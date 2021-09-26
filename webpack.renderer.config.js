@@ -12,13 +12,19 @@ rules.push(
 
 module.exports = {
   mode: "development",
+  entry: {
+    "editor": "monaco-editor/esm/vs/editor/editor.worker.js",
+    "json": "monaco-editor/esm/vs/language/json/json.worker",
+    "css": "monaco-editor/esm/vs/language/css/css.worker",
+    "html": "monaco-editor/esm/vs/language/html/html.worker",
+    "ts": "monaco-editor/esm/vs/language/typescript/ts.worker",
+  },
   module: {
     rules,
   },
   output: {
-    globalObject: 'self',
-    filename: '[name].bundle.js',
-    path: path.resolve(__dirname, 'dist'),
+    globalObject: "self",
+    path: path.resolve(__dirname, "dist"),
   },
   plugins: plugins,
   resolve: {

@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 const rules = require('./webpack.rules');
 const plugins = require('./webpack.plugins');
+const path = require("path");
 
 rules.push(
   {
@@ -25,6 +26,11 @@ module.exports = {
   },
   module: {
     rules,
+  },
+  output: {
+    globalObject: 'self',
+    filename: '[name].bundle.js',
+    path: path.resolve(__dirname, 'dist'),
   },
   plugins: plugins,
   resolve: {

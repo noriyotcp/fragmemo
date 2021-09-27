@@ -29,33 +29,15 @@
 import './index.css';
 import * as monaco from "monaco-editor";
 
-interface Window {
-  MonacoEnvironment: monaco.Environment;
-}
-declare let self: Window;
-
-self.MonacoEnvironment = {
-  getWorkerUrl: function (moduleId, label) {
-    if (label === "json") {
-      return "./json.worker.js";
-    }
-    if (label === "css" || label === "scss" || label === "less") {
-      return "./css.worker.js";
-    }
-    if (label === "html" || label === "handlebars" || label === "razor") {
-      return "./html.worker.js";
-    }
-    if (label === "typescript" || label === "javascript") {
-      return "./ts.worker.js";
-    }
-    return "./editor.worker.js";
-  },
-};
+const value = `var num: number = 123;
+function identity(num: number): number {
+    return num;
+}`;
 
 monaco.editor.create(document.getElementById("container"), {
   theme: "vs-dark",
-  value: ["function x() {", '\tconsole.log("Hello world!");', "}"].join("\n"),
-  language: "javascript",
+  value: value,
+  language: "typescript",
 });
 
 console.log('👋 This message is being logged by "renderer.js", included via webpack');

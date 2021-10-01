@@ -27,6 +27,8 @@
  */
 
 import './index.css';
+import "./app";
+
 import * as monaco from "monaco-editor";
 
 const value = `var num: number = 123;
@@ -34,10 +36,11 @@ function identity(num: number): number {
     return num;
 }`;
 
-monaco.editor.create(document.getElementById("container"), {
+monaco.editor.create(document.getElementById("monaco-container"), {
   theme: "vs-dark",
   value: value,
   language: "typescript",
+  automaticLayout: true
 });
 
 console.log('👋 This message is being logged by "renderer.js", included via webpack');

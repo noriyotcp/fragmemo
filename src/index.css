@@ -6,8 +6,13 @@ html, body {
   margin: 0;
 }
 
-#container {
+#container, #monaco-container {
   width: 100%;
   height: 100%;
   /* border: 1px solid #ccc; */
+}
+
+#container {
+  background-color: #1e1e1e;
+  overflow: hidden;
 }

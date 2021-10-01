@@ -27,17 +27,19 @@
  */
 
 import './index.css';
-import * as monaco from "monaco-editor";
+import "./app";
 
-const value = `var num: number = 123;
-function identity(num: number): number {
-    return num;
-}`;
+// import * as monaco from "monaco-editor";
 
-monaco.editor.create(document.getElementById("container"), {
-  theme: "vs-dark",
-  value: value,
-  language: "typescript",
-});
+// const value = `var num: number = 123;
+// function identity(num: number): number {
+//     return num;
+// }`;
+
+// monaco.editor.create(document.getElementById("container"), {
+//   theme: "vs-dark",
+//   value: value,
+//   language: "typescript",
+// });
 
 console.log('👋 This message is being logged by "renderer.js", included via webpack');

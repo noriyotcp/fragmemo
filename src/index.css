@@ -11,3 +11,8 @@ html, body {
   height: 100%;
   /* border: 1px solid #ccc; */
 }
+
+#container {
+  background-color: #1e1e1e;
+  overflow: hidden;
+}

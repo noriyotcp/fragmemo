@@ -3,7 +3,7 @@ import * as ReactDOM from 'react-dom';
 
 const App = (): JSX.Element => {
   return (
-    <h2>Hello from React!</h2>
+    <div id="monaco-container"></div>
   )
 }
 function render() {

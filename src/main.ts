@@ -2,6 +2,8 @@ import path from "path";
 import { BrowserWindow, app, session, nativeTheme } from "electron";
 import { searchDevtools } from "electron-search-devtools";
 
+// process.env.ELECTRON_DISABLE_SECURITY_WARNINGS = "1";
+
 const isDev = process.env.NODE_ENV === "development";
 
 /// #if DEBUG

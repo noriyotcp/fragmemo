@@ -29,11 +29,9 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom";
 
-import "./index.css";
+import "../index.css";
+import { App } from "./App";
 
-const App = (): JSX.Element => {
-  return <div id="monaco-container"></div>;
-};
 function render() {
   ReactDOM.render(<App />, document.getElementById("root"));
 }
@@ -47,7 +45,8 @@ function identity(num: number): number {
     return num;
 }`;
 
-monaco.editor.create(document.getElementById("monaco-container"), {
+// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+monaco.editor.create(document.getElementById("monaco-container")!, {
   theme: "vs-dark",
   value: value,
   language: "typescript",

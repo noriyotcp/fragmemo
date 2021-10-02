@@ -17,58 +17,7 @@
     "email": "noriyo.akita@gmail.com"
   },
   "license": "MIT",
-  "config": {
-    "forge": {
-      "packagerConfig": {},
-      "makers": [
-        {
-          "name": "@electron-forge/maker-squirrel",
-          "config": {
-            "name": "fragmemo"
-          }
-        },
-        {
-          "name": "@electron-forge/maker-zip",
-          "platforms": [
-            "darwin"
-          ]
-        },
-        {
-          "name": "@electron-forge/maker-deb",
-          "config": {}
-        },
-        {
-          "name": "@electron-forge/maker-rpm",
-          "config": {}
-        }
-      ],
-      "plugins": [
-        [
-          "@electron-forge/plugin-webpack",
-          {
-            "mainConfig": "./webpack.main.config.js",
-            "renderer": {
-              "config": "./webpack.renderer.config.js",
-              "entryPoints": [
-                {
-                  "html": "./src/index.html",
-                  "js": "./src/renderer.ts",
-                  "name": "main_window"
-                }
-              ]
-            }
-          }
-        ]
-      ]
-    }
-  },
   "devDependencies": {
-    "@electron-forge/cli": "^6.0.0-beta.60",
-    "@electron-forge/maker-deb": "^6.0.0-beta.60",
-    "@electron-forge/maker-rpm": "^6.0.0-beta.60",
-    "@electron-forge/maker-squirrel": "^6.0.0-beta.60",
-    "@electron-forge/maker-zip": "^6.0.0-beta.60",
-    "@electron-forge/plugin-webpack": "6.0.0-beta.60",
     "@types/mini-css-extract-plugin": "^2.3.0",
     "@types/node": "^16.10.2",
     "@types/react": "^17.0.26",

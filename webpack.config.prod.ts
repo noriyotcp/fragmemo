@@ -2,6 +2,9 @@ import path from "path";
 import { Configuration } from "webpack";
 import HtmlWebpackPlugin from "html-webpack-plugin";
 import MiniCssExtractPlugin from "mini-css-extract-plugin";
+import MonacoWebpackPlugin from "monaco-editor-webpack-plugin";
+
+// process.env.ELECTRON_DISABLE_SECURITY_WARNINGS = "1";
 
 const isDev = process.env.NODE_ENV === "development";
 
@@ -31,24 +34,29 @@ const base: Configuration = {
         ],
       },
       {
-        test: /\.s?css$/,
-        use: [
-          MiniCssExtractPlugin.loader,
-          {
-            loader: "css-loader",
-            options: {
-              sourceMap: isDev,
-              importLoaders: 1,
-            },
-          },
-          {
-            loader: "sass-loader",
-            options: {
-              sourceMap: isDev,
-            },
-          },
-        ],
+        test: /\.css$/,
+        use: [{ loader: "style-loader" }, { loader: "css-loader" }],
       },
+      // {
+      //   test: /\.s?css$/,
+      //   use: [
+      //     MiniCssExtractPlugin.loader,
+      //     { loader: "style-loader" },
+      //     {
+      //       loader: "css-loader",
+      //       options: {
+      //         sourceMap: isDev,
+      //         importLoaders: 1,
+      //       },
+      //     },
+      //     {
+      //       loader: "sass-loader",
+      //       options: {
+      //         sourceMap: isDev,
+      //       },
+      //     },
+      //   ],
+      // },
       {
         test: /\.(ico|gif|jpe?g|png|svg|webp|ttf|otf|eot|woff?2?)$/,
         type: "asset/resource",
@@ -84,6 +92,7 @@ const renderer: Configuration = {
     index: "./src/web/index.tsx",
   },
   plugins: [
+    new MonacoWebpackPlugin(),
     new MiniCssExtractPlugin(),
     new HtmlWebpackPlugin({
       template: "./src/web/index.html",

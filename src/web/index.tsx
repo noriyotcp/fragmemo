@@ -26,8 +26,17 @@
  * ```
  */
 
-import './index.css';
-import "./app";
+import * as React from "react";
+import * as ReactDOM from "react-dom";
+
+import "../index.css";
+import { App } from "./App";
+
+function render() {
+  ReactDOM.render(<App />, document.getElementById("root"));
+}
+
+render();
 
 import * as monaco from "monaco-editor";
 
@@ -36,11 +45,14 @@ function identity(num: number): number {
     return num;
 }`;
 
-monaco.editor.create(document.getElementById("monaco-container"), {
+// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+monaco.editor.create(document.getElementById("monaco-container")!, {
   theme: "vs-dark",
   value: value,
   language: "typescript",
-  automaticLayout: true
+  automaticLayout: true,
 });
 
-console.log('👋 This message is being logged by "renderer.js", included via webpack');
+console.log(
+  '👋 This message is being logged by "renderer.js", included via webpack'
+);

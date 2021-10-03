@@ -1,6 +1,7 @@
 import path from "path";
 import { BrowserWindow, app, session, nativeTheme } from "electron";
 import { searchDevtools } from "electron-search-devtools";
+import { createMenu } from "./createMenu";
 
 // process.env.ELECTRON_DISABLE_SECURITY_WARNINGS = "1";
 
@@ -28,9 +29,15 @@ const createWindow = (): void => {
     height: 600,
     width: 800,
     backgroundColor: "#1e1e1e",
+    webPreferences: {
+      preload: path.resolve('src', 'preload.js')
+      // preload: path.join(__dirname, 'preload.js')
+    }
   });
 
   nativeTheme.themeSource = "dark";
+
+  createMenu(mainWindow);
 
   if (isDev) mainWindow.webContents.openDevTools({ mode: "detach" });
   mainWindow.loadFile("dist/index.html");

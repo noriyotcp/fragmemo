@@ -77,13 +77,13 @@ const main: Configuration = {
   },
 };
 
-const preload: Configuration = {
-  ...base,
-  target: "electron-preload",
-  entry: {
-    preload: "./src/preload.ts",
-  },
-};
+// const preload: Configuration = {
+//   ...base,
+//   target: "electron-preload",
+//   entry: {
+//     preload: "./src/preload.js",
+//   },
+// };
 
 const renderer: Configuration = {
   ...base,
@@ -104,4 +104,5 @@ const renderer: Configuration = {
   ],
 };
 
-export default [main, preload, renderer];
+// export default [main, preload, renderer];
+export default [main, renderer];

@@ -6,7 +6,7 @@
   "main": "dist/main.js",
   "scripts": {
     "start": "run-s clean build serve",
-    "dev": "run-p dev:*",
+    "dev": "run-s clean && run-p dev:*",
     "dev:electron": "wait-on ./dist/index.html && cross-env NODE_ENV=\"development\" electron .",
     "dev:tsc": "tsc -w -p tsconfig.main.json",
     "dev:webpack": "webpack --watch --progress",

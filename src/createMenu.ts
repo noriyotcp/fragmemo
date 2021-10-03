@@ -30,7 +30,7 @@ export const createMenu = (win: BrowserWindow): void => {
                   return;
                 }
 
-                win.webContents.send("menu-open", result.filePaths[0]);
+                win.webContents.send("open-by-menu", result.filePaths[0]);
               })
               .catch((err) => console.log(`Error: ${err}`));
           },

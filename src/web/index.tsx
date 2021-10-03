@@ -31,6 +31,7 @@ import * as ReactDOM from "react-dom";
 
 import "./index.css";
 import { App } from "./App";
+const { myAPI } = window;
 
 function render() {
   ReactDOM.render(<App />, document.getElementById("root"));
@@ -56,3 +57,12 @@ monaco.editor.create(document.getElementById("monaco-container")!, {
 console.log(
   '👋 This message is being logged by "renderer.js", included via webpack'
 );
+
+const text = document.getElementById("text");
+
+const listener = (filepath: string) => {
+  if (text) text.textContent = filepath;
+  console.log(filepath)
+};
+
+myAPI.openByMenu((_e: Event, filepath: string) => listener(filepath));

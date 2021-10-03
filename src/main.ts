@@ -29,6 +29,10 @@ const createWindow = (): void => {
     height: 600,
     width: 800,
     backgroundColor: "#1e1e1e",
+    webPreferences: {
+      preload: path.resolve('src', 'preload.js')
+      // preload: path.join(__dirname, 'preload.js')
+    }
   });
 
   nativeTheme.themeSource = "dark";

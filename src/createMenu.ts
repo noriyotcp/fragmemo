@@ -4,6 +4,7 @@ import {
   Menu,
   MenuItemConstructorOptions,
 } from "electron";
+import * as fs from "fs";
 
 export const createMenu = (win: BrowserWindow): void => {
   const template: MenuItemConstructorOptions[] = [
@@ -30,7 +31,14 @@ export const createMenu = (win: BrowserWindow): void => {
                   return;
                 }
 
-                win.webContents.send("open-by-menu", result.filePaths[0]);
+                const path = result.filePaths[0];
+                const buff = fs.readFileSync(path);
+                const fileData = {
+                  status: true,
+                  path: path,
+                  text: buff.toString()
+                }
+                win.webContents.send("open-by-menu", fileData);
               })
               .catch((err) => console.log(`Error: ${err}`));
           },

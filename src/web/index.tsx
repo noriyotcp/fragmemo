@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-types */
 /**
  * This file will automatically be loaded by webpack and run in the "renderer" context.
  * To learn more about the differences between the "main" and the "renderer" context in
@@ -46,11 +47,11 @@ function identity(num: number): number {
     return num;
 }`;
 
+const model = monaco.editor.createModel(value, "typescript");
 // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 monaco.editor.create(document.getElementById("monaco-container")!, {
+  model: model,
   theme: "vs-dark",
-  value: value,
-  language: "typescript",
   automaticLayout: true,
 });
 
@@ -58,11 +59,26 @@ console.log(
   '👋 This message is being logged by "renderer.js", included via webpack'
 );
 
-const text = document.getElementById("text");
+const listener = (fileData: any) => {
+    if (fileData.status === undefined) {
+      return false;
+    }
 
-const listener = (filepath: string) => {
-  if (text) text.textContent = filepath;
-  console.log(filepath)
+    if (!fileData.status) {
+      alert(`ファイルが開けませんでした\n${fileData.message}`);
+      return false;
+    }
+
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    const textarea = document.querySelector<HTMLTextAreaElement>("#text")!;
+    textarea.value = fileData.text;
 };
 
-myAPI.openByMenu((_e: Event, filepath: string) => listener(filepath));
+// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+document.querySelector<HTMLButtonElement>("#btn-save")!.addEventListener('click', () => {
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+  const textarea = document.querySelector<HTMLTextAreaElement>("#text")!;
+  myAPI.fileSaveAs(textarea.value);
+});
+
+myAPI.openByMenu((_e: Event, fileData: object) => listener(fileData));

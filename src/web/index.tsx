@@ -74,4 +74,11 @@ const listener = (fileData: any) => {
     textarea.value = fileData.text;
 };
 
+// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+document.querySelector<HTMLButtonElement>("#btn-save")!.addEventListener('click', () => {
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+  const textarea = document.querySelector<HTMLTextAreaElement>("#text")!;
+  myAPI.fileSaveAs(textarea.value);
+});
+
 myAPI.openByMenu((_e: Event, fileData: object) => listener(fileData));

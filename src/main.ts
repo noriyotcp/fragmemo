@@ -2,6 +2,7 @@ import path from "path";
 import { BrowserWindow, app, session, nativeTheme } from "electron";
 import { searchDevtools } from "electron-search-devtools";
 import { createMenu } from "./createMenu";
+import { setFileSaveAs } from "./createMenu";
 
 // process.env.ELECTRON_DISABLE_SECURITY_WARNINGS = "1";
 
@@ -38,6 +39,7 @@ const createWindow = (): void => {
   nativeTheme.themeSource = "dark";
 
   createMenu(mainWindow);
+  setFileSaveAs(mainWindow);
 
   if (isDev) mainWindow.webContents.openDevTools({ mode: "detach" });
   mainWindow.loadFile("dist/index.html");

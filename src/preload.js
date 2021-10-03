@@ -2,9 +2,8 @@
 const { contextBridge, ipcRenderer } = require("electron");
 
 contextBridge.exposeInMainWorld("myAPI", {
-  openByMenu: (listener =>
-    ipcRenderer.on("open-by-menu", listener)
-  )
+  openByMenu: (listener) => ipcRenderer.on("open-by-menu", listener),
+  fileSaveAs: (fileData) => ipcRenderer.invoke("file-save-as", fileData),
 });
 
 console.log("preload!");

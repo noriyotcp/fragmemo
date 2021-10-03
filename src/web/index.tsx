@@ -46,11 +46,11 @@ function identity(num: number): number {
     return num;
 }`;
 
+const model = monaco.editor.createModel(value, "typescript");
 // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 monaco.editor.create(document.getElementById("monaco-container")!, {
+  model: model,
   theme: "vs-dark",
-  value: value,
-  language: "typescript",
   automaticLayout: true,
 });
 

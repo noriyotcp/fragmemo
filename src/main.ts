@@ -1,8 +1,10 @@
 import path from "path";
-import { BrowserWindow, app, session, nativeTheme } from "electron";
+import os from "os";
+import { BrowserWindow, app, session, nativeTheme, ipcMain } from "electron";
 import { searchDevtools } from "electron-search-devtools";
 import { createMenu } from "./createMenu";
 import { setFileSaveAs } from "./setFileSaveAs";
+import { storageFound } from "./storageFound";
 
 // process.env.ELECTRON_DISABLE_SECURITY_WARNINGS = "1";
 
@@ -24,16 +26,15 @@ if (isDev) {
 }
 /// #endif
 
-
 const createWindow = (): void => {
   const mainWindow = new BrowserWindow({
     height: 600,
     width: 800,
     backgroundColor: "#1e1e1e",
     webPreferences: {
-      preload: path.resolve('src', 'preload.js')
+      preload: path.resolve("src", "preload.js"),
       // preload: path.join(__dirname, 'preload.js')
-    }
+    },
   });
 
   nativeTheme.themeSource = "dark";
@@ -57,6 +58,13 @@ app.whenReady().then(async () => {
 
   createWindow();
 });
+
+app.once('browser-window-created', () => {
+  console.log("browser-window-created");
+  ipcMain.handle("storage-found", async () => {
+    return storageFound(path.resolve(os.homedir(), "fragmemo"));
+  });
+})
 
 // app.once("window-all-closed", () => app.quit());
 

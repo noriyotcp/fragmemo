@@ -2,7 +2,7 @@ import path from "path";
 import { BrowserWindow, app, session, nativeTheme } from "electron";
 import { searchDevtools } from "electron-search-devtools";
 import { createMenu } from "./createMenu";
-import { setFileSaveAs } from "./createMenu";
+import { setFileSaveAs } from "./setFileSaveAs";
 
 // process.env.ELECTRON_DISABLE_SECURITY_WARNINGS = "1";
 

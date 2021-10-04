@@ -8,7 +8,7 @@ html, body {
 
 #root, #monaco-container {
   width: 100%;
-  height: 90%;
+  height: 50%;
   /* border: 1px solid #ccc; */
 }
 
@@ -19,5 +19,11 @@ html, body {
 
 #text {
   background-color: white;
-  min-height: 100px;
+  height: 87%;
+  margin: 0px;
+  width: 87%;
+}
+
+#textarea {
+  height: 50%;
 }

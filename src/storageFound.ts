@@ -4,17 +4,8 @@ export const storageFound = (_path: fs.PathLike): string => {
   let msg = "";
 
   if (!fs.existsSync(_path)) {
-    fs.mkdir(_path, (err) => {
-      if (err) return err;
-
-      fs.writeFile(`${_path}/.fragmemo`, "", "utf8", (err) => {
-        if (err) return err;
-
-        // msg = `${_path} and ${_path}/.fragmemo created.`;
-        console.log(`${_path} and ${_path}/.fragmemo created.`);
-      });
-      createTestFile(_path);
-    });
+    createStorage(_path);
+    msg = `${_path} and ${_path}/.fragmemo created.`;
   } else {
     if (canUseAsStorage(_path)) {
       msg = `${_path} found.`;
@@ -47,5 +38,16 @@ function identity(num: number): number {
 
     // msg = `${_path} and ${_path}/.fragmemo created.`;
     console.log(`${_path} and ${_path}/test.ts created.`);
+  });
+};
+
+const createStorage = async (_path: fs.PathLike) => {
+  fs.mkdir(_path, (err) => {
+    if (err) return err;
+
+    fs.writeFile(`${_path}/.fragmemo`, "", "utf8", (err) => {
+      if (err) return err;
+    });
+    createTestFile(_path);
   });
 };

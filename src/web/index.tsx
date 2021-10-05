@@ -32,6 +32,7 @@ import * as ReactDOM from "react-dom";
 
 import "./index.css";
 import { App } from "./App";
+import { initMonaco } from "./code-editor";
 const { myAPI } = window;
 
 function render() {
@@ -40,20 +41,7 @@ function render() {
 
 render();
 
-import * as monaco from "monaco-editor";
-
-const value = `var num: number = 123;
-function identity(num: number): number {
-    return num;
-}`;
-
-const model = monaco.editor.createModel(value, "typescript");
-// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-monaco.editor.create(document.getElementById("monaco-container")!, {
-  model: model,
-  theme: "vs-dark",
-  automaticLayout: true,
-});
+initMonaco();
 
 console.log(
   '👋 This message is being logged by "renderer.js", included via webpack'

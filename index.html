@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" href="/favicon.ico" />
+    <link rel="stylesheet" href="./index.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vite App</title>
+    <script type="module" src="/src/codeEditor.ts"></script>
+    <script type="module" src="/src/renderer.ts"></script>
+  </head>
+  <body>
+    <!-- <div id="app"></div> -->
+    <div id="textarea" rows="4">
+      <form>
+        <button type="button" id="btn-save">保存</button>
+        <span id="message"></span>
+      </form>
+      <textarea id="text"></textarea>
+    </div>
+    <code-editor code="console.log('Hello World');" language="typescript">
+    </code-editor>
+  </body>
+</html>

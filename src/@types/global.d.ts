@@ -3,13 +3,14 @@ import { IpcRenderer } from "electron";
 declare global {
   interface Window {
     ipcRenderer: IpcRenderer;
-    myAPI: Sandbox;
+    myAPI: SandBox;
   }
 }
 
 export interface SandBox {
+  fileSaveAs: (fileData: string) => void;
   openByMenu: (
-    listener: (_e: Event, filepath: string) => void
+    listener: (_e: Event, fileData: object) => void
   ) => Electron.IpcRenderer;
-  storageFound: () => Promise;
+  setupStorage: () => Promise;
 }

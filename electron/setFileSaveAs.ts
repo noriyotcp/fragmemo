@@ -1,8 +1,4 @@
-import {
-  BrowserWindow,
-  dialog,
-  ipcMain
-} from "electron";
+import { BrowserWindow, dialog, ipcMain } from "electron";
 import * as fs from "fs";
 
 export const setFileSaveAs = (win: BrowserWindow): void => {
@@ -24,8 +20,7 @@ export const setFileSaveAs = (win: BrowserWindow): void => {
         ],
       })
       .then((result) => {
-        if (result.canceled)
-          return;
+        if (result.canceled) return;
         const path = <fs.PathOrFileDescriptor>result.filePath;
         fs.writeFileSync(path, fileData);
       })

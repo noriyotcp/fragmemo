@@ -1,6 +1,6 @@
 import * as fs from "fs";
 
-export const storageFound = (_path: fs.PathLike): string => {
+export const setupStorage = (_path: fs.PathLike): string => {
   let msg = "";
 
   if (!fs.existsSync(_path)) {
@@ -33,7 +33,7 @@ function identity(num: number): number {
     return num;
 }`;
 
-  fs.writeFile(`${_path}/test.ts`, value, 'utf8', (err) => {
+  fs.writeFile(`${_path}/test.ts`, value, "utf8", (err) => {
     if (err) return err;
 
     // msg = `${_path} and ${_path}/.fragmemo created.`;

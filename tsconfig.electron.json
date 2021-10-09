@@ -1,9 +1,0 @@
-{
-  "extends": "./tsconfig.json",
-  "compilerOptions": {
-    "module": "CommonJS",
-    "outDir": "build",
-    "allowJs": true
-  },
-  "include": ["electron/*.ts", "electron/*.js"]
-}

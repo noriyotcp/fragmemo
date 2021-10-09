@@ -37,9 +37,9 @@
     "wait-on": "^6.0.0"
   },
   "build": {
-    "appId": "com.my-website.my-app",
-    "productName": "MyApp",
-    "copyright": "Copyright © 2019 ${author}",
+    "appId": "com.electron.fragmemo",
+    "productName": "fragmemo",
+    "copyright": "Copyright © 2021 ${author}",
     "mac": {
       "category": "public.app-category.utilities"
     },

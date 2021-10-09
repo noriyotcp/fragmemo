@@ -13,7 +13,9 @@
     "electron:dev": "concurrently -k \"cross-env BROWSER=none yarn dev\" \"yarn electron\"",
     "electron:builder": "electron-builder",
     "build:for:electron": "cross-env ELECTRON=true vite build && tsc -b electron/",
-    "app:build": "yarn build:for:electron && yarn electron:builder"
+    "app:build": "yarn build:for:electron && yarn electron:builder",
+    "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
+    "lint:fix": "eslint . --ext .js,.jsx,.ts,.tsx --fix"
   },
   "keywords": [],
   "author": {

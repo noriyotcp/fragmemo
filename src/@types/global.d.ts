@@ -12,5 +12,5 @@ export interface SandBox {
   openByMenu: (
     listener: (_e: Event, fileData: object) => void
   ) => Electron.IpcRenderer;
-  setupStorage: () => Promise,
+  setupStorage: () => Promise;
 }

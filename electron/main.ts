@@ -1,9 +1,9 @@
-import path from 'path';
+import path from "path";
 import os from "os";
-import { app, BrowserWindow, ipcMain } from 'electron';
+import { app, BrowserWindow, ipcMain } from "electron";
 import { setFileSaveAs } from "./setFileSaveAs";
-import { createMenu } from './createMenu';
-import { setupStorage } from './setupStorage';
+import { createMenu } from "./createMenu";
+import { setupStorage } from "./setupStorage";
 
 const isDev = process.env.IS_DEV == "true" ? true : false;
 
@@ -14,7 +14,7 @@ function createWindow() {
     height: 600,
     webPreferences: {
       // preload: path.resolve("electron", "preload.js"),
-      preload: path.join(__dirname, 'preload.js'),
+      preload: path.join(__dirname, "preload.js"),
       nodeIntegration: false,
     },
   });
@@ -26,8 +26,8 @@ function createWindow() {
   // win.loadFile("index.html");
   mainWindow.loadURL(
     isDev
-      ? 'http://localhost:3000'
-      : `file://${path.join(__dirname, '../build/index.html')}`
+      ? "http://localhost:3000"
+      : `file://${path.join(__dirname, "../build/index.html")}`
   );
   // Open the DevTools.
   if (isDev) {
@@ -39,12 +39,12 @@ function createWindow() {
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.whenReady().then(() => {
-  createWindow()
-  app.on('activate', function () {
+  createWindow();
+  app.on("activate", function () {
     // On macOS it's common to re-create a window in the app when the
     // dock icon is clicked and there are no other windows open.
-    if (BrowserWindow.getAllWindows().length === 0) createWindow()
-  })
+    if (BrowserWindow.getAllWindows().length === 0) createWindow();
+  });
 });
 
 app.once("browser-window-created", () => {
@@ -57,8 +57,8 @@ app.once("browser-window-created", () => {
 // Quit when all windows are closed, except on macOS. There, it's common
 // for applications and their menu bar to stay active until the user quits
 // explicitly with Cmd + Q.
-app.on('window-all-closed', () => {
-  if (process.platform !== 'darwin') {
+app.on("window-all-closed", () => {
+  if (process.platform !== "darwin") {
     app.quit();
   }
 });

@@ -1,4 +1,4 @@
-import { defineConfig } from 'vite'
+import { defineConfig } from "vite";
 import { resolve } from "path";
 
 // https://vitejs.dev/config/
@@ -10,6 +10,6 @@ export default defineConfig({
         main: resolve(__dirname, "index.html"),
       },
     },
-    outDir: "build"
+    outDir: "build",
   },
 });

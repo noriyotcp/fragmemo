@@ -1,3 +1,7 @@
+build
+*.local
+.vscode
+
 # Logs
 logs
 *.log
@@ -88,6 +92,5 @@ typings/
 # Electron-Forge
 out/
 
-# webpack build output
+# Electron Builder output
 dist/
-

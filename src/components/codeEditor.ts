@@ -1,4 +1,4 @@
-import { css, html, LitElement } from "lit";
+import { css, html, LitElement, TemplateResult } from "lit";
 import { customElement, property } from "lit/decorators.js";
 import { createRef, Ref, ref } from "lit/directives/ref.js";
 
@@ -50,7 +50,7 @@ export class CodeEditor extends LitElement {
     }
   `;
 
-  render() {
+  render(): TemplateResult {
     return html`
       <style>
         ${styles}
@@ -75,8 +75,8 @@ export class CodeEditor extends LitElement {
     if (this.language) return this.language;
     const file = this.getFile();
     if (!file) return;
-    const type = file.getAttribute("type")!;
-    return type.split("/").pop()!;
+    const type = <string>file.getAttribute("type");
+    return type.split("/").pop();
   }
 
   private getTheme() {
@@ -92,25 +92,26 @@ export class CodeEditor extends LitElement {
     );
   }
 
-  setValue(value: string) {
-    this.editor!.setValue(value);
+  setValue(value: string): void {
+    this.editor?.setValue(value);
   }
 
-  getValue() {
-    const value = this.editor!.getValue();
-    return value;
+  getValue(): string {
+    const value = this.editor?.getValue();
+    return value || "";
   }
 
-  setReadOnly(value: boolean) {
+  setReadOnly(value: boolean): void {
     this.readOnly = value;
     this.setOptions({ readOnly: value });
   }
 
-  setOptions(value: monaco.editor.IStandaloneEditorConstructionOptions) {
-    this.editor!.updateOptions(value);
+  setOptions(value: monaco.editor.IStandaloneEditorConstructionOptions): void {
+    this.editor?.updateOptions(value);
   }
 
-  firstUpdated() {
+  firstUpdated(): void {
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     this.editor = monaco.editor.create(this.container.value!, {
       value: this.getCode(),
       language: this.getLang(),
@@ -118,7 +119,7 @@ export class CodeEditor extends LitElement {
       automaticLayout: true,
       readOnly: this.readOnly ?? false,
     });
-    this.editor.getModel()!.onDidChangeContent(() => {
+    this.editor.getModel()?.onDidChangeContent(() => {
       this.dispatchEvent(new CustomEvent("change", { detail: {} }));
     });
     window
@@ -126,11 +127,5 @@ export class CodeEditor extends LitElement {
       .addEventListener("change", () => {
         monaco.editor.setTheme(this.getTheme());
       });
-  }
-}
-
-declare global {
-  interface HTMLElementTagNameMap {
-    "code-editor": CodeEditor;
   }
 }

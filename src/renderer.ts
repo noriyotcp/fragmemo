@@ -1,4 +1,5 @@
 const { myAPI } = window;
+import { Router } from "@vaadin/router";
 
 document.addEventListener("DOMContentLoaded", (): void => {
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
@@ -33,3 +34,14 @@ const openByMenuListener = (fileData: any) => {
 };
 
 myAPI.openByMenu((_e: Event, fileData: object) => openByMenuListener(fileData));
+
+document
+  .querySelector<HTMLButtonElement>("#trigger")
+  ?.addEventListener("click", () => {
+    Router.go("/user/you-know-who");
+  });
+const router = new Router(document.getElementById("outlet"));
+router.setRoutes([
+  { path: "/", component: "x-home-view" },
+  { path: "/user/:user", component: "x-user-profile" },
+]);

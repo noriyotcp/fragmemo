@@ -9,5 +9,9 @@
     "eslint:recommended",
     "plugin:@typescript-eslint/recommended",
     "prettier"
-  ]
+  ],
+  "rules": {
+    "no-unused-vars": ["error", { "argsIgnorePattern": "^_?(e|event)$" }],
+    "@typescript-eslint/no-unused-vars": ["off"]
+  }
 }

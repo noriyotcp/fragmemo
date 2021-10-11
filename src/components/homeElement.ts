@@ -20,7 +20,9 @@ export class HomeElement extends LitElement {
     return html`
       <div id="textarea" rows="4">
         <form>
-          <button type="button" id="btn-save">保存</button>
+          <button type="button" id="btn-save" @click="${this._fileSaveAs}">
+            保存
+          </button>
           <span id="message"></span>
         </form>
         <textarea id="text"></textarea>
@@ -36,9 +38,9 @@ export class HomeElement extends LitElement {
     myAPI.setupStorage().then((msg: string) => {
       this.textarea.value = msg;
     });
+  }
 
-    this.btnSave.addEventListener("click", () => {
-      myAPI.fileSaveAs(this.textarea.value);
-    });
+  private _fileSaveAs(_e: Event): void {
+    myAPI.fileSaveAs(this.textarea.value);
   }
 }

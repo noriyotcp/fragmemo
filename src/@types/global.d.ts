@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { IpcRenderer } from "electron";
 
 declare global {
@@ -7,10 +8,16 @@ declare global {
   }
 }
 
+export type FileData = {
+  status: true;
+  path: string;
+  text: string;
+};
+
 export interface SandBox {
   fileSaveAs: (fileData: string) => void;
   openByMenu: (
-    listener: (_e: Event, fileData: object) => void
+    listener: (_e: Event, fileData: FileData) => void
   ) => Electron.IpcRenderer;
-  setupStorage: () => Promise;
+  setupStorage: () => Promise<string>;
 }

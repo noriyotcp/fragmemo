@@ -1,5 +1,6 @@
 import { LitElement, html, css, TemplateResult } from "lit";
 import { customElement, query } from "lit/decorators.js";
+import { FileData } from "../@types/global";
 const { myAPI } = window;
 
 @customElement("test-header")
@@ -36,9 +37,30 @@ export class TestHeader extends LitElement {
     myAPI.setupStorage().then((msg: string) => {
       this.textarea.value = msg;
     });
+    myAPI.openByMenu((_e: Event, fileData: FileData) =>
+      this._openByMenuListener(fileData)
+    );
   }
 
   private _fileSaveAs(_e: Event): void {
     myAPI.fileSaveAs(this.textarea.value);
+  }
+
+  private async _openByMenuListener(
+    fileData: FileData
+  ): Promise<boolean | void> {
+    // Give the browser a chance to paint
+    await new Promise((r) => setTimeout(r, 0));
+
+    if (fileData.status === undefined) {
+      return false;
+    }
+
+    if (!fileData.status) {
+      alert(`ファイルが開けませんでした\n${fileData.path}`);
+      return false;
+    }
+
+    this.textarea.value = fileData.text;
   }
 }

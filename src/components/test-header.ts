@@ -9,7 +9,7 @@ export class TestHeader extends LitElement {
 
   static styles = css`
     :host {
-      --textarea-width: 30%;
+      --textarea-width: 50%;
     }
     textarea {
       width: var(--textarea-width);
@@ -18,14 +18,14 @@ export class TestHeader extends LitElement {
 
   render(): TemplateResult {
     return html`
-      <div id="textarea" rows="4">
+      <div id="textarea">
         <form>
           <button type="button" id="btn-save" @click="${this._fileSaveAs}">
             保存
           </button>
           <span id="message"></span>
         </form>
-        <textarea id="text"></textarea>
+        <textarea id="text" rows="4"></textarea>
       </div>
     `;
   }

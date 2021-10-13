@@ -52,10 +52,27 @@ export const createMenu = (win: BrowserWindow): void => {
     { role: "help", submenu: [{ role: "about" }] },
   ];
 
+  const preferences = [
+    {
+      label: "Preferences…",
+      submenu: [
+        {
+          label: "Settings",
+          accelerator: "Command+,",
+          click() {
+            console.log("Preferences clicked");
+          },
+        },
+      ],
+    },
+  ];
+
   const appMenu: MenuItemConstructorOptions = {
     label: app.name,
     submenu: [
       { role: "about" },
+      { type: "separator" },
+      ...preferences,
       { type: "separator" },
       { role: "services" },
       { type: "separator" },

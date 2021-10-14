@@ -21,6 +21,6 @@ export interface SandBox {
     listener: (_e: Event, fileData: FileData) => void
   ) => Electron.IpcRenderer;
   openSettings: (
-    listener: (_e: Event, message: string) => void
+    listener: (_e: Event, elementName: string) => void
   ) => Electron.IpcRenderer;
 }

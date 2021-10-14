@@ -30,16 +30,16 @@ export class AppElement extends LitElement {
   async firstUpdated(): Promise<void> {
     // Give the browser a chance to paint
     await new Promise((r) => setTimeout(r, 0));
-    myAPI.openSettings((_e: Event, message: string) =>
-      this._openSettings(message)
+    myAPI.openSettings((_e: Event, elementName: string) =>
+      this._openSettings(elementName)
     );
   }
 
-  private async _openSettings(message: string): Promise<void> {
+  private async _openSettings(elementName: string): Promise<void> {
     // Give the browser a chance to paint
     await new Promise((r) => setTimeout(r, 0));
-    console.log(message);
-    this._current_page = message;
+    console.log(elementName);
+    this._current_page = elementName;
   }
 
   private _backToHomeListener(e: CustomEvent) {

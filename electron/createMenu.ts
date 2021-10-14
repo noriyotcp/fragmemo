@@ -60,9 +60,8 @@ export const createMenu = (win: BrowserWindow): void => {
           label: "Settings",
           accelerator: "Command+,",
           click() {
-            const message = "settings-element";
-            console.log(message);
-            win.webContents.send("open-settings", message);
+            const elementName = "settings-element";
+            win.webContents.send("open-settings", elementName);
           },
         },
       ],

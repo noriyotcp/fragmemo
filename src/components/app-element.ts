@@ -5,7 +5,7 @@ const { myAPI } = window;
 @customElement("app-element")
 export class AppElement extends LitElement {
   @state()
-  private _current_page = "settings-element";
+  private _current_page = "home-element";
 
   static styles = [
     css`
@@ -18,12 +18,12 @@ export class AppElement extends LitElement {
   ];
 
   render(): TemplateResult {
-    if (this._current_page == "settings-element") {
+    if (this._current_page == "home-element") {
+      return html`<home-element></home-element>`;
+    } else {
       return html`<settings-element
         @back-to-home=${this._backToHomeListener}
       ></settings-element>`;
-    } else {
-      return html`<home-element></home-element>`;
     }
   }
 

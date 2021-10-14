@@ -1,9 +1,12 @@
 import { LitElement, html, css, TemplateResult } from "lit";
-import { customElement } from "lit/decorators.js";
+import { customElement, state } from "lit/decorators.js";
 const { myAPI } = window;
 
 @customElement("app-element")
 export class AppElement extends LitElement {
+  @state()
+  private _current_page = "settings-element";
+
   static styles = [
     css`
       :host {
@@ -15,7 +18,13 @@ export class AppElement extends LitElement {
   ];
 
   render(): TemplateResult {
-    return html` <home-element></home-element> `;
+    if (this._current_page == "settings-element") {
+      return html`<settings-element
+        @back-to-home=${this._backToHomeListener}
+      ></settings-element>`;
+    } else {
+      return html`<home-element></home-element>`;
+    }
   }
 
   async firstUpdated(): Promise<void> {
@@ -30,5 +39,11 @@ export class AppElement extends LitElement {
     // Give the browser a chance to paint
     await new Promise((r) => setTimeout(r, 0));
     console.log(message);
+    this._current_page = message;
+  }
+
+  private _backToHomeListener(e: CustomEvent) {
+    console.log(e.detail.elementName);
+    this._current_page = e.detail.elementName;
   }
 }

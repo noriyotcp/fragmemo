@@ -28,10 +28,18 @@ export class SettingsElement extends LitElement {
     return html`
       <header>
         <h1>Settings</h1>
-        <div class="close">
+        <div class="close" @click=${this._dispatchBackToHome}>
           <span>X</span>
         </div>
+        <textarea></textarea>
       </header>
     `;
+  }
+
+  private _dispatchBackToHome() {
+    const options = {
+      detail: { elementName: "home-element" },
+    };
+    this.dispatchEvent(new CustomEvent("back-to-home", options));
   }
 }

@@ -16,8 +16,11 @@ export type FileData = {
 
 export interface SandBox {
   fileSaveAs: (fileData: string) => void;
+  setupStorage: () => Promise<string>;
   openByMenu: (
     listener: (_e: Event, fileData: FileData) => void
   ) => Electron.IpcRenderer;
-  setupStorage: () => Promise<string>;
+  openSettings: (
+    listener: (_e: Event, elementName: string) => void
+  ) => Electron.IpcRenderer;
 }

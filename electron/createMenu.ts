@@ -1,4 +1,5 @@
 import {
+  app,
   BrowserWindow,
   dialog,
   Menu,
@@ -51,7 +52,40 @@ export const createMenu = (win: BrowserWindow): void => {
     { role: "help", submenu: [{ role: "about" }] },
   ];
 
-  if (process.platform === "darwin") template.unshift({ role: "appMenu" });
+  const preferences = [
+    {
+      label: "Preferences…",
+      submenu: [
+        {
+          label: "Settings",
+          accelerator: "Command+,",
+          click() {
+            const elementName = "settings-element";
+            win.webContents.send("open-settings", elementName);
+          },
+        },
+      ],
+    },
+  ];
+
+  const appMenu: MenuItemConstructorOptions = {
+    label: app.name,
+    submenu: [
+      { role: "about" },
+      { type: "separator" },
+      ...preferences,
+      { type: "separator" },
+      { role: "services" },
+      { type: "separator" },
+      { role: "hide" },
+      { role: "hideOthers" },
+      { role: "unhide" },
+      { type: "separator" },
+      { role: "quit" },
+    ],
+  };
+
+  if (process.platform === "darwin") template.unshift(appMenu);
 
   const menu = Menu.buildFromTemplate(template);
   Menu.setApplicationMenu(menu);

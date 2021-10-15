@@ -10,6 +10,9 @@ import jsonWorker from "monaco-editor/esm/vs/language/json/json.worker?worker";
 import cssWorker from "monaco-editor/esm/vs/language/css/css.worker?worker";
 import htmlWorker from "monaco-editor/esm/vs/language/html/html.worker?worker";
 import tsWorker from "monaco-editor/esm/vs/language/typescript/ts.worker?worker";
+import { FileData } from "../@types/global";
+
+const { myAPI } = window;
 
 // @ts-ignore
 self.MonacoEnvironment = {
@@ -127,5 +130,25 @@ export class CodeEditor extends LitElement {
       .addEventListener("change", () => {
         monaco.editor.setTheme(this.getTheme());
       });
+
+    myAPI.openByMenu((_e: Event, fileData: FileData) =>
+      this._openByMenuListener(fileData)
+    );
+  }
+
+  private _openByMenuListener(fileData: FileData): boolean | void {
+    // Give the browser a chance to paint
+    // await new Promise((r) => setTimeout(r, 0));
+
+    if (fileData.status === undefined) {
+      return false;
+    }
+
+    if (!fileData.status) {
+      alert(`ファイルが開けませんでした\n${fileData.path}`);
+      return false;
+    }
+
+    this.setValue(fileData.text);
   }
 }

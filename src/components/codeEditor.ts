@@ -114,14 +114,15 @@ export class CodeEditor extends LitElement {
   }
 
   firstUpdated(): void {
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    this.editor = monaco.editor.create(this.container.value!, {
+    const editorOptions = {
       value: this.getCode(),
       language: this.getLang(),
       theme: this.getTheme(),
       automaticLayout: true,
       readOnly: this.readOnly ?? false,
-    });
+    };
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    this.editor = monaco.editor.create(this.container.value!, editorOptions);
     this.editor.getModel()?.onDidChangeContent(() => {
       this.dispatchEvent(new CustomEvent("change", { detail: {} }));
     });

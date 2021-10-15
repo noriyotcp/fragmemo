@@ -67,10 +67,10 @@ export class CodeEditor extends LitElement {
     return null;
   }
 
-  private getCode() {
+  private getCode(): string {
     if (this.code) return this.code;
     const file = this.getFile();
-    if (!file) return;
+    if (!file) return "";
     return file.innerHTML.trim();
   }
 
@@ -114,15 +114,18 @@ export class CodeEditor extends LitElement {
   }
 
   firstUpdated(): void {
+    const model = monaco.editor.createModel(this.getCode(), this.getLang());
     const editorOptions = {
-      value: this.getCode(),
-      language: this.getLang(),
+      model,
       theme: this.getTheme(),
       automaticLayout: true,
       readOnly: this.readOnly ?? false,
     };
+
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     this.editor = monaco.editor.create(this.container.value!, editorOptions);
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    // monaco.editor.setModelLanguage(this.editor.getModel()!, "c");
     this.editor.getModel()?.onDidChangeContent(() => {
       this.dispatchEvent(new CustomEvent("change", { detail: {} }));
     });

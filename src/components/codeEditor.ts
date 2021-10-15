@@ -126,8 +126,14 @@ export class CodeEditor extends LitElement {
     this.editor = monaco.editor.create(this.container.value!, editorOptions);
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     // monaco.editor.setModelLanguage(this.editor.getModel()!, "c");
-    this.editor.getModel()?.onDidChangeContent(() => {
-      this.dispatchEvent(new CustomEvent("change", { detail: {} }));
+    this.editor.getModel()?.onDidChangeContent((e) => {
+      this.dispatchEvent(
+        new CustomEvent("change-text", {
+          detail: { text: this.getValue() },
+          bubbles: true,
+          composed: true,
+        })
+      );
     });
     window
       .matchMedia("(prefers-color-scheme: dark)")

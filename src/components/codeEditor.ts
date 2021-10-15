@@ -10,6 +10,9 @@ import jsonWorker from "monaco-editor/esm/vs/language/json/json.worker?worker";
 import cssWorker from "monaco-editor/esm/vs/language/css/css.worker?worker";
 import htmlWorker from "monaco-editor/esm/vs/language/html/html.worker?worker";
 import tsWorker from "monaco-editor/esm/vs/language/typescript/ts.worker?worker";
+import { FileData } from "../@types/global";
+
+const { myAPI } = window;
 
 // @ts-ignore
 self.MonacoEnvironment = {
@@ -64,10 +67,10 @@ export class CodeEditor extends LitElement {
     return null;
   }
 
-  private getCode() {
+  private getCode(): string {
     if (this.code) return this.code;
     const file = this.getFile();
-    if (!file) return;
+    if (!file) return "";
     return file.innerHTML.trim();
   }
 
@@ -111,14 +114,18 @@ export class CodeEditor extends LitElement {
   }
 
   firstUpdated(): void {
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    this.editor = monaco.editor.create(this.container.value!, {
-      value: this.getCode(),
-      language: this.getLang(),
+    const model = monaco.editor.createModel(this.getCode(), this.getLang());
+    const editorOptions = {
+      model,
       theme: this.getTheme(),
       automaticLayout: true,
       readOnly: this.readOnly ?? false,
-    });
+    };
+
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    this.editor = monaco.editor.create(this.container.value!, editorOptions);
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    // monaco.editor.setModelLanguage(this.editor.getModel()!, "c");
     this.editor.getModel()?.onDidChangeContent(() => {
       this.dispatchEvent(new CustomEvent("change", { detail: {} }));
     });
@@ -127,5 +134,25 @@ export class CodeEditor extends LitElement {
       .addEventListener("change", () => {
         monaco.editor.setTheme(this.getTheme());
       });
+
+    myAPI.openByMenu((_e: Event, fileData: FileData) =>
+      this._openByMenuListener(fileData)
+    );
+  }
+
+  private _openByMenuListener(fileData: FileData): boolean | void {
+    // Give the browser a chance to paint
+    // await new Promise((r) => setTimeout(r, 0));
+
+    if (fileData.status === undefined) {
+      return false;
+    }
+
+    if (!fileData.status) {
+      alert(`ファイルが開けませんでした\n${fileData.path}`);
+      return false;
+    }
+
+    this.setValue(fileData.text);
   }
 }

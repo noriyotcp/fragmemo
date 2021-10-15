@@ -1,5 +1,5 @@
 import { LitElement, html, css, TemplateResult } from "lit";
-import { customElement, query } from "lit/decorators.js";
+import { customElement, property, query } from "lit/decorators.js";
 import { FileData } from "../@types/global";
 const { myAPI } = window;
 
@@ -7,6 +7,7 @@ const { myAPI } = window;
 export class TestHeader extends LitElement {
   @query("#text") textarea!: HTMLTextAreaElement;
   @query("#btn-save") btnSave!: HTMLButtonElement;
+  @property({ type: String }) textareaValue?: string;
 
   static styles = css`
     :host {
@@ -27,6 +28,9 @@ export class TestHeader extends LitElement {
           <span id="message"></span>
         </form>
         <textarea id="text" rows="4"></textarea>
+        <textarea rows="4" placeholder="Two-way binding">
+${this.textareaValue}</textarea
+        >
       </div>
     `;
   }

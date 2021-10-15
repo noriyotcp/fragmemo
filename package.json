@@ -26,7 +26,8 @@
   "license": "MIT",
   "dependencies": {
     "lit": "^2.0.2",
-    "monaco-editor": "^0.29.0"
+    "monaco-editor": "^0.29.0",
+    "split.js": "^1.6.4"
   },
   "devDependencies": {
     "@types/node": "^16.10.3",

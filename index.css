@@ -4,6 +4,10 @@ body {
   background-color: #1e1e1e;
 }
 
+body::-webkit-scrollbar {
+  display: none;
+}
+
 .split {
   display: flex;
   flex-direction: row;

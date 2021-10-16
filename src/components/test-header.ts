@@ -5,12 +5,13 @@ const { myAPI } = window;
 
 @customElement("test-header")
 export class TestHeader extends LitElement {
-  @query("#text") textarea!: HTMLTextAreaElement;
   @query("#btn-save") btnSave!: HTMLButtonElement;
-  @property({ type: String }) textareaValue?: string;
+  @query("#message") message!: HTMLSpanElement;
+  @property({ type: String }) textareaValue!: string;
 
   static styles = css`
     :host {
+      color: ghostwhite;
       --textarea-width: 50%;
     }
     textarea {
@@ -27,7 +28,6 @@ export class TestHeader extends LitElement {
           </button>
           <span id="message"></span>
         </form>
-        <textarea id="text" rows="4"></textarea>
         <textarea rows="4" placeholder="Two-way binding">
 ${this.textareaValue}</textarea
         >
@@ -39,7 +39,7 @@ ${this.textareaValue}</textarea
     // Give the browser a chance to paint
     await new Promise((r) => setTimeout(r, 0));
     myAPI.setupStorage().then((msg: string) => {
-      this.textarea.value = msg;
+      this.message.textContent = msg;
     });
     myAPI.openByMenu((_e: Event, fileData: FileData) =>
       this._openByMenuListener(fileData)
@@ -47,7 +47,7 @@ ${this.textareaValue}</textarea
   }
 
   private _fileSaveAs(_e: Event): void {
-    myAPI.fileSaveAs(this.textarea.value);
+    myAPI.fileSaveAs(this.textareaValue);
   }
 
   private async _openByMenuListener(
@@ -65,6 +65,6 @@ ${this.textareaValue}</textarea
       return false;
     }
 
-    this.textarea.value = fileData.text;
+    this.textareaValue = fileData.text;
   }
 }

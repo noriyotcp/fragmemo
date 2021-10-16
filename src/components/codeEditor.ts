@@ -44,8 +44,9 @@ export class CodeEditor extends LitElement {
 
   static styles = css`
     :host {
+      --header-height: 100px;
       --editor-width: 100%;
-      --editor-height: 100vh;
+      --editor-height: calc(100vh - var(--header-height));
     }
     main {
       width: var(--editor-width);

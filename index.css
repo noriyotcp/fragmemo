@@ -5,7 +5,8 @@ body {
   color: ghostwhite;
 }
 
-body::-webkit-scrollbar {
+body::-webkit-scrollbar,
+snippet-list::-webkit-scrollbar {
   display: none;
 }
 

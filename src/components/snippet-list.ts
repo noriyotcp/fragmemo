@@ -1,19 +1,25 @@
 import { LitElement, html, css, TemplateResult } from "lit";
-import { customElement } from "lit/decorators.js";
+import { customElement, state } from "lit/decorators.js";
 import "@material/mwc-list/mwc-list.js";
-import "@material/mwc-list/mwc-list-item.js";
 
+import "./snippet-list-item";
 @customElement("snippet-list")
 export class SnippetList extends LitElement {
+  @state()
+  private itemCount: number;
+
+  constructor() {
+    super();
+    this.itemCount = 10;
+  }
+
   static styles = [
     css`
       :host {
         display: block;
-        --mdc-theme-text-primary-on-background: ghostwhite;
-        --mdc-theme-text-secondary-on-background: ghostwhite;
-      }
-      mwc-list > li {
-        border-bottom-color: rgba(248, 248, 255, 0.12);
+        overflow-y: scroll;
+        overflow-x: hidden;
+        height: 100vh;
       }
     `,
   ];
@@ -21,30 +27,18 @@ export class SnippetList extends LitElement {
   render(): TemplateResult {
     return html`
       <mwc-list>
-        <mwc-list-item twoline>
-          <span>Item 0</span>
-          <span slot="secondary">Secondary line</span>
-        </mwc-list-item>
-        <li divider role="separator"></li>
-
-        <mwc-list-item twoline>
-          <span>Item 1</span>
-          <span slot="secondary">Secondary line</span>
-        </mwc-list-item>
-        <li divider role="separator"></li>
-
-        <mwc-list-item twoline>
-          <span>Item 2</span>
-          <span slot="secondary">Secondary line</span>
-        </mwc-list-item>
-        <li divider role="separator"></li>
-
-        <mwc-list-item twoline>
-          <span>Item 3</span>
-          <span slot="secondary">Secondary line</span>
-        </mwc-list-item>
-        <li divider role="separator"></li>
+        ${this.range(1, this.itemCount).map(
+          (i) => html`<snippet-list-item></snippet-list-item>`
+        )}
       </mwc-list>
     `;
+  }
+
+  private range(
+    start: number,
+    end: number,
+    length = end - start + 1
+  ): Array<number> {
+    return Array.from({ length }, (_, i) => start + i);
   }
 }

@@ -7,10 +7,12 @@ const { myAPI } = window;
 export class TestHeader extends LitElement {
   @query("#text") textarea!: HTMLTextAreaElement;
   @query("#btn-save") btnSave!: HTMLButtonElement;
+  @query("#message") message!: HTMLSpanElement;
   @property({ type: String }) textareaValue?: string;
 
   static styles = css`
     :host {
+      color: ghostwhite;
       --textarea-width: 50%;
     }
     textarea {
@@ -39,7 +41,7 @@ ${this.textareaValue}</textarea
     // Give the browser a chance to paint
     await new Promise((r) => setTimeout(r, 0));
     myAPI.setupStorage().then((msg: string) => {
-      this.textarea.value = msg;
+      this.message.textContent = msg;
     });
     myAPI.openByMenu((_e: Event, fileData: FileData) =>
       this._openByMenuListener(fileData)

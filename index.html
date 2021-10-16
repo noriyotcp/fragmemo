@@ -7,9 +7,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>fragmemo</title>
     <script type="module" src="/src/components.ts"></script>
-    <script type="module" src="/src/renderer.ts"></script>
+    <script type="module" src="/src/split-pane.ts"></script>
   </head>
   <body>
-    <app-element></app-element>
+    <div class="split">
+      <div id="split-0"></div>
+      <app-element id="split-1"></app-element>
+    </div>
   </body>
 </html>

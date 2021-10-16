@@ -2471,6 +2471,11 @@ spawn-command@^0.0.2-1:
   resolved "https://registry.yarnpkg.com/spawn-command/-/spawn-command-0.0.2-1.tgz#62f5e9466981c1b796dc5929937e11c9c6921bd0"
   integrity sha1-YvXpRmmBwbeW3Fkpk34RycaSG9A=
 
+split.js@^1.6.4:
+  version "1.6.4"
+  resolved "https://registry.yarnpkg.com/split.js/-/split.js-1.6.4.tgz#13d47cba53382adef230a53294ce5dacb2a2f2e1"
+  integrity sha512-kYmQZprRJrF1IOjg/E+gdBEsKFv5kbgUE6RJVJZvrIzTOK/IHzKSqIeiJnWs7IP5D9TnpTQ2CbanuDuIWcyDUQ==
+
 sprintf-js@^1.1.2:
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/sprintf-js/-/sprintf-js-1.1.2.tgz#da1765262bf8c0f571749f2ad6c26300207ae673"

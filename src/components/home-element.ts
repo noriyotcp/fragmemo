@@ -11,7 +11,6 @@ export class HomeElement extends LitElement {
     css`
       :host {
         display: block;
-        width: 100%;
         height: 100vh;
         position: fixed;
         top: 0;

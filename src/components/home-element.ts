@@ -6,8 +6,6 @@ const { myAPI } = window;
 export class HomeElement extends LitElement {
   @state()
   private _current_page = "home-element";
-  @property()
-  _textareaValue = "";
 
   static styles = [
     css`
@@ -26,13 +24,7 @@ export class HomeElement extends LitElement {
   render(): TemplateResult {
     if (this._current_page == "home-element") {
       return html`
-        <test-header textareaValue="${this._textareaValue}"></test-header>
-        <code-editor
-          code="console.log('Hello World');"
-          language="typescript"
-          @change-text="${this._changeTextListener}"
-        >
-        </code-editor>
+        <editor-element><editor-element> </editor-element></editor-element>
       `;
     } else {
       return html`<settings-element
@@ -59,10 +51,5 @@ export class HomeElement extends LitElement {
   private _backToHomeListener(e: CustomEvent) {
     console.log(e.detail.elementName);
     this._current_page = e.detail.elementName;
-  }
-
-  private _changeTextListener(e: CustomEvent) {
-    console.log(e);
-    this._textareaValue = e.detail.text;
   }
 }

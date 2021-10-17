@@ -12,6 +12,11 @@ export class TestHeader extends LitElement {
   static styles = css`
     :host {
       color: ghostwhite;
+      position: fixed;
+      top: 0;
+      height: 100px;
+      width: 100%;
+      z-index: 9999;
       --textarea-width: 50%;
     }
     textarea {

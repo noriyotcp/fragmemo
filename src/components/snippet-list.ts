@@ -10,14 +10,15 @@ export class SnippetList extends LitElement {
 
   constructor() {
     super();
-    this.itemCount = 10;
+    this.itemCount = 100;
   }
 
   static styles = [
     css`
       :host {
         display: block;
-        overflow-y: scroll;
+        position: sticky;
+        overflow-y: smooth;
         overflow-x: hidden;
         height: 100vh;
       }

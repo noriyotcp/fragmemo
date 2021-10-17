@@ -15,6 +15,7 @@ export class HomeElement extends LitElement {
         height: 100vh;
         position: fixed;
         top: 0;
+        right: 0;
         overflow: hidden;
       }
     `,
@@ -22,9 +23,7 @@ export class HomeElement extends LitElement {
 
   render(): TemplateResult {
     if (this._current_page == "home-element") {
-      return html`
-        <editor-element><editor-element> </editor-element></editor-element>
-      `;
+      return html` <editor-element></editor-element> `;
     } else {
       return html`<settings-element
         @back-to-home=${this._backToHomeListener}

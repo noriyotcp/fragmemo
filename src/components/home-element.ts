@@ -1,23 +1,20 @@
 import { LitElement, html, css, TemplateResult } from "lit";
-import { customElement, property, state } from "lit/decorators.js";
+import { customElement, state } from "lit/decorators.js";
 const { myAPI } = window;
 
-@customElement("app-element")
-export class AppElement extends LitElement {
+@customElement("home-element")
+export class HomeElement extends LitElement {
   @state()
   private _current_page = "home-element";
-  @property()
-  _textareaValue = "";
 
   static styles = [
     css`
       :host {
         display: block;
-        margin-top: 100px;
-        width: 100%;
         height: 100vh;
         position: fixed;
         top: 0;
+        right: 0;
         overflow: hidden;
       }
     `,
@@ -25,15 +22,7 @@ export class AppElement extends LitElement {
 
   render(): TemplateResult {
     if (this._current_page == "home-element") {
-      return html`
-        <test-header textareaValue="${this._textareaValue}"></test-header>
-        <code-editor
-          code="console.log('Hello World');"
-          language="typescript"
-          @change-text="${this._changeTextListener}"
-        >
-        </code-editor>
-      `;
+      return html` <editor-element></editor-element> `;
     } else {
       return html`<settings-element
         @back-to-home=${this._backToHomeListener}
@@ -59,10 +48,5 @@ export class AppElement extends LitElement {
   private _backToHomeListener(e: CustomEvent) {
     console.log(e.detail.elementName);
     this._current_page = e.detail.elementName;
-  }
-
-  private _changeTextListener(e: CustomEvent) {
-    console.log(e);
-    this._textareaValue = e.detail.text;
   }
 }

@@ -1,10 +1,19 @@
-import { LitElement, html, TemplateResult } from "lit";
-import { customElement, state } from "lit/decorators.js";
+import { LitElement, html, css, TemplateResult } from "lit";
+import { customElement, property } from "lit/decorators.js";
 
-@customElement("home-element")
-export class HomeElement extends LitElement {
-  @state()
-  private _textareaValue = "";
+@customElement("editor-element")
+export class EditorElement extends LitElement {
+  @property()
+  _textareaValue = "";
+
+  static styles = [
+    css`
+      :host {
+        display: block;
+        margin-top: 100px;
+      }
+    `,
+  ];
 
   render(): TemplateResult {
     return html`
@@ -19,6 +28,7 @@ export class HomeElement extends LitElement {
   }
 
   private _changeTextListener(e: CustomEvent) {
+    console.log(e);
     this._textareaValue = e.detail.text;
   }
 }

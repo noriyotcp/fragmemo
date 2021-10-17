@@ -1,5 +1,5 @@
 import { LitElement, html, css, TemplateResult } from "lit";
-import { customElement, property, state } from "lit/decorators.js";
+import { customElement, state } from "lit/decorators.js";
 const { myAPI } = window;
 
 @customElement("home-element")

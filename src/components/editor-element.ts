@@ -10,6 +10,7 @@ export class EditorElement extends LitElement {
     css`
       :host {
         display: block;
+        margin-top: 100px;
       }
     `,
   ];

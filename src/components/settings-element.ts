@@ -8,7 +8,7 @@ export class SettingsElement extends LitElement {
       :host {
         display: block;
         height: 100vh;
-        margin-right: 30%;
+        margin-right: 20%;
         color: ghostwhite;
       }
       header {

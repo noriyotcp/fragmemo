@@ -11,7 +11,6 @@ export class TestHeader extends LitElement {
 
   static styles = css`
     :host {
-      color: ghostwhite;
       position: fixed;
       top: 0;
       height: 100px;

@@ -9,7 +9,6 @@ export class SettingsElement extends LitElement {
         display: block;
         height: 100vh;
         margin-right: 20%;
-        color: ghostwhite;
       }
       header {
         display: grid;

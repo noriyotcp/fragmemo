@@ -2,8 +2,8 @@ import { LitElement, html, css, TemplateResult } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
 const { myAPI } = window;
 
-@customElement("app-element")
-export class AppElement extends LitElement {
+@customElement("home-element")
+export class HomeElement extends LitElement {
   @state()
   private _current_page = "home-element";
   @property()

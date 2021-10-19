@@ -10,7 +10,6 @@ export class SearchItem extends LitElement {
         --mdc-theme-text-primary-on-background: ghostwhite;
         --mdc-theme-text-secondary-on-background: ghostwhite;
         --mdc-list-side-padding: 8px;
-        border-bottom: 1px solid rgba(248, 248, 255, 0.12);
         background-color: #1e1e1e;
       }
     `,
@@ -19,10 +18,10 @@ export class SearchItem extends LitElement {
 
   render(): TemplateResult {
     return html`
-      <mwc-list-item twoline>
+      <header>
+        <button>Save</button>
         <span>Search...</span>
-        <li divider role="separator"></li>
-      </mwc-list-item>
+      </header>
     `;
   }
 }

@@ -23,17 +23,6 @@ export class SnippetList extends LitElement {
         --mdc-list-vertical-padding: -8px;
         padding-top: var(--mdc-list-vertical-padding);
       }
-      search-item {
-        position: sticky;
-        top: 0;
-        height: 100px;
-        z-index: 9999;
-        display: block;
-        align-items: unset;
-        justify-content: unset;
-        padding: 0;
-        cursor: unset;
-      }
     `,
     List.styles,
   ];

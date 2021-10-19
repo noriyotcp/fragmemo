@@ -32,9 +32,13 @@ export class TestHeader extends LitElement {
           </button>
           <span id="message"></span>
         </form>
-        <textarea rows="4" placeholder="Two-way binding">
-${this.textareaValue}</textarea
-        >
+        <input
+          type="text"
+          id="snippet-title"
+          name="snippet-title"
+          placeholder="Two-way binding"
+          value="${this.textareaValue}"
+        />
       </div>
     `;
   }

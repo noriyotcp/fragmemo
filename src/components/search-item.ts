@@ -20,7 +20,13 @@ export class SearchItem extends LitElement {
     return html`
       <header>
         <button>Save</button>
-        <span>Search...</span>
+        <input
+          type="text"
+          id="search"
+          name="search"
+          placeholder="Search..."
+          value=""
+        />
       </header>
     `;
   }

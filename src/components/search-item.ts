@@ -1,6 +1,5 @@
 import { LitElement, html, css, TemplateResult } from "lit";
 import { customElement } from "lit/decorators.js";
-import { ListItem } from "@material/mwc-list/mwc-list-item.js";
 
 @customElement("search-item")
 export class SearchItem extends LitElement {
@@ -11,9 +10,13 @@ export class SearchItem extends LitElement {
         --mdc-theme-text-secondary-on-background: ghostwhite;
         --mdc-list-side-padding: 8px;
         background-color: #1e1e1e;
+        position: sticky;
+        top: 0;
+        height: 100px;
+        z-index: 9999;
+        display: block;
       }
     `,
-    ListItem.styles,
   ];
 
   render(): TemplateResult {

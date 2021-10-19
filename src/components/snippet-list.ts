@@ -20,6 +20,19 @@ export class SnippetList extends LitElement {
         overflow-x: hidden;
         height: 100vh;
         background-color: #323233;
+        --mdc-list-vertical-padding: -8px;
+        padding-top: var(--mdc-list-vertical-padding);
+      }
+      search-item {
+        position: sticky;
+        top: 0;
+        height: 100px;
+        z-index: 9999;
+        display: block;
+        align-items: unset;
+        justify-content: unset;
+        padding: 0;
+        cursor: unset;
       }
     `,
     List.styles,
@@ -27,6 +40,7 @@ export class SnippetList extends LitElement {
 
   render(): TemplateResult {
     return html`
+      <search-item></search-item>
       <mwc-list>
         ${this.range(1, this.itemCount).map(
           (i) =>

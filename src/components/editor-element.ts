@@ -28,7 +28,6 @@ export class EditorElement extends LitElement {
   }
 
   private _changeTextListener(e: CustomEvent) {
-    console.log(e);
     this._textareaValue = e.detail.text;
   }
 }

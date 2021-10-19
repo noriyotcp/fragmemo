@@ -1,6 +1,8 @@
 import { LitElement, html, css, TemplateResult } from "lit";
 import { customElement, property, query } from "lit/decorators.js";
 import { FileData } from "../@types/global";
+import { dispatch } from "../events/dispatcher";
+
 const { myAPI } = window;
 
 @customElement("test-header")
@@ -38,9 +40,14 @@ export class TestHeader extends LitElement {
           name="snippet-title"
           placeholder="Two-way binding"
           value="${this.textareaValue}"
+          @input="${this._inputTitleDispatcher}"
         />
       </div>
     `;
+  }
+
+  private _inputTitleDispatcher(e: { target: { value: string } }) {
+    dispatch({ type: "input-title", message: e.target.value });
   }
 
   async firstUpdated(): Promise<void> {

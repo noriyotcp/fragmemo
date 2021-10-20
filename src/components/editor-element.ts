@@ -18,16 +18,8 @@ export class EditorElement extends LitElement {
   render(): TemplateResult {
     return html`
       <test-header textareaValue="${this._textareaValue}"></test-header>
-      <code-editor
-        code="console.log('Hello World');"
-        language="typescript"
-        @change-text="${this._changeTextListener}"
-      >
+      <code-editor code="console.log('Hello World');" language="typescript">
       </code-editor>
     `;
-  }
-
-  private _changeTextListener(e: CustomEvent) {
-    this._textareaValue = e.detail.text;
   }
 }

@@ -18,8 +18,7 @@ export class EditorElement extends LitElement {
   render(): TemplateResult {
     return html`
       <test-header textareaValue="${this._textareaValue}"></test-header>
-      <code-editor code="console.log('Hello World');" language="typescript">
-      </code-editor>
+      <code-editor code="" language="typescript"> </code-editor>
     `;
   }
 }

@@ -62,7 +62,7 @@ export class TestHeader extends LitElement {
   }
 
   private _fileSaveAs(_e: Event): void {
-    myAPI.fileSaveAs(this.textareaValue);
+    dispatch({ type: "file-save-as", message: "" });
   }
 
   private async _openByMenuListener(

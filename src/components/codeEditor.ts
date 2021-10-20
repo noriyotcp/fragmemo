@@ -40,7 +40,7 @@ export class CodeEditor extends LitElement {
   @property({ type: Boolean, attribute: "readonly" }) readOnly?: boolean;
   @property() theme?: string;
   @property() language?: string;
-  @property() code?: string;
+  @property() code!: string;
 
   static styles = css`
     :host {
@@ -61,6 +61,13 @@ export class CodeEditor extends LitElement {
       </style>
       <main ${ref(this.container)}></main>
     `;
+  }
+
+  constructor() {
+    super();
+    window.addEventListener("file-save-as", (e) => {
+      myAPI.fileSaveAs(this.getValue());
+    });
   }
 
   private getFile() {

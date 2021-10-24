@@ -42,10 +42,13 @@ export class SearchItem extends LitElement {
 
   constructor() {
     super();
-    window.addEventListener("input-title", this._inputTitleListener);
+    window.addEventListener(
+      "input-title",
+      this._inputTitleListener as EventListener
+    );
   }
 
-  private _inputTitleListener = (e): void => {
+  private _inputTitleListener = (e: CustomEvent): void => {
     this.searchMessage.textContent = e.detail.message;
   };
 }

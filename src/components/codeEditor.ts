@@ -65,9 +65,9 @@ export class CodeEditor extends LitElement {
 
   constructor() {
     super();
-    window.addEventListener("file-save-as", (e) => {
+    window.addEventListener("file-save-as", ((e: CustomEvent) => {
       myAPI.fileSaveAs(this.getValue());
-    });
+    }) as EventListener);
   }
 
   private getFile() {
@@ -152,6 +152,14 @@ export class CodeEditor extends LitElement {
     myAPI.openByMenu((_e: Event, fileData: FileData) =>
       this._openByMenuListener(fileData)
     );
+
+    console.log(this.editor.hasTextFocus());
+    this.editor.onDidFocusEditorText(() => {
+      console.log("focus");
+    });
+    this.editor.onDidBlurEditorText(() => {
+      console.log("blur");
+    });
   }
 
   private _openByMenuListener(fileData: FileData): boolean | void {

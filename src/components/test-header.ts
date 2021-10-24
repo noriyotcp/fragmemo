@@ -32,7 +32,7 @@ export class TestHeader extends LitElement {
           <button type="button" id="btn-save" @click="${this._fileSaveAs}">
             保存
           </button>
-          <span id="message"></span>
+          <div id="message"></div>
         </form>
         <input
           type="text"
@@ -54,7 +54,7 @@ export class TestHeader extends LitElement {
     // Give the browser a chance to paint
     await new Promise((r) => setTimeout(r, 0));
     myAPI.setupStorage().then((msg: string) => {
-      this.message.textContent = msg;
+      this.message.innerText = msg;
     });
     myAPI.openByMenu((_e: Event, fileData: FileData) =>
       this._openByMenuListener(fileData)

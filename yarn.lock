@@ -2610,6 +2610,11 @@ signal-exit@^3.0.2:
   resolved "https://registry.yarnpkg.com/signal-exit/-/signal-exit-3.0.5.tgz#9e3e8cc0c75a99472b44321033a7702e7738252f"
   integrity sha512-KWcOiKeQj6ZyXx7zq4YxSMgHRlod4czeBQZrPb8OKcohcqAXShm7E20kEMle9WBt26hFcAf0qLOcp5zmY7kOqQ==
 
+simple-json-db@^1.2.3:
+  version "1.2.3"
+  resolved "https://registry.yarnpkg.com/simple-json-db/-/simple-json-db-1.2.3.tgz#ea7256bbbb1205b4af079f9bed2611e33401bce7"
+  integrity sha512-eL8u7YkcHidSaUvmolPooTPjxvMYd+IglSaxjnf13Tg1KQXcpoXlLOa38n4LillfQhgJuCgmUbCYERPl5fmY+w==
+
 slash@^3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/slash/-/slash-3.0.0.tgz#6539be870c165adbd5240220dbe361f1bc4d4634"

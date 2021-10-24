@@ -1,4 +1,5 @@
 import * as fs from "fs";
+import { StorageDB, FileDoesNotExistError } from "./storage-db";
 
 export const setupStorage = (_path: fs.PathLike): string => {
   let msg = "";
@@ -8,7 +9,9 @@ export const setupStorage = (_path: fs.PathLike): string => {
     msg = `${_path} and ${_path}/.fragmemo created.`;
   } else {
     if (canUseAsStorage(_path)) {
-      msg = `${_path} found.`;
+      msg = `${_path} found.
+${messageOnDbCheck(_path)}
+`;
     } else {
       msg = `${_path} found but cannot be as storage.`;
     }
@@ -50,4 +53,23 @@ const createStorage = async (_path: fs.PathLike) => {
     });
     createTestFile(_path);
   });
+};
+
+const messageOnDbCheck = (_path: fs.PathLike): string => {
+  try {
+    const db = new StorageDB(`${_path}/storage.json`);
+    if (db.isEmpty()) {
+      return `${_path}/storage.json is empty`;
+    }
+    console.log(db.JSON());
+    return `${_path}/storage.json`;
+  } catch (error: unknown) {
+    if (error instanceof FileDoesNotExistError) {
+      console.error(error.name);
+      console.error(error.message);
+      return error.message;
+    } else {
+      return "Error: somethig is wrong";
+    }
+  }
 };

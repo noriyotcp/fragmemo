@@ -1,4 +1,5 @@
 import * as fs from "fs";
+import { StorageDB, FileDoesNotExistError } from "./storage-db";
 
 export const setupStorage = (_path: fs.PathLike): string => {
   let msg = "";
@@ -9,6 +10,19 @@ export const setupStorage = (_path: fs.PathLike): string => {
   } else {
     if (canUseAsStorage(_path)) {
       msg = `${_path} found.`;
+      try {
+        const db = new StorageDB(`${_path}/storage.json`);
+        if (db.isEmpty()) {
+          msg = `${_path}/storage.json is empty`;
+        }
+        console.log(db.JSON());
+      } catch (error: unknown) {
+        if (error instanceof FileDoesNotExistError) {
+          console.error(error.name);
+          console.error(error.message);
+          msg = error.message;
+        }
+      }
     } else {
       msg = `${_path} found but cannot be as storage.`;
     }

@@ -16,7 +16,8 @@
     "app:build": "yarn build:for:electron && yarn electron:builder",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
     "lint:fix": "eslint . --ext .js,.jsx,.ts,.tsx --fix",
-    "lint:prettier": "prettier --write ."
+    "lint:prettier": "prettier --write .",
+    "test": "jest"
   },
   "keywords": [],
   "author": {

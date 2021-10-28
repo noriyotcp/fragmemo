@@ -1,0 +1,24 @@
+{
+  "testEnvironment": "node",
+  "testPathIgnorePatterns": ["./src/test/utils/", "./node_modules/"],
+  "transformIgnorePatterns": ["/node_modules/"],
+  "transform": {
+    "^.+\\.(t|j)sx?$": [
+      "@swc/jest",
+      {
+        "sourceMaps": true,
+
+        "module": {
+          "type": "commonjs"
+        },
+
+        "jsc": {
+          "parser": {
+            "syntax": "typescript",
+            "tsx": true
+          }
+        }
+      }
+    ]
+  }
+}

@@ -1,5 +1,5 @@
 import * as fs from "fs";
-import { StorageDB, FileDoesNotExistError } from "./storage-db";
+import { StorageDB, FileDoesNotExistError } from "./storageDb";
 
 export const setupStorage = (_path: fs.PathLike): string => {
   let msg = "";

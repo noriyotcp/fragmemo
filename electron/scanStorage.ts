@@ -10,4 +10,16 @@ export const scanDirectories = async (
   return allDirents.filter((dirent) => dirent.isDirectory());
 };
 
-console.log(scanDirectories(resolve(__dirname)));
+export const scanFiles = async (
+  path: string
+): Promise<import("fs").Dirent[]> => {
+  const allDirents = await readdir(path, {
+    withFileTypes: true,
+  });
+  // reject hidden files
+  return allDirents.filter(
+    (dirent) => dirent.isFile() && !/^\.+/.test(dirent.name)
+  );
+};
+
+console.log(scanFiles(resolve(__dirname, "../test-fragmemo", "snippet-1")));

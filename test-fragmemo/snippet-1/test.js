@@ -1,4 +1,3 @@
-# same file name
 class Hoge {
   constructor(hoge) {
     this.hoge = hoge;
@@ -9,5 +8,5 @@ class Hoge {
   }
 }
 
-const hoge = new Hoge('test');
+const hoge = new Hoge("test desu");
 hoge.say();

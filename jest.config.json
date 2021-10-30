@@ -1,6 +1,10 @@
 {
   "testEnvironment": "node",
-  "testPathIgnorePatterns": ["./src/test/utils/", "./node_modules/"],
+  "testPathIgnorePatterns": [
+    "./src/test/utils/",
+    "./node_modules/",
+    "/test-fragmemo/"
+  ],
   "transformIgnorePatterns": ["/node_modules/"],
   "transform": {
     "^.+\\.(t|j)sx?$": [

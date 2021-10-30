@@ -1,7 +1,6 @@
 import { readdir } from "fs/promises";
-import { resolve } from "path";
 
-export const scanDirectories = async (
+const scanDirectories = async (
   path: string
 ): Promise<import("fs").Dirent[]> => {
   const allDirents = await readdir(path, {
@@ -10,9 +9,7 @@ export const scanDirectories = async (
   return allDirents.filter((dirent) => dirent.isDirectory());
 };
 
-export const scanFiles = async (
-  path: string
-): Promise<import("fs").Dirent[]> => {
+const scanFiles = async (path: string): Promise<import("fs").Dirent[]> => {
   const allDirents = await readdir(path, {
     withFileTypes: true,
   });
@@ -22,4 +19,4 @@ export const scanFiles = async (
   );
 };
 
-console.log(scanFiles(resolve(__dirname, "../test-fragmemo", "snippet-1")));
+export { scanDirectories, scanFiles };

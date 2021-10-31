@@ -1,5 +1,6 @@
 import * as fs from "fs";
 import { StorageDB, FileDoesNotExistError } from "./storageDb";
+import { scanDirectories, scanFiles } from "./scanStorage";
 
 export const setupStorage = (_path: fs.PathLike): string => {
   let msg = "";
@@ -10,8 +11,7 @@ export const setupStorage = (_path: fs.PathLike): string => {
   } else {
     if (canUseAsStorage(_path)) {
       msg = `${_path} found.
-${messageOnDbCheck(_path)}
-`;
+${checkDB(_path).msg}`;
     } else {
       msg = `${_path} found but cannot be as storage.`;
     }
@@ -55,21 +55,60 @@ const createStorage = async (_path: fs.PathLike) => {
   });
 };
 
-const messageOnDbCheck = (_path: fs.PathLike): string => {
+const checkDB = (_path: fs.PathLike): { status: boolean; msg: string } => {
+  let [status, msg] = [false, ""];
+
   try {
     const db = new StorageDB(`${_path}/storage.json`);
     if (db.isEmpty()) {
-      return `${_path}/storage.json is empty`;
+      [status, msg] = [true, `${_path}/storage.json is empty`];
+      return { status, msg };
     }
-    console.log(db.JSON());
-    return `${_path}/storage.json`;
+    refreshStorageDB(db, objsFromStorage(_path));
+    [status, msg] = [true, `${_path}/storage.json`];
   } catch (error: unknown) {
     if (error instanceof FileDoesNotExistError) {
       console.error(error.name);
       console.error(error.message);
-      return error.message;
-    } else {
-      return "Error: somethig is wrong";
+      [status, msg] = [false, error.message];
+    } else if (error instanceof Error) {
+      [status, msg] = [false, error.message];
     }
   }
+  return { status, msg };
+};
+
+type objsFromStorageType = Promise<
+  Promise<{
+    directory: string;
+    fragments: string[];
+  }>[]
+>;
+
+const objsFromStorage = async (_path: fs.PathLike): objsFromStorageType => {
+  const directories = await scanDirectories(`${_path}`);
+  return directories.map(async (dir) => {
+    return {
+      directory: dir.name,
+      fragments: await scanFiles(`${_path}/${dir.name}`).then((files) => {
+        return files.map((file) => file.name);
+      }),
+    };
+  });
+};
+
+const refreshStorageDB = (
+  db: StorageDB,
+  objsFromStorage: objsFromStorageType
+) => {
+  objsFromStorage.then((objs) => {
+    objs.forEach((obj) => {
+      // Update DB's fragments only
+      // https://github.com/nmaggioni/Simple-JSONdb/issues/9#issuecomment-859535922
+      obj.then((o) => {
+        db.update(o.directory, "fragments", o.fragments);
+      });
+    });
+  });
+  db.sync();
 };

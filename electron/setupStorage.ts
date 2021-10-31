@@ -64,7 +64,7 @@ const checkDB = (_path: fs.PathLike): { status: boolean; msg: string } => {
       [status, msg] = [true, `${_path}/storage.json is empty`];
       return { status, msg };
     }
-    refreshStorageDB(db, _path);
+    refreshStorageDB(db, objsFromStorage(_path));
     [status, msg] = [true, `${_path}/storage.json`];
   } catch (error: unknown) {
     if (error instanceof FileDoesNotExistError) {
@@ -78,9 +78,9 @@ const checkDB = (_path: fs.PathLike): { status: boolean; msg: string } => {
   return { status, msg };
 };
 
-const refreshStorageDB = async (db: StorageDB, _path: fs.PathLike) => {
+const objsFromStorage = async (_path: fs.PathLike) => {
   const directories = await scanDirectories(`${_path}`);
-  const objsFromStorage = directories.map(async (dir) => {
+  return directories.map(async (dir) => {
     return {
       directory: dir.name,
       fragments: await scanFiles(`${_path}/${dir.name}`).then((files) => {
@@ -88,11 +88,21 @@ const refreshStorageDB = async (db: StorageDB, _path: fs.PathLike) => {
       }),
     };
   });
-  objsFromStorage.forEach((obj) => {
-    // Update DB's fragments only
-    // https://github.com/nmaggioni/Simple-JSONdb/issues/9#issuecomment-859535922
-    obj.then((o) => {
-      db.update(o.directory, "fragments", o.fragments);
+};
+
+const refreshStorageDB = (
+  db: StorageDB,
+  objsFromStorage: Promise<
+    Promise<{ directory: string; fragments: string[] }>[]
+  >
+) => {
+  objsFromStorage.then((objs) => {
+    objs.forEach((obj) => {
+      // Update DB's fragments only
+      // https://github.com/nmaggioni/Simple-JSONdb/issues/9#issuecomment-859535922
+      obj.then((o) => {
+        db.update(o.directory, "fragments", o.fragments);
+      });
     });
   });
   db.sync();

@@ -65,7 +65,6 @@ const checkDB = (_path: fs.PathLike): { status: boolean; msg: string } => {
       return { status, msg };
     }
     refreshStorageDB(db, _path);
-    db.sync();
     [status, msg] = [true, `${_path}/storage.json`];
   } catch (error: unknown) {
     if (error instanceof FileDoesNotExistError) {
@@ -93,10 +92,8 @@ const refreshStorageDB = async (db: StorageDB, _path: fs.PathLike) => {
     // Update DB's fragments only
     // https://github.com/nmaggioni/Simple-JSONdb/issues/9#issuecomment-859535922
     obj.then((o) => {
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      const clone: any = db.get(o.directory)!;
-      clone.fragments = o.fragments;
-      db.set(o.directory, clone);
+      db.update(o.directory, "fragments", o.fragments);
     });
   });
+  db.sync();
 };

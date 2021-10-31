@@ -16,6 +16,12 @@ class StorageDB extends JSONdb {
   public isEmpty(): boolean {
     return !Object.keys(this.JSON()).length;
   }
+
+  public update(primaryKey: string, secondaryKey: string, value: any): void {
+    const clone: any = this.get(primaryKey);
+    clone[secondaryKey] = value;
+    this.set(primaryKey, clone);
+  }
 }
 
 class FileDoesNotExistError extends Error {

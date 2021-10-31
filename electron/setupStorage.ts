@@ -78,7 +78,14 @@ const checkDB = (_path: fs.PathLike): { status: boolean; msg: string } => {
   return { status, msg };
 };
 
-const objsFromStorage = async (_path: fs.PathLike) => {
+type objsFromStorageType = Promise<
+  Promise<{
+    directory: string;
+    fragments: string[];
+  }>[]
+>;
+
+const objsFromStorage = async (_path: fs.PathLike): objsFromStorageType => {
   const directories = await scanDirectories(`${_path}`);
   return directories.map(async (dir) => {
     return {
@@ -92,9 +99,7 @@ const objsFromStorage = async (_path: fs.PathLike) => {
 
 const refreshStorageDB = (
   db: StorageDB,
-  objsFromStorage: Promise<
-    Promise<{ directory: string; fragments: string[] }>[]
-  >
+  objsFromStorage: objsFromStorageType
 ) => {
   objsFromStorage.then((objs) => {
     objs.forEach((obj) => {

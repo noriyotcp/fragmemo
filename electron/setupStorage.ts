@@ -11,8 +11,7 @@ export const setupStorage = (_path: fs.PathLike): string => {
   } else {
     if (canUseAsStorage(_path)) {
       msg = `${_path} found.
-${messageOnDbCheck(_path)}
-`;
+${checkDB(_path).msg}`;
     } else {
       msg = `${_path} found but cannot be as storage.`;
     }
@@ -56,24 +55,28 @@ const createStorage = async (_path: fs.PathLike) => {
   });
 };
 
-const messageOnDbCheck = (_path: fs.PathLike): string => {
+const checkDB = (_path: fs.PathLike): { status: boolean; msg: string } => {
+  let [status, msg] = [false, ""];
+
   try {
     const db = new StorageDB(`${_path}/storage.json`);
     if (db.isEmpty()) {
-      return `${_path}/storage.json is empty`;
+      [status, msg] = [true, `${_path}/storage.json is empty`];
+      return { status, msg };
     }
     refreshStorageDB(db, _path);
     db.sync();
-    return `${_path}/storage.json`;
+    [status, msg] = [true, `${_path}/storage.json`];
   } catch (error: unknown) {
     if (error instanceof FileDoesNotExistError) {
       console.error(error.name);
       console.error(error.message);
-      return error.message;
-    } else {
-      return "Error: somethig is wrong";
+      [status, msg] = [false, error.message];
+    } else if (error instanceof Error) {
+      [status, msg] = [false, error.message];
     }
   }
+  return { status, msg };
 };
 
 const refreshStorageDB = async (db: StorageDB, _path: fs.PathLike) => {

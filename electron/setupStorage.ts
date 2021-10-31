@@ -52,15 +52,18 @@ const createStorage = async (_path: fs.PathLike) => {
     fs.writeFile(`${_path}/.fragmemo`, "", "utf8", (err) => {
       if (err) return err;
     });
+    // create an emptry storage.json
+    fs.writeFile(`${_path}/storage.json`, "", "utf8", (err) => {
+      if (err) return err;
+    });
     // create first snippet (directory)
     const chars32 = createHash("md5").update(String(Date.now())).digest("hex");
     const chars40 = createHash("sha1").update(String(Date.now())).digest("hex");
     const snippetName = `${chars32}-${chars40}`;
     fs.mkdir(`${_path}/${snippetName}`, (err) => {
       if (err) return err;
+      createTestFile(`${_path}/${snippetName}`);
     });
-
-    createTestFile(`${_path}/${snippetName}`);
   });
 };
 

@@ -12,7 +12,7 @@ export const setupStorage = (_path: fs.PathLike): string => {
   } else {
     if (canUseAsStorage(_path)) {
       msg = `${_path} found.
-${checkDB(_path).msg}`;
+${refreshDB(_path).msg}`;
     } else {
       msg = `${_path} found but cannot be as storage.`;
     }
@@ -76,15 +76,11 @@ const createStorage = async (_path: fs.PathLike) => {
   });
 };
 
-const checkDB = (_path: fs.PathLike): { status: boolean; msg: string } => {
+const refreshDB = (_path: fs.PathLike): { status: boolean; msg: string } => {
   let [status, msg] = [false, ""];
 
   try {
     const db = new StorageDB(`${_path}/storage.json`);
-    if (db.isEmpty()) {
-      [status, msg] = [true, `${_path}/storage.json is empty`];
-      return { status, msg };
-    }
     refreshStorageDB(db, objsFromStorage(_path));
     [status, msg] = [true, `${_path}/storage.json`];
   } catch (error: unknown) {

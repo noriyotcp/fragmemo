@@ -11,8 +11,7 @@ export const setupStorage = (_path: fs.PathLike): string => {
     msg = `${_path} and ${_path}/.fragmemo created.`;
   } else {
     if (canUseAsStorage(_path)) {
-      msg = `${_path} found.
-${refreshDB(_path).msg}`;
+      msg = refreshDB(_path).msg;
     } else {
       msg = `${_path} found but cannot be as storage.`;
     }
@@ -82,7 +81,9 @@ const refreshDB = (_path: fs.PathLike): { status: boolean; msg: string } => {
   try {
     const db = new StorageDB(`${_path}/storage.json`);
     refreshStorageDB(db, objsFromStorage(_path));
-    [status, msg] = [true, `${_path}/storage.json`];
+    const storageFound = `${_path} found.
+${_path}/storage.json`;
+    [status, msg] = [true, storageFound];
   } catch (error: unknown) {
     if (error instanceof FileDoesNotExistError) {
       console.error(error.name);

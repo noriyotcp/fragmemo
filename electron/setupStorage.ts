@@ -63,6 +63,15 @@ const createStorage = async (_path: fs.PathLike) => {
     fs.mkdir(`${_path}/${snippetName}`, (err) => {
       if (err) return err;
       createTestFile(`${_path}/${snippetName}`);
+
+      const db = new StorageDB(`${_path}/storage.json`);
+      const obj = {
+        [`${snippetName}`]: {
+          fragments: ["test.ts"],
+        },
+      };
+      db.JSON(obj);
+      db.sync();
     });
   });
 };

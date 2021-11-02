@@ -48,22 +48,27 @@ const createStorage = (
 ): { status: boolean; msg: string } => {
   let [status, msg] = [false, ""];
 
+  const returnError = (err: NodeJS.ErrnoException) => {
+    [status, msg] = [false, err.message];
+    return err;
+  };
+
   fs.mkdir(_path, (err) => {
-    if (err) return err;
+    if (err) returnError(err);
 
     fs.writeFile(`${_path}/.fragmemo`, "", "utf8", (err) => {
-      if (err) return err;
+      if (err) returnError(err);
     });
     // create an emptry storage.json
     fs.writeFile(`${_path}/storage.json`, "", "utf8", (err) => {
-      if (err) return err;
+      if (err) returnError(err);
     });
     // create first snippet (directory)
     const chars32 = createHash("md5").update(String(Date.now())).digest("hex");
     const chars40 = createHash("sha1").update(String(Date.now())).digest("hex");
     const snippetName = `${chars32}-${chars40}`;
     fs.mkdir(`${_path}/${snippetName}`, (err) => {
-      if (err) return err;
+      if (err) returnError(err);
       createTestFile(`${_path}/${snippetName}`);
 
       const db = new StorageDB(`${_path}/storage.json`);

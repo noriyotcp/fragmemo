@@ -4,6 +4,7 @@ import { app, BrowserWindow, ipcMain } from "electron";
 import { setFileSaveAs } from "./setFileSaveAs";
 import { createMenu } from "./createMenu";
 import { setupStorage } from "./setupStorage";
+import { setTimeout } from "timers/promises";
 
 const isDev = process.env.IS_DEV == "true" ? true : false;
 
@@ -54,6 +55,8 @@ app.whenReady().then(() => {
 app.once("browser-window-created", () => {
   console.log("browser-window-created");
   ipcMain.handle("setup-storage", async () => {
+    await setTimeout(5000); // wait 5 seconds for testing
+
     return setupStorage(path.resolve(os.homedir(), "fragmemo"));
   });
 });

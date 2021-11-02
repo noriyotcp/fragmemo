@@ -2,7 +2,7 @@ import * as fs from "fs";
 import { StorageDB, FileDoesNotExistError } from "./storageDb";
 import { scanDirectories, scanFiles } from "./scanStorage";
 import { createHash } from "crypto";
-import { setupStorageResultType } from "../src/@types/global";
+import { setupStorageResultType } from "src/@types/global";
 
 export const setupStorage = (_path: fs.PathLike): setupStorageResultType => {
   let setupStorageResult: { status: boolean; msg: string };

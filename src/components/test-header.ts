@@ -1,6 +1,6 @@
 import { LitElement, html, css, TemplateResult } from "lit";
 import { customElement, property, query } from "lit/decorators.js";
-import { FileData, setupStorageResultType } from "../@types/global";
+import { FileData, setupStorageResultType } from "src/@types/global";
 import { dispatch } from "../events/dispatcher";
 
 const { myAPI } = window;

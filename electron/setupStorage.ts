@@ -7,8 +7,7 @@ export const setupStorage = (_path: fs.PathLike): string => {
   let msg = "";
 
   if (!fs.existsSync(_path)) {
-    createStorage(_path);
-    msg = `${_path} and ${_path}/.fragmemo created.`;
+    msg = createStorage(_path).msg;
   } else {
     if (canUseAsStorage(_path)) {
       msg = refreshDB(_path).msg;
@@ -44,7 +43,11 @@ function identity(num: number): number {
   });
 };
 
-const createStorage = async (_path: fs.PathLike) => {
+const createStorage = (
+  _path: fs.PathLike
+): { status: boolean; msg: string } => {
+  let [status, msg] = [false, ""];
+
   fs.mkdir(_path, (err) => {
     if (err) return err;
 
@@ -73,6 +76,8 @@ const createStorage = async (_path: fs.PathLike) => {
       db.sync();
     });
   });
+  [status, msg] = [true, `${_path} and ${_path}/.fragmemo created.`];
+  return { status, msg };
 };
 
 const refreshDB = (_path: fs.PathLike): { status: boolean; msg: string } => {

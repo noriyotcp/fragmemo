@@ -1,4 +1,4 @@
-import { scanDirectories, scanFiles } from "../electron/scanStorage";
+import { scanDirectories, scanFiles } from "../main-process/scanStorage";
 import { resolve } from "path";
 
 describe("Scan storage", () => {

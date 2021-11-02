@@ -1,5 +1,5 @@
 import fs from "fs";
-import { StorageDB, FileDoesNotExistError } from "../electron/storageDb";
+import { StorageDB, FileDoesNotExistError } from "../main-process/storageDb";
 import path from "path";
 import os from "os";
 

@@ -1,5 +1,5 @@
-jest.mock("../electron/foo");
-import foo from "../electron/foo";
+jest.mock("../main-process/foo");
+import foo from "../main-process/foo";
 const fooMock = foo as jest.Mock;
 
 it("should return 42", () => {

@@ -90,7 +90,7 @@ const refreshDB = (_path: fs.PathLike): { status: boolean; msg: string } => {
 
   try {
     const db = new StorageDB(`${_path}/storage.json`);
-    refreshStorageDB(db, objsFromStorage(_path));
+    refreshStorageDB(db, dataForDB(_path));
     const storageFound = `${_path} found.
 ${_path}/storage.json`;
     [status, msg] = [true, storageFound];
@@ -106,36 +106,41 @@ ${_path}/storage.json`;
   return { status, msg };
 };
 
-type objsFromStorageType = Promise<
-  Promise<{
-    directory: string;
-    fragments: string[];
-  }>[]
->;
+type dbDataType = {
+  directory: string;
+  fragments: string[];
+};
 
-const objsFromStorage = async (_path: fs.PathLike): objsFromStorageType => {
+const dataForDB = async (_path: fs.PathLike): Promise<dbDataType[]> => {
   const directories = await scanDirectories(`${_path}`);
-  return directories.map(async (dir) => {
-    return {
-      directory: dir.name,
-      fragments: await scanFiles(`${_path}/${dir.name}`).then((files) => {
-        return files.map((file) => file.name);
-      }),
-    };
-  });
+  return await composeDbData(_path, directories);
+};
+
+const composeDbData = async (
+  _path: fs.PathLike,
+  directories: fs.Dirent[]
+): Promise<dbDataType[]> => {
+  return await Promise.all(
+    directories.map(async (dir) => {
+      return {
+        directory: dir.name,
+        fragments: await scanFiles(`${_path}/${dir.name}`).then((files) => {
+          return files.map((file) => file.name);
+        }),
+      };
+    })
+  );
 };
 
 const refreshStorageDB = (
   db: StorageDB,
-  objsFromStorage: objsFromStorageType
+  objsFromStorage: Promise<dbDataType[]>
 ) => {
   objsFromStorage.then((objs) => {
     objs.forEach((obj) => {
       // Update DB's fragments only
       // https://github.com/nmaggioni/Simple-JSONdb/issues/9#issuecomment-859535922
-      obj.then((o) => {
-        db.update(o.directory, "fragments", o.fragments);
-      });
+      db.update(obj.directory, "fragments", obj.fragments);
     });
   });
   db.sync();

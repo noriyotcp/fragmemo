@@ -1,7 +1,6 @@
 {
   "compilerOptions": {
     "target": "esnext",
-    "module": "esnext",
     "moduleResolution": "node",
     "strict": true,
     "jsx": "preserve",
@@ -10,7 +9,7 @@
     "esModuleInterop": true,
     "experimentalDecorators": true,
     "useDefineForClassFields": false,
-    "lib": ["esnext", "dom"]
-  },
-  "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx"]
+    "lib": ["esnext", "dom"],
+    "baseUrl": "./"
+  }
 }

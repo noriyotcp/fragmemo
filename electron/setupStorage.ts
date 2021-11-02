@@ -2,21 +2,25 @@ import * as fs from "fs";
 import { StorageDB, FileDoesNotExistError } from "./storageDb";
 import { scanDirectories, scanFiles } from "./scanStorage";
 import { createHash } from "crypto";
+import { setupStorageResultType } from "../src/@types/global";
 
-export const setupStorage = (_path: fs.PathLike): string => {
-  let msg = "";
+export const setupStorage = (_path: fs.PathLike): setupStorageResultType => {
+  let setupStorageResult: { status: boolean; msg: string };
 
   if (!fs.existsSync(_path)) {
-    msg = createStorage(_path).msg;
+    setupStorageResult = createStorage(_path);
   } else {
     if (canUseAsStorage(_path)) {
-      msg = refreshDB(_path).msg;
+      setupStorageResult = refreshDB(_path);
     } else {
-      msg = `${_path} found but cannot be as storage.`;
+      setupStorageResult = {
+        status: false,
+        msg: `${_path} found but cannot be as storage.`,
+      };
     }
   }
 
-  return msg;
+  return setupStorageResult;
 };
 
 const canUseAsStorage = (_path: fs.PathLike): boolean => {

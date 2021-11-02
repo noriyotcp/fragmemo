@@ -1,6 +1,6 @@
 import { LitElement, html, css, TemplateResult } from "lit";
 import { customElement, property, query } from "lit/decorators.js";
-import { FileData } from "../@types/global";
+import { FileData, setupStorageResultType } from "../@types/global";
 import { dispatch } from "../events/dispatcher";
 
 const { myAPI } = window;
@@ -53,8 +53,9 @@ export class TestHeader extends LitElement {
   async firstUpdated(): Promise<void> {
     // Give the browser a chance to paint
     await new Promise((r) => setTimeout(r, 0));
-    myAPI.setupStorage().then((msg: string) => {
+    myAPI.setupStorage().then(({ status, msg }: setupStorageResultType) => {
       this.message.innerText = msg;
+      console.log(`status: ${status}, msg: ${msg}`);
     });
     myAPI.openByMenu((_e: Event, fileData: FileData) =>
       this._openByMenuListener(fileData)

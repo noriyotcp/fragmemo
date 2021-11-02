@@ -1,7 +1,7 @@
-import defaultExport, { bar, foo } from "../electron/foo-bar-baz";
+import defaultExport, { bar, foo } from "../main-process/foo-bar-baz";
 
-jest.mock("../electron/foo-bar-baz", () => {
-  const originalModule = jest.requireActual("../electron/foo-bar-baz");
+jest.mock("../main-process/foo-bar-baz", () => {
+  const originalModule = jest.requireActual("../main-process/foo-bar-baz");
 
   return {
     __esModule: true,

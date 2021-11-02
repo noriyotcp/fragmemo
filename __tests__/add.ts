@@ -1,4 +1,4 @@
-import { add } from "../electron/add";
+import { add } from "../main-process/add";
 
 describe("add", () => {
   it("should return 2 when it gives 1,1", () => {

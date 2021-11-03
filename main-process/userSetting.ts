@@ -1,8 +1,18 @@
 import fs from "fs";
 import { StorageDB, FileDoesNotExistError } from "./storageDb";
+type SettingsType = {
+  window: {
+    width: number;
+    height: number;
+    x: number;
+    y: number;
+  };
+  theme: string;
+};
+
 export default class UserSetting {
   settingsPath: string;
-  defaultSettings: any = {
+  defaultSettings: SettingsType = {
     window: { width: 800, height: 600, x: 0, y: 0 },
     theme: "light",
   };
@@ -19,11 +29,11 @@ export default class UserSetting {
     }
   }
 
-  readSettings(): any {
+  readSettings(): SettingsType {
     return JSON.parse(fs.readFileSync(this.settingsPath, "utf8"));
   }
 
-  writeSettings(settings: any): void {
+  writeSettings(settings: SettingsType): void {
     fs.writeFileSync(this.settingsPath, JSON.stringify(settings));
   }
 }

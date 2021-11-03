@@ -17,6 +17,8 @@ function createWindow() {
   const mainWindow = new BrowserWindow({
     width: userSetting.readSettings().window.width,
     height: userSetting.readSettings().window.height,
+    x: userSetting.readSettings().window.x,
+    y: userSetting.readSettings().window.y,
     backgroundColor: "#1e1e1e",
     webPreferences: {
       // preload: path.resolve("electron", "preload.js"),

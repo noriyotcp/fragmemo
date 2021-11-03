@@ -45,6 +45,8 @@ describe("readSettings()", () => {
           window: {
             width: 1200,
             height: 900,
+            x: 100,
+            y: 100,
           },
         })
       );
@@ -53,6 +55,8 @@ describe("readSettings()", () => {
         window: {
           width: 1200,
           height: 900,
+          x: 100,
+          y: 100,
         },
       });
     });
@@ -65,6 +69,8 @@ describe("readSettings()", () => {
         window: {
           width: 800,
           height: 600,
+          x: 0,
+          y: 0,
         },
       });
     });

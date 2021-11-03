@@ -4,6 +4,7 @@ import { app, BrowserWindow, ipcMain } from "electron";
 import { setFileSaveAs } from "./setFileSaveAs";
 import { createMenu } from "./createMenu";
 import { setupStorage } from "./setupStorage";
+import UserSetting from "./userSetting";
 import { setTimeout } from "timers/promises";
 
 const isDev = process.env.IS_DEV == "true" ? true : false;
@@ -23,6 +24,8 @@ function createWindow() {
 
   createMenu(mainWindow);
   setFileSaveAs(mainWindow);
+  const userSetting = new UserSetting(app.getPath("userData"));
+  console.log(userSetting.readSettings());
 
   // and load the index.html of the app.
   // win.loadFile("index.html");

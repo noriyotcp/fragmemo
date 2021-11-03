@@ -5,12 +5,12 @@ import UserSetting from "../main-process/userSetting";
 
 describe("new UserSetting()", () => {
   const userSetting = new UserSetting(
-    "/Users/user_name/Library/Application Support/fragmemo"
+    "/Users/user_name/Library/Application Support/fragmemo/settings.json"
   );
   it("should an instance of UserSetting and returns appPath", () => {
     expect(userSetting).toBeInstanceOf(UserSetting);
-    expect(userSetting.appPath).toBe(
-      "/Users/user_name/Library/Application Support/fragmemo"
+    expect(userSetting.settingsPath).toBe(
+      "/Users/user_name/Library/Application Support/fragmemo/settings.json"
     );
   });
 });
@@ -50,29 +50,33 @@ describe("readSettings()", () => {
           },
         })
       );
-      expect(new UserSetting(tmpDir).readSettings()).toEqual({
-        theme: "custom",
-        window: {
-          width: 1200,
-          height: 900,
-          x: 100,
-          y: 100,
-        },
-      });
+      expect(new UserSetting(`${tmpDir}/settings.json`).readSettings()).toEqual(
+        {
+          theme: "custom",
+          window: {
+            width: 1200,
+            height: 900,
+            x: 100,
+            y: 100,
+          },
+        }
+      );
     });
   });
 
   describe("Settings file does not exists", () => {
     it("should return the default settings", () => {
-      expect(new UserSetting(tmpDir).readSettings()).toEqual({
-        theme: "light",
-        window: {
-          width: 800,
-          height: 600,
-          x: 0,
-          y: 0,
-        },
-      });
+      expect(new UserSetting(`${tmpDir}/settings.json`).readSettings()).toEqual(
+        {
+          theme: "light",
+          window: {
+            width: 800,
+            height: 600,
+            x: 0,
+            y: 0,
+          },
+        }
+      );
     });
   });
 });

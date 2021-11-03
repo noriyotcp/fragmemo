@@ -1,28 +1,22 @@
 import fs from "fs";
 export default class UserSetting {
-  appPath: string;
+  settingsPath: string;
   defaultSettings: any = {
     window: { width: 800, height: 600, x: 0, y: 0 },
     theme: "light",
   };
-  settingsFile = `settings.json`;
-  settingsFilePath: string;
 
-  constructor(appPath: string) {
-    this.appPath = appPath;
-    this.settingsFilePath = `${this.appPath}/${this.settingsFile}`;
+  constructor(settingsPath: string) {
+    this.settingsPath = settingsPath;
   }
 
   readSettings(): any {
     // if settings file doesn't exist, create it
-    if (fs.existsSync(this.settingsFilePath)) {
-      return JSON.parse(fs.readFileSync(this.settingsFilePath, "utf8"));
+    if (fs.existsSync(this.settingsPath)) {
+      return JSON.parse(fs.readFileSync(this.settingsPath, "utf8"));
     } else {
-      fs.writeFileSync(
-        this.settingsFilePath,
-        JSON.stringify(this.defaultSettings)
-      );
-      return JSON.parse(fs.readFileSync(this.settingsFilePath, "utf8"));
+      fs.writeFileSync(this.settingsPath, JSON.stringify(this.defaultSettings));
+      return JSON.parse(fs.readFileSync(this.settingsPath, "utf8"));
     }
   }
 }

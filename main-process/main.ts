@@ -10,7 +10,9 @@ import { setTimeout } from "timers/promises";
 const isDev = process.env.IS_DEV == "true" ? true : false;
 
 function createWindow() {
-  const userSetting = new UserSetting(app.getPath("userData"));
+  const userSetting = new UserSetting(
+    path.resolve(app.getPath("userData"), "settings.json")
+  );
   console.log(userSetting.readSettings());
 
   // Create the browser window.

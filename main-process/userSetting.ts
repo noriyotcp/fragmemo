@@ -6,11 +6,12 @@ export default class UserSetting {
     window: { width: 800, height: 600, x: 0, y: 0 },
     theme: "light",
   };
+  jsonDbHandler!: StorageDB;
 
   constructor(settingsPath: string) {
     this.settingsPath = settingsPath;
     try {
-      new StorageDB(this.settingsPath);
+      this.jsonDbHandler = new StorageDB(this.settingsPath);
     } catch (error) {
       if (error instanceof FileDoesNotExistError) {
         this.writeSettings(this.defaultSettings);

@@ -2,6 +2,7 @@ import fs from "fs";
 import path from "path";
 import os from "os";
 import UserSetting from "../main-process/userSetting";
+import { StorageDB } from "../main-process/storageDb";
 
 describe("new UserSetting()", () => {
   let tmpDir: string;
@@ -40,6 +41,7 @@ describe("new UserSetting()", () => {
 
     const userSetting = new UserSetting(`${tmpDir}/settings.json`);
     expect(userSetting).toBeInstanceOf(UserSetting);
+    expect(userSetting.jsonDbHandler).toBeInstanceOf(StorageDB);
     expect(userSetting.settingsPath).toBe(`${tmpDir}/settings.json`);
   });
 });

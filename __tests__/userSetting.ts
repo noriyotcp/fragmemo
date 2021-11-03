@@ -4,14 +4,43 @@ import os from "os";
 import UserSetting from "../main-process/userSetting";
 
 describe("new UserSetting()", () => {
-  const userSetting = new UserSetting(
-    "/Users/user_name/Library/Application Support/fragmemo/settings.json"
-  );
+  let tmpDir: string;
+  beforeEach(() => {
+    try {
+      tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), "test-"));
+    } catch (err) {
+      throw new Error("Could not create tmp dir");
+    }
+  });
+  afterEach(() => {
+    try {
+      if (tmpDir) {
+        fs.rmSync(tmpDir, { recursive: true });
+      }
+    } catch (e) {
+      console.error(
+        `An error has occurred while removing the temp folder at ${tmpDir}. Please remove it manually. Error: ${e}`
+      );
+    }
+  });
+
   it("should an instance of UserSetting and returns appPath", () => {
-    expect(userSetting).toBeInstanceOf(UserSetting);
-    expect(userSetting.settingsPath).toBe(
-      "/Users/user_name/Library/Application Support/fragmemo/settings.json"
+    fs.writeFileSync(
+      `${tmpDir}/settings.json`,
+      JSON.stringify({
+        theme: "custom",
+        window: {
+          width: 1200,
+          height: 900,
+          x: 100,
+          y: 100,
+        },
+      })
     );
+
+    const userSetting = new UserSetting(`${tmpDir}/settings.json`);
+    expect(userSetting).toBeInstanceOf(UserSetting);
+    expect(userSetting.settingsPath).toBe(`${tmpDir}/settings.json`);
   });
 });
 

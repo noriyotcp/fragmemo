@@ -5,27 +5,27 @@ import UserSetting from "../main-process/userSetting";
 import { StorageDB } from "../main-process/storageDb";
 
 describe("UserSetting", () => {
-  describe("new UserSetting()", () => {
-    let tmpDir: string;
-    beforeEach(() => {
-      try {
-        tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), "test-"));
-      } catch (err) {
-        throw new Error("Could not create tmp dir");
+  let tmpDir: string;
+  beforeEach(() => {
+    try {
+      tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), "test-"));
+    } catch (err) {
+      throw new Error("Could not create tmp dir");
+    }
+  });
+  afterEach(() => {
+    try {
+      if (tmpDir) {
+        fs.rmSync(tmpDir, { recursive: true });
       }
-    });
-    afterEach(() => {
-      try {
-        if (tmpDir) {
-          fs.rmSync(tmpDir, { recursive: true });
-        }
-      } catch (e) {
-        console.error(
-          `An error has occurred while removing the temp folder at ${tmpDir}. Please remove it manually. Error: ${e}`
-        );
-      }
-    });
+    } catch (e) {
+      console.error(
+        `An error has occurred while removing the temp folder at ${tmpDir}. Please remove it manually. Error: ${e}`
+      );
+    }
+  });
 
+  describe("new UserSetting()", () => {
     it("should an instance of UserSetting and returns appPath", () => {
       fs.writeFileSync(
         `${tmpDir}/settings.json`,
@@ -48,26 +48,6 @@ describe("UserSetting", () => {
   });
 
   describe("readSettings()", () => {
-    let tmpDir: string;
-    beforeEach(() => {
-      try {
-        tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), "test-"));
-      } catch (err) {
-        throw new Error("Could not create tmp dir");
-      }
-    });
-    afterEach(() => {
-      try {
-        if (tmpDir) {
-          fs.rmSync(tmpDir, { recursive: true });
-        }
-      } catch (e) {
-        console.error(
-          `An error has occurred while removing the temp folder at ${tmpDir}. Please remove it manually. Error: ${e}`
-        );
-      }
-    });
-
     it("should return the settings", () => {
       fs.writeFileSync(
         `${tmpDir}/settings.json`,

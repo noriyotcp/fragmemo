@@ -1,5 +1,5 @@
 import fs from "fs";
-import { StorageDB, FileDoesNotExistError } from "./storageDb";
+import { StorageDB } from "./storageDb";
 type SettingsType = {
   window: {
     width: number;
@@ -20,13 +20,10 @@ export default class UserSetting {
 
   constructor(settingsPath: string) {
     this.settingsPath = settingsPath;
-    try {
-      this.jsonDbHandler = new StorageDB(this.settingsPath);
-    } catch (error) {
-      if (error instanceof FileDoesNotExistError) {
-        this.writeSettings(this.defaultSettings);
-      }
+    if (!fs.existsSync(settingsPath)) {
+      this.writeSettings(this.defaultSettings);
     }
+    this.jsonDbHandler = new StorageDB(this.settingsPath);
   }
 
   readSettings(): SettingsType {

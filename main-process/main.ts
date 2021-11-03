@@ -13,7 +13,6 @@ function createWindow() {
   const userSetting = new UserSetting(
     path.resolve(app.getPath("userData"), "settings.json")
   );
-  console.log(userSetting.readSettings());
 
   // Create the browser window.
   const mainWindow = new BrowserWindow({
@@ -46,6 +45,30 @@ function createWindow() {
       activate: false,
     });
   }
+
+  mainWindow.on("close", () => {
+    userSetting.jsonDbHandler.update(
+      "window",
+      "width",
+      mainWindow.getSize()[0]
+    );
+    userSetting.jsonDbHandler.update(
+      "window",
+      "height",
+      mainWindow.getSize()[1]
+    );
+    userSetting.jsonDbHandler.update(
+      "window",
+      "x",
+      mainWindow.getPosition()[0]
+    );
+    userSetting.jsonDbHandler.update(
+      "window",
+      "y",
+      mainWindow.getPosition()[1]
+    );
+    userSetting.jsonDbHandler.sync();
+  });
 }
 
 // This method will be called when Electron has finished

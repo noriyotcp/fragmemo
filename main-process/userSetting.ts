@@ -20,13 +20,7 @@ export default class UserSetting {
   }
 
   readSettings(): any {
-    // if settings file doesn't exist, create it
-    if (fs.existsSync(this.settingsPath)) {
-      return JSON.parse(fs.readFileSync(this.settingsPath, "utf8"));
-    } else {
-      fs.writeFileSync(this.settingsPath, JSON.stringify(this.defaultSettings));
-      return JSON.parse(fs.readFileSync(this.settingsPath, "utf8"));
-    }
+    return JSON.parse(fs.readFileSync(this.settingsPath, "utf8"));
   }
 
   writeSettings(settings: any): void {

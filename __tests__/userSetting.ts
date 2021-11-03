@@ -67,47 +67,27 @@ describe("readSettings()", () => {
     }
   });
 
-  describe("Settings file exists", () => {
-    it("should return the settings", () => {
-      fs.writeFileSync(
-        `${tmpDir}/settings.json`,
-        JSON.stringify({
-          theme: "custom",
-          window: {
-            width: 1200,
-            height: 900,
-            x: 100,
-            y: 100,
-          },
-        })
-      );
-      expect(new UserSetting(`${tmpDir}/settings.json`).readSettings()).toEqual(
-        {
-          theme: "custom",
-          window: {
-            width: 1200,
-            height: 900,
-            x: 100,
-            y: 100,
-          },
-        }
-      );
-    });
-  });
-
-  describe("Settings file does not exists", () => {
-    it("should return the default settings", () => {
-      expect(new UserSetting(`${tmpDir}/settings.json`).readSettings()).toEqual(
-        {
-          theme: "light",
-          window: {
-            width: 800,
-            height: 600,
-            x: 0,
-            y: 0,
-          },
-        }
-      );
+  it("should return the settings", () => {
+    fs.writeFileSync(
+      `${tmpDir}/settings.json`,
+      JSON.stringify({
+        theme: "custom",
+        window: {
+          width: 1200,
+          height: 900,
+          x: 100,
+          y: 100,
+        },
+      })
+    );
+    expect(new UserSetting(`${tmpDir}/settings.json`).readSettings()).toEqual({
+      theme: "custom",
+      window: {
+        width: 1200,
+        height: 900,
+        x: 100,
+        y: 100,
+      },
     });
   });
 });

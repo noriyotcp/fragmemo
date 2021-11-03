@@ -10,10 +10,16 @@ import { setTimeout } from "timers/promises";
 const isDev = process.env.IS_DEV == "true" ? true : false;
 
 function createWindow() {
+  const userSetting = new UserSetting(
+    path.resolve(app.getPath("userData"), "settings.json")
+  );
+
   // Create the browser window.
   const mainWindow = new BrowserWindow({
-    width: 800,
-    height: 600,
+    width: userSetting.readSettings().window.width,
+    height: userSetting.readSettings().window.height,
+    x: userSetting.readSettings().window.x,
+    y: userSetting.readSettings().window.y,
     backgroundColor: "#1e1e1e",
     webPreferences: {
       // preload: path.resolve("electron", "preload.js"),
@@ -24,8 +30,6 @@ function createWindow() {
 
   createMenu(mainWindow);
   setFileSaveAs(mainWindow);
-  const userSetting = new UserSetting(app.getPath("userData"));
-  console.log(userSetting.readSettings());
 
   // and load the index.html of the app.
   // win.loadFile("index.html");
@@ -41,6 +45,30 @@ function createWindow() {
       activate: false,
     });
   }
+
+  mainWindow.on("close", () => {
+    userSetting.jsonDbHandler.update(
+      "window",
+      "width",
+      mainWindow.getSize()[0]
+    );
+    userSetting.jsonDbHandler.update(
+      "window",
+      "height",
+      mainWindow.getSize()[1]
+    );
+    userSetting.jsonDbHandler.update(
+      "window",
+      "x",
+      mainWindow.getPosition()[0]
+    );
+    userSetting.jsonDbHandler.update(
+      "window",
+      "y",
+      mainWindow.getPosition()[1]
+    );
+    userSetting.jsonDbHandler.sync();
+  });
 }
 
 // This method will be called when Electron has finished

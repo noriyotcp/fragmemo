@@ -2,20 +2,9 @@ import fs from "fs";
 import path from "path";
 import os from "os";
 import UserSetting from "../main-process/userSetting";
+import { StorageDB } from "../main-process/storageDb";
 
-describe("new UserSetting()", () => {
-  const userSetting = new UserSetting(
-    "/Users/user_name/Library/Application Support/fragmemo"
-  );
-  it("should an instance of UserSetting and returns appPath", () => {
-    expect(userSetting).toBeInstanceOf(UserSetting);
-    expect(userSetting.appPath).toBe(
-      "/Users/user_name/Library/Application Support/fragmemo"
-    );
-  });
-});
-
-describe("readSettings()", () => {
+describe("UserSetting", () => {
   let tmpDir: string;
   beforeEach(() => {
     try {
@@ -36,31 +25,58 @@ describe("readSettings()", () => {
     }
   });
 
-  describe("Settings file exists", () => {
+  describe("new UserSetting()", () => {
+    it("should an instance of UserSetting and returns appPath", () => {
+      fs.writeFileSync(
+        `${tmpDir}/settings.json`,
+        JSON.stringify({
+          theme: "custom",
+          window: {
+            width: 1200,
+            height: 900,
+            x: 100,
+            y: 100,
+          },
+        })
+      );
+
+      const userSetting = new UserSetting(`${tmpDir}/settings.json`);
+      expect(userSetting).toBeInstanceOf(UserSetting);
+      expect(userSetting.jsonDbHandler).toBeInstanceOf(StorageDB);
+      expect(userSetting.settingsPath).toBe(`${tmpDir}/settings.json`);
+    });
+  });
+
+  describe("readSettings()", () => {
     it("should return the settings", () => {
       fs.writeFileSync(
         `${tmpDir}/settings.json`,
         JSON.stringify({
           theme: "custom",
+          window: {
+            width: 1200,
+            height: 900,
+            x: 100,
+            y: 100,
+          },
         })
       );
-      expect(new UserSetting(tmpDir).readSettings()).toEqual({
-        theme: "custom",
-      });
+      expect(new UserSetting(`${tmpDir}/settings.json`).readSettings()).toEqual(
+        {
+          theme: "custom",
+          window: {
+            width: 1200,
+            height: 900,
+            x: 100,
+            y: 100,
+          },
+        }
+      );
     });
   });
 
-  describe("Settings file does not exists", () => {
-    it("should return the default settings", () => {
-      expect(new UserSetting(tmpDir).readSettings()).toEqual({
-        theme: "light",
-      });
-    });
+  // TODO: test settings file is empty
+  xdescribe("Settings file is empty", () => {
+    it("", () => {});
   });
 });
-
-// TODO: test settings file is empty
-// describe("Settings file is empty", () => {
-//   it("", () => {
-//   });
-// });

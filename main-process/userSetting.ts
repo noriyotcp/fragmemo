@@ -1,27 +1,36 @@
 import fs from "fs";
+import { StorageDB } from "./storageDb";
+type SettingsType = {
+  window: {
+    width: number;
+    height: number;
+    x: number;
+    y: number;
+  };
+  theme: string;
+};
+
 export default class UserSetting {
-  appPath: string;
-  defaultSettings: any = {
+  settingsPath: string;
+  defaultSettings: SettingsType = {
+    window: { width: 800, height: 600, x: 0, y: 0 },
     theme: "light",
   };
-  settingsFile = `settings.json`;
-  settingsFilePath: string;
+  jsonDbHandler!: StorageDB;
 
-  constructor(appPath: string) {
-    this.appPath = appPath;
-    this.settingsFilePath = `${this.appPath}/${this.settingsFile}`;
+  constructor(settingsPath: string) {
+    this.settingsPath = settingsPath;
+    if (!fs.existsSync(settingsPath)) {
+      this.writeSettings(this.defaultSettings);
+    }
+    this.jsonDbHandler = new StorageDB(this.settingsPath);
   }
 
-  readSettings(): any {
-    // if settings file doesn't exist, create it
-    if (fs.existsSync(this.settingsFilePath)) {
-      return JSON.parse(fs.readFileSync(this.settingsFilePath, "utf8"));
-    } else {
-      fs.writeFileSync(
-        this.settingsFilePath,
-        JSON.stringify(this.defaultSettings)
-      );
-      return JSON.parse(fs.readFileSync(this.settingsFilePath, "utf8"));
-    }
+  readSettings(): SettingsType {
+    return JSON.parse(fs.readFileSync(this.settingsPath, "utf8"));
+  }
+
+  writeSettings(settings: SettingsType): void {
+    fs.writeFileSync(this.settingsPath, JSON.stringify(settings));
   }
 }

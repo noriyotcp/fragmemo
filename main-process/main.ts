@@ -10,10 +10,13 @@ import { setTimeout } from "timers/promises";
 const isDev = process.env.IS_DEV == "true" ? true : false;
 
 function createWindow() {
+  const userSetting = new UserSetting(app.getPath("userData"));
+  console.log(userSetting.readSettings());
+
   // Create the browser window.
   const mainWindow = new BrowserWindow({
-    width: 800,
-    height: 600,
+    width: userSetting.readSettings().window.width,
+    height: userSetting.readSettings().window.height,
     backgroundColor: "#1e1e1e",
     webPreferences: {
       // preload: path.resolve("electron", "preload.js"),
@@ -24,8 +27,6 @@ function createWindow() {
 
   createMenu(mainWindow);
   setFileSaveAs(mainWindow);
-  const userSetting = new UserSetting(app.getPath("userData"));
-  console.log(userSetting.readSettings());
 
   // and load the index.html of the app.
   // win.loadFile("index.html");

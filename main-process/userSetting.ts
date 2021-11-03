@@ -2,6 +2,7 @@ import fs from "fs";
 export default class UserSetting {
   appPath: string;
   defaultSettings: any = {
+    window: { width: 800, height: 600 },
     theme: "light",
   };
   settingsFile = `settings.json`;

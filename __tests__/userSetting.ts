@@ -42,10 +42,18 @@ describe("readSettings()", () => {
         `${tmpDir}/settings.json`,
         JSON.stringify({
           theme: "custom",
+          window: {
+            width: 1200,
+            height: 900,
+          },
         })
       );
       expect(new UserSetting(tmpDir).readSettings()).toEqual({
         theme: "custom",
+        window: {
+          width: 1200,
+          height: 900,
+        },
       });
     });
   });
@@ -54,13 +62,16 @@ describe("readSettings()", () => {
     it("should return the default settings", () => {
       expect(new UserSetting(tmpDir).readSettings()).toEqual({
         theme: "light",
+        window: {
+          width: 800,
+          height: 600,
+        },
       });
     });
   });
 });
 
 // TODO: test settings file is empty
-// describe("Settings file is empty", () => {
-//   it("", () => {
-//   });
-// });
+xdescribe("Settings file is empty", () => {
+  it("", () => {});
+});

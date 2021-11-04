@@ -11,11 +11,11 @@ export const setFileSaveAs = (win: BrowserWindow): void => {
           "treatPackageAsDirectory",
           "showOverwriteConfirmation",
         ],
-        title: "ファイルを保存する",
+        title: "Save file as...",
         filters: [
           {
-            name: "Text",
-            extensions: ["txt", "text"],
+            name: "All Files",
+            extensions: ["*"],
           },
         ],
       })

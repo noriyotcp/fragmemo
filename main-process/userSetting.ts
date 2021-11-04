@@ -1,4 +1,6 @@
 import fs from "fs";
+import path from "path";
+import os from "os";
 import { StorageDB } from "./storageDb";
 type SettingsType = {
   window: {
@@ -7,14 +9,14 @@ type SettingsType = {
     x: number;
     y: number;
   };
-  theme: string;
+  storagePath: string;
 };
 
 export default class UserSetting {
   settingsPath: string;
   defaultSettings: SettingsType = {
     window: { width: 800, height: 600, x: 0, y: 0 },
-    theme: "light",
+    storagePath: path.resolve(os.homedir(), "fragmemo"),
   };
   jsonDbHandler!: StorageDB;
 

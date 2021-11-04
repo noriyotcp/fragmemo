@@ -1,5 +1,4 @@
 import path from "path";
-import os from "os";
 import { app, BrowserWindow, ipcMain } from "electron";
 import { setFileSaveAs } from "./setFileSaveAs";
 import { createMenu } from "./createMenu";
@@ -8,11 +7,11 @@ import UserSetting from "./userSetting";
 import { setTimeout } from "timers/promises";
 
 const isDev = process.env.IS_DEV == "true" ? true : false;
+const userSetting = new UserSetting(
+  path.resolve(app.getPath("userData"), "settings.json")
+);
 
 function createWindow() {
-  const userSetting = new UserSetting(
-    path.resolve(app.getPath("userData"), "settings.json")
-  );
   const { width, height, x, y } = userSetting.readSettings().window;
 
   // Create the browser window.
@@ -91,7 +90,7 @@ app.once("browser-window-created", () => {
   ipcMain.handle("setup-storage", async () => {
     await setTimeout(5000); // wait 5 seconds for testing
 
-    return setupStorage(path.resolve(os.homedir(), "fragmemo"));
+    return setupStorage(userSetting.readSettings().storagePath);
   });
 });
 

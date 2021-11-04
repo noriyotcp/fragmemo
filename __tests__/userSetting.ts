@@ -30,13 +30,13 @@ describe("UserSetting", () => {
       fs.writeFileSync(
         `${tmpDir}/settings.json`,
         JSON.stringify({
-          theme: "custom",
           window: {
             width: 1200,
             height: 900,
             x: 100,
             y: 100,
           },
+          storagePath: "path/to/storage",
         })
       );
 
@@ -52,24 +52,24 @@ describe("UserSetting", () => {
       fs.writeFileSync(
         `${tmpDir}/settings.json`,
         JSON.stringify({
-          theme: "custom",
           window: {
             width: 1200,
             height: 900,
             x: 100,
             y: 100,
           },
+          storagePath: "path/to/storage",
         })
       );
       expect(new UserSetting(`${tmpDir}/settings.json`).readSettings()).toEqual(
         {
-          theme: "custom",
           window: {
             width: 1200,
             height: 900,
             x: 100,
             y: 100,
           },
+          storagePath: "path/to/storage",
         }
       );
     });

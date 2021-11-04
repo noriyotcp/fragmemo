@@ -13,13 +13,14 @@ function createWindow() {
   const userSetting = new UserSetting(
     path.resolve(app.getPath("userData"), "settings.json")
   );
+  const { width, height, x, y } = userSetting.readSettings().window;
 
   // Create the browser window.
   const mainWindow = new BrowserWindow({
-    width: userSetting.readSettings().window.width,
-    height: userSetting.readSettings().window.height,
-    x: userSetting.readSettings().window.x,
-    y: userSetting.readSettings().window.y,
+    width: width,
+    height: height,
+    x: x,
+    y: y,
     backgroundColor: "#1e1e1e",
     webPreferences: {
       // preload: path.resolve("electron", "preload.js"),

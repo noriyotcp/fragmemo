@@ -28,7 +28,7 @@
   "dependencies": {
     "@material/mwc-list": "^0.25.3",
     "lit": "^2.0.2",
-    "monaco-editor": "^0.29.1",
+    "monaco-editor": "^0.30.0",
     "simple-json-db": "^1.2.3",
     "split.js": "^1.6.4"
   },

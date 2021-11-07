@@ -1,10 +1,19 @@
 import fs from "fs";
+import path from "path";
 import JSONdb from "simple-json-db";
+import { scanDirectories, scanFiles } from "./scanStorage";
+
+type dbDataType = {
+  directory: string;
+  fragments: string[];
+};
 
 class StorageDB extends JSONdb {
+  filePath: string;
   constructor(filePath: string) {
     super(filePath);
     this.doesFileExist(filePath);
+    this.filePath = filePath;
   }
 
   doesFileExist(filePath: fs.PathLike): void {
@@ -22,6 +31,30 @@ class StorageDB extends JSONdb {
     clone[secondaryKey] = value;
     this.set(primaryKey, clone);
   }
+
+  dataForDB = async (): Promise<dbDataType[]> => {
+    const directories = await scanDirectories(path.dirname(`${this.filePath}`));
+    return await this.composeDbData(
+      path.dirname(`${this.filePath}`),
+      directories
+    );
+  };
+
+  composeDbData = async (
+    _path: fs.PathLike,
+    directories: fs.Dirent[]
+  ): Promise<dbDataType[]> => {
+    return await Promise.all(
+      directories.map(async (dir) => {
+        return {
+          directory: dir.name,
+          fragments: await scanFiles(`${_path}/${dir.name}`).then((files) => {
+            return files.map((file) => file.name);
+          }),
+        };
+      })
+    );
+  };
 }
 
 class FileDoesNotExistError extends Error {

@@ -32,7 +32,7 @@ class StorageDB extends JSONdb {
     this.set(primaryKey, clone);
   }
 
-  dataForDB = async (): Promise<dbDataType[]> => {
+  scanStorage = async (): Promise<dbDataType[]> => {
     const directories = await scanDirectories(path.dirname(`${this.filePath}`));
     return await this.composeDbData(
       path.dirname(`${this.filePath}`),

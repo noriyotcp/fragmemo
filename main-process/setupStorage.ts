@@ -110,7 +110,7 @@ ${_path}/storage.json`;
 };
 
 const refreshStorageDB = (db: StorageDB) => {
-  db.dataForDB().then((objs) => {
+  db.scanStorage().then((objs) => {
     objs.forEach((obj) => {
       // Update DB's fragments only
       // https://github.com/nmaggioni/Simple-JSONdb/issues/9#issuecomment-859535922

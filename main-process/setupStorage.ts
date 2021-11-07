@@ -1,6 +1,5 @@
 import * as fs from "fs";
 import { StorageDB, FileDoesNotExistError } from "./storageDb";
-import { scanDirectories, scanFiles } from "./scanStorage";
 import { createHash } from "crypto";
 import { setupStorageResultType } from "src/@types/global";
 
@@ -94,7 +93,7 @@ const refreshDB = (_path: fs.PathLike): { status: boolean; msg: string } => {
 
   try {
     const db = new StorageDB(`${_path}/storage.json`);
-    refreshStorageDB(db, dataForDB(_path));
+    refreshStorageDB(db);
     const storageFound = `${_path} found.
 ${_path}/storage.json`;
     [status, msg] = [true, storageFound];
@@ -110,37 +109,8 @@ ${_path}/storage.json`;
   return { status, msg };
 };
 
-type dbDataType = {
-  directory: string;
-  fragments: string[];
-};
-
-const dataForDB = async (_path: fs.PathLike): Promise<dbDataType[]> => {
-  const directories = await scanDirectories(`${_path}`);
-  return await composeDbData(_path, directories);
-};
-
-const composeDbData = async (
-  _path: fs.PathLike,
-  directories: fs.Dirent[]
-): Promise<dbDataType[]> => {
-  return await Promise.all(
-    directories.map(async (dir) => {
-      return {
-        directory: dir.name,
-        fragments: await scanFiles(`${_path}/${dir.name}`).then((files) => {
-          return files.map((file) => file.name);
-        }),
-      };
-    })
-  );
-};
-
-const refreshStorageDB = (
-  db: StorageDB,
-  objsFromStorage: Promise<dbDataType[]>
-) => {
-  objsFromStorage.then((objs) => {
+const refreshStorageDB = (db: StorageDB) => {
+  db.scanStorage().then((objs) => {
     objs.forEach((obj) => {
       // Update DB's fragments only
       // https://github.com/nmaggioni/Simple-JSONdb/issues/9#issuecomment-859535922

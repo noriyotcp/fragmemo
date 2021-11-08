@@ -1,12 +1,15 @@
 import { LitElement, html, css, TemplateResult } from "lit";
 import { customElement, property, query } from "lit/decorators.js";
-import { FileData, setupStorageResultType } from "src/@types/global";
+import { FileData } from "src/@types/global";
 import { dispatch } from "../events/dispatcher";
+import { SetupStorageController } from "../controllers/setup-storage-controller";
 
 const { myAPI } = window;
 
 @customElement("test-header")
 export class TestHeader extends LitElement {
+  private setupStorage = new SetupStorageController(this);
+
   @query("#btn-save") btnSave!: HTMLButtonElement;
   @query("#message") message!: HTMLSpanElement;
   @property({ type: String }) textareaValue!: string;
@@ -32,7 +35,7 @@ export class TestHeader extends LitElement {
           <button type="button" id="btn-save" @click="${this._fileSaveAs}">
             保存
           </button>
-          <div id="message"></div>
+          <div id="message">${this.setupStorage.msg}</div>
         </form>
         <input
           type="text"
@@ -53,10 +56,6 @@ export class TestHeader extends LitElement {
   async firstUpdated(): Promise<void> {
     // Give the browser a chance to paint
     await new Promise((r) => setTimeout(r, 0));
-    myAPI.setupStorage().then(({ status, msg }: setupStorageResultType) => {
-      this.message.innerText = msg;
-      console.log(`status: ${status}, msg: ${msg}`);
-    });
     myAPI.openByMenu((_e: Event, fileData: FileData) =>
       this._openByMenuListener(fileData)
     );

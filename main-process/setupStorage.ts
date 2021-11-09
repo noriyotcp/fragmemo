@@ -4,7 +4,7 @@ import { createHash } from "crypto";
 import { setupStorageResultType } from "src/@types/global";
 
 export const setupStorage = (_path: fs.PathLike): setupStorageResultType => {
-  let setupStorageResult: { status: boolean; msg: string };
+  let setupStorageResult: setupStorageResultType;
 
   if (!fs.existsSync(_path)) {
     setupStorageResult = createStorage(_path);
@@ -15,6 +15,7 @@ export const setupStorage = (_path: fs.PathLike): setupStorageResultType => {
       setupStorageResult = {
         status: false,
         msg: `${_path} found but cannot be as storage.`,
+        snippets: {},
       };
     }
   }
@@ -38,75 +39,63 @@ function identity(num: number): number {
     return num;
 }`;
 
-  fs.writeFile(`${_path}/test.ts`, value, "utf8", (err) => {
-    if (err) return err;
-
-    // msg = `${_path} and ${_path}/.fragmemo created.`;
-    console.log(`${_path} and ${_path}/test.ts created.`);
-  });
+  fs.writeFileSync(`${_path}/test.ts`, value, "utf8");
+  console.log(`${_path} and ${_path}/test.ts created.`);
 };
 
-const createStorage = (
-  _path: fs.PathLike
-): { status: boolean; msg: string } => {
-  let [status, msg] = [false, ""];
+const createStorage = (_path: fs.PathLike): setupStorageResultType => {
+  let [status, msg, snippets] = [false, "", {}];
 
-  const returnError = (err: NodeJS.ErrnoException) => {
-    [status, msg] = [false, err.message];
-    return err;
-  };
-
-  fs.mkdir(_path, (err) => {
-    if (err) returnError(err);
-
-    fs.writeFile(`${_path}/.fragmemo`, "", "utf8", (err) => {
-      if (err) returnError(err);
-    });
-    // create an emptry storage.json
-    fs.writeFile(`${_path}/storage.json`, "", "utf8", (err) => {
-      if (err) returnError(err);
-    });
-    // create first snippet (directory)
+  // create first snippet (directory)
+  const createdDB = (): StorageDB => {
     const chars32 = createHash("md5").update(String(Date.now())).digest("hex");
     const chars40 = createHash("sha1").update(String(Date.now())).digest("hex");
     const snippetName = `${chars32}-${chars40}`;
-    fs.mkdir(`${_path}/${snippetName}`, (err) => {
-      if (err) returnError(err);
-      createTestFile(`${_path}/${snippetName}`);
 
-      const db = new StorageDB(`${_path}/storage.json`);
-      const obj = {
-        [`${snippetName}`]: {
-          fragments: ["test.ts"],
-        },
-      };
-      db.JSON(obj);
-      db.sync();
-    });
-  });
-  [status, msg] = [true, `${_path} and ${_path}/.fragmemo created.`];
-  return { status, msg };
+    fs.mkdirSync(`${_path}/${snippetName}`);
+    createTestFile(`${_path}/${snippetName}`);
+
+    const db = new StorageDB(`${_path}/storage.json`);
+    const obj = {
+      [`${snippetName}`]: {
+        fragments: ["test.ts"],
+      },
+    };
+    db.JSON(obj);
+    db.sync();
+    return db;
+  };
+
+  fs.mkdirSync(_path);
+  fs.writeFileSync(`${_path}/.fragmemo`, "", "utf8");
+  fs.writeFileSync(`${_path}/storage.json`, "", "utf8");
+
+  [status, msg, snippets] = [
+    true,
+    `${_path} and ${_path}/.fragmemo created.`,
+    createdDB().JSON(),
+  ];
+  return { status, msg, snippets };
 };
 
-const refreshDB = (_path: fs.PathLike): { status: boolean; msg: string } => {
-  let [status, msg] = [false, ""];
+const refreshDB = (_path: fs.PathLike): setupStorageResultType => {
+  let [status, msg, snippets] = [false, "", {}];
 
   try {
     const db = new StorageDB(`${_path}/storage.json`);
-    refreshStorageDB(db);
     const storageFound = `${_path} found.
 ${_path}/storage.json`;
-    [status, msg] = [true, storageFound];
+    [status, msg, snippets] = [true, storageFound, refreshStorageDB(db).JSON()];
   } catch (error: unknown) {
     if (error instanceof FileDoesNotExistError) {
       console.error(error.name);
       console.error(error.message);
-      [status, msg] = [false, error.message];
+      [status, msg, snippets] = [false, error.message, {}];
     } else if (error instanceof Error) {
-      [status, msg] = [false, error.message];
+      [status, msg, snippets] = [false, error.message, {}];
     }
   }
-  return { status, msg };
+  return { status, msg, snippets };
 };
 
 const refreshStorageDB = (db: StorageDB) => {
@@ -118,4 +107,5 @@ const refreshStorageDB = (db: StorageDB) => {
     });
   });
   db.sync();
+  return db;
 };

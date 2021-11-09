@@ -8,6 +8,7 @@ export class SetupStorageController implements ReactiveController {
 
   status = false;
   msg = "";
+  snippets = {};
 
   constructor(host: ReactiveControllerHost) {
     this.host = host;
@@ -16,10 +17,13 @@ export class SetupStorageController implements ReactiveController {
 
   hostConnected(): void {
     console.info(this.constructor.name, "has connected");
-    myAPI.setupStorage().then(({ status, msg }: setupStorageResultType) => {
-      this.status = status;
-      this.msg = msg;
-      this.host.requestUpdate();
-    });
+    myAPI
+      .setupStorage()
+      .then(({ status, msg, snippets }: setupStorageResultType) => {
+        this.status = status;
+        this.msg = msg;
+        this.snippets = snippets;
+        this.host.requestUpdate();
+      });
   }
 }

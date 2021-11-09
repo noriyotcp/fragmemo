@@ -3,8 +3,12 @@ import { customElement, state } from "lit/decorators.js";
 import { List } from "@material/mwc-list/mwc-list.js";
 
 import "./snippet-list-item";
+import { SetupStorageController } from "../controllers/setup-storage-controller";
+
 @customElement("snippet-list")
 export class SnippetList extends LitElement {
+  private setupStorage = new SetupStorageController(this);
+
   @state()
   private itemCount: number;
 
@@ -31,10 +35,10 @@ export class SnippetList extends LitElement {
     return html`
       <search-item></search-item>
       <mwc-list>
-        ${this.range(1, this.itemCount).map(
-          (i) =>
+        ${Object.entries(this.setupStorage.snippets).map(
+          ([snippet, _]) =>
             html` <snippet-list-item>
-              <span slot="title">${i}</span>
+              <span slot="title">${snippet}</span>
               <span slot="date"
                 >${this.randomDate(
                   new Date(2021, 1, 1),

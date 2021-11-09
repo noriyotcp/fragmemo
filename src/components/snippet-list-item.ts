@@ -23,7 +23,7 @@ export class SnippetListItem extends LitElement {
   render(): TemplateResult {
     return html`
       <mwc-list-item twoline>
-        <span>Item<slot name="title"></slot></span>
+        <span><slot name="title"></slot></span>
         <span slot="secondary"><slot name="date"></slot></span>
       </mwc-list-item>
       <li divider role="separator"></li>

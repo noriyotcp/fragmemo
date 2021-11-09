@@ -17,7 +17,9 @@ export type FileData = {
 type setupStorageResultType = {
   status: boolean;
   msg: string;
+  snippets: Record<string, unknown>;
 };
+
 export interface SandBox {
   fileSaveAs: (fileData: string) => void;
   setupStorage: () => Promise<setupStorageResultType>;

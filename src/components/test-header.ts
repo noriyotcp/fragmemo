@@ -35,7 +35,7 @@ export class TestHeader extends LitElement {
           <button type="button" id="btn-save" @click="${this._fileSaveAs}">
             保存
           </button>
-          <div id="message">${this.setupStorage.msg}</div>
+          <div id="message"></div>
         </form>
         <input
           type="text"
@@ -59,6 +59,12 @@ export class TestHeader extends LitElement {
     myAPI.openByMenu((_e: Event, fileData: FileData) =>
       this._openByMenuListener(fileData)
     );
+  }
+
+  // eslint-disable-next-line no-unused-vars
+  updated(changedProps: Map<string, unknown>): void {
+    console.info(this.setupStorage.snippets);
+    console.log("storage status: ", this.setupStorage.status);
   }
 
   private _fileSaveAs(_e: Event): void {

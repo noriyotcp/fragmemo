@@ -26,8 +26,19 @@ class StorageDB extends JSONdb {
     return !Object.keys(this.JSON()).length;
   }
 
-  public update(primaryKey: string, secondaryKey: string, value: any): void {
-    const clone: any = this.get(primaryKey);
+  public update(
+    primaryKey: string,
+    secondaryKey: string,
+    value: unknown
+  ): void {
+    // If primary key is not found, create it with secondary key and value
+    const clone: any =
+      this.get(primaryKey) ??
+      (() => {
+        this.set(primaryKey, { [secondaryKey]: value });
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        return this.get(primaryKey)!;
+      })();
     clone[secondaryKey] = value;
     this.set(primaryKey, clone);
   }

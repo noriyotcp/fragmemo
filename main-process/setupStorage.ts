@@ -9,28 +9,10 @@ export const setupStorage = (_path: fs.PathLike): setupStorageResultType => {
   if (!fs.existsSync(_path)) {
     setupStorageResult = createStorage(_path);
   } else {
-    if (canUseAsStorage(_path)) {
-      setupStorageResult = refreshDB(_path);
-    } else {
-      setupStorageResult = {
-        status: false,
-        msg: `${_path} found but cannot be as storage.`,
-        snippets: {},
-      };
-    }
+    setupStorageResult = refreshDB(_path);
   }
 
   return setupStorageResult;
-};
-
-const canUseAsStorage = (_path: fs.PathLike): boolean => {
-  const dotfile = `${_path}/.fragmemo`;
-
-  if (fs.existsSync(dotfile)) {
-    return true;
-  } else {
-    return false;
-  }
 };
 
 const createTestFile = (_path: fs.PathLike) => {
@@ -67,14 +49,9 @@ const createStorage = (_path: fs.PathLike): setupStorageResultType => {
   };
 
   fs.mkdirSync(_path);
-  fs.writeFileSync(`${_path}/.fragmemo`, "", "utf8");
   fs.writeFileSync(`${_path}/storage.json`, "", "utf8");
 
-  [status, msg, snippets] = [
-    true,
-    `${_path} and ${_path}/.fragmemo created.`,
-    createdDB().JSON(),
-  ];
+  [status, msg, snippets] = [true, `${_path} created.`, createdDB().JSON()];
   return { status, msg, snippets };
 };
 

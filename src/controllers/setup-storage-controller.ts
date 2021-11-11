@@ -16,6 +16,10 @@ export class SetupStorageController implements ReactiveController {
   }
 
   hostConnected(): void {
+    window.addEventListener(
+      "select-snippet",
+      this._selectSnippetListener as EventListener
+    );
     console.info(this.constructor.name, "has connected");
     myAPI
       .setupStorage()
@@ -24,4 +28,8 @@ export class SetupStorageController implements ReactiveController {
         this.host.requestUpdate();
       });
   }
+
+  private _selectSnippetListener = (e: CustomEvent): void => {
+    console.log(e.detail.message);
+  };
 }

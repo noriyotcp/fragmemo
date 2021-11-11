@@ -1,6 +1,7 @@
 import { LitElement, html, css, TemplateResult } from "lit";
 import { customElement } from "lit/decorators.js";
 import { ListItem } from "@material/mwc-list/mwc-list-item.js";
+import { dispatch } from "../events/dispatcher";
 
 @customElement("snippet-list-item")
 export class SnippetListItem extends LitElement {
@@ -25,11 +26,18 @@ export class SnippetListItem extends LitElement {
 
   render(): TemplateResult {
     return html`
-      <mwc-list-item twoline>
+      <mwc-list-item twoline @click="${this._selected}">
         <span><slot name="title"></slot></span>
         <span slot="secondary"><slot name="date"></slot></span>
       </mwc-list-item>
       <li divider role="separator"></li>
     `;
+  }
+
+  private _selected(e: MouseEvent): void {
+    dispatch({
+      type: "select-snippet",
+      message: "click an item",
+    });
   }
 }

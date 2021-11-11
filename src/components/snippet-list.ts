@@ -27,6 +27,9 @@ export class SnippetList extends LitElement {
         --mdc-list-vertical-padding: -8px;
         padding-top: var(--mdc-list-vertical-padding);
       }
+      #snippet-list {
+        --mdc-ripple-color: transparent;
+      }
     `,
     List.styles,
   ];
@@ -34,7 +37,7 @@ export class SnippetList extends LitElement {
   render(): TemplateResult {
     return html`
       <search-item></search-item>
-      <mwc-list>
+      <mwc-list id="snippet-list">
         ${Object.entries(this.setupStorage.snippets).map(
           ([snippet, _]) =>
             html` <snippet-list-item>

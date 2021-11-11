@@ -16,6 +16,9 @@ export class SnippetListItem extends LitElement {
         flex-shrink: 0;
         width: 100%;
       }
+      [mwc-list-item]:active {
+        background-color: rgba(33, 33, 33, 0.4);
+      }
     `,
     ListItem.styles,
   ];

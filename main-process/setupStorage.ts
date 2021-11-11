@@ -3,34 +3,18 @@ import { StorageDB, FileDoesNotExistError } from "./storageDb";
 import { createHash } from "crypto";
 import { setupStorageResultType } from "src/@types/global";
 
+const storageFile = "storage.json";
+
 export const setupStorage = (_path: fs.PathLike): setupStorageResultType => {
   let setupStorageResult: setupStorageResultType;
 
   if (!fs.existsSync(_path)) {
     setupStorageResult = createStorage(_path);
   } else {
-    if (canUseAsStorage(_path)) {
-      setupStorageResult = refreshDB(_path);
-    } else {
-      setupStorageResult = {
-        status: false,
-        msg: `${_path} found but cannot be as storage.`,
-        snippets: {},
-      };
-    }
+    setupStorageResult = refreshDB(_path);
   }
 
   return setupStorageResult;
-};
-
-const canUseAsStorage = (_path: fs.PathLike): boolean => {
-  const dotfile = `${_path}/.fragmemo`;
-
-  if (fs.existsSync(dotfile)) {
-    return true;
-  } else {
-    return false;
-  }
 };
 
 const createTestFile = (_path: fs.PathLike) => {
@@ -55,7 +39,7 @@ const createStorage = (_path: fs.PathLike): setupStorageResultType => {
     fs.mkdirSync(`${_path}/${snippetName}`);
     createTestFile(`${_path}/${snippetName}`);
 
-    const db = new StorageDB(`${_path}/storage.json`);
+    const db = new StorageDB(`${_path}/${storageFile}`);
     const obj = {
       [`${snippetName}`]: {
         fragments: ["test.ts"],
@@ -67,14 +51,9 @@ const createStorage = (_path: fs.PathLike): setupStorageResultType => {
   };
 
   fs.mkdirSync(_path);
-  fs.writeFileSync(`${_path}/.fragmemo`, "", "utf8");
-  fs.writeFileSync(`${_path}/storage.json`, "", "utf8");
+  fs.writeFileSync(`${_path}/${storageFile}`, "", "utf8");
 
-  [status, msg, snippets] = [
-    true,
-    `${_path} and ${_path}/.fragmemo created.`,
-    createdDB().JSON(),
-  ];
+  [status, msg, snippets] = [true, `${_path} created.`, createdDB().JSON()];
   return { status, msg, snippets };
 };
 
@@ -82,9 +61,9 @@ const refreshDB = (_path: fs.PathLike): setupStorageResultType => {
   let [status, msg, snippets] = [false, "", {}];
 
   try {
-    const db = new StorageDB(`${_path}/storage.json`);
+    const db = new StorageDB(`${_path}/${storageFile}`);
     const storageFound = `${_path} found.
-${_path}/storage.json`;
+${_path}/${storageFile}`;
     [status, msg, snippets] = [true, storageFound, refreshStorageDB(db).JSON()];
   } catch (error: unknown) {
     if (error instanceof FileDoesNotExistError) {

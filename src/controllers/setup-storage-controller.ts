@@ -20,9 +20,7 @@ export class SetupStorageController implements ReactiveController {
     myAPI
       .setupStorage()
       .then(({ status, msg, snippets }: setupStorageResultType) => {
-        this.status = status;
-        this.msg = msg;
-        this.snippets = snippets;
+        [this.status, this.msg, this.snippets] = [status, msg, snippets];
         this.host.requestUpdate();
       });
   }

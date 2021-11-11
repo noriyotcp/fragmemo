@@ -18,9 +18,9 @@ export class TestHeader extends LitElement {
       height: 100px;
       width: 100%;
       z-index: 9999;
-      --textarea-width: 50%;
+      --textarea-width: 100%;
     }
-    textarea {
+    input[type="text"] {
       width: var(--textarea-width);
     }
   `;
@@ -56,6 +56,9 @@ export class TestHeader extends LitElement {
     myAPI.openByMenu((_e: Event, fileData: FileData) =>
       this._openByMenuListener(fileData)
     );
+    window.addEventListener("select-snippet", ((e: CustomEvent) => {
+      this.textareaValue = e.detail.message;
+    }) as EventListener);
   }
 
   private _fileSaveAs(_e: Event): void {

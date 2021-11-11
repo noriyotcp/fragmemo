@@ -2,14 +2,11 @@ import { LitElement, html, css, TemplateResult } from "lit";
 import { customElement, property, query } from "lit/decorators.js";
 import { FileData } from "src/@types/global";
 import { dispatch } from "../events/dispatcher";
-import { SetupStorageController } from "../controllers/setup-storage-controller";
 
 const { myAPI } = window;
 
 @customElement("test-header")
 export class TestHeader extends LitElement {
-  private setupStorage = new SetupStorageController(this);
-
   @query("#btn-save") btnSave!: HTMLButtonElement;
   @query("#message") message!: HTMLSpanElement;
   @property({ type: String }) textareaValue!: string;
@@ -59,13 +56,6 @@ export class TestHeader extends LitElement {
     myAPI.openByMenu((_e: Event, fileData: FileData) =>
       this._openByMenuListener(fileData)
     );
-  }
-
-  // eslint-disable-next-line no-unused-vars
-  updated(changedProps: Map<string, unknown>): void {
-    console.log("storage status: ", this.setupStorage.status);
-    console.info(this.setupStorage.snippets);
-    console.log(this.setupStorage.msg);
   }
 
   private _fileSaveAs(_e: Event): void {

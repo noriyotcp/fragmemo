@@ -1,10 +1,13 @@
 import { LitElement, html, css, TemplateResult } from "lit";
-import { customElement } from "lit/decorators.js";
+import { customElement, queryAssignedNodes } from "lit/decorators.js";
 import { ListItem } from "@material/mwc-list/mwc-list-item.js";
 import { dispatch } from "../events/dispatcher";
 
 @customElement("snippet-list-item")
 export class SnippetListItem extends LitElement {
+  @queryAssignedNodes("title", true)
+  _titleNodes!: NodeListOf<HTMLElement>;
+
   static styles = [
     css`
       :host {
@@ -35,9 +38,11 @@ export class SnippetListItem extends LitElement {
   }
 
   private _selected(e: MouseEvent): void {
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    const snippetTitle = this._titleNodes[0].textContent!;
     dispatch({
       type: "select-snippet",
-      message: "click an item",
+      message: snippetTitle,
     });
   }
 }

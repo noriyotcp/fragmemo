@@ -27,6 +27,7 @@
   "license": "MIT",
   "dependencies": {
     "@material/mwc-list": "^0.25.3",
+    "@ui5/webcomponents": "^1.0.1",
     "lit": "^2.0.2",
     "monaco-editor": "^0.30.1",
     "simple-json-db": "^1.2.3",

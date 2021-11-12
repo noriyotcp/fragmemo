@@ -2,6 +2,7 @@ import { LitElement, html, css, TemplateResult } from "lit";
 import { customElement, property, query } from "lit/decorators.js";
 import { FileData } from "src/@types/global";
 import { dispatch } from "../events/dispatcher";
+import "@ui5/webcomponents/dist/Input.js";
 
 const { myAPI } = window;
 
@@ -18,10 +19,14 @@ export class TestHeader extends LitElement {
       height: 100px;
       width: 100%;
       z-index: 9999;
-      --textarea-width: 100%;
+      --textarea-width: 67%;
     }
-    input[type="text"] {
+    #snippet-title {
       width: var(--textarea-width);
+      background-color: inherit;
+      border: none;
+      color: ghostwhite;
+      font-size: 1.5em;
     }
   `;
 
@@ -34,14 +39,13 @@ export class TestHeader extends LitElement {
           </button>
           <div id="message"></div>
         </form>
-        <input
-          type="text"
+        <ui5-input
           id="snippet-title"
-          name="snippet-title"
-          placeholder="Two-way binding"
+          type="text"
+          placeholder="Snippet title..."
           value="${this.textareaValue}"
           @input="${this._inputTitleDispatcher}"
-        />
+        ></ui5-input>
       </div>
     `;
   }
@@ -59,6 +63,12 @@ export class TestHeader extends LitElement {
     window.addEventListener("select-snippet", ((e: CustomEvent) => {
       this.textareaValue = e.detail.message;
     }) as EventListener);
+    // Fired when the input operation has finished by pressing Enter or on focusout
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    const textField = this.shadowRoot!.getElementById("snippet-title")!;
+    textField.addEventListener("change", (e: Event) => {
+      console.log("Input has finished", e);
+    });
   }
 
   private _fileSaveAs(_e: Event): void {

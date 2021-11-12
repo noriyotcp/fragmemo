@@ -21,9 +21,6 @@ export class TestHeader extends LitElement {
       z-index: 9999;
       --textarea-width: 100%;
     }
-    input[type="text"] {
-      width: var(--textarea-width);
-    }
     ui5-input {
       width: var(--textarea-width);
     }
@@ -44,14 +41,6 @@ export class TestHeader extends LitElement {
           value="${this.textareaValue}"
           @input="${this._inputTitleDispatcher}"
         ></ui5-input>
-        <input
-          type="text"
-          id="snippet-title"
-          name="snippet-title"
-          placeholder="Two-way binding"
-          value="${this.textareaValue}"
-          @input="${this._inputTitleDispatcher}"
-        />
       </div>
     `;
   }

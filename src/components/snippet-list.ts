@@ -1,5 +1,5 @@
 import { LitElement, html, css, TemplateResult } from "lit";
-import { customElement, query, state } from "lit/decorators.js";
+import { customElement, query } from "lit/decorators.js";
 import "@ui5/webcomponents/dist/List.js";
 import "@ui5/webcomponents/dist/StandardListItem.js";
 
@@ -13,12 +13,8 @@ export class SnippetList extends LitElement {
 
   @query("#snippetList") snippetList!: HTMLElement;
 
-  @state()
-  private itemCount: number;
-
   constructor() {
     super();
-    this.itemCount = 100;
   }
 
   static styles = [

@@ -39,7 +39,7 @@ export class SnippetList extends LitElement {
       <ui5-list id="snippetList" class="full-width" mode="SingleSelect">
         ${Object.entries(this.setupStorage.snippets).map(
           ([snippet, _]) =>
-            html` <ui5-li
+            html`<ui5-li
               description="${this.randomDate(
                 new Date(2021, 1, 1),
                 new Date()

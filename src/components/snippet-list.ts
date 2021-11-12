@@ -1,6 +1,8 @@
 import { LitElement, html, css, TemplateResult } from "lit";
 import { customElement, state } from "lit/decorators.js";
 import { List } from "@material/mwc-list/mwc-list.js";
+import "@ui5/webcomponents/dist/List.js";
+import "@ui5/webcomponents/dist/StandardListItem.js";
 
 import "./snippet-list-item";
 import { SetupStorageController } from "../controllers/setup-storage-controller";
@@ -37,6 +39,20 @@ export class SnippetList extends LitElement {
   render(): TemplateResult {
     return html`
       <search-item></search-item>
+      <ui5-list id="myList" class="full-width">
+        ${Object.entries(this.setupStorage.snippets).map(
+          ([snippet, _]) =>
+            html` <ui5-li
+              description="${this.randomDate(
+                new Date(2021, 1, 1),
+                new Date()
+              ).toDateString()}"
+              additional-text="snippet"
+              additional-text-state="Success"
+              >${snippet}</ui5-li
+            >`
+        )}
+      </ui5-list>
       <mwc-list id="snippet-list">
         ${Object.entries(this.setupStorage.snippets).map(
           ([snippet, _]) =>

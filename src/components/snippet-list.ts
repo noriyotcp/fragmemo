@@ -27,6 +27,8 @@ export class SnippetList extends LitElement {
         --sapTextColor: ghostwhite;
         --ui5-listitem-background-color: #323233;
         --sapList_Hover_Background: #1e1e1e;
+        --sapList_Hover_SelectionBackground: #1e1e1e;
+        --sapList_SelectionBackgroundColor: #1e1e1e;
       }
     `,
   ];
@@ -34,7 +36,7 @@ export class SnippetList extends LitElement {
   render(): TemplateResult {
     return html`
       <search-item></search-item>
-      <ui5-list id="snippetList" class="full-width">
+      <ui5-list id="snippetList" class="full-width" mode="SingleSelect">
         ${Object.entries(this.setupStorage.snippets).map(
           ([snippet, _]) =>
             html` <ui5-li

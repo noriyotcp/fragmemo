@@ -19,10 +19,14 @@ export class TestHeader extends LitElement {
       height: 100px;
       width: 100%;
       z-index: 9999;
-      --textarea-width: 100%;
+      --textarea-width: 67%;
     }
     #snippet-title {
       width: var(--textarea-width);
+      background-color: inherit;
+      border: none;
+      color: ghostwhite;
+      font-size: 1.5em;
     }
   `;
 

@@ -21,7 +21,7 @@ export class TestHeader extends LitElement {
       z-index: 9999;
       --textarea-width: 100%;
     }
-    ui5-input {
+    #snippet-title {
       width: var(--textarea-width);
     }
   `;
@@ -36,6 +36,7 @@ export class TestHeader extends LitElement {
           <div id="message"></div>
         </form>
         <ui5-input
+          id="snippet-title"
           type="text"
           placeholder="Snippet title..."
           value="${this.textareaValue}"

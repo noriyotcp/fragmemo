@@ -1,6 +1,5 @@
 import { LitElement, html, css, TemplateResult } from "lit";
 import { customElement, query, state } from "lit/decorators.js";
-import { List } from "@material/mwc-list/mwc-list.js";
 import "@ui5/webcomponents/dist/List.js";
 import "@ui5/webcomponents/dist/StandardListItem.js";
 
@@ -28,18 +27,12 @@ export class SnippetList extends LitElement {
         overflow-y: smooth;
         overflow-x: hidden;
         height: 100vh;
-        background-color: #323233;
-        --mdc-list-vertical-padding: -8px;
-        padding-top: var(--mdc-list-vertical-padding);
+        padding-top: -8px;
         --sapTextColor: ghostwhite;
         --ui5-listitem-background-color: #323233;
         --sapList_Hover_Background: #1e1e1e;
       }
-      #snippet-list {
-        --mdc-ripple-color: transparent;
-      }
     `,
-    List.styles,
   ];
 
   render(): TemplateResult {
@@ -59,20 +52,6 @@ export class SnippetList extends LitElement {
             >`
         )}
       </ui5-list>
-      <mwc-list id="snippet-list">
-        ${Object.entries(this.setupStorage.snippets).map(
-          ([snippet, _]) =>
-            html` <snippet-list-item>
-              <span slot="title">${snippet}</span>
-              <span slot="date"
-                >${this.randomDate(
-                  new Date(2021, 1, 1),
-                  new Date()
-                ).toDateString()}</span
-              >
-            </snippet-list-item>`
-        )}
-      </mwc-list>
     `;
   }
 

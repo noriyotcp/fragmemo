@@ -1,20 +1,20 @@
 import { LitElement, html, css, TemplateResult } from "lit";
-import { customElement, state } from "lit/decorators.js";
-import { List } from "@material/mwc-list/mwc-list.js";
+import { customElement, query } from "lit/decorators.js";
+import "@ui5/webcomponents/dist/List.js";
+import "@ui5/webcomponents/dist/StandardListItem.js";
 
 import "./snippet-list-item";
 import { SetupStorageController } from "../controllers/setup-storage-controller";
+import { dispatch } from "../events/dispatcher";
 
 @customElement("snippet-list")
 export class SnippetList extends LitElement {
   private setupStorage = new SetupStorageController(this);
 
-  @state()
-  private itemCount: number;
+  @query("#snippetList") snippetList!: HTMLElement;
 
   constructor() {
     super();
-    this.itemCount = 100;
   }
 
   static styles = [
@@ -23,35 +23,45 @@ export class SnippetList extends LitElement {
         overflow-y: smooth;
         overflow-x: hidden;
         height: 100vh;
-        background-color: #323233;
-        --mdc-list-vertical-padding: -8px;
-        padding-top: var(--mdc-list-vertical-padding);
-      }
-      #snippet-list {
-        --mdc-ripple-color: transparent;
+        padding-top: -8px;
+        --sapTextColor: ghostwhite;
+        --ui5-listitem-background-color: #323233;
+        --sapList_Hover_Background: #1e1e1e;
+        --sapList_Hover_SelectionBackground: #1e1e1e;
+        --sapList_SelectionBackgroundColor: #1e1e1e;
       }
     `,
-    List.styles,
   ];
 
   render(): TemplateResult {
     return html`
       <search-item></search-item>
-      <mwc-list id="snippet-list">
+      <ui5-list id="snippetList" class="full-width" mode="SingleSelect">
         ${Object.entries(this.setupStorage.snippets).map(
           ([snippet, _]) =>
-            html` <snippet-list-item>
-              <span slot="title">${snippet}</span>
-              <span slot="date"
-                >${this.randomDate(
-                  new Date(2021, 1, 1),
-                  new Date()
-                ).toDateString()}</span
-              >
-            </snippet-list-item>`
+            html`<ui5-li
+              description="${this.randomDate(
+                new Date(2021, 1, 1),
+                new Date()
+              ).toDateString()}"
+              additional-text="snippet"
+              additional-text-state="Success"
+              >${snippet}</ui5-li
+            >`
         )}
-      </mwc-list>
+      </ui5-list>
     `;
+  }
+
+  firstUpdated(): void {
+    this.snippetList.addEventListener("selection-change", ((
+      e: CustomEvent
+    ): void => {
+      dispatch({
+        type: "select-snippet",
+        message: e.detail.selectedItems[0].textContent,
+      });
+    }) as EventListener);
   }
 
   // eslint-disable-next-line no-unused-vars

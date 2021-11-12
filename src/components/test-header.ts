@@ -59,6 +59,12 @@ export class TestHeader extends LitElement {
     window.addEventListener("select-snippet", ((e: CustomEvent) => {
       this.textareaValue = e.detail.message;
     }) as EventListener);
+    // Fired when the input operation has finished by pressing Enter or on focusout
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    const textField = this.shadowRoot!.getElementById("snippet-title")!;
+    textField.addEventListener("change", (e: Event) => {
+      console.log("Input has finished", e);
+    });
   }
 
   private _fileSaveAs(_e: Event): void {

@@ -54,11 +54,12 @@ export class SnippetList extends LitElement {
   }
 
   firstUpdated(): void {
-    this.snippetList.addEventListener("item-click", ((e: CustomEvent): void => {
-      console.info(e.detail.item.textContent);
+    this.snippetList.addEventListener("selection-change", ((
+      e: CustomEvent
+    ): void => {
       dispatch({
         type: "select-snippet",
-        message: e.detail.item.textContent,
+        message: e.detail.selectedItems[0].textContent,
       });
     }) as EventListener);
   }

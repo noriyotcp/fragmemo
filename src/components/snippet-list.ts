@@ -1,15 +1,18 @@
 import { LitElement, html, css, TemplateResult } from "lit";
-import { customElement, state } from "lit/decorators.js";
+import { customElement, query, state } from "lit/decorators.js";
 import { List } from "@material/mwc-list/mwc-list.js";
 import "@ui5/webcomponents/dist/List.js";
 import "@ui5/webcomponents/dist/StandardListItem.js";
 
 import "./snippet-list-item";
 import { SetupStorageController } from "../controllers/setup-storage-controller";
+import { dispatch } from "../events/dispatcher";
 
 @customElement("snippet-list")
 export class SnippetList extends LitElement {
   private setupStorage = new SetupStorageController(this);
+
+  @query("#snippetList") snippetList!: HTMLElement;
 
   @state()
   private itemCount: number;
@@ -39,7 +42,7 @@ export class SnippetList extends LitElement {
   render(): TemplateResult {
     return html`
       <search-item></search-item>
-      <ui5-list id="myList" class="full-width">
+      <ui5-list id="snippetList" class="full-width">
         ${Object.entries(this.setupStorage.snippets).map(
           ([snippet, _]) =>
             html` <ui5-li
@@ -68,6 +71,16 @@ export class SnippetList extends LitElement {
         )}
       </mwc-list>
     `;
+  }
+
+  firstUpdated(): void {
+    this.snippetList.addEventListener("item-click", ((e: CustomEvent): void => {
+      console.info(e.detail.item.textContent);
+      dispatch({
+        type: "select-snippet",
+        message: e.detail.item.textContent,
+      });
+    }) as EventListener);
   }
 
   // eslint-disable-next-line no-unused-vars

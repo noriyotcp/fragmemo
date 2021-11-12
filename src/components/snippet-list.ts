@@ -31,6 +31,9 @@ export class SnippetList extends LitElement {
         background-color: #323233;
         --mdc-list-vertical-padding: -8px;
         padding-top: var(--mdc-list-vertical-padding);
+        --sapTextColor: ghostwhite;
+        --ui5-listitem-background-color: #323233;
+        --sapList_Hover_Background: #1e1e1e;
       }
       #snippet-list {
         --mdc-ripple-color: transparent;

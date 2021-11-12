@@ -2,6 +2,7 @@ import { LitElement, html, css, TemplateResult } from "lit";
 import { customElement, property, query } from "lit/decorators.js";
 import { FileData } from "src/@types/global";
 import { dispatch } from "../events/dispatcher";
+import "@ui5/webcomponents/dist/Input.js";
 
 const { myAPI } = window;
 
@@ -23,6 +24,9 @@ export class TestHeader extends LitElement {
     input[type="text"] {
       width: var(--textarea-width);
     }
+    ui5-input {
+      width: var(--textarea-width);
+    }
   `;
 
   render(): TemplateResult {
@@ -34,6 +38,12 @@ export class TestHeader extends LitElement {
           </button>
           <div id="message"></div>
         </form>
+        <ui5-input
+          type="text"
+          placeholder="Snippet title..."
+          value="${this.textareaValue}"
+          @input="${this._inputTitleDispatcher}"
+        ></ui5-input>
         <input
           type="text"
           id="snippet-title"

@@ -1,3 +1,9 @@
+import { initRealm } from "./realm";
+
+function initDB(pathToDB: string): Realm {
+  return initRealm(pathToDB);
+}
+
 const testContentOfFragment = `var num: number = 123;
 function identity(num: number): number {
     return num;
@@ -33,4 +39,4 @@ function createFragment(realm: Realm, title: string, content: string): void {
   });
 }
 
-export { createSnippet, createFragment };
+export { initDB, createSnippet, createFragment };

@@ -5,7 +5,7 @@ import { createMenu } from "./createMenu";
 import { setupStorage } from "./setupStorage";
 import UserSetting from "./userSetting";
 import { setTimeout } from "timers/promises";
-import * as db from "./db/dbHandler";
+import * as db from "./db/realmHandler";
 
 const isDev = process.env.IS_DEV == "true" ? true : false;
 const userSetting = new UserSetting(

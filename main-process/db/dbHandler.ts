@@ -1,7 +1,12 @@
-import { initRealm } from "./realm";
+import { initRealm, Realm } from "./realm";
+let realm: Realm;
 
-function initDB(pathToDB: string): Realm {
-  return initRealm(pathToDB);
+function initDB(pathToDB: string): void {
+  realm = initRealm(pathToDB);
+}
+
+function close(): void {
+  realm.close();
 }
 
 const testContentOfFragment = `var num: number = 123;
@@ -9,34 +14,34 @@ function identity(num: number): number {
     return num;
 }`;
 
-function currentMaxId(realm: Realm, className: string): number {
+function currentMaxId(className: string): number {
   return <number>realm.objects(className).max("_id") || 0;
 }
 
-function createSnippet(realm: Realm, title: string): void {
-  createFragment(realm, "", testContentOfFragment);
+function createSnippet(title: string): void {
+  createFragment("", testContentOfFragment);
   const latestFragment = realm.objectForPrimaryKey(
     "Fragment",
-    currentMaxId(realm, "Fragment")
+    currentMaxId("Fragment")
   );
 
   realm.write(() => {
     realm.create("Snippet", {
-      _id: currentMaxId(realm, "Snippet") + 1,
+      _id: currentMaxId("Snippet") + 1,
       title: title,
       fragments: [latestFragment],
     });
   });
 }
 
-function createFragment(realm: Realm, title: string, content: string): void {
+function createFragment(title: string, content: string): void {
   realm.write(() => {
     realm.create("Fragment", {
-      _id: currentMaxId(realm, "Fragment") + 1,
+      _id: currentMaxId("Fragment") + 1,
       title: title,
       content: content,
     });
   });
 }
 
-export { initDB, createSnippet, createFragment };
+export { initDB, close, createSnippet, createFragment };

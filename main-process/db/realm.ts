@@ -21,7 +21,16 @@ Snippet.schema = {
 class Fragment extends Realm.Object {
   static schema: {
     name: string;
-    properties: { _id: string; title: string; content: string };
+    properties: {
+      _id: string;
+      title: string;
+      content: string;
+      snippet: {
+        type: "linkingObjects";
+        objectType: "Snippet";
+        property: "fragments";
+      };
+    };
     primaryKey: string;
   };
 }
@@ -32,6 +41,11 @@ Fragment.schema = {
     _id: "int",
     title: "string?",
     content: "string?",
+    snippet: {
+      type: "linkingObjects",
+      objectType: "Snippet",
+      property: "fragments",
+    },
   },
   primaryKey: "_id",
 };

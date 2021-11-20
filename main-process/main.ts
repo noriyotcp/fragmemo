@@ -6,6 +6,7 @@ import { setupStorage } from "./setupStorage";
 import UserSetting from "./userSetting";
 import { setTimeout } from "timers/promises";
 import { initRealm, Realm } from "./db/realm";
+import * as db from "./db/dbHandler";
 
 const isDev = process.env.IS_DEV == "true" ? true : false;
 const userSetting = new UserSetting(
@@ -93,6 +94,11 @@ app.once("browser-window-created", () => {
     await setTimeout(5000); // wait 5 seconds for testing
 
     realm = initRealm(`${app.getPath("userData")}/fragmemoDB/fragmemo.realm`);
+
+    db.createSnippet(realm, "test-snippet");
+    realm.write(() => {
+      realm.objectForPrimaryKey("Snippet", 1);
+    });
     return setupStorage(userSetting.readSettings().storagePath);
   });
 });

@@ -34,7 +34,7 @@
     "split.js": "^1.6.4"
   },
   "devDependencies": {
-    "@swc/core": "1.2.108",
+    "@swc/core": "1.2.111",
     "@swc/jest": "^0.2.5",
     "@types/jest": "^27.0.3",
     "@types/node": "^16.11.7",

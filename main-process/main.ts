@@ -5,11 +5,13 @@ import { createMenu } from "./createMenu";
 import { setupStorage } from "./setupStorage";
 import UserSetting from "./userSetting";
 import { setTimeout } from "timers/promises";
+import { initRealm, Realm } from "./db/realm";
 
 const isDev = process.env.IS_DEV == "true" ? true : false;
 const userSetting = new UserSetting(
   path.resolve(app.getPath("userData"), "settings.json")
 );
+let realm: Realm;
 
 function createWindow() {
   const { width, height, x, y } = userSetting.readSettings().window;
@@ -90,6 +92,7 @@ app.once("browser-window-created", () => {
   ipcMain.handle("setup-storage", async () => {
     await setTimeout(5000); // wait 5 seconds for testing
 
+    realm = initRealm(`${app.getPath("userData")}/fragmemoDB/fragmemo.realm`);
     return setupStorage(userSetting.readSettings().storagePath);
   });
 });
@@ -98,6 +101,7 @@ app.once("browser-window-created", () => {
 // for applications and their menu bar to stay active until the user quits
 // explicitly with Cmd + Q.
 app.on("window-all-closed", () => {
+  realm.close();
   if (process.platform !== "darwin") {
     app.quit();
   }

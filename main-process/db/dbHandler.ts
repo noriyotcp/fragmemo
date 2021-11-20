@@ -1,7 +1,7 @@
 import { initRealm, Realm } from "./realm";
 let realm: Realm;
 
-function initDB(pathToDB: string): void {
+function init(pathToDB: string): void {
   realm = initRealm(pathToDB);
 }
 
@@ -44,4 +44,4 @@ function createFragment(title: string, content: string): void {
   });
 }
 
-export { initDB, close, createSnippet, createFragment };
+export { init, close, createSnippet, createFragment };

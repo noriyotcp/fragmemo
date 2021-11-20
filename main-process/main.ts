@@ -91,7 +91,7 @@ app.once("browser-window-created", () => {
   ipcMain.handle("setup-storage", async () => {
     await setTimeout(5000); // wait 5 seconds for testing
 
-    db.initDB(`${app.getPath("userData")}/fragmemoDB/fragmemo.realm`);
+    db.init(`${app.getPath("userData")}/fragmemoDB/fragmemo.realm`);
 
     db.createSnippet("test-snippet");
     return setupStorage(userSetting.readSettings().storagePath);

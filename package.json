@@ -41,7 +41,7 @@
     "@typescript-eslint/eslint-plugin": "^4.33.0",
     "@typescript-eslint/parser": "^4.33.0",
     "@vitejs/plugin-vue": "^1.9.4",
-    "concurrently": "^6.2.0",
+    "concurrently": "^6.4.0",
     "cross-env": "^7.0.3",
     "electron": "^16.0.1",
     "electron-builder": "^22.14.5",

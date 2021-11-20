@@ -5,5 +5,5 @@
     "outDir": "../build",
     "allowJs": true
   },
-  "include": ["./*.ts", "./*.js"]
+  "include": ["./**/*.ts", "./**/*.js"]
 }

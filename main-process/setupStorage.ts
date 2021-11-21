@@ -7,13 +7,13 @@ type SnippetData = {
   snippetId: Snippet["_id"];
 }[];
 
-type setupStorageResult2Type = {
+type setupStorageResultType = {
   status: boolean;
   msg: string;
   snippets: SnippetData;
 };
 
-export const setupStorage = (db: DB): setupStorageResult2Type => {
+export const setupStorage = (db: DB): setupStorageResultType => {
   const snippets = (db.reverseSortById("Snippet") as Results<Snippet>).map(
     (snippet) => ({
       snippetTitle: snippet.title,

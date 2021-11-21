@@ -9,6 +9,10 @@ function close(): void {
   realm.close();
 }
 
+function reverseSortById(className: string): Realm.Results<Realm.Object> {
+  return realm.objects(className).sorted("_id", true);
+}
+
 const testContentOfFragment = `var num: number = 123;
 function identity(num: number): number {
     return num;
@@ -44,4 +48,4 @@ function createFragment(title: string, content: string): void {
   });
 }
 
-export { init, close, createSnippet, createFragment };
+export { init, close, createSnippet, createFragment, reverseSortById };

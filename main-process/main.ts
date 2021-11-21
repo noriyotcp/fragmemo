@@ -3,6 +3,7 @@ import { app, BrowserWindow, ipcMain } from "electron";
 import { setFileSaveAs } from "./setFileSaveAs";
 import { createMenu } from "./createMenu";
 import { setupStorage } from "./setupStorage";
+import { setupStorage2 } from "./setupStorage2";
 import UserSetting from "./userSetting";
 import { setTimeout } from "timers/promises";
 import * as db from "./db/realmHandler";
@@ -94,7 +95,7 @@ app.once("browser-window-created", () => {
     db.init(`${app.getPath("userData")}/fragmemoDB/fragmemo.realm`);
 
     db.createSnippet("test-snippet");
-    return setupStorage(userSetting.readSettings().storagePath);
+    return setupStorage2(db);
   });
 });
 

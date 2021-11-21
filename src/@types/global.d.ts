@@ -22,7 +22,11 @@ type setupStorageResultType = {
 
 export interface SandBox {
   fileSaveAs: (fileData: string) => void;
-  setupStorage: () => Promise<setupStorageResultType>;
+  setupStorage: () => Promise<{
+    status: boolean;
+    msg: string;
+    snippets: [];
+  }>;
   openByMenu: (
     listener: (_e: Event, fileData: FileData) => void
   ) => Electron.IpcRenderer;

@@ -17,36 +17,26 @@ class Snippet extends Realm.Object {
 }
 
 class Fragment extends Realm.Object {
-  static schema: {
-    name: string;
+  public _id = 0;
+  public title = "";
+  public content = "";
+  public snippet!: Snippet;
+
+  public static schema: Realm.ObjectSchema = {
+    name: "Fragment",
     properties: {
-      _id: string;
-      title: string;
-      content: string;
+      _id: "int",
+      title: "string?",
+      content: "string?",
       snippet: {
-        type: "linkingObjects";
-        objectType: "Snippet";
-        property: "fragments";
-      };
-    };
-    primaryKey: string;
+        type: "linkingObjects",
+        objectType: "Snippet",
+        property: "fragments",
+      },
+    },
+    primaryKey: "_id",
   };
 }
-
-Fragment.schema = {
-  name: "Fragment",
-  properties: {
-    _id: "int",
-    title: "string?",
-    content: "string?",
-    snippet: {
-      type: "linkingObjects",
-      objectType: "Snippet",
-      property: "fragments",
-    },
-  },
-  primaryKey: "_id",
-};
 
 const realmSchema = [Snippet, Fragment];
 

@@ -55,4 +55,4 @@ const initRealm = (path: string): Realm => {
   return realm;
 };
 
-export { initRealm, Realm };
+export { initRealm, Realm, Snippet, Fragment };

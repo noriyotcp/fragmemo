@@ -6,12 +6,13 @@ import { setupStorage } from "./setupStorage";
 import { setupStorage2 } from "./setupStorage2";
 import UserSetting from "./userSetting";
 import { setTimeout } from "timers/promises";
-import * as db from "./db/realmHandler";
+import DB from "./db/db";
 
 const isDev = process.env.IS_DEV == "true" ? true : false;
 const userSetting = new UserSetting(
   path.resolve(app.getPath("userData"), "settings.json")
 );
+let db: DB;
 
 function createWindow() {
   const { width, height, x, y } = userSetting.readSettings().window;
@@ -92,7 +93,7 @@ app.once("browser-window-created", () => {
   ipcMain.handle("setup-storage", async () => {
     await setTimeout(5000); // wait 5 seconds for testing
 
-    db.init(`${app.getPath("userData")}/fragmemoDB/fragmemo.realm`);
+    db = new DB(`${app.getPath("userData")}/fragmemoDB/fragmemo.realm`);
 
     db.createSnippet("test-snippet");
     return setupStorage2(db);

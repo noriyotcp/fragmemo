@@ -1,9 +1,10 @@
 // @ts-nocheck
 
 import { Results } from "realm";
+import DB from "./db/db";
 
 export const setupStorage2 = (
-  db: typeof import("./db/realmHandler")
+  db: DB
 ): { status: boolean; msg: string; snippets: Results<Realm.Object> } => {
   const snippets = db
     .reverseSortById("Snippet")

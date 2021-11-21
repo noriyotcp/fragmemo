@@ -2,7 +2,6 @@ import path from "path";
 import { app, BrowserWindow, ipcMain } from "electron";
 import { setFileSaveAs } from "./setFileSaveAs";
 import { createMenu } from "./createMenu";
-import { setupStorage } from "./setupStorage";
 import { setupStorage2 } from "./setupStorage2";
 import UserSetting from "./userSetting";
 import { setTimeout } from "timers/promises";

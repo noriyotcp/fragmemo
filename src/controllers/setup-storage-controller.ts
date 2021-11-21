@@ -1,5 +1,4 @@
 import { ReactiveController, ReactiveControllerHost } from "lit";
-import { setupStorageResultType } from "src/@types/global";
 
 const { myAPI } = window;
 

@@ -40,9 +40,4 @@ class Fragment extends Realm.Object {
 
 const realmSchema = [Snippet, Fragment];
 
-const initRealm = (path: string): Realm => {
-  const realm = new Realm({ path, schema: [Snippet, Fragment] });
-  return realm;
-};
-
-export { initRealm, Realm, realmSchema, Snippet };
+export { Realm, realmSchema, Snippet };

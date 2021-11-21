@@ -50,9 +50,11 @@ Fragment.schema = {
   primaryKey: "_id",
 };
 
+const realmSchema = [Snippet, Fragment];
+
 const initRealm = (path: string): Realm => {
   const realm = new Realm({ path, schema: [Snippet, Fragment] });
   return realm;
 };
 
-export { initRealm, Realm };
+export { initRealm, Realm, realmSchema };

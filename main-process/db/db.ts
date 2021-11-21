@@ -10,6 +10,7 @@ class DB extends Realm {
   }
 
   currentMaxId(className: string): number {
+    // If no records exist, return 0
     return <number>this.objects(className).max("_id") || 0;
   }
 

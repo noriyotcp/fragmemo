@@ -8,7 +8,7 @@ export class SetupStorageController implements ReactiveController {
 
   status = false;
   msg = "";
-  snippets = {};
+  snippets = [];
 
   constructor(host: ReactiveControllerHost) {
     this.host = host;
@@ -21,12 +21,11 @@ export class SetupStorageController implements ReactiveController {
       this._selectSnippetListener as EventListener
     );
     console.info(this.constructor.name, "has connected");
-    myAPI
-      .setupStorage()
-      .then(({ status, msg, snippets }: setupStorageResultType) => {
-        [this.status, this.msg, this.snippets] = [status, msg, snippets];
-        this.host.requestUpdate();
-      });
+    myAPI.setupStorage().then(({ status, msg, snippets }) => {
+      [this.status, this.msg, this.snippets] = [status, msg, snippets];
+      console.info(this.snippets);
+      this.host.requestUpdate();
+    });
   }
 
   private _selectSnippetListener = (e: CustomEvent): void => {

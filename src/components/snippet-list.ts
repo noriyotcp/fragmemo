@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import { LitElement, html, css, TemplateResult } from "lit";
 import { customElement, query } from "lit/decorators.js";
 import "@ui5/webcomponents/dist/List.js";
@@ -37,8 +39,8 @@ export class SnippetList extends LitElement {
     return html`
       <search-item></search-item>
       <ui5-list id="snippetList" class="full-width" mode="SingleSelect">
-        ${Object.entries(this.setupStorage.snippets).map(
-          ([snippet, _]) =>
+        ${this.setupStorage.snippets.map(
+          (snippet) =>
             html`<ui5-li
               description="${this.randomDate(
                 new Date(2021, 1, 1),
@@ -46,7 +48,7 @@ export class SnippetList extends LitElement {
               ).toDateString()}"
               additional-text="snippet"
               additional-text-state="Success"
-              >${snippet}</ui5-li
+              >${snippet.snippetTitle}-${snippet.snippetId}</ui5-li
             >`
         )}
       </ui5-list>

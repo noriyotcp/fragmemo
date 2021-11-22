@@ -5,8 +5,11 @@ class DB extends Realm {
     super({ path, schema: realmSchema });
   }
 
-  reverseSortById(className: string): Realm.Results<Realm.Object> {
-    return this.objects(className).sorted("_id", true);
+  reverseSortBy(
+    className: string,
+    property: string
+  ): Realm.Results<Realm.Object> {
+    return this.objects(className).sorted(property, true);
   }
 
   currentMaxId(className: string): number {

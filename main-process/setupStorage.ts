@@ -14,11 +14,12 @@ type setupStorageResultType = {
 };
 
 export const setupStorage = (db: DB): setupStorageResultType => {
-  const snippets = (db.reverseSortBy("Snippet", "_id") as Results<Snippet>).map(
-    (snippet) => ({
-      snippetTitle: snippet.title,
-      snippetId: snippet._id,
-    })
-  );
+  const snippets = (
+    db.reverseSortBy("Snippet", "updatedAt") as Results<Snippet>
+  ).map((snippet) => ({
+    snippetTitle: snippet.title,
+    snippetId: snippet._id,
+    snippetUpdatedAt: snippet.updatedAt,
+  }));
   return { status: true, msg: "Snippets loaded", snippets };
 };

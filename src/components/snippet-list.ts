@@ -42,10 +42,7 @@ export class SnippetList extends LitElement {
         ${this.setupStorage.snippets.map(
           (snippet) =>
             html`<ui5-li
-              description="${this.randomDate(
-                new Date(2021, 1, 1),
-                new Date()
-              ).toDateString()}"
+              description="${snippet.snippetUpdatedAt}"
               additional-text="snippet"
               additional-text-state="Success"
               >${snippet.snippetTitle}-${snippet.snippetId}</ui5-li

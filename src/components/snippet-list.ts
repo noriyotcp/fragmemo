@@ -42,7 +42,7 @@ export class SnippetList extends LitElement {
         ${this.setupStorage.snippets.map(
           (snippet) =>
             html`<ui5-li
-              description="${snippet.snippetUpdatedAt}"
+              description="${this.formatDatetime(snippet.snippetUpdatedAt)}"
               additional-text="snippet"
               additional-text-state="Success"
               >${snippet.snippetTitle}-${snippet.snippetId}</ui5-li
@@ -68,6 +68,14 @@ export class SnippetList extends LitElement {
     console.log("storage status: ", this.setupStorage.status);
     console.info(this.setupStorage.snippets);
     console.log(this.setupStorage.msg);
+  }
+
+  private formatDatetime(datetime: string) {
+    const locale = Intl.DateTimeFormat().resolvedOptions().locale;
+    return new Intl.DateTimeFormat(locale || "jp", {
+      dateStyle: "short",
+      timeStyle: "medium",
+    }).format(datetime);
   }
 
   private range(

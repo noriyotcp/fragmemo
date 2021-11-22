@@ -32,6 +32,8 @@ function identity(num: number): number {
         _id: this.currentMaxId("Snippet") + 1,
         title: title,
         fragments: [latestFragment],
+        createdAt: new Date(),
+        updatedAt: new Date(),
       });
     });
   }
@@ -42,6 +44,8 @@ function identity(num: number): number {
         _id: this.currentMaxId("Fragment") + 1,
         title: title,
         content: content,
+        createdAt: new Date(),
+        updatedAt: new Date(),
       });
     });
   }

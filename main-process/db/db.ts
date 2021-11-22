@@ -5,8 +5,11 @@ class DB extends Realm {
     super({ path, schema: realmSchema });
   }
 
-  reverseSortById(className: string): Realm.Results<Realm.Object> {
-    return this.objects(className).sorted("_id", true);
+  reverseSortBy(
+    className: string,
+    property: string
+  ): Realm.Results<Realm.Object> {
+    return this.objects(className).sorted(property, true);
   }
 
   currentMaxId(className: string): number {
@@ -32,6 +35,8 @@ function identity(num: number): number {
         _id: this.currentMaxId("Snippet") + 1,
         title: title,
         fragments: [latestFragment],
+        createdAt: new Date(),
+        updatedAt: new Date(),
       });
     });
   }
@@ -42,6 +47,8 @@ function identity(num: number): number {
         _id: this.currentMaxId("Fragment") + 1,
         title: title,
         content: content,
+        createdAt: new Date(),
+        updatedAt: new Date(),
       });
     });
   }

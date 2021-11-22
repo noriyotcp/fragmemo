@@ -42,10 +42,7 @@ export class SnippetList extends LitElement {
         ${this.setupStorage.snippets.map(
           (snippet) =>
             html`<ui5-li
-              description="${this.randomDate(
-                new Date(2021, 1, 1),
-                new Date()
-              ).toDateString()}"
+              description="${this.formatDatetime(snippet.snippetUpdatedAt)}"
               additional-text="snippet"
               additional-text-state="Success"
               >${snippet.snippetTitle}-${snippet.snippetId}</ui5-li
@@ -73,20 +70,11 @@ export class SnippetList extends LitElement {
     console.log(this.setupStorage.msg);
   }
 
-  private range(
-    start: number,
-    end: number,
-    length = end - start + 1
-  ): Array<number> {
-    return Array.from({ length }, (_, i) => start + i);
-  }
-
-  private randomDate(
-    start: { getTime: () => number },
-    end: { getTime: () => number }
-  ) {
-    return new Date(
-      start.getTime() + Math.random() * (end.getTime() - start.getTime())
-    );
+  private formatDatetime(datetime: string) {
+    const locale = Intl.DateTimeFormat().resolvedOptions().locale;
+    return new Intl.DateTimeFormat(locale || "jp", {
+      dateStyle: "short",
+      timeStyle: "medium",
+    }).format(datetime);
   }
 }

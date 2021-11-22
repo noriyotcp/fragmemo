@@ -77,21 +77,4 @@ export class SnippetList extends LitElement {
       timeStyle: "medium",
     }).format(datetime);
   }
-
-  private range(
-    start: number,
-    end: number,
-    length = end - start + 1
-  ): Array<number> {
-    return Array.from({ length }, (_, i) => start + i);
-  }
-
-  private randomDate(
-    start: { getTime: () => number },
-    end: { getTime: () => number }
-  ) {
-    return new Date(
-      start.getTime() + Math.random() * (end.getTime() - start.getTime())
-    );
-  }
 }

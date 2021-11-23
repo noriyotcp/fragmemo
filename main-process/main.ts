@@ -6,6 +6,7 @@ import { setupStorage } from "./setupStorage";
 import UserSetting from "./userSetting";
 import { setTimeout } from "timers/promises";
 import DB from "./db/db";
+import { createHash } from "node:crypto";
 
 const isDev = process.env.IS_DEV == "true" ? true : false;
 const userSetting = new UserSetting(
@@ -94,7 +95,9 @@ app.once("browser-window-created", () => {
 
     db = new DB(`${app.getPath("userData")}/fragmemoDB/fragmemo.realm`);
 
-    db.createSnippet("test-snippet");
+    db.createSnippet(
+      createHash("md5").update(String(Date.now())).digest("hex")
+    );
     return setupStorage(db);
   });
 });

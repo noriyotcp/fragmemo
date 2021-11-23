@@ -1,15 +1,5 @@
 import Realm from "realm";
 
-class Snippet {
-  public _id = 0;
-  public title = "";
-  public fragments!: Fragment[];
-  public createdAt = new Date();
-  public updatedAt = new Date();
-
-  public static schema: typeof SnippetSchema;
-}
-
 const SnippetSchema: Realm.ObjectSchema = {
   name: "Snippet",
   properties: {
@@ -22,15 +12,14 @@ const SnippetSchema: Realm.ObjectSchema = {
   primaryKey: "_id",
 };
 
-class Fragment {
+class Snippet {
   public _id = 0;
   public title = "";
-  public content = "";
-  public snippet!: Snippet;
+  public fragments!: Fragment[];
   public createdAt = new Date();
   public updatedAt = new Date();
 
-  public static schema: typeof FragmentSchema;
+  public static schema: typeof SnippetSchema = SnippetSchema;
 }
 
 const FragmentSchema: Realm.ObjectSchema = {
@@ -50,6 +39,17 @@ const FragmentSchema: Realm.ObjectSchema = {
   primaryKey: "_id",
 };
 
-const realmSchema = [SnippetSchema, FragmentSchema];
+class Fragment {
+  public _id = 0;
+  public title = "";
+  public content = "";
+  public snippet!: Snippet;
+  public createdAt = new Date();
+  public updatedAt = new Date();
+
+  public static schema: typeof FragmentSchema = FragmentSchema;
+}
+
+const realmSchema = [Snippet.schema, Fragment.schema];
 
 export { Realm, realmSchema, Snippet, Fragment };

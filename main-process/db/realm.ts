@@ -52,6 +52,11 @@ class Fragment {
   public createdAt = new Date();
   public updatedAt = new Date();
 
+  // TODO: Change Partial to Required
+  constructor(data: Partial<Fragment>) {
+    Object.assign(this, data);
+  }
+
   public static schema: typeof FragmentSchema = FragmentSchema;
 }
 

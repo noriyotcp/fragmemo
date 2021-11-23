@@ -15,13 +15,13 @@ type setupStorageResultType = {
 
 const fragmentsList = (fragments: Fragment[]) => {
   return fragments.map((fragment) => {
-    return {
+    return new Fragment({
       _id: fragment._id,
       title: fragment.title,
       content: fragment.content,
       createdAt: fragment.createdAt,
       updatedAt: fragment.updatedAt,
-    };
+    });
   });
 };
 
@@ -34,6 +34,7 @@ export const setupStorage = (db: DB): setupStorageResultType => {
       title: snippet.title,
       createdAt: snippet.createdAt,
       updatedAt: snippet.updatedAt,
+      fragments: fragmentsList(snippet.fragments),
     });
   });
   return { status: true, msg: "Snippets loaded", snippets };

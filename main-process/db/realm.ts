@@ -7,18 +7,20 @@ class Snippet {
   public createdAt = new Date();
   public updatedAt = new Date();
 
-  public static schema: Realm.ObjectSchema = {
-    name: "Snippet",
-    properties: {
-      _id: "int",
-      title: "string?",
-      fragments: "Fragment[]",
-      createdAt: "date",
-      updatedAt: "date",
-    },
-    primaryKey: "_id",
-  };
+  public static schema: typeof SnippetSchema;
 }
+
+const SnippetSchema: Realm.ObjectSchema = {
+  name: "Snippet",
+  properties: {
+    _id: "int",
+    title: "string?",
+    fragments: "Fragment[]",
+    createdAt: "date",
+    updatedAt: "date",
+  },
+  primaryKey: "_id",
+};
 
 class Fragment {
   public _id = 0;
@@ -28,24 +30,26 @@ class Fragment {
   public createdAt = new Date();
   public updatedAt = new Date();
 
-  public static schema: Realm.ObjectSchema = {
-    name: "Fragment",
-    properties: {
-      _id: "int",
-      title: "string?",
-      content: "string?",
-      createdAt: "date",
-      updatedAt: "date",
-      snippet: {
-        type: "linkingObjects",
-        objectType: "Snippet",
-        property: "fragments",
-      },
-    },
-    primaryKey: "_id",
-  };
+  public static schema: typeof FragmentSchema;
 }
 
-const realmSchema = [Snippet.schema, Fragment.schema];
+const FragmentSchema: Realm.ObjectSchema = {
+  name: "Fragment",
+  properties: {
+    _id: "int",
+    title: "string?",
+    content: "string?",
+    createdAt: "date",
+    updatedAt: "date",
+    snippet: {
+      type: "linkingObjects",
+      objectType: "Snippet",
+      property: "fragments",
+    },
+  },
+  primaryKey: "_id",
+};
+
+const realmSchema = [SnippetSchema, FragmentSchema];
 
 export { Realm, realmSchema, Snippet, Fragment };

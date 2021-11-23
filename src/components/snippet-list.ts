@@ -45,6 +45,7 @@ export class SnippetList extends LitElement {
               description="${this.formatDatetime(snippet.updatedAt)}"
               additional-text="snippet"
               additional-text-state="Success"
+              snippet=${JSON.stringify(snippet)}
               >${snippet.title}</ui5-li
             >`
         )}
@@ -58,7 +59,7 @@ export class SnippetList extends LitElement {
     ): void => {
       dispatch({
         type: "select-snippet",
-        message: e.detail.selectedItems[0].textContent,
+        message: e.detail.selectedItems[0].getAttribute("snippet"),
       });
     }) as EventListener);
   }

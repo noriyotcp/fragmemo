@@ -61,7 +61,8 @@ export class TestHeader extends LitElement {
       this._openByMenuListener(fileData)
     );
     window.addEventListener("select-snippet", ((e: CustomEvent) => {
-      this.textareaValue = e.detail.message;
+      const snippet = JSON.parse(e.detail.message);
+      this.textareaValue = snippet.title;
     }) as EventListener);
     // Fired when the input operation has finished by pressing Enter or on focusout
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion

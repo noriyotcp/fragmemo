@@ -8,6 +8,7 @@ export class SetupStorageController implements ReactiveController {
   status = false;
   msg = "";
   snippets = [];
+  selectedSnippet: Record<string, unknown> = {};
 
   constructor(host: ReactiveControllerHost) {
     this.host = host;
@@ -28,6 +29,7 @@ export class SetupStorageController implements ReactiveController {
   }
 
   private _selectSnippetListener = (e: CustomEvent): void => {
-    console.log(e.detail.message);
+    this.selectedSnippet = JSON.parse(e.detail.message);
+    this.host.requestUpdate();
   };
 }

@@ -3,14 +3,21 @@ import { customElement, property, query } from "lit/decorators.js";
 import { FileData } from "src/@types/global";
 import { dispatch } from "../events/dispatcher";
 import "@ui5/webcomponents/dist/Input.js";
+import { SetupStorageController } from "../controllers/setup-storage-controller";
 
 const { myAPI } = window;
 
 @customElement("test-header")
 export class TestHeader extends LitElement {
+  private setupStorage = new SetupStorageController(this);
+
   @query("#btn-save") btnSave!: HTMLButtonElement;
   @query("#message") message!: HTMLSpanElement;
   @property({ type: String }) textareaValue!: string;
+
+  constructor() {
+    super();
+  }
 
   static styles = css`
     :host {
@@ -43,7 +50,7 @@ export class TestHeader extends LitElement {
           id="snippet-title"
           type="text"
           placeholder="Snippet title..."
-          value="${this.textareaValue}"
+          value="${this.setupStorage.selectedSnippet.title}"
           @input="${this._inputTitleDispatcher}"
         ></ui5-input>
       </div>
@@ -60,9 +67,6 @@ export class TestHeader extends LitElement {
     myAPI.openByMenu((_e: Event, fileData: FileData) =>
       this._openByMenuListener(fileData)
     );
-    window.addEventListener("select-snippet", ((e: CustomEvent) => {
-      this.textareaValue = e.detail.message;
-    }) as EventListener);
     // Fired when the input operation has finished by pressing Enter or on focusout
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const textField = this.shadowRoot!.getElementById("snippet-title")!;

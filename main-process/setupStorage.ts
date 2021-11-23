@@ -2,11 +2,6 @@ import { Results } from "realm";
 import DB from "./db/db";
 import { Snippet, Fragment } from "./db/realm";
 
-type SnippetData = {
-  snippetTitle: Snippet["title"];
-  snippetId: Snippet["_id"];
-}[];
-
 type setupStorageResultType = {
   status: boolean;
   msg: string;

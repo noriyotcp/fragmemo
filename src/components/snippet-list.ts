@@ -42,10 +42,10 @@ export class SnippetList extends LitElement {
         ${this.setupStorage.snippets.map(
           (snippet) =>
             html`<ui5-li
-              description="${this.formatDatetime(snippet.snippetUpdatedAt)}"
+              description="${this.formatDatetime(snippet.updatedAt)}"
               additional-text="snippet"
               additional-text-state="Success"
-              >${snippet.snippetTitle}-${snippet.snippetId}</ui5-li
+              >${snippet.title}-${snippet._id}</ui5-li
             >`
         )}
       </ui5-list>

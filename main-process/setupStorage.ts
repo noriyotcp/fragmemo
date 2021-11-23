@@ -10,7 +10,7 @@ type SnippetData = {
 type setupStorageResultType = {
   status: boolean;
   msg: string;
-  snippets: SnippetData;
+  snippets: Snippet[];
 };
 
 const fragmentsList = (fragments: Fragment[]) => {
@@ -28,11 +28,13 @@ const fragmentsList = (fragments: Fragment[]) => {
 export const setupStorage = (db: DB): setupStorageResultType => {
   const snippets = (
     db.reverseSortBy("Snippet", "updatedAt") as unknown as Results<Snippet>
-  ).map((snippet) => ({
-    snippetTitle: snippet.title,
-    snippetId: snippet._id,
-    snippetUpdatedAt: snippet.updatedAt,
-    fragments: fragmentsList(snippet.fragments),
-  }));
+  ).map((snippet) => {
+    return new Snippet({
+      _id: snippet._id,
+      title: snippet.title,
+      createdAt: snippet.createdAt,
+      updatedAt: snippet.updatedAt,
+    });
+  });
   return { status: true, msg: "Snippets loaded", snippets };
 };

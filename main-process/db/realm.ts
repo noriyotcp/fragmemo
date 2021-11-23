@@ -13,11 +13,16 @@ const SnippetSchema: Realm.ObjectSchema = {
 };
 
 class Snippet {
-  public _id = 0;
-  public title = "";
-  public fragments!: Fragment[];
-  public createdAt = new Date();
-  public updatedAt = new Date();
+  _id = 0;
+  title = "";
+  fragments!: Fragment[];
+  createdAt = new Date();
+  updatedAt = new Date();
+
+  // TODO: Change Partial to Required
+  constructor(data: Partial<Snippet>) {
+    Object.assign(this, data);
+  }
 
   public static schema: typeof SnippetSchema = SnippetSchema;
 }

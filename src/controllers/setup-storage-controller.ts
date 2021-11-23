@@ -22,7 +22,7 @@ export class SetupStorageController implements ReactiveController {
     console.info(this.constructor.name, "has connected");
     myAPI.setupStorage().then(({ status, msg, snippets }) => {
       [this.status, this.msg, this.snippets] = [status, msg, snippets];
-      console.info(this.snippets);
+      console.info("Snippets: ", this.snippets);
       this.host.requestUpdate();
     });
   }

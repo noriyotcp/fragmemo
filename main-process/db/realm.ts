@@ -48,4 +48,4 @@ class Fragment extends Realm.Object {
 
 const realmSchema = [Snippet, Fragment];
 
-export { Realm, realmSchema, Snippet };
+export { Realm, realmSchema, Snippet, Fragment };

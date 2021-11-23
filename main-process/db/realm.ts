@@ -46,6 +46,6 @@ class Fragment {
   };
 }
 
-const realmSchema = [Snippet, Fragment];
+const realmSchema = [Snippet.schema, Fragment.schema];
 
 export { Realm, realmSchema, Snippet, Fragment };

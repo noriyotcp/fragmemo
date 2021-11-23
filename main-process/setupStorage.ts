@@ -13,7 +13,7 @@ type setupStorageResultType = {
   snippets: SnippetData;
 };
 
-const fragmentsList = (fragments: Realm.List<Fragment>) => {
+const fragmentsList = (fragments: Fragment[]) => {
   return fragments.map((fragment) => {
     return {
       _id: fragment._id,

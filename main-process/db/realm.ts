@@ -3,7 +3,7 @@ import Realm from "realm";
 class Snippet {
   public _id = 0;
   public title = "";
-  public fragments!: Realm.List<Fragment>;
+  public fragments!: Fragment[];
   public createdAt = new Date();
   public updatedAt = new Date();
 

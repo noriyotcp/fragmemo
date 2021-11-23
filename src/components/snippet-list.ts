@@ -66,7 +66,6 @@ export class SnippetList extends LitElement {
   // eslint-disable-next-line no-unused-vars
   updated(changedProps: Map<string, unknown>): void {
     console.log("storage status: ", this.setupStorage.status);
-    console.info(this.setupStorage.snippets);
     console.log(this.setupStorage.msg);
   }
 

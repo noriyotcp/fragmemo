@@ -27,7 +27,7 @@ const fragmentsList = (fragments: Realm.List<Fragment>) => {
 
 export const setupStorage = (db: DB): setupStorageResultType => {
   const snippets = (
-    db.reverseSortBy("Snippet", "updatedAt") as Results<Snippet>
+    db.reverseSortBy("Snippet", "updatedAt") as unknown as Results<Snippet>
   ).map((snippet) => ({
     snippetTitle: snippet.title,
     snippetId: snippet._id,

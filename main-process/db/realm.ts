@@ -1,6 +1,6 @@
 import Realm from "realm";
 
-class Snippet extends Realm.Object {
+class Snippet {
   public _id = 0;
   public title = "";
   public fragments!: Realm.List<Fragment>;
@@ -20,7 +20,7 @@ class Snippet extends Realm.Object {
   };
 }
 
-class Fragment extends Realm.Object {
+class Fragment {
   public _id = 0;
   public title = "";
   public content = "";

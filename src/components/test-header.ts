@@ -3,13 +3,13 @@ import { customElement, property, query } from "lit/decorators.js";
 import { FileData } from "src/@types/global";
 import { dispatch } from "../events/dispatcher";
 import "@ui5/webcomponents/dist/Input.js";
-import { SetupStorageController } from "../controllers/setup-storage-controller";
+import { SnippetController } from "../controllers/snippet-controller";
 
 const { myAPI } = window;
 
 @customElement("test-header")
 export class TestHeader extends LitElement {
-  private setupStorage = new SetupStorageController(this);
+  private snippet = new SnippetController(this);
 
   @query("#btn-save") btnSave!: HTMLButtonElement;
   @query("#message") message!: HTMLSpanElement;
@@ -50,7 +50,7 @@ export class TestHeader extends LitElement {
           id="snippet-title"
           type="text"
           placeholder="Snippet title..."
-          value="${this.setupStorage.selectedSnippet.title}"
+          value="${this.snippet.selectedSnippet.title}"
           @input="${this._inputTitleDispatcher}"
         ></ui5-input>
       </div>

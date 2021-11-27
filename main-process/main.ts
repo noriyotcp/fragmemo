@@ -3,19 +3,29 @@ import { app, BrowserWindow, ipcMain } from "electron";
 import { setFileSaveAs } from "./setFileSaveAs";
 import { createMenu } from "./createMenu";
 import { setupStorage } from "./setupStorage";
-import UserSetting from "./userSetting";
+import JsonStorage from "./jsonStorage";
 import { setTimeout } from "timers/promises";
 import DB from "./db/db";
 import { createHash } from "node:crypto";
 
 const isDev = process.env.IS_DEV == "true" ? true : false;
-const userSetting = new UserSetting(
-  path.resolve(app.getPath("userData"), "settings.json")
+const jsonStorage = new JsonStorage(
+  path.resolve(`${app.getPath("userData")}/fragmemoSettings/restore`)
 );
 let db: DB;
 
 function createWindow() {
-  const { width, height, x, y } = userSetting.readSettings().window;
+  type settingsDataType = {
+    window: {
+      width: number;
+      height: number;
+      x: number;
+      y: number;
+    };
+  };
+
+  const { window } = <settingsDataType>jsonStorage.lib.getSync("window");
+  const { width, height, x, y } = window;
 
   // Create the browser window.
   const mainWindow = new BrowserWindow({
@@ -50,27 +60,20 @@ function createWindow() {
   }
 
   mainWindow.on("close", () => {
-    userSetting.jsonDbHandler.update(
-      "window",
-      "width",
-      mainWindow.getSize()[0]
-    );
-    userSetting.jsonDbHandler.update(
-      "window",
-      "height",
-      mainWindow.getSize()[1]
-    );
-    userSetting.jsonDbHandler.update(
-      "window",
-      "x",
-      mainWindow.getPosition()[0]
-    );
-    userSetting.jsonDbHandler.update(
-      "window",
-      "y",
-      mainWindow.getPosition()[1]
-    );
-    userSetting.jsonDbHandler.sync();
+    const updatedWindowSettings = {
+      window: {
+        width: mainWindow.getSize()[0],
+        height: mainWindow.getSize()[1],
+        x: mainWindow.getPosition()[0],
+        y: mainWindow.getPosition()[1],
+      },
+    };
+
+    jsonStorage.lib.set("window", updatedWindowSettings, function (err) {
+      if (err) {
+        console.log(err);
+      }
+    });
   });
 }
 

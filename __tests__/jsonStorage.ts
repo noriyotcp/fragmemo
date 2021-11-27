@@ -3,7 +3,7 @@ import path from "path";
 import os from "os";
 import {
   JsonStorage,
-  FileDoesNotExistError,
+  DatapathDoesNotExistError,
 } from "../main-process/jsonStorage";
 
 describe("JsonStorage", () => {
@@ -27,31 +27,19 @@ describe("JsonStorage", () => {
     }
   });
 
-  describe("Storage file does not exists", () => {
+  describe("datapath does not exists", () => {
     jest
       .spyOn(fs, "existsSync")
       .mockImplementationOnce(() => false) as jest.SpyInstance;
     it("should throw an error", () => {
       expect(() => {
         new JsonStorage(`${tmpDir}`);
-      }).toThrowError(FileDoesNotExistError);
+      }).toThrowError(DatapathDoesNotExistError);
     });
   });
 
   describe("new JsonStorage()", () => {
     it("should an instance of JsonStorage", () => {
-      fs.writeFileSync(
-        `${tmpDir}/window.json`,
-        JSON.stringify({
-          window: {
-            width: 1200,
-            height: 900,
-            x: 100,
-            y: 100,
-          },
-        })
-      );
-
       const jsonStorage = new JsonStorage(`${tmpDir}`);
       expect(jsonStorage).toBeInstanceOf(JsonStorage);
     });

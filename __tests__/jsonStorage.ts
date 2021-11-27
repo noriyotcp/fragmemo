@@ -1,7 +1,10 @@
 import fs from "fs";
 import path from "path";
 import os from "os";
-import JsonStorage from "../main-process/jsonStorage";
+import {
+  JsonStorage,
+  FileDoesNotExistError,
+} from "../main-process/jsonStorage";
 
 describe("JsonStorage", () => {
   let tmpDir: string;
@@ -24,6 +27,17 @@ describe("JsonStorage", () => {
     }
   });
 
+  describe("Storage file does not exists", () => {
+    jest
+      .spyOn(fs, "existsSync")
+      .mockImplementationOnce(() => false) as jest.SpyInstance;
+    it("should throw an error", () => {
+      expect(() => {
+        new JsonStorage(`${tmpDir}`);
+      }).toThrowError(FileDoesNotExistError);
+    });
+  });
+
   describe("new JsonStorage()", () => {
     it("should an instance of JsonStorage", () => {
       fs.writeFileSync(
@@ -41,10 +55,5 @@ describe("JsonStorage", () => {
       const jsonStorage = new JsonStorage(`${tmpDir}`);
       expect(jsonStorage).toBeInstanceOf(JsonStorage);
     });
-  });
-
-  // TODO: test settings file is empty
-  xdescribe("Settings file is empty", () => {
-    it("", () => {});
   });
 });

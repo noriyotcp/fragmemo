@@ -3,18 +3,45 @@ import { app, BrowserWindow, ipcMain } from "electron";
 import { setFileSaveAs } from "./setFileSaveAs";
 import { createMenu } from "./createMenu";
 import { setupStorage } from "./setupStorage";
-import JsonStorage from "./jsonStorage";
+import { JsonStorage, DatapathDoesNotExistError } from "./jsonStorage";
 import { setTimeout } from "timers/promises";
 import DB from "./db/db";
 import { createHash } from "node:crypto";
+import fs from "fs";
 
 const isDev = process.env.IS_DEV == "true" ? true : false;
-const jsonStorage = new JsonStorage(
-  path.resolve(`${app.getPath("userData")}/fragmemoSettings/restore`)
-);
 let db: DB;
+let jsonStorage: JsonStorage;
 
-function createWindow() {
+function windowSettingsReady(): void {
+  try {
+    jsonStorage = new JsonStorage(
+      path.resolve(`${app.getPath("userData")}/fragmemoSettings/restore`)
+    );
+  } catch (error) {
+    if (error instanceof DatapathDoesNotExistError) {
+      fs.mkdirSync(
+        path.resolve(`${app.getPath("userData")}/fragmemoSettings/restore`),
+        { recursive: true }
+      );
+      const defaultWindowSettings = {
+        window: { width: 800, height: 600, x: 0, y: 0 },
+      };
+      jsonStorage = new JsonStorage(
+        path.resolve(`${app.getPath("userData")}/fragmemoSettings/restore`)
+      );
+      jsonStorage.lib.set("window", defaultWindowSettings, function (err) {
+        if (err) {
+          console.log(err);
+        }
+      });
+    } else {
+      throw error;
+    }
+  }
+}
+
+async function createWindow() {
   type settingsDataType = {
     window: {
       width: number;
@@ -24,8 +51,11 @@ function createWindow() {
     };
   };
 
-  const { window } = <settingsDataType>jsonStorage.lib.getSync("window");
-  const { width, height, x, y } = window;
+  windowSettingsReady();
+  await setTimeout(100); // wait for the windowSettingsReady to finish
+
+  const data = <settingsDataType>jsonStorage.lib.getSync("window");
+  const { width, height, x, y } = data.window;
 
   // Create the browser window.
   const mainWindow = new BrowserWindow({

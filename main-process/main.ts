@@ -127,7 +127,7 @@ app.whenReady().then(() => {
 app.once("browser-window-created", () => {
   console.log("browser-window-created");
   ipcMain.handle("setup-storage", async () => {
-    await setTimeout(5000); // wait 5 seconds for testing
+    await setTimeout(1000); // wait 1 seconds for testing
 
     db = new DB(`${app.getPath("userData")}/fragmemoDB/fragmemo.realm`);
 

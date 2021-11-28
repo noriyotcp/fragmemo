@@ -3,19 +3,59 @@ import { app, BrowserWindow, ipcMain } from "electron";
 import { setFileSaveAs } from "./setFileSaveAs";
 import { createMenu } from "./createMenu";
 import { setupStorage } from "./setupStorage";
-import UserSetting from "./userSetting";
+import { JsonStorage, DatapathDoesNotExistError } from "./jsonStorage";
 import { setTimeout } from "timers/promises";
 import DB from "./db/db";
 import { createHash } from "node:crypto";
+import fs from "fs";
 
 const isDev = process.env.IS_DEV == "true" ? true : false;
-const userSetting = new UserSetting(
-  path.resolve(app.getPath("userData"), "settings.json")
-);
 let db: DB;
+let jsonStorage: JsonStorage;
+
+async function createWindowSettings(): Promise<void> {
+  const datapath = `${app.getPath("userData")}/fragmemoSettings/restore`;
+
+  try {
+    jsonStorage = new JsonStorage(path.resolve(datapath));
+  } catch (error) {
+    if (error instanceof DatapathDoesNotExistError) {
+      fs.mkdirSync(path.resolve(datapath), { recursive: true });
+      jsonStorage = new JsonStorage(path.resolve(datapath));
+      jsonStorage.lib.set(
+        "window",
+        {
+          window: { width: 800, height: 600, x: 0, y: 0 },
+        },
+        function (err) {
+          if (err) {
+            throw err;
+          }
+        }
+      );
+    } else {
+      throw error;
+    }
+  } finally {
+    // electron-json-storage set() is async, so we need to wait for it to finish
+    // Check that the writes were actually successful after a little bit
+    //github.dev/electron-userland/electron-json-storage/blob/df4edce1e643e7343d962721fe2eacfeda094870/lib/storage.js#L419-L439
+    await setTimeout(100);
+  }
+}
 
 function createWindow() {
-  const { width, height, x, y } = userSetting.readSettings().window;
+  type settingsDataType = {
+    window: {
+      width: number;
+      height: number;
+      x: number;
+      y: number;
+    };
+  };
+
+  const data = <settingsDataType>jsonStorage.lib.getSync("window");
+  const { width, height, x, y } = data.window;
 
   // Create the browser window.
   const mainWindow = new BrowserWindow({
@@ -50,27 +90,20 @@ function createWindow() {
   }
 
   mainWindow.on("close", () => {
-    userSetting.jsonDbHandler.update(
-      "window",
-      "width",
-      mainWindow.getSize()[0]
-    );
-    userSetting.jsonDbHandler.update(
-      "window",
-      "height",
-      mainWindow.getSize()[1]
-    );
-    userSetting.jsonDbHandler.update(
-      "window",
-      "x",
-      mainWindow.getPosition()[0]
-    );
-    userSetting.jsonDbHandler.update(
-      "window",
-      "y",
-      mainWindow.getPosition()[1]
-    );
-    userSetting.jsonDbHandler.sync();
+    const updatedWindowSettings = {
+      window: {
+        width: mainWindow.getSize()[0],
+        height: mainWindow.getSize()[1],
+        x: mainWindow.getPosition()[0],
+        y: mainWindow.getPosition()[1],
+      },
+    };
+
+    jsonStorage.lib.set("window", updatedWindowSettings, function (err) {
+      if (err) {
+        console.log(err);
+      }
+    });
   });
 }
 
@@ -78,20 +111,25 @@ function createWindow() {
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.whenReady().then(() => {
-  createWindow();
-  app.on("activate", function () {
-    // To avoid attempting to register the same handler due to re-create a window
-    ipcMain.removeHandler("file-save-as");
-    // On macOS it's common to re-create a window in the app when the
-    // dock icon is clicked and there are no other windows open.
-    if (BrowserWindow.getAllWindows().length === 0) createWindow();
+  (async () => {
+    await createWindowSettings();
+    createWindow();
+    app.on("activate", function () {
+      // To avoid attempting to register the same handler due to re-create a window
+      ipcMain.removeHandler("file-save-as");
+      // On macOS it's common to re-create a window in the app when the
+      // dock icon is clicked and there are no other windows open.
+      if (BrowserWindow.getAllWindows().length === 0) createWindow();
+    });
+  })().catch((err) => {
+    console.info(err);
   });
 });
 
 app.once("browser-window-created", () => {
   console.log("browser-window-created");
   ipcMain.handle("setup-storage", async () => {
-    await setTimeout(5000); // wait 5 seconds for testing
+    await setTimeout(1000); // wait 1 seconds for testing
 
     db = new DB(`${app.getPath("userData")}/fragmemoDB/fragmemo.realm`);
 

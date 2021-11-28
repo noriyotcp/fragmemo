@@ -3,7 +3,11 @@
   "compilerOptions": {
     "module": "CommonJS",
     "outDir": "../build",
-    "allowJs": true
+    "allowJs": true,
+    "baseUrl": "./",
+    "paths": {
+      "electron-json-storage": ["../src/@types/electron-json-storage"]
+    }
   },
   "include": ["./**/*.ts", "./**/*.js"]
 }

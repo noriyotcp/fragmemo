@@ -4,8 +4,8 @@ class Snippet {
   fragments!: Fragment[];
   createdAt = new Date();
   updatedAt = new Date();
-  // TODO: should be Required
-  constructor(data: Partial<Snippet>) {
+
+  constructor(data: Required<Snippet>) {
     Object.assign(this, data);
   }
 }

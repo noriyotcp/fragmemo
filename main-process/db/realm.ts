@@ -22,8 +22,6 @@ class Snippet {
   constructor(data: Required<Snippet>) {
     Object.assign(this, data);
   }
-
-  public static schema: typeof SnippetSchema = SnippetSchema;
 }
 
 const FragmentSchema: Realm.ObjectSchema = {
@@ -54,8 +52,6 @@ class Fragment {
   constructor(data: Partial<Fragment>) {
     Object.assign(this, data);
   }
-
-  public static schema: typeof FragmentSchema = FragmentSchema;
 }
 
 const realmSchema = [SnippetSchema, FragmentSchema];

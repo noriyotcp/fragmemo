@@ -13,7 +13,7 @@ const isDev = process.env.IS_DEV == "true" ? true : false;
 let db: DB;
 let jsonStorage: JsonStorage;
 
-function createWindowSettings(): void {
+async function createWindowSettings(): Promise<void> {
   const datapath = `${app.getPath("userData")}/fragmemoSettings/restore`;
 
   try {
@@ -36,6 +36,11 @@ function createWindowSettings(): void {
     } else {
       throw error;
     }
+  } finally {
+    // electron-json-storage set() is async, so we need to wait for it to finish
+    // Check that the writes were actually successful after a little bit
+    //github.dev/electron-userland/electron-json-storage/blob/df4edce1e643e7343d962721fe2eacfeda094870/lib/storage.js#L419-L439
+    await setTimeout(100);
   }
 }
 
@@ -107,8 +112,7 @@ function createWindow() {
 // Some APIs can only be used after this event occurs.
 app.whenReady().then(() => {
   (async () => {
-    createWindowSettings();
-    await setTimeout(100);
+    await createWindowSettings();
     createWindow();
     app.on("activate", function () {
       // To avoid attempting to register the same handler due to re-create a window

@@ -58,6 +58,6 @@ class Fragment {
   public static schema: typeof FragmentSchema = FragmentSchema;
 }
 
-const realmSchema = [Snippet.schema, Fragment.schema];
+const realmSchema = [SnippetSchema, FragmentSchema];
 
 export { Realm, realmSchema, Snippet, Fragment };

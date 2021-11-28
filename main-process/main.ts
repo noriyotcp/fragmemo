@@ -14,27 +14,25 @@ let db: DB;
 let jsonStorage: JsonStorage;
 
 function windowSettingsReady(): void {
+  const datapath = `${app.getPath("userData")}/fragmemoSettings/restore`;
+
   try {
-    jsonStorage = new JsonStorage(
-      path.resolve(`${app.getPath("userData")}/fragmemoSettings/restore`)
-    );
+    jsonStorage = new JsonStorage(path.resolve(datapath));
   } catch (error) {
     if (error instanceof DatapathDoesNotExistError) {
-      fs.mkdirSync(
-        path.resolve(`${app.getPath("userData")}/fragmemoSettings/restore`),
-        { recursive: true }
-      );
-      const defaultWindowSettings = {
-        window: { width: 800, height: 600, x: 0, y: 0 },
-      };
-      jsonStorage = new JsonStorage(
-        path.resolve(`${app.getPath("userData")}/fragmemoSettings/restore`)
-      );
-      jsonStorage.lib.set("window", defaultWindowSettings, function (err) {
-        if (err) {
-          console.log(err);
+      fs.mkdirSync(path.resolve(datapath), { recursive: true });
+      jsonStorage = new JsonStorage(path.resolve(datapath));
+      jsonStorage.lib.set(
+        "window",
+        {
+          window: { width: 800, height: 600, x: 0, y: 0 },
+        },
+        function (err) {
+          if (err) {
+            throw err;
+          }
         }
-      });
+      );
     } else {
       throw error;
     }

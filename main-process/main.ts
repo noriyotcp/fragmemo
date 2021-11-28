@@ -20,27 +20,24 @@ async function createWindowSettings(): Promise<void> {
     jsonStorage = new JsonStorage(path.resolve(datapath));
   } catch (error) {
     if (error instanceof DatapathDoesNotExistError) {
-      fs.mkdirSync(path.resolve(datapath), { recursive: true });
-      jsonStorage = new JsonStorage(path.resolve(datapath));
-      jsonStorage.lib.set(
-        "window",
-        {
-          window: { width: 800, height: 600, x: 0, y: 0 },
-        },
-        function (err) {
-          if (err) {
-            throw err;
-          }
-        }
+      fs.mkdirSync(datapath, { recursive: true });
+      jsonStorage = new JsonStorage(datapath);
+      const defaultWindowSettings = {
+        window: { width: 800, height: 600, x: 0, y: 0 },
+      };
+      // Use fs.writeFileSync instead of electron-json-storage set()
+      // electron-json-storage set() is async, so we need to wait for it to finish
+      // github.dev/electron-userland/electron-json-storage/blob/df4edce1e643e7343d962721fe2eacfeda094870/lib/storage.js#L419-L439
+      fs.writeFileSync(
+        path.resolve(datapath, "window.json"),
+        JSON.stringify(defaultWindowSettings)
       );
     } else {
       throw error;
     }
   } finally {
-    // electron-json-storage set() is async, so we need to wait for it to finish
-    // Check that the writes were actually successful after a little bit
-    //github.dev/electron-userland/electron-json-storage/blob/df4edce1e643e7343d962721fe2eacfeda094870/lib/storage.js#L419-L439
-    await setTimeout(200);
+    // But, just in case, we'll wait for 1 millisecond :)
+    await setTimeout(1);
   }
 }
 

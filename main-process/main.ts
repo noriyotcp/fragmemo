@@ -40,7 +40,7 @@ async function createWindowSettings(): Promise<void> {
     // electron-json-storage set() is async, so we need to wait for it to finish
     // Check that the writes were actually successful after a little bit
     //github.dev/electron-userland/electron-json-storage/blob/df4edce1e643e7343d962721fe2eacfeda094870/lib/storage.js#L419-L439
-    await setTimeout(100);
+    await setTimeout(200);
   }
 }
 

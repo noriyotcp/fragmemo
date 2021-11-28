@@ -20,8 +20,8 @@ async function createWindowSettings(): Promise<void> {
     jsonStorage = new JsonStorage(path.resolve(datapath));
   } catch (error) {
     if (error instanceof DatapathDoesNotExistError) {
-      fs.mkdirSync(path.resolve(datapath), { recursive: true });
-      jsonStorage = new JsonStorage(path.resolve(datapath));
+      fs.mkdirSync(datapath, { recursive: true });
+      jsonStorage = new JsonStorage(datapath);
       const defaultWindowSettings = {
         window: { width: 800, height: 600, x: 0, y: 0 },
       };

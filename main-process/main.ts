@@ -22,16 +22,12 @@ async function createWindowSettings(): Promise<void> {
     if (error instanceof DatapathDoesNotExistError) {
       fs.mkdirSync(path.resolve(datapath), { recursive: true });
       jsonStorage = new JsonStorage(path.resolve(datapath));
-      jsonStorage.lib.set(
-        "window",
-        {
-          window: { width: 800, height: 600, x: 0, y: 0 },
-        },
-        function (err) {
-          if (err) {
-            throw err;
-          }
-        }
+      const defaultWindowSettings = {
+        window: { width: 800, height: 600, x: 0, y: 0 },
+      };
+      fs.writeFileSync(
+        path.resolve(datapath, "window.json"),
+        JSON.stringify(defaultWindowSettings)
       );
     } else {
       throw error;

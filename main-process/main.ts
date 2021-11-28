@@ -41,7 +41,7 @@ function windowSettingsReady(): void {
   }
 }
 
-async function createWindow() {
+function createWindow() {
   type settingsDataType = {
     window: {
       width: number;
@@ -50,9 +50,6 @@ async function createWindow() {
       y: number;
     };
   };
-
-  windowSettingsReady();
-  await setTimeout(100); // wait for the windowSettingsReady to finish
 
   const data = <settingsDataType>jsonStorage.lib.getSync("window");
   const { width, height, x, y } = data.window;
@@ -111,13 +108,19 @@ async function createWindow() {
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.whenReady().then(() => {
-  createWindow();
-  app.on("activate", function () {
-    // To avoid attempting to register the same handler due to re-create a window
-    ipcMain.removeHandler("file-save-as");
-    // On macOS it's common to re-create a window in the app when the
-    // dock icon is clicked and there are no other windows open.
-    if (BrowserWindow.getAllWindows().length === 0) createWindow();
+  (async () => {
+    windowSettingsReady();
+    await setTimeout(100);
+    createWindow();
+    app.on("activate", function () {
+      // To avoid attempting to register the same handler due to re-create a window
+      ipcMain.removeHandler("file-save-as");
+      // On macOS it's common to re-create a window in the app when the
+      // dock icon is clicked and there are no other windows open.
+      if (BrowserWindow.getAllWindows().length === 0) createWindow();
+    });
+  })().catch((err) => {
+    console.info(err);
   });
 });
 

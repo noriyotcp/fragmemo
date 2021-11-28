@@ -13,7 +13,7 @@ const isDev = process.env.IS_DEV == "true" ? true : false;
 let db: DB;
 let jsonStorage: JsonStorage;
 
-function windowSettingsReady(): void {
+function createWindowSettings(): void {
   const datapath = `${app.getPath("userData")}/fragmemoSettings/restore`;
 
   try {
@@ -107,7 +107,7 @@ function createWindow() {
 // Some APIs can only be used after this event occurs.
 app.whenReady().then(() => {
   (async () => {
-    windowSettingsReady();
+    createWindowSettings();
     await setTimeout(100);
     createWindow();
     app.on("activate", function () {

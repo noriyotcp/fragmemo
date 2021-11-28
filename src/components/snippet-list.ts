@@ -39,7 +39,7 @@ export class SnippetList extends LitElement {
     return html`
       <search-item></search-item>
       <ui5-list id="snippetList" class="full-width" mode="SingleSelect">
-        ${this.setupStorage.snippetInstances.map(
+        ${this.setupStorage.snippets.map(
           (snippet) =>
             html`<ui5-li
               description="${this.formatDatetime(snippet.updatedAt)}"

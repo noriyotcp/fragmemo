@@ -8,7 +8,6 @@ export class SetupStorageController implements ReactiveController {
   status = false;
   msg = "";
   snippets = [];
-  snippetInstances = [];
 
   constructor(host: ReactiveControllerHost) {
     this.host = host;
@@ -19,10 +18,9 @@ export class SetupStorageController implements ReactiveController {
     console.info(this.constructor.name, "has connected");
     myAPI.setupStorage().then(({ status, msg, snippets }) => {
       [this.status, this.msg, this.snippets] = [status, msg, snippets];
-      console.info("Snippets: ", this.snippets);
       // @ts-ignore
-      this.snippetInstances = this.setSnippets(this.snippets);
-      console.info("Snippet instances: ", this.snippetInstances);
+      this.snippets = this.setSnippets(this.snippets);
+      console.info("Snippet instances: ", this.snippets);
       this.host.requestUpdate();
     });
   }

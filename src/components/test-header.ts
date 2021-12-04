@@ -54,7 +54,7 @@ export class TestHeader extends LitElement {
               >UI5 Toast</a
             >
           </p>
-          <p>${this.toast.text}</p>
+          <p>${this.textareaValue}</p>
         </span>
       </toast-element>
       <div id="textarea">
@@ -91,7 +91,18 @@ export class TestHeader extends LitElement {
     textField.addEventListener("change", (e: Event) => {
       console.log("Input has finished", e);
     });
+
+    window.addEventListener(
+      "display-toast",
+      this._displayToastListener as EventListener
+    );
   }
+
+  private _displayToastListener = (e: CustomEvent): void => {
+    // @ts-ignore
+    this.toastElement.shadowRoot?.querySelector("#wcToastBE")?.show();
+    this.textareaValue = e.detail.message || "Default text";
+  };
 
   private _fileSaveAs(_e: Event): void {
     dispatch({ type: "file-save-as", detail: { message: "" } });

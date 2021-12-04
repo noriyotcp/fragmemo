@@ -76,7 +76,7 @@ export class TestHeader extends LitElement {
   }
 
   private _inputTitleDispatcher(e: { target: { value: string } }) {
-    dispatch({ type: "input-title", message: e.target.value });
+    dispatch({ type: "input-title", detail: { message: e.target.value } });
   }
 
   async firstUpdated(): Promise<void> {
@@ -94,7 +94,7 @@ export class TestHeader extends LitElement {
   }
 
   private _fileSaveAs(_e: Event): void {
-    dispatch({ type: "file-save-as", message: "" });
+    dispatch({ type: "file-save-as", detail: { message: "" } });
   }
 
   private async _openByMenuListener(

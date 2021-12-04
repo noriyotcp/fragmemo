@@ -32,7 +32,6 @@
     "lit": "^2.0.2",
     "monaco-editor": "^0.30.1",
     "realm": "^10.10.1",
-    "simple-json-db": "^1.2.3",
     "split.js": "^1.6.4"
   },
   "devDependencies": {

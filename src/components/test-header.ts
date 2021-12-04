@@ -1,6 +1,6 @@
 import { LitElement, html, css, TemplateResult } from "lit";
 import { customElement, property, query } from "lit/decorators.js";
-import { FileData } from "src/@types/global";
+import { FileData } from "index";
 import { dispatch } from "../events/dispatcher";
 import "@ui5/webcomponents/dist/Input.js";
 import { SnippetController } from "../controllers/snippet-controller";

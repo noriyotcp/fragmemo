@@ -19,7 +19,7 @@ export class TestHeader extends LitElement {
   @query("#snippet-title") snippetTitle!: HTMLInputElement;
   @query("toast-element") toastElement!: ToastElement;
   @property({ type: String })
-  textareaValue!: string;
+  toastContent!: string;
 
   constructor() {
     super();
@@ -54,7 +54,7 @@ export class TestHeader extends LitElement {
               >UI5 Toast</a
             >
           </p>
-          <p>${this.textareaValue}</p>
+          <p>${this.toastContent}</p>
         </span>
       </toast-element>
       <div id="textarea">
@@ -101,7 +101,7 @@ export class TestHeader extends LitElement {
   private _displayToastListener = (e: CustomEvent): void => {
     // @ts-ignore
     this.toastElement.shadowRoot?.querySelector("#wcToastBE")?.show();
-    this.textareaValue = e.detail.message || "Default text";
+    this.toastContent = e.detail.message || "Default text";
   };
 
   private _fileSaveAs(_e: Event): void {
@@ -123,7 +123,7 @@ export class TestHeader extends LitElement {
       return false;
     }
 
-    this.textareaValue = fileData.text;
+    this.toastContent = fileData.text;
   }
 
   private _displayToast(): void {

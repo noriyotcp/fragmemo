@@ -4,6 +4,7 @@ import { FileData } from "index";
 import { dispatch } from "../events/dispatcher";
 import "@ui5/webcomponents/dist/Input.js";
 import { SnippetController } from "../controllers/snippet-controller";
+import { ToastController } from "../controllers/toast-controller";
 import { ToastElement } from "./toast-element";
 
 const { myAPI } = window;
@@ -11,10 +12,12 @@ const { myAPI } = window;
 @customElement("test-header")
 export class TestHeader extends LitElement {
   private snippet = new SnippetController(this);
+  private toast = new ToastController(this);
 
   @query("#btn-save") btnSave!: HTMLButtonElement;
   @query("#message") message!: HTMLSpanElement;
-  @query("toast-element") toast!: ToastElement;
+  @query("#snippet-title") snippetTitle!: HTMLInputElement;
+  @query("toast-element") toastElement!: ToastElement;
   @property({ type: String })
   textareaValue!: string;
 
@@ -42,7 +45,18 @@ export class TestHeader extends LitElement {
 
   render(): TemplateResult {
     return html`
-      <toast-element></toast-element>
+      <toast-element>
+        <span slot="toast-text">
+          <p>
+            <a
+              href="https://sap.github.io/ui5-webcomponents/playground/components/Toast/"
+              target="_blank"
+              >UI5 Toast</a
+            >
+          </p>
+          <p>${this.toast.text}</p>
+        </span>
+      </toast-element>
       <div id="textarea">
         <form>
           <button type="button" id="btn-save" @click="${this._displayToast}">
@@ -104,6 +118,13 @@ export class TestHeader extends LitElement {
   private _displayToast(): void {
     // @ts-ignore
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    this.toast.shadowRoot!.querySelector("#wcToastBE")!.show();
+    const event = new CustomEvent("display-toast", {
+      detail: {
+        target: this.toastElement.shadowRoot!.querySelector("#wcToastBE"),
+        message: this.snippetTitle?.value,
+      },
+    });
+
+    window.dispatchEvent(event);
   }
 }

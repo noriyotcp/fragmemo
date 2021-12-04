@@ -7,14 +7,7 @@ export class ToastElement extends LitElement {
   render(): TemplateResult {
     return html`
       <ui5-toast id="wcToastBE" placement="BottomEnd">
-        <p>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer
-          dapibus hendrerit turpis ac eleifend. Quisque laoreet, dui non
-          efficitur convallis, nisl risus interdum erat, et aliquam tellus dui
-          sed erat. Aliquam tellus metus, consequat a maximus consectetur,
-          varius non orci. Aliquam felis urna, porttitor non lectus non,
-          scelerisque scelerisque nibh.
-        </p>
+        <slot name="toast-text"></slot>
       </ui5-toast>
     `;
   }

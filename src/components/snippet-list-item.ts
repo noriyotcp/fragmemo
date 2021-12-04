@@ -42,7 +42,9 @@ export class SnippetListItem extends LitElement {
     const snippetTitle = this._titleNodes[0].textContent!;
     dispatch({
       type: "select-snippet",
-      message: snippetTitle,
+      detail: {
+        message: snippetTitle,
+      },
     });
   }
 }

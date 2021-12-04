@@ -6,3 +6,4 @@ import "./components/codeEditor";
 import "./components/snippet-list";
 import "./components/snippet-list-item";
 import "./components/search-item";
+import "./components/toast-element";

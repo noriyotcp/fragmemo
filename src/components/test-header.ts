@@ -13,7 +13,9 @@ export class TestHeader extends LitElement {
 
   @query("#btn-save") btnSave!: HTMLButtonElement;
   @query("#message") message!: HTMLSpanElement;
-  @property({ type: String }) textareaValue!: string;
+  @query("#snippet-title") snippetTitle!: HTMLInputElement;
+  @property({ type: String })
+  textareaValue!: string;
 
   constructor() {
     super();
@@ -39,10 +41,11 @@ export class TestHeader extends LitElement {
 
   render(): TemplateResult {
     return html`
+      <toast-element></toast-element>
       <div id="textarea">
         <form>
-          <button type="button" id="btn-save" @click="${this._fileSaveAs}">
-            保存
+          <button type="button" id="btn-save" @click="${this._displayToast}">
+            Toast
           </button>
           <div id="message"></div>
         </form>
@@ -58,7 +61,7 @@ export class TestHeader extends LitElement {
   }
 
   private _inputTitleDispatcher(e: { target: { value: string } }) {
-    dispatch({ type: "input-title", message: e.target.value });
+    dispatch({ type: "input-title", detail: { message: e.target.value } });
   }
 
   async firstUpdated(): Promise<void> {
@@ -76,7 +79,7 @@ export class TestHeader extends LitElement {
   }
 
   private _fileSaveAs(_e: Event): void {
-    dispatch({ type: "file-save-as", message: "" });
+    dispatch({ type: "file-save-as", detail: { message: "" } });
   }
 
   private async _openByMenuListener(
@@ -95,5 +98,14 @@ export class TestHeader extends LitElement {
     }
 
     this.textareaValue = fileData.text;
+  }
+
+  private _displayToast(): void {
+    dispatch({
+      type: "display-toast",
+      detail: {
+        message: this.snippetTitle?.value,
+      },
+    });
   }
 }

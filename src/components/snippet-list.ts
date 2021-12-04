@@ -59,7 +59,9 @@ export class SnippetList extends LitElement {
     ): void => {
       dispatch({
         type: "select-snippet",
-        message: e.detail.selectedItems[0].getAttribute("snippet"),
+        detail: {
+          message: e.detail.selectedItems[0].getAttribute("snippet"),
+        },
       });
     }) as EventListener);
   }

@@ -1,3 +1,4 @@
+import { dispatch } from "../events/dispatcher";
 import { ReactiveController, ReactiveControllerHost } from "lit";
 import { Snippet, Fragment } from "../models";
 const { myAPI } = window;
@@ -18,6 +19,12 @@ export class SetupStorageController implements ReactiveController {
     console.info(this.constructor.name, "has connected");
     myAPI.setupStorage().then(({ status, msg, snippets }) => {
       [this.status, this.msg, this.snippets] = [status, msg, snippets];
+      dispatch({
+        type: "display-toast",
+        detail: {
+          message: this.msg,
+        },
+      });
       // @ts-ignore
       this.snippets = this.setSnippets(this.snippets);
       console.info("Snippet instances: ", this.snippets);

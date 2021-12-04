@@ -16,7 +16,7 @@ const { myAPI } = window;
 
 // @ts-ignore
 self.MonacoEnvironment = {
-  getWorker(_: any, label: string) {
+  getWorker(_workerId: string, label: string) {
     if (label === "json") {
       return new jsonWorker();
     }

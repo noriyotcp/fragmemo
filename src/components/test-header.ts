@@ -41,8 +41,8 @@ export class TestHeader extends LitElement {
     return html`
       <div id="textarea">
         <form>
-          <button type="button" id="btn-save" @click="${this._fileSaveAs}">
-            保存
+          <button type="button" id="btn-save" @click="${this._displayToast}">
+            Toast
           </button>
           <div id="message"></div>
         </form>
@@ -95,5 +95,9 @@ export class TestHeader extends LitElement {
     }
 
     this.textareaValue = fileData.text;
+  }
+
+  private _displayToast(): void {
+    document.getElementById("wcToastBE")!.show();
   }
 }

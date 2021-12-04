@@ -4,7 +4,6 @@ import { FileData } from "index";
 import { dispatch } from "../events/dispatcher";
 import "@ui5/webcomponents/dist/Input.js";
 import { SnippetController } from "../controllers/snippet-controller";
-import { ToastController } from "../controllers/toast-controller";
 import { ToastElement } from "./toast-element";
 
 const { myAPI } = window;
@@ -12,7 +11,6 @@ const { myAPI } = window;
 @customElement("test-header")
 export class TestHeader extends LitElement {
   private snippet = new SnippetController(this);
-  private toast = new ToastController(this);
 
   @query("#btn-save") btnSave!: HTMLButtonElement;
   @query("#message") message!: HTMLSpanElement;
@@ -130,7 +128,6 @@ export class TestHeader extends LitElement {
     dispatch({
       type: "display-toast",
       detail: {
-        target: this.toastElement.shadowRoot?.querySelector("#wcToastBE"),
         message: this.snippetTitle?.value,
       },
     });

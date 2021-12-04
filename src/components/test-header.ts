@@ -116,15 +116,12 @@ export class TestHeader extends LitElement {
   }
 
   private _displayToast(): void {
-    // @ts-ignore
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    const event = new CustomEvent("display-toast", {
+    dispatch({
+      type: "display-toast",
       detail: {
-        target: this.toastElement.shadowRoot!.querySelector("#wcToastBE"),
+        target: this.toastElement.shadowRoot?.querySelector("#wcToastBE"),
         message: this.snippetTitle?.value,
       },
     });
-
-    window.dispatchEvent(event);
   }
 }

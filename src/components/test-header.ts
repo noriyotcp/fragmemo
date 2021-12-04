@@ -4,7 +4,6 @@ import { FileData } from "index";
 import { dispatch } from "../events/dispatcher";
 import "@ui5/webcomponents/dist/Input.js";
 import { SnippetController } from "../controllers/snippet-controller";
-import { ToastElement } from "./toast-element";
 
 const { myAPI } = window;
 
@@ -15,9 +14,8 @@ export class TestHeader extends LitElement {
   @query("#btn-save") btnSave!: HTMLButtonElement;
   @query("#message") message!: HTMLSpanElement;
   @query("#snippet-title") snippetTitle!: HTMLInputElement;
-  @query("toast-element") toastElement!: ToastElement;
   @property({ type: String })
-  toastContent!: string;
+  textareaValue!: string;
 
   constructor() {
     super();
@@ -43,18 +41,7 @@ export class TestHeader extends LitElement {
 
   render(): TemplateResult {
     return html`
-      <toast-element>
-        <span slot="toast-text">
-          <p>
-            <a
-              href="https://sap.github.io/ui5-webcomponents/playground/components/Toast/"
-              target="_blank"
-              >UI5 Toast</a
-            >
-          </p>
-          <p>${this.toastContent}</p>
-        </span>
-      </toast-element>
+      <toast-element></toast-element>
       <div id="textarea">
         <form>
           <button type="button" id="btn-save" @click="${this._displayToast}">
@@ -89,18 +76,7 @@ export class TestHeader extends LitElement {
     textField.addEventListener("change", (e: Event) => {
       console.log("Input has finished", e);
     });
-
-    window.addEventListener(
-      "display-toast",
-      this._displayToastListener as EventListener
-    );
   }
-
-  private _displayToastListener = (e: CustomEvent): void => {
-    // @ts-ignore
-    this.toastElement.shadowRoot?.querySelector("#wcToastBE")?.show();
-    this.toastContent = e.detail.message || "Default text";
-  };
 
   private _fileSaveAs(_e: Event): void {
     dispatch({ type: "file-save-as", detail: { message: "" } });
@@ -121,7 +97,7 @@ export class TestHeader extends LitElement {
       return false;
     }
 
-    this.toastContent = fileData.text;
+    this.textareaValue = fileData.text;
   }
 
   private _displayToast(): void {

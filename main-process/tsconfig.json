@@ -6,7 +6,7 @@
     "allowJs": true,
     "baseUrl": "./",
     "paths": {
-      "electron-json-storage": ["../src/@types/electron-json-storage"]
+      "electron-json-storage": ["electron-json-storage"]
     }
   },
   "include": ["./**/*.ts", "./**/*.js"]

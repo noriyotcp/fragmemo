@@ -6,4 +6,4 @@ import "./components/codeEditor";
 import "./components/snippet-list";
 import "./components/snippet-list-item";
 import "./components/search-item";
-import "@ui5/webcomponents/dist/Toast.js";
+import "./components/toast-element";

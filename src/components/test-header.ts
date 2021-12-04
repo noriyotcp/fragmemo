@@ -4,6 +4,7 @@ import { FileData } from "index";
 import { dispatch } from "../events/dispatcher";
 import "@ui5/webcomponents/dist/Input.js";
 import { SnippetController } from "../controllers/snippet-controller";
+import { ToastElement } from "./toast-element";
 
 const { myAPI } = window;
 
@@ -13,7 +14,9 @@ export class TestHeader extends LitElement {
 
   @query("#btn-save") btnSave!: HTMLButtonElement;
   @query("#message") message!: HTMLSpanElement;
-  @property({ type: String }) textareaValue!: string;
+  @query("toast-element") toast!: ToastElement;
+  @property({ type: String })
+  textareaValue!: string;
 
   constructor() {
     super();
@@ -39,6 +42,7 @@ export class TestHeader extends LitElement {
 
   render(): TemplateResult {
     return html`
+      <toast-element></toast-element>
       <div id="textarea">
         <form>
           <button type="button" id="btn-save" @click="${this._displayToast}">
@@ -98,6 +102,8 @@ export class TestHeader extends LitElement {
   }
 
   private _displayToast(): void {
-    document.getElementById("wcToastBE")!.show();
+    // @ts-ignore
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    this.toast.shadowRoot!.querySelector("#wcToastBE")!.show();
   }
 }

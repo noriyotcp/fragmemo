@@ -1,6 +1,6 @@
 import { LitElement, html, css, TemplateResult } from "lit";
 import { customElement, property, query } from "lit/decorators.js";
-import { FileData } from "index";
+import { FileData, Override } from "index";
 import { dispatch } from "../events/dispatcher";
 import "@ui5/webcomponents/dist/Input.js";
 import { SnippetController } from "../controllers/snippet-controller";
@@ -70,9 +70,6 @@ export class TestHeader extends LitElement {
       this._openByMenuListener(fileData)
     );
 
-    // Override properties with type intersection
-    // https://dev.to/vborodulin/ts-how-to-override-properties-with-type-intersection-554l
-    type Override<T1, T2> = Omit<T1, keyof T2> & T2;
     // Fired when the input operation has finished by pressing Enter or on focusout
     this.snippetTitle.addEventListener("change", (e: Event) => {
       const { highlightValue } = e.currentTarget as Override<

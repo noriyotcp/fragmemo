@@ -41,7 +41,6 @@ export class TestHeader extends LitElement {
 
   render(): TemplateResult {
     return html`
-      <toast-element></toast-element>
       <div id="textarea">
         <form>
           <button type="button" id="btn-save" @click="${this._displayToast}">

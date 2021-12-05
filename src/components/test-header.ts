@@ -69,11 +69,18 @@ export class TestHeader extends LitElement {
     myAPI.openByMenu((_e: Event, fileData: FileData) =>
       this._openByMenuListener(fileData)
     );
+
+    // Override properties with type intersection
+    // https://dev.to/vborodulin/ts-how-to-override-properties-with-type-intersection-554l
+    type Override<T1, T2> = Omit<T1, keyof T2> & T2;
     // Fired when the input operation has finished by pressing Enter or on focusout
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    const textField = this.shadowRoot!.getElementById("snippet-title")!;
-    textField.addEventListener("change", (e: Event) => {
-      console.log("Input has finished", e);
+    this.snippetTitle.addEventListener("change", (e: Event) => {
+      const { highlightValue } = e.currentTarget as Override<
+        EventTarget,
+        { highlightValue: string }
+      >;
+
+      console.log("Input has finished", highlightValue);
     });
   }
 

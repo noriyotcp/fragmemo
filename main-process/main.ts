@@ -14,14 +14,14 @@ let db: DB;
 let jsonStorage: JsonStorage;
 
 async function createWindowSettings(): Promise<void> {
-  const datapath = `${app.getPath("userData")}/fragmemoSettings/restore`;
+  const pathToRestore = `${app.getPath("userData")}/fragmemoSettings/restore`;
 
   try {
-    jsonStorage = new JsonStorage(path.resolve(datapath));
+    jsonStorage = new JsonStorage(pathToRestore);
   } catch (error) {
     if (error instanceof DatapathDoesNotExistError) {
-      fs.mkdirSync(datapath, { recursive: true });
-      jsonStorage = new JsonStorage(datapath);
+      fs.mkdirSync(pathToRestore, { recursive: true });
+      jsonStorage = new JsonStorage(pathToRestore);
       const defaultWindowSettings = {
         window: { width: 800, height: 600, x: 0, y: 0 },
       };
@@ -29,7 +29,7 @@ async function createWindowSettings(): Promise<void> {
       // electron-json-storage set() is async, so we need to wait for it to finish
       // github.dev/electron-userland/electron-json-storage/blob/df4edce1e643e7343d962721fe2eacfeda094870/lib/storage.js#L419-L439
       fs.writeFileSync(
-        path.resolve(datapath, "window.json"),
+        path.resolve(pathToRestore, "window.json"),
         JSON.stringify(defaultWindowSettings)
       );
     } else {

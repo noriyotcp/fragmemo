@@ -20,13 +20,23 @@ export class HomeElement extends LitElement {
     `,
   ];
 
+  toastTemplate() {
+    return html`<toast-element></toast-element>`;
+  }
+
   render(): TemplateResult {
     if (this._current_page == "home-element") {
-      return html` <editor-element></editor-element> `;
+      return html`
+        ${this.toastTemplate()}
+        <editor-element></editor-element>
+      `;
     } else {
-      return html`<settings-element
-        @back-to-home=${this._backToHomeListener}
-      ></settings-element>`;
+      return html`
+        ${this.toastTemplate()}
+        <settings-element
+          @back-to-home=${this._backToHomeListener}
+        ></settings-element>
+      `;
     }
   }
 

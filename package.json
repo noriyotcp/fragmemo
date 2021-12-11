@@ -39,7 +39,7 @@
     "@swc/jest": "^0.2.11",
     "@types/electron-json-storage": "^4.5.0",
     "@types/jest": "^27.0.3",
-    "@types/node": "^16.11.11",
+    "@types/node": "^16.11.12",
     "@typescript-eslint/eslint-plugin": "^5.5.0",
     "@typescript-eslint/parser": "^5.5.0",
     "@vitejs/plugin-vue": "^1.10.2",

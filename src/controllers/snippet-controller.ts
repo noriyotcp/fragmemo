@@ -16,10 +16,21 @@ export class SnippetController implements ReactiveController {
       this._selectSnippetListener as EventListener
     );
     console.info(this.constructor.name, "has connected");
+
+    window.addEventListener(
+      "snippet-changed",
+      this._snippetChangedListener as EventListener
+    );
   }
 
   private _selectSnippetListener = (e: CustomEvent): void => {
     this.selectedSnippet = JSON.parse(e.detail.message);
+    this.host.requestUpdate();
+  };
+
+  private _snippetChangedListener = (e: CustomEvent): void => {
+    this.selectedSnippet = e.detail.snippet;
+    console.log("snippet changed: ", this.selectedSnippet);
     this.host.requestUpdate();
   };
 }

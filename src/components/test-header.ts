@@ -77,6 +77,11 @@ export class TestHeader extends LitElement {
         { highlightValue: string }
       >;
 
+      this.snippet.selectedSnippet.title = highlightValue;
+      dispatch({
+        type: "snippet-changed",
+        detail: { snippet: this.snippet.selectedSnippet },
+      });
       console.log("Input has finished", highlightValue);
     });
   }

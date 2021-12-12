@@ -130,6 +130,7 @@ app.once("browser-window-created", () => {
       className: "Snippet",
       data,
     });
+    db.updateSnippet(data);
   });
 
   ipcMain.handle("setup-storage", async () => {

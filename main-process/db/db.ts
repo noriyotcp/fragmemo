@@ -1,4 +1,4 @@
-import { Realm, realmSchema } from "./realm";
+import { Realm, realmSchema, Snippet } from "./realm";
 
 class DB extends Realm {
   constructor(path: string) {
@@ -51,6 +51,21 @@ function identity(num: number): number {
         updatedAt: new Date(),
       });
     });
+  }
+
+  updateSnippet(data: { _id: number; properties: typeof Snippet }): void {
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    const findObject: Snippet = this.objectForPrimaryKey("Snippet", data._id)!;
+    this.write(() => {
+      Object.assign(findObject, data.properties);
+      findObject.updatedAt = new Date();
+    });
+
+    console.info(
+      "snippet title updated: ",
+      // @ts-ignore
+      this.objectForPrimaryKey("Snippet", data._id)?.title
+    );
   }
 }
 

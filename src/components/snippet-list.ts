@@ -14,6 +14,7 @@ export class SnippetList extends LitElement {
   private setupStorage = new SetupStorageController(this);
 
   @query("#snippetList") snippetList!: HTMLElement;
+  @query("ui5-li") firstItem!: HTMLLIElement;
 
   constructor() {
     super();
@@ -72,8 +73,22 @@ export class SnippetList extends LitElement {
 
   // eslint-disable-next-line no-unused-vars
   updated(changedProps: Map<string, unknown>): void {
-    console.log("storage status: ", this.setupStorage.status);
-    console.log(this.setupStorage.msg);
+    this._selectFirstItem();
+  }
+
+  // Select the first item on the top of the list
+  private _selectFirstItem() {
+    if (!this.firstItem) return;
+    this.snippetList.querySelectorAll("ui5-li").forEach((li) => {
+      li.removeAttribute("selected");
+      li.removeAttribute("focused");
+    });
+    this.firstItem.setAttribute("selected", true);
+    this.firstItem.setAttribute("focused", true);
+    const event = new CustomEvent("selection-change", {
+      detail: { selectedItems: [this.firstItem] },
+    });
+    this.snippetList.dispatchEvent(event);
   }
 
   private formatDatetime(datetime: string) {

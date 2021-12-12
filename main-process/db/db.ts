@@ -53,7 +53,10 @@ function identity(num: number): number {
     });
   }
 
-  updateSnippet(data: { _id: number; properties: typeof Snippet }): void {
+  async updateSnippet(data: {
+    _id: number;
+    properties: typeof Snippet;
+  }): Promise<void> {
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const findObject: Snippet = this.objectForPrimaryKey("Snippet", data._id)!;
     this.write(() => {

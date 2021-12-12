@@ -17,6 +17,19 @@ export class SetupStorageController implements ReactiveController {
 
   hostConnected(): void {
     console.info(this.constructor.name, "has connected");
+    this.setupStorage();
+    window.addEventListener(
+      "update-snippets",
+      this._updateSnippetsListener as EventListener
+    );
+  }
+
+  private _updateSnippetsListener = (e: CustomEvent) => {
+    console.log("Update Snippets", e.detail.message);
+    this.setupStorage();
+  };
+
+  setupStorage(): void {
     myAPI.setupStorage().then(({ status, msg, snippets }) => {
       [this.status, this.msg, this.snippets] = [status, msg, snippets];
       dispatch({

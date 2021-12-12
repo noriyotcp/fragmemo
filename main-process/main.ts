@@ -125,22 +125,24 @@ app.whenReady().then(() => {
 
 app.once("browser-window-created", () => {
   console.log("browser-window-created");
-  ipcMain.handle("update-snippet", (event, data) => {
+  ipcMain.handle("update-snippet", async (event, data) => {
     console.info("Main process: update-snippet", {
       className: "Snippet",
       data,
     });
-    db.updateSnippet(data);
+    await db.updateSnippet(data);
+    return { status: true };
   });
 
   ipcMain.handle("setup-storage", async () => {
-    await setTimeout(1000); // wait 1 seconds for testing
+    // await setTimeout(1000); // wait 1 seconds for testing
 
     db = new DB(`${app.getPath("userData")}/fragmemoDB/fragmemo.realm`);
 
-    db.createSnippet(
-      createHash("md5").update(String(Date.now())).digest("hex")
-    );
+    // Create a new snippet when no snippet exists only
+    // db.createSnippet(
+    //   createHash("md5").update(String(Date.now())).digest("hex")
+    // );
     return setupStorage(db);
   });
 });

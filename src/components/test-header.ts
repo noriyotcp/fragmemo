@@ -1,6 +1,6 @@
 import { LitElement, html, css, TemplateResult } from "lit";
 import { customElement, property, query } from "lit/decorators.js";
-import { FileData } from "index";
+import { FileData, Override } from "index";
 import { dispatch } from "../events/dispatcher";
 import "@ui5/webcomponents/dist/Input.js";
 import { SnippetController } from "../controllers/snippet-controller";
@@ -69,11 +69,25 @@ export class TestHeader extends LitElement {
     myAPI.openByMenu((_e: Event, fileData: FileData) =>
       this._openByMenuListener(fileData)
     );
+
     // Fired when the input operation has finished by pressing Enter or on focusout
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    const textField = this.shadowRoot!.getElementById("snippet-title")!;
-    textField.addEventListener("change", (e: Event) => {
-      console.log("Input has finished", e);
+    this.snippetTitle.addEventListener("change", (e: Event) => {
+      const { highlightValue } = e.currentTarget as Override<
+        EventTarget,
+        { highlightValue: string }
+      >;
+
+      this.snippet.selectedSnippet.title = highlightValue;
+      dispatch({
+        type: "snippet-changed",
+        detail: {
+          _id: this.snippet.selectedSnippet._id,
+          properties: {
+            title: this.snippet.selectedSnippet.title,
+          },
+        },
+      });
+      console.log("Input has finished", highlightValue);
     });
   }
 

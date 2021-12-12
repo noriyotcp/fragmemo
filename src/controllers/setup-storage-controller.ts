@@ -26,13 +26,6 @@ export class SetupStorageController implements ReactiveController {
     );
   }
 
-  private _updateSnippetsListener = (e: CustomEvent) => {
-    this.setupStorage().then(() => {
-      this.msg = e.detail.message;
-      this._displayToast();
-    });
-  };
-
   async setupStorage(): Promise<void> {
     await myAPI.setupStorage().then(({ status, msg, snippets }) => {
       [this.status, this.msg, this.snippets] = [status, msg, snippets];
@@ -40,15 +33,6 @@ export class SetupStorageController implements ReactiveController {
       this.snippets = this.setSnippets(this.snippets);
       console.info("Snippet instances: ", this.snippets);
       this.host.requestUpdate();
-    });
-  }
-
-  private _displayToast() {
-    dispatch({
-      type: "display-toast",
-      detail: {
-        message: this.msg,
-      },
     });
   }
 
@@ -73,6 +57,22 @@ export class SetupStorageController implements ReactiveController {
         createdAt: fragment.createdAt,
         updatedAt: fragment.updatedAt,
       });
+    });
+  }
+
+  private _updateSnippetsListener = (e: CustomEvent) => {
+    this.setupStorage().then(() => {
+      this.msg = e.detail.message;
+      this._displayToast();
+    });
+  };
+
+  private _displayToast() {
+    dispatch({
+      type: "display-toast",
+      detail: {
+        message: this.msg,
+      },
     });
   }
 }

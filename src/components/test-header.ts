@@ -80,7 +80,12 @@ export class TestHeader extends LitElement {
       this.snippet.selectedSnippet.title = highlightValue;
       dispatch({
         type: "snippet-changed",
-        detail: { snippet: this.snippet.selectedSnippet },
+        detail: {
+          _id: this.snippet.selectedSnippet._id,
+          properties: {
+            title: this.snippet.selectedSnippet.title,
+          },
+        },
       });
       console.log("Input has finished", highlightValue);
     });

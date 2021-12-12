@@ -1,4 +1,5 @@
 import { ReactiveController, ReactiveControllerHost } from "lit";
+const { myAPI } = window;
 
 export class SnippetController implements ReactiveController {
   private host: ReactiveControllerHost;
@@ -29,8 +30,8 @@ export class SnippetController implements ReactiveController {
   };
 
   private _snippetChangedListener = (e: CustomEvent): void => {
-    this.selectedSnippet = e.detail.snippet;
-    console.log("snippet changed: ", this.selectedSnippet);
+    console.info("Changed Data: ", e.detail.properties);
+    myAPI.updateSnippet(e.detail);
     this.host.requestUpdate();
   };
 }

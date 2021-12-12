@@ -21,6 +21,7 @@ export interface SandBox {
     msg: string;
     snippets: [];
   }>;
+  updateSnippet: (data: object) => void;
   openByMenu: (
     listener: (_e: Event, fileData: FileData) => void
   ) => Electron.IpcRenderer;

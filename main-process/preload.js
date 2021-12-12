@@ -6,6 +6,7 @@ contextBridge.exposeInMainWorld("myAPI", {
   openByMenu: (listener) => ipcRenderer.on("open-by-menu", listener),
   openSettings: (listener) => ipcRenderer.on("open-settings", listener),
   setupStorage: () => ipcRenderer.invoke("setup-storage"),
+  updateSnippet: (data) => ipcRenderer.invoke("update-snippet", data),
 });
 
 console.log("preload!");

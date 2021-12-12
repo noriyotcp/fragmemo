@@ -125,6 +125,13 @@ app.whenReady().then(() => {
 
 app.once("browser-window-created", () => {
   console.log("browser-window-created");
+  ipcMain.handle("update-snippet", (event, data) => {
+    console.info("Main process: update-snippet", {
+      className: "Snippet",
+      data,
+    });
+  });
+
   ipcMain.handle("setup-storage", async () => {
     await setTimeout(1000); // wait 1 seconds for testing
 

@@ -17,7 +17,9 @@ export class SetupStorageController implements ReactiveController {
 
   hostConnected(): void {
     console.info(this.constructor.name, "has connected");
-    this.setupStorage();
+    this.setupStorage().then(() => {
+      this._displayToast();
+    });
     window.addEventListener(
       "update-snippets",
       this._updateSnippetsListener as EventListener
@@ -25,23 +27,28 @@ export class SetupStorageController implements ReactiveController {
   }
 
   private _updateSnippetsListener = (e: CustomEvent) => {
-    console.log("Update Snippets", e.detail.message);
-    this.setupStorage();
+    this.setupStorage().then(() => {
+      this.msg = e.detail.message;
+      this._displayToast();
+    });
   };
 
-  setupStorage(): void {
-    myAPI.setupStorage().then(({ status, msg, snippets }) => {
+  async setupStorage(): Promise<void> {
+    await myAPI.setupStorage().then(({ status, msg, snippets }) => {
       [this.status, this.msg, this.snippets] = [status, msg, snippets];
-      dispatch({
-        type: "display-toast",
-        detail: {
-          message: this.msg,
-        },
-      });
       // @ts-ignore
       this.snippets = this.setSnippets(this.snippets);
       console.info("Snippet instances: ", this.snippets);
       this.host.requestUpdate();
+    });
+  }
+
+  private _displayToast() {
+    dispatch({
+      type: "display-toast",
+      detail: {
+        message: this.msg,
+      },
     });
   }
 

@@ -6,7 +6,7 @@ import { setupStorage } from "./setupStorage";
 import { JsonStorage, DatapathDoesNotExistError } from "./jsonStorage";
 import { setTimeout } from "timers/promises";
 import DB from "./db/db";
-import { createHash } from "node:crypto";
+// import { createHash } from "node:crypto";
 import fs from "fs";
 
 const isDev = process.env.IS_DEV == "true" ? true : false;

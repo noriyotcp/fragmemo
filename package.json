@@ -30,7 +30,7 @@
     "@ui5/webcomponents": "^1.0.2",
     "electron-json-storage": "^4.5.0",
     "lit": "^2.0.2",
-    "monaco-editor": "^0.31.0",
+    "monaco-editor": "^0.31.1",
     "realm": "^10.10.1",
     "split.js": "^1.6.4"
   },

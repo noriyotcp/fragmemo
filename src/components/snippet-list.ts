@@ -1,5 +1,3 @@
-// @ts-nocheck
-
 import { LitElement, html, css, TemplateResult } from "lit";
 import { customElement, query, queryAll } from "lit/decorators.js";
 import "@ui5/webcomponents/dist/List.js";
@@ -8,6 +6,7 @@ import "@ui5/webcomponents/dist/StandardListItem.js";
 import "./snippet-list-item";
 import { SetupStorageController } from "../controllers/setup-storage-controller";
 import { dispatch } from "../events/dispatcher";
+import { Snippet } from "../models";
 
 @customElement("snippet-list")
 export class SnippetList extends LitElement {
@@ -45,7 +44,7 @@ export class SnippetList extends LitElement {
       <search-item></search-item>
       <ui5-list id="snippetList" class="full-width" mode="SingleSelect">
         ${this.setupStorage.snippets.map(
-          (snippet) =>
+          (snippet: Snippet) =>
             html`<ui5-li
               description="${this.formatDatetime(snippet.updatedAt)}"
               additional-text="snippet"
@@ -83,8 +82,8 @@ export class SnippetList extends LitElement {
       li.removeAttribute("selected");
       li.removeAttribute("focused");
     });
-    this.snippetItems[0].setAttribute("selected", true);
-    this.snippetItems[0].setAttribute("focused", true);
+    this.snippetItems[0].setAttribute("selected", "true");
+    this.snippetItems[0].setAttribute("focused", "true");
     const event = new CustomEvent("selection-change", {
       detail: { selectedItems: [this.snippetItems[0]] },
     });
@@ -95,7 +94,7 @@ export class SnippetList extends LitElement {
     //   this.scroll({ top: this.snippetItems[1].offsetTop, behavior: "smooth" });
   }
 
-  private formatDatetime(datetime: string) {
+  private formatDatetime(datetime: Date): string {
     const locale = Intl.DateTimeFormat().resolvedOptions().locale;
     return new Intl.DateTimeFormat(locale || "jp", {
       dateStyle: "short",

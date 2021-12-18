@@ -72,20 +72,20 @@ export class SnippetList extends LitElement {
 
   // eslint-disable-next-line no-unused-vars
   updated(changedProps: Map<string, unknown>): void {
-    this._selectFirstItem();
+    if (!this.snippetItems[0]) return;
+    this._updateSelectedItem(this.snippetItems[0]);
   }
 
   // Select the first item on the top of the list
-  private _selectFirstItem() {
-    if (!this.snippetItems[0]) return;
+  private _updateSelectedItem(item: HTMLLIElement): void {
     this.snippetList.querySelectorAll("ui5-li").forEach((li) => {
       li.removeAttribute("selected");
       li.removeAttribute("focused");
     });
-    this.snippetItems[0].setAttribute("selected", "true");
-    this.snippetItems[0].setAttribute("focused", "true");
+    item.setAttribute("selected", "true");
+    item.setAttribute("focused", "true");
     const event = new CustomEvent("selection-change", {
-      detail: { selectedItems: [this.snippetItems[0]] },
+      detail: { selectedItems: [item] },
     });
     this.snippetList.dispatchEvent(event);
     this.scroll({ top: 0, behavior: "smooth" });

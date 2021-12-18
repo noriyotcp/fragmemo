@@ -91,8 +91,8 @@ export class SnippetList extends LitElement {
     this.snippetList.dispatchEvent(event);
     this.scroll({ top: 0, behavior: "smooth" });
     // e.g. scroll to the top of the second item
-    // const second = this.snippetList.querySelectorAll("ui5-li")[1];
-    // this.scroll({ top: second.clientHeight, behavior: "smooth" });
+    // this.snippetItems[1] &&
+    //   this.scroll({ top: this.snippetItems[1].offsetTop, behavior: "smooth" });
   }
 
   private formatDatetime(datetime: string) {

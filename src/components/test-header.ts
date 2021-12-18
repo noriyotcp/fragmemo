@@ -12,7 +12,6 @@ export class TestHeader extends LitElement {
   private snippet = new SnippetController(this);
 
   @query("#btn-save") btnSave!: HTMLButtonElement;
-  @query("#message") message!: HTMLSpanElement;
   @query("#snippet-title") snippetTitle!: HTMLInputElement;
   @property({ type: String })
   textareaValue!: string;
@@ -42,12 +41,6 @@ export class TestHeader extends LitElement {
   render(): TemplateResult {
     return html`
       <div id="textarea">
-        <form>
-          <button type="button" id="btn-save" @click="${this._displayToast}">
-            Toast
-          </button>
-          <div id="message"></div>
-        </form>
         <ui5-input
           id="snippet-title"
           type="text"
@@ -55,6 +48,9 @@ export class TestHeader extends LitElement {
           value="${this.snippet.selectedSnippet.title}"
           @input="${this._inputTitleDispatcher}"
         ></ui5-input>
+        <button type="button" id="btn-save" @click="${this._displayToast}">
+          Toast
+        </button>
       </div>
     `;
   }

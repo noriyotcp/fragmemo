@@ -1,7 +1,7 @@
 // @ts-nocheck
 
 import { LitElement, html, css, TemplateResult } from "lit";
-import { customElement, query } from "lit/decorators.js";
+import { customElement, query, queryAll } from "lit/decorators.js";
 import "@ui5/webcomponents/dist/List.js";
 import "@ui5/webcomponents/dist/StandardListItem.js";
 
@@ -14,7 +14,7 @@ export class SnippetList extends LitElement {
   private setupStorage = new SetupStorageController(this);
 
   @query("#snippetList") snippetList!: HTMLElement;
-  @query("ui5-li") firstItem!: HTMLLIElement;
+  @queryAll("ui5-li") snippetItems!: HTMLLIElement[];
 
   constructor() {
     super();
@@ -78,17 +78,21 @@ export class SnippetList extends LitElement {
 
   // Select the first item on the top of the list
   private _selectFirstItem() {
-    if (!this.firstItem) return;
+    if (!this.snippetItems[0]) return;
     this.snippetList.querySelectorAll("ui5-li").forEach((li) => {
       li.removeAttribute("selected");
       li.removeAttribute("focused");
     });
-    this.firstItem.setAttribute("selected", true);
-    this.firstItem.setAttribute("focused", true);
+    this.snippetItems[0].setAttribute("selected", true);
+    this.snippetItems[0].setAttribute("focused", true);
     const event = new CustomEvent("selection-change", {
-      detail: { selectedItems: [this.firstItem] },
+      detail: { selectedItems: [this.snippetItems[0]] },
     });
     this.snippetList.dispatchEvent(event);
+    this.scroll({ top: 0, behavior: "smooth" });
+    // e.g. scroll to the top of the second item
+    // const second = this.snippetList.querySelectorAll("ui5-li")[1];
+    // this.scroll({ top: second.clientHeight, behavior: "smooth" });
   }
 
   private formatDatetime(datetime: string) {

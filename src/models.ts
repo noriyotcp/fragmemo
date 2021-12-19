@@ -1,7 +1,6 @@
 class Snippet {
   _id = 0;
   title = "";
-  fragments!: Fragment[];
   createdAt = new Date();
   updatedAt = new Date();
 

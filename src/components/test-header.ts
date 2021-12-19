@@ -42,18 +42,17 @@ export class TestHeader extends LitElement {
 
   render(): TemplateResult {
     return html`
-      <div id="textarea">
-        <ui5-input
-          id="snippet-title"
-          type="text"
-          placeholder="Snippet title..."
-          value="${this.snippet.selectedSnippet.title}"
-          @input="${this._inputTitleDispatcher}"
-        ></ui5-input>
-        <button type="button" id="btn-save" @click="${this._displayToast}">
-          Toast
-        </button>
-      </div>
+      <ui5-input
+        id="snippet-title"
+        type="text"
+        placeholder="Snippet title..."
+        value="${this.snippet.selectedSnippet.title}"
+        @input="${this._inputTitleDispatcher}"
+      ></ui5-input>
+      <button type="button" id="btn-save" @click="${this._displayToast}">
+        Toast
+      </button>
+
       <ui5-tabcontainer class="full-width" collapsed fixed show-overflow>
         <ui5-tab text="Home"></ui5-tab>
         <ui5-tab text="What's new" selected></ui5-tab>

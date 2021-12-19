@@ -36,6 +36,21 @@ export class SearchItem extends LitElement {
           id="search-message"
           @input-title="${this._inputTitleListener}"
         ></span>
+        <sl-button type="default" size="small">
+          <sl-icon slot="prefix" name="gear"></sl-icon>
+          Settings
+        </sl-button>
+
+        <sl-button type="default" size="small">
+          <sl-icon slot="suffix" name="arrow-counterclockwise"></sl-icon>
+          Refresh
+        </sl-button>
+
+        <sl-button type="default" size="small">
+          <sl-icon slot="prefix" name="link-45deg"></sl-icon>
+          <sl-icon slot="suffix" name="box-arrow-up-right"></sl-icon>
+          Open
+        </sl-button>
       </header>
     `;
   }

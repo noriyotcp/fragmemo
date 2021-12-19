@@ -7,3 +7,4 @@ import "./components/snippet-list";
 import "./components/snippet-list-item";
 import "./components/search-item";
 import "./components/toast-element";
+import "./components/fragment-tab-list";

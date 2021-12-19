@@ -5,7 +5,6 @@ const SnippetSchema: Realm.ObjectSchema = {
   properties: {
     _id: "int",
     title: "string?",
-    fragments: "Fragment[]",
     createdAt: "date",
     updatedAt: "date",
   },
@@ -15,7 +14,6 @@ const SnippetSchema: Realm.ObjectSchema = {
 class Snippet {
   _id = 0;
   title = "";
-  fragments!: Fragment[];
   createdAt = new Date();
   updatedAt = new Date();
 
@@ -30,13 +28,9 @@ const FragmentSchema: Realm.ObjectSchema = {
     _id: "int",
     title: "string?",
     content: "string?",
+    snippet: "Snippet",
     createdAt: "date",
     updatedAt: "date",
-    snippet: {
-      type: "linkingObjects",
-      objectType: "Snippet",
-      property: "fragments",
-    },
   },
   primaryKey: "_id",
 };

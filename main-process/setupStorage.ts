@@ -1,23 +1,11 @@
 import { Results } from "realm";
 import DB from "./db/db";
-import { Snippet, Fragment } from "./db/realm";
+import { Snippet } from "./db/realm";
 
 type setupStorageResultType = {
   status: boolean;
   msg: string;
   snippets: Snippet[];
-};
-
-const fragmentsList = (fragments: Fragment[]) => {
-  return fragments.map((fragment) => {
-    return new Fragment({
-      _id: fragment._id,
-      title: fragment.title,
-      content: fragment.content,
-      createdAt: fragment.createdAt,
-      updatedAt: fragment.updatedAt,
-    });
-  });
 };
 
 export const setupStorage = (db: DB): setupStorageResultType => {
@@ -29,7 +17,6 @@ export const setupStorage = (db: DB): setupStorageResultType => {
       title: snippet.title,
       createdAt: snippet.createdAt,
       updatedAt: snippet.updatedAt,
-      fragments: fragmentsList(snippet.fragments),
     });
   });
   return { status: true, msg: "Snippets loaded", snippets };

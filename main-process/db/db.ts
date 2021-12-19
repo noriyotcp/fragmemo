@@ -1,4 +1,4 @@
-import { Realm, realmSchema, Snippet } from "./realm";
+import { Realm, realmSchema, Snippet, Fragment } from "./realm";
 
 class DB extends Realm {
   constructor(path: string) {
@@ -24,29 +24,38 @@ function identity(num: number): number {
     return num;
 }`;
 
-    this.createFragment("", testContentOfFragment);
-    const latestFragment = this.objectForPrimaryKey(
-      "Fragment",
-      this.currentMaxId("Fragment")
-    );
-
     this.write(() => {
       this.create("Snippet", {
         _id: this.currentMaxId("Snippet") + 1,
         title: title,
-        fragments: [latestFragment],
         createdAt: new Date(),
         updatedAt: new Date(),
       });
     });
+
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    const latestSnippet: Snippet = this.objectForPrimaryKey(
+      "Snippet",
+      this.currentMaxId("Snippet")
+    )!;
+
+    this.createFragment("", testContentOfFragment, latestSnippet);
+
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    const latestFragment: Fragment = this.objectForPrimaryKey(
+      "Fragment",
+      this.currentMaxId("Fragment")
+    )!;
+    console.info("frament.snippet._id: ", latestFragment.snippet._id);
   }
 
-  createFragment(title: string, content: string): void {
+  createFragment(title: string, content: string, snippet: Snippet): void {
     this.write(() => {
       this.create("Fragment", {
         _id: this.currentMaxId("Fragment") + 1,
         title: title,
         content: content,
+        snippet: snippet,
         createdAt: new Date(),
         updatedAt: new Date(),
       });
@@ -64,11 +73,8 @@ function identity(num: number): number {
       findObject.updatedAt = new Date();
     });
 
-    console.info(
-      "snippet title updated: ",
-      // @ts-ignore
-      this.objectForPrimaryKey("Snippet", data._id)?.title
-    );
+    const snippet = this.objectForPrimaryKey<Snippet>("Snippet", data._id);
+    console.info("snippet title updated: ", snippet?.title);
   }
 }
 

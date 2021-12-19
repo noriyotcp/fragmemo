@@ -2,8 +2,10 @@ import { LitElement, html, css, TemplateResult } from "lit";
 import { customElement, property, query } from "lit/decorators.js";
 import { FileData, Override } from "index";
 import { dispatch } from "../events/dispatcher";
-import "@ui5/webcomponents/dist/Input.js";
 import { SnippetController } from "../controllers/snippet-controller";
+import "@ui5/webcomponents/dist/Input.js";
+import "@ui5/webcomponents/dist/TabContainer.js";
+import "@ui5/webcomponents/dist/Tab.js";
 
 const { myAPI } = window;
 
@@ -52,6 +54,13 @@ export class TestHeader extends LitElement {
           Toast
         </button>
       </div>
+      <ui5-tabcontainer class="full-width" collapsed fixed show-overflow>
+        <ui5-tab text="Home"></ui5-tab>
+        <ui5-tab text="What's new" selected></ui5-tab>
+        <ui5-tab text="Who are we"></ui5-tab>
+        <ui5-tab text="About"></ui5-tab>
+        <ui5-tab text="Contacts"></ui5-tab>
+      </ui5-tabcontainer>
     `;
   }
 

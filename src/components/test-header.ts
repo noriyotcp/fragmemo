@@ -24,7 +24,7 @@ export class TestHeader extends LitElement {
     :host {
       position: fixed;
       top: 0;
-      height: 100px;
+      height: 47px;
       width: 100%;
       z-index: 9999;
       --textarea-width: 67%;
@@ -50,7 +50,6 @@ export class TestHeader extends LitElement {
       <button type="button" id="btn-save" @click="${this._displayToast}">
         Toast
       </button>
-      <fragment-tab-list></fragment-tab-list>
     `;
   }
 

@@ -25,7 +25,6 @@ export class EditorElement extends LitElement {
         <test-header textareaValue="${this._textareaValue}"></test-header>
         <fragment-tab-list></fragment-tab-list>
       </header>
-      <code-editor code="" language="typescript"> </code-editor>
     `;
   }
 }

@@ -10,11 +10,11 @@ export class EditorElement extends LitElement {
     css`
       :host {
         display: block;
-        margin-top: 47px;
+        margin-top: 41px;
       }
 
       header {
-        max-height: 53px;
+        max-height: 59px;
       }
     `,
   ];
@@ -25,7 +25,6 @@ export class EditorElement extends LitElement {
         <test-header textareaValue="${this._textareaValue}"></test-header>
         <fragment-tab-list></fragment-tab-list>
       </header>
-      <code-editor code="" language="typescript"> </code-editor>
     `;
   }
 }

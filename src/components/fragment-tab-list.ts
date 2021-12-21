@@ -15,18 +15,17 @@ export class FragmentTabList extends LitElement {
   render(): TemplateResult {
     return html`
       <sl-tab-group class="tabs-closable">
-        <sl-tab slot="nav" panel="tab-1" closable>Tab 1</sl-tab>
-        <sl-tab-panel name="tab-1">
-          <code-editor code="" language="typescript"> </code-editor>
-        </sl-tab-panel>
+        ${this.range(1, 10).map((num, i) => {
+          return html`
+            <sl-tab slot="nav" panel="tab-${i}" closable>Tab ${i}</sl-tab>
+            <sl-tab-panel name="tab-${i}">
+              <code-editor code="" language="typescript"> </code-editor>
+            </sl-tab-panel>
+          `;
+        })}
 
-        <sl-tab slot="nav" panel="tab-2" closable>Tab 2</sl-tab>
-        <sl-tab-panel name="tab-2">
-          <code-editor code="" language="typescript"> </code-editor>
-        </sl-tab-panel>
-
-        <sl-tab slot="nav" panel="tab-3" closable>Tab 3</sl-tab>
-        <sl-tab-panel name="tab-3">
+        <sl-tab slot="nav" panel="tab-settings" closable>Tab settings</sl-tab>
+        <sl-tab-panel name="tab-settings">
           <settings-element></settings-element>
         </sl-tab-panel>
       </sl-tab-group>
@@ -53,5 +52,13 @@ export class FragmentTabList extends LitElement {
       tab.remove();
       panel.remove();
     });
+  }
+
+  private range(
+    start: number,
+    end: number,
+    length = end - start + 1
+  ): Array<number> {
+    return Array.from({ length }, (_, i) => start + i);
   }
 }

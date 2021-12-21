@@ -16,15 +16,16 @@ export class FragmentTabList extends LitElement {
     return html`
       <sl-tab-group class="tabs-closable">
         <sl-tab slot="nav" panel="tab-1" closable>Tab 1</sl-tab>
-        <sl-tab slot="nav" panel="tab-2" closable>Tab 2</sl-tab>
-        <sl-tab slot="nav" panel="tab-3" closable>Tab 3</sl-tab>
-
         <sl-tab-panel name="tab-1">
           <code-editor code="" language="typescript"> </code-editor>
         </sl-tab-panel>
+
+        <sl-tab slot="nav" panel="tab-2" closable>Tab 2</sl-tab>
         <sl-tab-panel name="tab-2">
           <code-editor code="" language="typescript"> </code-editor>
         </sl-tab-panel>
+
+        <sl-tab slot="nav" panel="tab-3" closable>Tab 3</sl-tab>
         <sl-tab-panel name="tab-3">
           <settings-element></settings-element>
         </sl-tab-panel>
@@ -43,7 +44,9 @@ export class FragmentTabList extends LitElement {
 
       // Show the previous tab if the tab is currently active
       if (tab.active) {
-        this.tabGroup.show(tab.previousElementSibling.panel);
+        this.tabGroup.show(
+          tab.previousElementSibling?.previousElementSibling.panel
+        );
       }
 
       // Remove the tab + panel

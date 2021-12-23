@@ -12,6 +12,15 @@ export class FragmentTabList extends LitElement {
     }
   `;
 
+  settingsTemplate(): TemplateResult {
+    return html`
+      <sl-tab slot="nav" panel="tab-settings" closable>Tab settings</sl-tab>
+      <sl-tab-panel name="tab-settings">
+        <settings-element></settings-element>
+      </sl-tab-panel>
+    `;
+  }
+
   render(): TemplateResult {
     return html`
       <sl-tab-group class="tabs-closable">
@@ -23,11 +32,7 @@ export class FragmentTabList extends LitElement {
             </sl-tab-panel>
           `;
         })}
-
-        <sl-tab slot="nav" panel="tab-settings" closable>Tab settings</sl-tab>
-        <sl-tab-panel name="tab-settings">
-          <settings-element></settings-element>
-        </sl-tab-panel>
+        ${this.settingsTemplate()}
       </sl-tab-group>
     `;
   }

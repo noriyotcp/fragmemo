@@ -1,11 +1,12 @@
 // @ts-nocheck
 
 import { LitElement, html, css, TemplateResult } from "lit";
-import { customElement, query } from "lit/decorators.js";
+import { customElement, query, queryAll } from "lit/decorators.js";
 
 @customElement("fragment-tab-list")
 export class FragmentTabList extends LitElement {
   @query(".tabs-closable") tabGroup!: HTMLElement;
+  @queryAll("sl-tab[panel^='tab-']") tabs: Array<HTMLElement>;
 
   static styles = css`
     :host {
@@ -28,7 +29,11 @@ export class FragmentTabList extends LitElement {
           return html`
             <sl-tab slot="nav" panel="tab-${i}" closable>Tab ${i}</sl-tab>
             <sl-tab-panel name="tab-${i}">
-              <code-editor code="" language="typescript"> </code-editor>
+              <code-editor
+                code="const num: number = ${i};"
+                language="typescript"
+              >
+              </code-editor>
             </sl-tab-panel>
           `;
         })}
@@ -39,6 +44,8 @@ export class FragmentTabList extends LitElement {
 
   firstUpdated() {
     console.log("FragmentTabList firstUpdated");
+    console.info(this.tabs);
+    this.tabs[1].active = true;
 
     this.tabGroup.addEventListener("sl-close", async (event) => {
       const tab = event.target as HTMLElement;
@@ -56,6 +63,10 @@ export class FragmentTabList extends LitElement {
       // Remove the tab + panel
       tab.remove();
       panel.remove();
+    });
+
+    this.tabGroup.addEventListener("sl-tab-show", (event) => {
+      console.info("Tab show", event);
     });
   }
 

@@ -3,7 +3,6 @@ import { customElement, query, queryAll } from "lit/decorators.js";
 import "@ui5/webcomponents/dist/List.js";
 import "@ui5/webcomponents/dist/StandardListItem.js";
 
-import "./snippet-list-item";
 import { SetupStorageController } from "../controllers/setup-storage-controller";
 import { dispatch } from "../events/dispatcher";
 import { Snippet } from "../models";

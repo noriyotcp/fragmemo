@@ -45,7 +45,6 @@ export class FragmentTabList extends LitElement {
   firstUpdated() {
     console.log("FragmentTabList firstUpdated");
     console.info(this.tabs);
-    this.tabs[1].active = true;
 
     this.tabGroup.addEventListener("sl-close", async (event) => {
       const tab = event.target as HTMLElement;
@@ -55,9 +54,15 @@ export class FragmentTabList extends LitElement {
 
       // Show the previous tab if the tab is currently active
       if (tab.active) {
-        this.tabGroup.show(
-          tab.previousElementSibling?.previousElementSibling.panel
-        );
+        const previousTab = tab.previousElementSibling
+          ?.previousElementSibling as HTMLElement;
+        const nextTab = tab.nextElementSibling
+          ?.nextElementSibling as HTMLElement;
+        if (previousTab) {
+          this.tabGroup.show(previousTab.panel);
+        } else {
+          this.tabGroup.show(nextTab.panel);
+        }
       }
 
       // Remove the tab + panel

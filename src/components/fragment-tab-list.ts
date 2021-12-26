@@ -25,12 +25,12 @@ export class FragmentTabList extends LitElement {
   render(): TemplateResult {
     return html`
       <sl-tab-group class="tabs-closable">
-        ${this.range(1, 10).map((num, i) => {
+        ${this.range(1, 10).map((num, _) => {
           return html`
-            <sl-tab slot="nav" panel="tab-${i}" closable>Tab ${i}</sl-tab>
-            <sl-tab-panel name="tab-${i}">
+            <sl-tab slot="nav" panel="tab-${num}" closable>Tab ${num}</sl-tab>
+            <sl-tab-panel name="tab-${num}">
               <code-editor
-                code="const num: number = ${i};"
+                code="const num: number = ${num};"
                 language="typescript"
               >
               </code-editor>

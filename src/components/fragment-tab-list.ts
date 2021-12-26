@@ -5,7 +5,7 @@ import { customElement, query, queryAll } from "lit/decorators.js";
 
 @customElement("fragment-tab-list")
 export class FragmentTabList extends LitElement {
-  @query(".tabs-closable") tabGroup!: HTMLElement;
+  @query("sl-tab-group") tabGroup!: HTMLElement;
   @queryAll("sl-tab[panel^='tab-']") tabs: Array<HTMLElement>;
 
   static styles = css`

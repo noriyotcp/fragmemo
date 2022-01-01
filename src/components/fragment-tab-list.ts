@@ -28,13 +28,6 @@ export class FragmentTabList extends LitElement {
         ${this.range(1, 10).map((num, _) => {
           return html`
             <sl-tab slot="nav" panel="tab-${num}" closable>Tab ${num}</sl-tab>
-            <sl-tab-panel name="tab-${num}">
-              <code-editor
-                code="const num: number = ${num};"
-                language="typescript"
-              >
-              </code-editor>
-            </sl-tab-panel>
           `;
         })}
         ${this.settingsTemplate()}

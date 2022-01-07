@@ -28,7 +28,7 @@
   "dependencies": {
     "@ui5/webcomponents": "^1.0.2",
     "electron-json-storage": "^4.5.0",
-    "lit": "^2.0.2",
+    "lit": "^2.1.1",
     "monaco-editor": "^0.31.1",
     "realm": "^10.11.0",
     "split.js": "^1.6.5"

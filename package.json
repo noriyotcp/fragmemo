@@ -31,7 +31,7 @@
     "lit": "^2.0.2",
     "monaco-editor": "^0.31.1",
     "realm": "^10.10.1",
-    "split.js": "^1.6.4"
+    "split.js": "^1.6.5"
   },
   "devDependencies": {
     "@swc/core": "1.2.124",

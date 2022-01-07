@@ -30,11 +30,11 @@
     "electron-json-storage": "^4.5.0",
     "lit": "^2.0.2",
     "monaco-editor": "^0.31.1",
-    "realm": "^10.10.1",
+    "realm": "^10.11.0",
     "split.js": "^1.6.5"
   },
   "devDependencies": {
-    "@swc/core": "1.2.124",
+    "@swc/core": "1.2.127",
     "@swc/jest": "^0.2.15",
     "@types/electron-json-storage": "^4.5.0",
     "@types/jest": "^27.0.3",
@@ -42,7 +42,7 @@
     "@typescript-eslint/eslint-plugin": "^5.8.1",
     "@typescript-eslint/parser": "^5.9.0",
     "@vitejs/plugin-vue": "^1.10.2",
-    "concurrently": "^6.5.1",
+    "concurrently": "^7.0.0",
     "cross-env": "^7.0.3",
     "electron": "^16.0.6",
     "electron-builder": "^22.14.5",

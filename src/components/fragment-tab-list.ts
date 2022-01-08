@@ -1,39 +1,43 @@
 // @ts-nocheck
 
 import { LitElement, html, css, TemplateResult } from "lit";
-import { customElement, query } from "lit/decorators.js";
+import { customElement, query, queryAll } from "lit/decorators.js";
 
 @customElement("fragment-tab-list")
 export class FragmentTabList extends LitElement {
-  @query(".tabs-closable") tabGroup!: HTMLElement;
+  @query("sl-tab-group") tabGroup!: HTMLElement;
+  @queryAll("sl-tab[panel^='tab-']") tabs: Array<HTMLElement>;
 
   static styles = css`
     :host {
     }
   `;
 
+  settingsTemplate(): TemplateResult {
+    return html`
+      <sl-tab slot="nav" panel="tab-settings" closable>Tab settings</sl-tab>
+      <sl-tab-panel name="tab-settings">
+        <settings-element></settings-element>
+      </sl-tab-panel>
+    `;
+  }
+
   render(): TemplateResult {
     return html`
       <sl-tab-group class="tabs-closable">
-        ${this.range(1, 10).map((num, i) => {
+        ${this.range(1, 10).map((num, _) => {
           return html`
-            <sl-tab slot="nav" panel="tab-${i}" closable>Tab ${i}</sl-tab>
-            <sl-tab-panel name="tab-${i}">
-              <code-editor code="" language="typescript"> </code-editor>
-            </sl-tab-panel>
+            <sl-tab slot="nav" panel="tab-${num}" closable>Tab ${num}</sl-tab>
           `;
         })}
-
-        <sl-tab slot="nav" panel="tab-settings" closable>Tab settings</sl-tab>
-        <sl-tab-panel name="tab-settings">
-          <settings-element></settings-element>
-        </sl-tab-panel>
+        ${this.settingsTemplate()}
       </sl-tab-group>
     `;
   }
 
   firstUpdated() {
     console.log("FragmentTabList firstUpdated");
+    console.info(this.tabs);
 
     this.tabGroup.addEventListener("sl-close", async (event) => {
       const tab = event.target as HTMLElement;
@@ -43,14 +47,24 @@ export class FragmentTabList extends LitElement {
 
       // Show the previous tab if the tab is currently active
       if (tab.active) {
-        this.tabGroup.show(
-          tab.previousElementSibling?.previousElementSibling.panel
-        );
+        const previousTab = tab.previousElementSibling
+          ?.previousElementSibling as HTMLElement;
+        const nextTab = tab.nextElementSibling
+          ?.nextElementSibling as HTMLElement;
+        if (previousTab) {
+          this.tabGroup.show(previousTab.panel);
+        } else {
+          this.tabGroup.show(nextTab.panel);
+        }
       }
 
       // Remove the tab + panel
       tab.remove();
       panel.remove();
+    });
+
+    this.tabGroup.addEventListener("sl-tab-show", (event) => {
+      console.info("Tab show", event);
     });
   }
 

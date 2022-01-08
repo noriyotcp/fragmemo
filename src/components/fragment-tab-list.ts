@@ -4,9 +4,12 @@ import { LitElement, html, css, TemplateResult } from "lit";
 import { customElement, query, queryAll } from "lit/decorators.js";
 import { repeat } from "lit/directives/repeat.js";
 
+import { SnippetController } from "../controllers/snippet-controller";
 
 @customElement("fragment-tab-list")
 export class FragmentTabList extends LitElement {
+  private snippet = new SnippetController(this);
+
   @query("sl-tab-group") tabGroup!: HTMLElement;
   @queryAll("sl-tab[panel^='tab-']") tabs: Array<HTMLElement>;
 
@@ -32,7 +35,9 @@ export class FragmentTabList extends LitElement {
           (num) => num,
           (num, _) => {
             return html`
-              <sl-tab slot="nav" closable panel="tab-${num}">Tab ${num}</sl-tab>
+              <sl-tab slot="nav" closable panel="tab-${num}"
+                >${this.snippet.selectedSnippet.title} Tab ${num}</sl-tab
+              >
             `;
           }
         )}

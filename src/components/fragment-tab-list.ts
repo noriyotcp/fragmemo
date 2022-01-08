@@ -16,11 +16,25 @@ export class FragmentTabList extends LitElement {
   static styles = css`
     :host {
     }
+    sl-tab > input {
+      background-color: transparent;
+      color: white;
+      border: none;
+      text-align: center;
+    }
+    sl-tab > input[readonly] {
+      outline: none;
+    }
+    sl-tab > input:not([readonly]):focus-visible {
+      outline: var(--sl-color-primary-600) solid 1px;
+    }
   `;
 
   settingsTemplate(): TemplateResult {
     return html`
-      <sl-tab slot="nav" panel="tab-settings" closable>Tab settings</sl-tab>
+      <sl-tab slot="nav" panel="tab-settings" closable
+        ><input type="text" class="is-editable" value="Tab settings" readonly
+      /></sl-tab>
       <sl-tab-panel name="tab-settings">
         <settings-element></settings-element>
       </sl-tab-panel>
@@ -35,9 +49,14 @@ export class FragmentTabList extends LitElement {
           (num) => num,
           (num, _) => {
             return html`
-              <sl-tab slot="nav" closable panel="tab-${num}"
-                >${this.snippet.selectedSnippet.title} Tab ${num}</sl-tab
-              >
+              <sl-tab slot="nav" closable panel="tab-${num}">
+                <input
+                  type="text"
+                  class="is-editable"
+                  value="${this.snippet.selectedSnippet.title}"
+                  placeholder="untitled"
+                />
+              </sl-tab>
             `;
           }
         )}

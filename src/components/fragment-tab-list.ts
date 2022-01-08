@@ -47,20 +47,18 @@ export class FragmentTabList extends LitElement {
 
       // Show the previous tab if the tab is currently active
       if (tab.active) {
-        const previousTab = tab.previousElementSibling
-          ?.previousElementSibling as HTMLElement;
-        const nextTab = tab.nextElementSibling
-          ?.nextElementSibling as HTMLElement;
+        const previousTab = tab.previousElementSibling as HTMLElement;
+        const nextTab = tab.nextElementSibling as HTMLElement;
         if (previousTab) {
           this.tabGroup.show(previousTab.panel);
-        } else {
+        } else if (nextTab) {
           this.tabGroup.show(nextTab.panel);
         }
       }
 
       // Remove the tab + panel
       tab.remove();
-      panel.remove();
+      panel?.remove();
     });
 
     this.tabGroup.addEventListener("sl-tab-show", (event) => {

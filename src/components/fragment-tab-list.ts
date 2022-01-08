@@ -2,6 +2,8 @@
 
 import { LitElement, html, css, TemplateResult } from "lit";
 import { customElement, query, queryAll } from "lit/decorators.js";
+import { repeat } from "lit/directives/repeat.js";
+
 
 @customElement("fragment-tab-list")
 export class FragmentTabList extends LitElement {
@@ -25,11 +27,15 @@ export class FragmentTabList extends LitElement {
   render(): TemplateResult {
     return html`
       <sl-tab-group class="tabs-closable">
-        ${this.range(1, 10).map((num, _) => {
-          return html`
-            <sl-tab slot="nav" panel="tab-${num}" closable>Tab ${num}</sl-tab>
-          `;
-        })}
+        ${repeat(
+          this.range(1, 10),
+          (num) => num,
+          (num, _) => {
+            return html`
+              <sl-tab slot="nav" closable panel="tab-${num}">Tab ${num}</sl-tab>
+            `;
+          }
+        )}
         ${this.settingsTemplate()}
       </sl-tab-group>
     `;

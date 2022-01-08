@@ -1,5 +1,6 @@
 import { LitElement, html, css, TemplateResult } from "lit";
 import { customElement, query, queryAll } from "lit/decorators.js";
+import { repeat } from "lit/directives/repeat.js";
 import "@ui5/webcomponents/dist/List.js";
 import "@ui5/webcomponents/dist/StandardListItem.js";
 
@@ -42,7 +43,9 @@ export class SnippetList extends LitElement {
     return html`
       <search-item></search-item>
       <ui5-list id="snippetList" class="full-width" mode="SingleSelect">
-        ${this.setupStorage.snippets.map(
+        ${repeat(
+          this.setupStorage.snippets,
+          (snippet: Snippet) => snippet._id,
           (snippet: Snippet) =>
             html`<ui5-li
               description="${this.formatDatetime(snippet.updatedAt)}"
@@ -72,10 +75,10 @@ export class SnippetList extends LitElement {
   // eslint-disable-next-line no-unused-vars
   updated(changedProps: Map<string, unknown>): void {
     if (!this.snippetItems[0]) return;
+    // Select the first item on the top of the list
     this._updateSelectedItem(this.snippetItems[0]);
   }
 
-  // Select the first item on the top of the list
   private _updateSelectedItem(item: HTMLLIElement): void {
     this.snippetList.querySelectorAll("ui5-li").forEach((li) => {
       li.removeAttribute("selected");
@@ -83,6 +86,7 @@ export class SnippetList extends LitElement {
     });
     item.setAttribute("selected", "true");
     item.setAttribute("focused", "true");
+
     const event = new CustomEvent("selection-change", {
       detail: { selectedItems: [item] },
     });

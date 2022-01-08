@@ -2,20 +2,39 @@
 
 import { LitElement, html, css, TemplateResult } from "lit";
 import { customElement, query, queryAll } from "lit/decorators.js";
+import { repeat } from "lit/directives/repeat.js";
+
+import { SnippetController } from "../controllers/snippet-controller";
 
 @customElement("fragment-tab-list")
 export class FragmentTabList extends LitElement {
+  private snippet = new SnippetController(this);
+
   @query("sl-tab-group") tabGroup!: HTMLElement;
   @queryAll("sl-tab[panel^='tab-']") tabs: Array<HTMLElement>;
 
   static styles = css`
     :host {
     }
+    sl-tab > input {
+      background-color: transparent;
+      color: white;
+      border: none;
+      text-align: center;
+    }
+    sl-tab > input[readonly] {
+      outline: none;
+    }
+    sl-tab > input:not([readonly]):focus-visible {
+      outline: var(--sl-color-primary-600) solid 1px;
+    }
   `;
 
   settingsTemplate(): TemplateResult {
     return html`
-      <sl-tab slot="nav" panel="tab-settings" closable>Tab settings</sl-tab>
+      <sl-tab slot="nav" panel="tab-settings" closable
+        ><input type="text" class="is-editable" value="Tab settings" readonly
+      /></sl-tab>
       <sl-tab-panel name="tab-settings">
         <settings-element></settings-element>
       </sl-tab-panel>
@@ -25,11 +44,22 @@ export class FragmentTabList extends LitElement {
   render(): TemplateResult {
     return html`
       <sl-tab-group class="tabs-closable">
-        ${this.range(1, 10).map((num, _) => {
-          return html`
-            <sl-tab slot="nav" panel="tab-${num}" closable>Tab ${num}</sl-tab>
-          `;
-        })}
+        ${repeat(
+          this.range(1, 10),
+          (num) => num,
+          (num, _) => {
+            return html`
+              <sl-tab slot="nav" closable panel="tab-${num}">
+                <input
+                  type="text"
+                  class="is-editable"
+                  value="${this.snippet.selectedSnippet.title}"
+                  placeholder="untitled"
+                />
+              </sl-tab>
+            `;
+          }
+        )}
         ${this.settingsTemplate()}
       </sl-tab-group>
     `;
@@ -47,20 +77,18 @@ export class FragmentTabList extends LitElement {
 
       // Show the previous tab if the tab is currently active
       if (tab.active) {
-        const previousTab = tab.previousElementSibling
-          ?.previousElementSibling as HTMLElement;
-        const nextTab = tab.nextElementSibling
-          ?.nextElementSibling as HTMLElement;
+        const previousTab = tab.previousElementSibling as HTMLElement;
+        const nextTab = tab.nextElementSibling as HTMLElement;
         if (previousTab) {
           this.tabGroup.show(previousTab.panel);
-        } else {
+        } else if (nextTab) {
           this.tabGroup.show(nextTab.panel);
         }
       }
 
       // Remove the tab + panel
       tab.remove();
-      panel.remove();
+      panel?.remove();
     });
 
     this.tabGroup.addEventListener("sl-tab-show", (event) => {

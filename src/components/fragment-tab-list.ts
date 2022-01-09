@@ -28,12 +28,18 @@ export class FragmentTabList extends LitElement {
     sl-tab > input:not([readonly]):focus-visible {
       outline: var(--sl-color-primary-600) solid 1px;
     }
+    .tab-settings {
+      user-select: none;
+    }
+    .tab-settings > input {
+      pointer-events: none;
+    }
   `;
 
   settingsTemplate(): TemplateResult {
     return html`
-      <sl-tab slot="nav" panel="tab-settings" closable
-        ><input type="text" class="is-editable" value="Tab settings" readonly
+      <sl-tab slot="nav" panel="tab-settings" closable class="tab-settings"
+        ><input type="text" value="Settings" readonly
       /></sl-tab>
       <sl-tab-panel name="tab-settings">
         <settings-element></settings-element>

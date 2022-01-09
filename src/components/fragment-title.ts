@@ -35,6 +35,8 @@ export class FragmentTitle extends LitElement {
         placeholder="untitled"
         readonly
         @dblclick="${this._enableEdit}"
+        @keydown="${this._disableEditOnEnter}"
+        @blur="${this._disableEditOnBlur}"
       />
     `;
   }
@@ -43,5 +45,17 @@ export class FragmentTitle extends LitElement {
     const target = <HTMLInputElement>e.currentTarget;
     target.removeAttribute("readonly");
     target.select();
+  }
+
+  private _disableEditOnEnter(e: KeyboardEvent) {
+    const target = <HTMLInputElement>e.currentTarget;
+    if (e.key === "Enter" && e.isComposing === false) {
+      target.setAttribute("readonly", "true");
+    }
+  }
+
+  private _disableEditOnBlur(e: FocusEvent) {
+    const target = <HTMLInputElement>e.currentTarget;
+    target.setAttribute("readonly", "true");
   }
 }

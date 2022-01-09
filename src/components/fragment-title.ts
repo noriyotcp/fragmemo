@@ -30,7 +30,6 @@ export class FragmentTitle extends LitElement {
     return html`
       <input
         type="text"
-        class="is-editable"
         value="${this.snippet.selectedSnippet.title}"
         placeholder="untitled"
         readonly

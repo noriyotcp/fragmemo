@@ -55,6 +55,8 @@ export class FragmentTabList extends LitElement {
                   class="is-editable"
                   value="${this.snippet.selectedSnippet.title}"
                   placeholder="untitled"
+                  readonly
+                  @dblclick="${this.onDblclickHandler}"
                 />
               </sl-tab>
             `;
@@ -63,6 +65,11 @@ export class FragmentTabList extends LitElement {
         ${this.settingsTemplate()}
       </sl-tab-group>
     `;
+  }
+
+  onDblclickHandler(e) {
+    e.currentTarget.removeAttribute("readonly");
+    console.log("dblclicked!");
   }
 
   firstUpdated() {

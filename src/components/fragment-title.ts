@@ -1,9 +1,13 @@
 import { LitElement, html, TemplateResult, css } from "lit";
-import { customElement } from "lit/decorators.js";
+import { customElement, property, query } from "lit/decorators.js";
 import { SnippetController } from "../controllers/snippet-controller";
 
 @customElement("fragment-title")
 export class FragmentTitle extends LitElement {
+  @query("input") private inputElement!: HTMLInputElement;
+  @property({ type: String })
+  initialValue!: string;
+
   private snippet = new SnippetController(this);
 
   static styles = [
@@ -42,14 +46,21 @@ export class FragmentTitle extends LitElement {
 
   private _enableEdit(e: MouseEvent) {
     const target = <HTMLInputElement>e.currentTarget;
+    this.initialValue = this.inputElement.value;
     target.removeAttribute("readonly");
     target.select();
   }
 
   private _disableEditOnEnter(e: KeyboardEvent) {
     const target = <HTMLInputElement>e.currentTarget;
-    if (e.key === "Enter" && e.isComposing === false) {
-      target.setAttribute("readonly", "true");
+    if (!e.isComposing) {
+      if (e.key === "Enter") {
+        target.setAttribute("readonly", "true");
+      }
+      if (e.key === "Escape") {
+        target.value = this.initialValue;
+        target.setAttribute("readonly", "true");
+      }
     }
   }
 

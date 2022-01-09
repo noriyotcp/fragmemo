@@ -4,12 +4,8 @@ import { LitElement, html, css, TemplateResult } from "lit";
 import { customElement, query, queryAll } from "lit/decorators.js";
 import { repeat } from "lit/directives/repeat.js";
 
-import { SnippetController } from "../controllers/snippet-controller";
-
 @customElement("fragment-tab-list")
 export class FragmentTabList extends LitElement {
-  private snippet = new SnippetController(this);
-
   @query("sl-tab-group") tabGroup!: HTMLElement;
   @queryAll("sl-tab[panel^='tab-']") tabs: Array<HTMLElement>;
 
@@ -28,12 +24,18 @@ export class FragmentTabList extends LitElement {
     sl-tab > input:not([readonly]):focus-visible {
       outline: var(--sl-color-primary-600) solid 1px;
     }
+    .tab-settings {
+      user-select: none;
+    }
+    .tab-settings > input {
+      pointer-events: none;
+    }
   `;
 
   settingsTemplate(): TemplateResult {
     return html`
-      <sl-tab slot="nav" panel="tab-settings" closable
-        ><input type="text" class="is-editable" value="Tab settings" readonly
+      <sl-tab slot="nav" panel="tab-settings" closable class="tab-settings"
+        ><input type="text" value="Settings" readonly
       /></sl-tab>
       <sl-tab-panel name="tab-settings">
         <settings-element></settings-element>
@@ -50,12 +52,7 @@ export class FragmentTabList extends LitElement {
           (num, _) => {
             return html`
               <sl-tab slot="nav" closable panel="tab-${num}">
-                <input
-                  type="text"
-                  class="is-editable"
-                  value="${this.snippet.selectedSnippet.title}"
-                  placeholder="untitled"
-                />
+                <fragment-title></fragment-title>
               </sl-tab>
             `;
           }

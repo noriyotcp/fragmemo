@@ -1,14 +1,11 @@
 import { LitElement, html, TemplateResult, css } from "lit";
 import { customElement, property, query } from "lit/decorators.js";
-import { SnippetController } from "../controllers/snippet-controller";
 
 @customElement("fragment-title")
 export class FragmentTitle extends LitElement {
   @query("input") private inputElement!: HTMLInputElement;
   @property({ type: String })
   initialValue!: string;
-
-  private snippet = new SnippetController(this);
 
   static styles = [
     css`
@@ -34,7 +31,7 @@ export class FragmentTitle extends LitElement {
     return html`
       <input
         type="text"
-        value="${this.snippet.selectedSnippet.title}"
+        value="Fragment Tab"
         placeholder="untitled"
         readonly
         @dblclick="${this._enableEdit}"

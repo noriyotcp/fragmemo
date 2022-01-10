@@ -1,5 +1,6 @@
 /* eslint-disable no-unused-vars */
 import { IpcRenderer } from "electron";
+import { Fragment } from "models";
 
 declare global {
   interface Window {
@@ -24,7 +25,7 @@ export interface SandBox {
   updateSnippet: (data: object) => Promise<{
     status: boolean;
   }>;
-  fetchFragments: (snippetId: number) => Promise<string>;
+  fetchFragments: (snippetId: number) => Promise<Fragment[]>;
   openByMenu: (
     listener: (_e: Event, fileData: FileData) => void
   ) => Electron.IpcRenderer;

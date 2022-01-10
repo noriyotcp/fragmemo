@@ -9,6 +9,9 @@ import DB from "./db/db";
 // import { createHash } from "node:crypto";
 import fs from "fs";
 
+import { Fragment } from "./db/realm";
+import { Results } from "realm";
+
 const isDev = process.env.IS_DEV == "true" ? true : false;
 let db: DB;
 let jsonStorage: JsonStorage;
@@ -147,7 +150,20 @@ app.once("browser-window-created", () => {
   });
 
   ipcMain.handle("fetch-fragments", (event, snippetId) => {
-    return `fetch fragments of Snippet ID: ${snippetId}`;
+    const fragments = db
+      .objects("Fragment")
+      .filtered(`snippet._id == ${snippetId}`) as unknown as Results<Fragment>;
+
+    return fragments.map((fragment) => {
+      return new Fragment({
+        _id: fragment._id,
+        title: fragment.title,
+        content: fragment.content,
+        snippet: fragment.snippet,
+        createdAt: fragment.createdAt,
+        updatedAt: fragment.updatedAt,
+      });
+    });
   });
 });
 

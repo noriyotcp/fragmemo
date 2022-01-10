@@ -145,6 +145,10 @@ app.once("browser-window-created", () => {
     // );
     return setupStorage(db);
   });
+
+  ipcMain.handle("fetch-fragments", (event, snippetId) => {
+    return `fetch fragments of Snippet ID: ${snippetId}`;
+  });
 });
 
 // Quit when all windows are closed, except on macOS. There, it's common

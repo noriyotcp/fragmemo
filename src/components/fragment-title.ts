@@ -6,6 +6,8 @@ export class FragmentTitle extends LitElement {
   @query("input") private inputElement!: HTMLInputElement;
   @property({ type: String })
   initialValue!: string;
+  @property({ type: String })
+  title = "";
 
   static styles = [
     css`
@@ -31,7 +33,7 @@ export class FragmentTitle extends LitElement {
     return html`
       <input
         type="text"
-        value="Fragment Tab"
+        value="${this.title}"
         placeholder="untitled"
         readonly
         @dblclick="${this._enableEdit}"
@@ -39,6 +41,10 @@ export class FragmentTitle extends LitElement {
         @blur="${this._disableEditOnBlur}"
       />
     `;
+  }
+
+  updated() {
+    console.info("title updated", this.title);
   }
 
   private _enableEdit(e: MouseEvent) {

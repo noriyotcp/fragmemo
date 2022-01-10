@@ -3,11 +3,17 @@
 import { LitElement, html, css, TemplateResult } from "lit";
 import { customElement, query, queryAll } from "lit/decorators.js";
 import { repeat } from "lit/directives/repeat.js";
+import { map } from "lit/directives/map.js";
+import { FragmentsController } from "../controllers/fragments-controller";
 
 @customElement("fragment-tab-list")
 export class FragmentTabList extends LitElement {
+  private fragmentsController = new FragmentsController(this);
+
   @query("sl-tab-group") tabGroup!: HTMLElement;
   @queryAll("sl-tab[panel^='tab-']") tabs: Array<HTMLElement>;
+
+  // fragments: Fragment[] = [];
 
   static styles = css`
     :host {
@@ -46,24 +52,28 @@ export class FragmentTabList extends LitElement {
   render(): TemplateResult {
     return html`
       <sl-tab-group class="tabs-closable">
-        ${repeat(
-          this.range(1, 10),
-          (num) => num,
-          (num, _) => {
-            return html`
-              <sl-tab slot="nav" closable panel="tab-${num}">
-                <fragment-title></fragment-title>
-              </sl-tab>
-            `;
-          }
-        )}
+        ${map(this.fragmentsController.fragments, (fragment, _) => {
+          return html`
+            <sl-tab
+              slot="nav"
+              closable
+              panel="tab-${fragment._id}"
+              id="tab-${fragment._id}"
+            >
+              <fragment-title title="${fragment.title}"></fragment-title>
+            </sl-tab>
+          `;
+        })}
         ${this.settingsTemplate()}
       </sl-tab-group>
     `;
   }
 
+  updated() {
+    console.info("fragments updated", this.fragmentsController.fragments);
+  }
+
   firstUpdated() {
-    console.log("FragmentTabList firstUpdated");
     console.info(this.tabs);
 
     this.tabGroup.addEventListener("sl-close", async (event) => {

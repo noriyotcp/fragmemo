@@ -32,9 +32,6 @@ export class SnippetController implements ReactiveController {
       "has selected snippet",
       this.selectedSnippet
     );
-    myAPI.fetchFragments(<number>this.selectedSnippet._id).then((fragments) => {
-      console.log("Fetch fragments", fragments);
-    });
     this.host.requestUpdate();
   };
 

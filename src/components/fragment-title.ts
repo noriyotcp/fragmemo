@@ -1,14 +1,16 @@
 import { LitElement, html, TemplateResult, css } from "lit";
 import { customElement, property, query } from "lit/decorators.js";
-import { SnippetController } from "../controllers/snippet-controller";
+import { dispatch } from "../events/dispatcher";
 
 @customElement("fragment-title")
 export class FragmentTitle extends LitElement {
   @query("input") private inputElement!: HTMLInputElement;
   @property({ type: String })
   initialValue!: string;
-
-  private snippet = new SnippetController(this);
+  @property({ type: String })
+  title = "";
+  @property({ type: Number })
+  fragmentId!: number;
 
   static styles = [
     css`
@@ -34,7 +36,7 @@ export class FragmentTitle extends LitElement {
     return html`
       <input
         type="text"
-        value="${this.snippet.selectedSnippet.title}"
+        value="${this.title}"
         placeholder="untitled"
         readonly
         @dblclick="${this._enableEdit}"
@@ -56,10 +58,12 @@ export class FragmentTitle extends LitElement {
     if (!e.isComposing) {
       if (e.key === "Enter") {
         target.setAttribute("readonly", "true");
+        this._titleChanged();
       }
       if (e.key === "Escape") {
         target.value = this.initialValue;
         target.setAttribute("readonly", "true");
+        this._titleChanged();
       }
     }
   }
@@ -67,5 +71,15 @@ export class FragmentTitle extends LitElement {
   private _disableEditOnBlur(e: FocusEvent) {
     const target = <HTMLInputElement>e.currentTarget;
     target.setAttribute("readonly", "true");
+  }
+
+  private _titleChanged() {
+    dispatch({
+      type: "fragment-title-changed",
+      detail: {
+        fragmentId: this.fragmentId,
+        title: this.inputElement.value,
+      },
+    });
   }
 }

@@ -7,6 +7,8 @@ contextBridge.exposeInMainWorld("myAPI", {
   openSettings: (listener) => ipcRenderer.on("open-settings", listener),
   setupStorage: () => ipcRenderer.invoke("setup-storage"),
   updateSnippet: (data) => ipcRenderer.invoke("update-snippet", data),
+  fetchFragments: (snippetId) =>
+    ipcRenderer.invoke("fetch-fragments", snippetId),
 });
 
 console.log("preload!");

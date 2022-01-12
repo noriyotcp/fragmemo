@@ -60,7 +60,10 @@ export class FragmentTabList extends LitElement {
               panel="tab-${fragment._id}"
               id="tab-${fragment._id}"
             >
-              <fragment-title title="${fragment.title}"></fragment-title>
+              <fragment-title
+                fragmentId="${fragment._id}"
+                title="${fragment.title}"
+              ></fragment-title>
             </sl-tab>
           `;
         })}

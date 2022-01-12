@@ -22,8 +22,17 @@ export class FragmentsController implements ReactiveController {
       "select-snippet",
       this._selectSnippetListener as EventListener
     );
-    console.info(this.constructor.name, "has connected");
+    window.addEventListener(
+      "fragment-title-changed",
+      this._titleChangedListener as EventListener
+    );
   }
+
+  private _titleChangedListener = (e: CustomEvent) => {
+    const { fragmentId, title } = e.detail;
+    console.info("title changed", fragmentId, title);
+    // update the fragments
+  };
 
   private _selectSnippetListener = (e: CustomEvent): void => {
     this.snippet.selectedSnippet = JSON.parse(e.detail.message);

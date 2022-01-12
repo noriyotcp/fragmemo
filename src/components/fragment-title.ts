@@ -1,5 +1,6 @@
 import { LitElement, html, TemplateResult, css } from "lit";
 import { customElement, property, query } from "lit/decorators.js";
+import { dispatch } from "../events/dispatcher";
 
 @customElement("fragment-title")
 export class FragmentTitle extends LitElement {
@@ -8,6 +9,8 @@ export class FragmentTitle extends LitElement {
   initialValue!: string;
   @property({ type: String })
   title = "";
+  @property({ type: Number })
+  fragmentId!: number;
 
   static styles = [
     css`
@@ -43,10 +46,6 @@ export class FragmentTitle extends LitElement {
     `;
   }
 
-  updated() {
-    console.info("title updated", this.title);
-  }
-
   private _enableEdit(e: MouseEvent) {
     const target = <HTMLInputElement>e.currentTarget;
     this.initialValue = this.inputElement.value;
@@ -59,10 +58,12 @@ export class FragmentTitle extends LitElement {
     if (!e.isComposing) {
       if (e.key === "Enter") {
         target.setAttribute("readonly", "true");
+        this._titleChanged();
       }
       if (e.key === "Escape") {
         target.value = this.initialValue;
         target.setAttribute("readonly", "true");
+        this._titleChanged();
       }
     }
   }
@@ -70,5 +71,15 @@ export class FragmentTitle extends LitElement {
   private _disableEditOnBlur(e: FocusEvent) {
     const target = <HTMLInputElement>e.currentTarget;
     target.setAttribute("readonly", "true");
+  }
+
+  private _titleChanged() {
+    dispatch({
+      type: "fragment-title-changed",
+      detail: {
+        fragmentId: this.fragmentId,
+        title: this.inputElement.value,
+      },
+    });
   }
 }

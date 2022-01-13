@@ -26,6 +26,7 @@
   },
   "license": "MIT",
   "dependencies": {
+    "@material/mwc-tab-bar": "^0.25.3",
     "@ui5/webcomponents": "^1.0.2",
     "electron-json-storage": "^4.5.0",
     "lit": "^2.1.1",

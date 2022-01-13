@@ -2,7 +2,6 @@
 
 import { LitElement, html, css, TemplateResult } from "lit";
 import { customElement, query, queryAll } from "lit/decorators.js";
-import { repeat } from "lit/directives/repeat.js";
 import { map } from "lit/directives/map.js";
 import { FragmentsController } from "../controllers/fragments-controller";
 import "@material/mwc-tab-bar";
@@ -13,8 +12,6 @@ export class FragmentTabList extends LitElement {
 
   @query("sl-tab-group") tabGroup!: HTMLElement;
   @queryAll("sl-tab[panel^='tab-']") tabs: Array<HTMLElement>;
-
-  // fragments: Fragment[] = [];
 
   static styles = css`
     :host {

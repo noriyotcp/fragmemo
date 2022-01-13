@@ -12,6 +12,7 @@ export class FragmentTabList extends LitElement {
 
   @query("sl-tab-group") tabGroup!: HTMLElement;
   @queryAll("sl-tab[panel^='tab-']") tabs: Array<HTMLElement>;
+  @query("mwc-tab-bar") tabBar!: HTMLElement;
 
   static styles = css`
     :host {
@@ -59,6 +60,7 @@ export class FragmentTabList extends LitElement {
           return html`
             <mwc-tab
               label="${fragment.title || `fragment  ${fragment._id}`}"
+              id="mdc-tab-${fragment._id}"
             ></mwc-tab>
           `;
         })}
@@ -72,6 +74,12 @@ export class FragmentTabList extends LitElement {
 
   firstUpdated() {
     console.info(this.tabs);
+    this.addEventListener("MDCTab:interacted", (e: CustomEvent) => {
+      console.log("interacted", e.detail);
+    });
+    this.tabBar.addEventListener("MDCTabBar:activated", (e: CustomEvent) => {
+      console.log("activated", e.detail);
+    });
   }
 
   private range(

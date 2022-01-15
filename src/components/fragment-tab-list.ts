@@ -28,23 +28,6 @@ export class FragmentTabList extends LitElement {
       background-color: #808080b5;
       color: ghostwhite;
     }
-    mwc-tab-bar {
-      --mdc-theme-primary: grey;
-      --mdc-text-transform: none;
-      --mdc-tab-text-label-color-default: ghostwhite;
-    }
-    sl-tab > input {
-      background-color: transparent;
-      color: white;
-      border: none;
-      text-align: center;
-    }
-    sl-tab > input[readonly] {
-      outline: none;
-    }
-    sl-tab > input:not([readonly]):focus-visible {
-      outline: var(--sl-color-primary-600) solid 1px;
-    }
     .tab-settings {
       user-select: none;
     }

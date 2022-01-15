@@ -10,6 +10,7 @@ export class FragmentsController implements ReactiveController {
   private snippet: SnippetController;
 
   fragments!: Fragment[];
+  activeIndex = 0;
 
   constructor(host: ReactiveControllerHost) {
     this.snippet = new SnippetController(host);

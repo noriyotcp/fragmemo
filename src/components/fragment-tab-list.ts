@@ -11,11 +11,23 @@ export class FragmentTabList extends LitElement {
   private fragmentsController = new FragmentsController(this);
 
   @query("sl-tab-group") tabGroup!: HTMLElement;
-  @queryAll("sl-tab[panel^='tab-']") tabs: Array<HTMLElement>;
+  @queryAll(".tab-item") tabs!: Array<HTMLElement>;
   @query("mwc-tab-bar") tabBar!: HTMLElement;
 
   static styles = css`
     :host {
+    }
+    section {
+      display: flex;
+      flex-wrap: nowrap;
+    }
+    .tab-item {
+      width: 100%;
+      text-align: center;
+    }
+    .tab-item[active] {
+      background-color: #808080b5;
+      color: ghostwhite;
     }
     mwc-tab-bar {
       --mdc-theme-primary: grey;
@@ -53,33 +65,40 @@ export class FragmentTabList extends LitElement {
     `;
   }
 
-  render(): TemplateResult {
+  tabBarTemplate(): TemplateResult {
+    const fragments = this.fragmentsController.fragments;
     return html`
-      <mwc-tab-bar>
-        ${map(this.fragmentsController.fragments, (fragment, _) => {
+      <section activeIndex="${this.fragmentsController.activeIndex}">
+        ${map(fragments, (fragment, _) => {
           return html`
-            <mwc-tab
+            <div
               label="${fragment.title || `fragment  ${fragment._id}`}"
               id="mdc-tab-${fragment._id}"
-            ></mwc-tab>
+              class="tab-item"
+              @click="${this._onClickListener}"
+            >
+              ${fragment.title || `fragment ${fragment._id}`}
+            </div>
           `;
         })}
-      </mwc-tab-bar>
+      </section>
     `;
+  }
+
+  render(): TemplateResult {
+    return html`${this.tabBarTemplate()}`;
   }
 
   updated() {
     console.info("fragments updated", this.fragmentsController.fragments);
+    this.tabs[0]?.setAttribute("active", "true");
   }
 
-  firstUpdated() {
-    console.info(this.tabs);
-    this.addEventListener("MDCTab:interacted", (e: CustomEvent) => {
-      console.log("interacted", e.detail);
+  private _onClickListener(e: MouseEvent) {
+    this.tabs.forEach((tab, _) => {
+      tab.removeAttribute("active");
     });
-    this.tabBar.addEventListener("MDCTabBar:activated", (e: CustomEvent) => {
-      console.log("activated", e.detail);
-    });
+    e.currentTarget.setAttribute("active", "true");
   }
 
   private range(

@@ -2,7 +2,6 @@
 
 import { LitElement, html, css, TemplateResult } from "lit";
 import { customElement, query, queryAll } from "lit/decorators.js";
-import { repeat } from "lit/directives/repeat.js";
 import { map } from "lit/directives/map.js";
 import { FragmentsController } from "../controllers/fragments-controller";
 
@@ -11,24 +10,22 @@ export class FragmentTabList extends LitElement {
   private fragmentsController = new FragmentsController(this);
 
   @query("sl-tab-group") tabGroup!: HTMLElement;
-  @queryAll("sl-tab[panel^='tab-']") tabs: Array<HTMLElement>;
-
-  // fragments: Fragment[] = [];
+  @queryAll(".tab-item") tabs!: Array<HTMLElement>;
 
   static styles = css`
     :host {
     }
-    sl-tab > input {
-      background-color: transparent;
-      color: white;
-      border: none;
+    section {
+      display: flex;
+      flex-wrap: nowrap;
+    }
+    .tab-item {
+      width: 100%;
       text-align: center;
     }
-    sl-tab > input[readonly] {
-      outline: none;
-    }
-    sl-tab > input:not([readonly]):focus-visible {
-      outline: var(--sl-color-primary-600) solid 1px;
+    .tab-item[active] {
+      background-color: #808080b5;
+      color: ghostwhite;
     }
     .tab-settings {
       user-select: none;
@@ -49,61 +46,40 @@ export class FragmentTabList extends LitElement {
     `;
   }
 
-  render(): TemplateResult {
+  tabBarTemplate(): TemplateResult {
+    const fragments = this.fragmentsController.fragments;
     return html`
-      <sl-tab-group class="tabs-closable">
-        ${map(this.fragmentsController.fragments, (fragment, _) => {
+      <section activeIndex="${this.fragmentsController.activeIndex}">
+        ${map(fragments, (fragment, _) => {
           return html`
-            <sl-tab
-              slot="nav"
-              closable
-              panel="tab-${fragment._id}"
-              id="tab-${fragment._id}"
+            <div
+              label="${fragment.title || `fragment  ${fragment._id}`}"
+              id="mdc-tab-${fragment._id}"
+              class="tab-item"
+              @click="${this._onClickListener}"
             >
-              <fragment-title
-                fragmentId="${fragment._id}"
-                title="${fragment.title}"
-              ></fragment-title>
-            </sl-tab>
+              ${fragment.title || `fragment ${fragment._id}`}
+            </div>
           `;
         })}
-        ${this.settingsTemplate()}
-      </sl-tab-group>
+      </section>
     `;
+  }
+
+  render(): TemplateResult {
+    return html`${this.tabBarTemplate()}`;
   }
 
   updated() {
     console.info("fragments updated", this.fragmentsController.fragments);
+    this.tabs[0]?.setAttribute("active", "true");
   }
 
-  firstUpdated() {
-    console.info(this.tabs);
-
-    this.tabGroup.addEventListener("sl-close", async (event) => {
-      const tab = event.target as HTMLElement;
-      const panel = this.tabGroup.querySelector(
-        `sl-tab-panel[name="${tab.panel}"]`
-      );
-
-      // Show the previous tab if the tab is currently active
-      if (tab.active) {
-        const previousTab = tab.previousElementSibling as HTMLElement;
-        const nextTab = tab.nextElementSibling as HTMLElement;
-        if (previousTab) {
-          this.tabGroup.show(previousTab.panel);
-        } else if (nextTab) {
-          this.tabGroup.show(nextTab.panel);
-        }
-      }
-
-      // Remove the tab + panel
-      tab.remove();
-      panel?.remove();
+  private _onClickListener(e: MouseEvent) {
+    this.tabs.forEach((tab, _) => {
+      tab.removeAttribute("active");
     });
-
-    this.tabGroup.addEventListener("sl-tab-show", (event) => {
-      console.info("Tab show", event);
-    });
+    e.currentTarget.setAttribute("active", "true");
   }
 
   private range(

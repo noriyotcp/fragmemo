@@ -27,8 +27,7 @@ export class EditorElement extends LitElement {
         <code-editor
           code="const num: number = 1;"
           language="typescript"
-        ></code-editor
-        >;
+        ></code-editor>
       </header>
     `;
   }

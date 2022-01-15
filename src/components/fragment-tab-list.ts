@@ -4,7 +4,6 @@ import { LitElement, html, css, TemplateResult } from "lit";
 import { customElement, query, queryAll } from "lit/decorators.js";
 import { map } from "lit/directives/map.js";
 import { FragmentsController } from "../controllers/fragments-controller";
-import "@material/mwc-tab-bar";
 
 @customElement("fragment-tab-list")
 export class FragmentTabList extends LitElement {

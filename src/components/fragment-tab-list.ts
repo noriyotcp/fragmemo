@@ -11,7 +11,6 @@ export class FragmentTabList extends LitElement {
 
   @query("sl-tab-group") tabGroup!: HTMLElement;
   @queryAll(".tab-item") tabs!: Array<HTMLElement>;
-  @query("mwc-tab-bar") tabBar!: HTMLElement;
 
   static styles = css`
     :host {

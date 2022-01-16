@@ -21,7 +21,7 @@ export class FragmentTabList extends LitElement {
       width: 100%;
       text-align: center;
     }
-    .tab-item[active] {
+    .tab-item[active="true"] {
       background-color: #808080b5;
       color: ghostwhite;
     }
@@ -48,12 +48,14 @@ export class FragmentTabList extends LitElement {
     const fragments = this.fragmentsController.fragments;
     return html`
       <section activeIndex="${this.fragmentsController.activeIndex}">
-        ${map(fragments, (fragment, _) => {
+        ${map(fragments, (fragment, index) => {
           return html`
             <div
               label="${fragment.title || `fragment  ${fragment._id}`}"
               id="mdc-tab-${fragment._id}"
               class="tab-item"
+              tabindex="${index}"
+              active="${index === this.fragmentsController.activeIndex}"
               @click="${this._onClickListener}"
             >
               ${fragment.title || `fragment ${fragment._id}`}
@@ -70,7 +72,6 @@ export class FragmentTabList extends LitElement {
 
   updated() {
     console.info("fragments updated", this.fragmentsController.fragments);
-    this.tabs[0]?.setAttribute("active", "true");
   }
 
   private _onClickListener(e: MouseEvent) {
@@ -79,7 +80,10 @@ export class FragmentTabList extends LitElement {
     this.tabs.forEach((tab, _) => {
       tab.removeAttribute("active");
     });
-    (<HTMLDivElement>e.currentTarget).setAttribute("active", "true");
+    this.fragmentsController.activeIndex = Number(
+      (<HTMLDivElement>e.currentTarget).getAttribute("tabindex")
+    );
+    this.requestUpdate();
   }
 
   private range(

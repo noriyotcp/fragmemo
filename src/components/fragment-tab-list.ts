@@ -52,7 +52,6 @@ export class FragmentTabList extends LitElement {
         ${map(fragments, (fragment, _) => {
           return html`
             <div
-              label="${fragment.title || `fragment  ${fragment._id}`}"
               id="fragment-${fragment._id}"
               class="tab-item"
               fragmentId="${fragment._id}"

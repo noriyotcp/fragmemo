@@ -50,6 +50,8 @@ export class FragmentsController implements ReactiveController {
       .then((fragments) => {
         this.fragments = fragments;
         this.fragments = this.setFragments(this.fragments);
+        // set the first fragment as active
+        this.activeFragmentId = this.fragments[0]._id;
         console.log("Fetch fragments", this.fragments);
         this.host.requestUpdate();
       });
@@ -57,6 +59,7 @@ export class FragmentsController implements ReactiveController {
 
   private _activeFragmentListener = (e: CustomEvent): void => {
     this.activeFragmentId = e.detail.activeFragmentId;
+    this.host.requestUpdate();
   };
 
   setFragments(fragments: Fragment[]): Fragment[] {

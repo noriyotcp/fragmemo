@@ -48,15 +48,14 @@ export class FragmentTabList extends LitElement {
   tabBarTemplate(): TemplateResult {
     const fragments = this.fragmentsController.fragments;
     return html`
-      <section activeIndex="${this.fragmentsController.activeFragmentId}">
-        ${map(fragments, (fragment, index) => {
+      <section>
+        ${map(fragments, (fragment, _) => {
           return html`
             <div
               label="${fragment.title || `fragment  ${fragment._id}`}"
               id="fragment-${fragment._id}"
               class="tab-item"
               fragmentId="${fragment._id}"
-              tabindex="${index}"
               active="${fragment._id ===
               this.fragmentsController.activeFragmentId}"
               @click="${this._onClickListener}"
@@ -92,8 +91,6 @@ export class FragmentTabList extends LitElement {
         ),
       },
     });
-
-    this.requestUpdate();
   }
 
   private range(

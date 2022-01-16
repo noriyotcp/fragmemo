@@ -1,5 +1,3 @@
-// @ts-nocheck
-
 import { LitElement, html, css, TemplateResult } from "lit";
 import { customElement, query, queryAll } from "lit/decorators.js";
 import { map } from "lit/directives/map.js";
@@ -76,10 +74,12 @@ export class FragmentTabList extends LitElement {
   }
 
   private _onClickListener(e: MouseEvent) {
+    if (!e.currentTarget) return;
+
     this.tabs.forEach((tab, _) => {
       tab.removeAttribute("active");
     });
-    e.currentTarget.setAttribute("active", "true");
+    (<HTMLDivElement>e.currentTarget).setAttribute("active", "true");
   }
 
   private range(

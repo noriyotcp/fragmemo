@@ -1,4 +1,3 @@
-import { dispatch } from "../events/dispatcher";
 import { ReactiveController, ReactiveControllerHost } from "lit";
 import { SnippetController } from "./snippet-controller";
 import { Fragment } from "../models";

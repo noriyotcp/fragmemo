@@ -18,12 +18,6 @@ class DB extends Realm {
   }
 
   createSnippet(title: string): void {
-    // For testing
-    const testContentOfFragment = `var num: number = 123;
-function identity(num: number): number {
-    return num;
-}`;
-
     this.write(() => {
       this.create("Snippet", {
         _id: this.currentMaxId("Snippet") + 1,
@@ -39,7 +33,8 @@ function identity(num: number): number {
       this.currentMaxId("Snippet")
     )!;
 
-    this.createFragment("", testContentOfFragment, latestSnippet);
+    // create an empty fragment
+    this.createFragment("", "", latestSnippet);
 
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const latestFragment: Fragment = this.objectForPrimaryKey(

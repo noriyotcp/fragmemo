@@ -9,6 +9,9 @@ type setupStorageResultType = {
 };
 
 export const setupStorage = (db: DB): setupStorageResultType => {
+  if (db.empty) {
+    db.createSnippet("");
+  }
   const snippets = (
     db.reverseSortBy("Snippet", "updatedAt") as unknown as Results<Snippet>
   ).map((snippet) => {

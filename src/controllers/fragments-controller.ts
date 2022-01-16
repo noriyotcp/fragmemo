@@ -26,6 +26,10 @@ export class FragmentsController implements ReactiveController {
       "fragment-title-changed",
       this._titleChangedListener as EventListener
     );
+    window.addEventListener(
+      "active-fragment",
+      this._activeFragmentListener as EventListener
+    );
   }
 
   private _titleChangedListener = (e: CustomEvent) => {
@@ -49,6 +53,10 @@ export class FragmentsController implements ReactiveController {
         console.log("Fetch fragments", this.fragments);
         this.host.requestUpdate();
       });
+  };
+
+  private _activeFragmentListener = (e: CustomEvent): void => {
+    console.log("active fragment", e.detail);
   };
 
   setFragments(fragments: Fragment[]): Fragment[] {

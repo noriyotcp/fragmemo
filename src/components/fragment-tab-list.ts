@@ -1,3 +1,4 @@
+import { dispatch } from "../events/dispatcher";
 import { LitElement, html, css, TemplateResult } from "lit";
 import { customElement, query, queryAll } from "lit/decorators.js";
 import { map } from "lit/directives/map.js";
@@ -52,8 +53,9 @@ export class FragmentTabList extends LitElement {
           return html`
             <div
               label="${fragment.title || `fragment  ${fragment._id}`}"
-              id="mdc-tab-${fragment._id}"
+              id="fragment-${fragment._id}"
               class="tab-item"
+              fragmentId="${fragment._id}"
               tabindex="${index}"
               active="${index === this.fragmentsController.activeIndex}"
               @click="${this._onClickListener}"
@@ -83,6 +85,15 @@ export class FragmentTabList extends LitElement {
     this.fragmentsController.activeIndex = Number(
       (<HTMLDivElement>e.currentTarget).getAttribute("tabindex")
     );
+    dispatch({
+      type: "active-fragment",
+      detail: {
+        activeFragmentId: Number(
+          (<HTMLDivElement>e.currentTarget).getAttribute("fragmentId")
+        ),
+      },
+    });
+
     this.requestUpdate();
   }
 

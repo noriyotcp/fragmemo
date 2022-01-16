@@ -48,7 +48,7 @@ export class FragmentTabList extends LitElement {
   tabBarTemplate(): TemplateResult {
     const fragments = this.fragmentsController.fragments;
     return html`
-      <section activeIndex="${this.fragmentsController.activeIndex}">
+      <section activeIndex="${this.fragmentsController.activeFragmentId}">
         ${map(fragments, (fragment, index) => {
           return html`
             <div
@@ -57,7 +57,8 @@ export class FragmentTabList extends LitElement {
               class="tab-item"
               fragmentId="${fragment._id}"
               tabindex="${index}"
-              active="${index === this.fragmentsController.activeIndex}"
+              active="${fragment._id ===
+              this.fragmentsController.activeFragmentId}"
               @click="${this._onClickListener}"
             >
               ${fragment.title || `fragment ${fragment._id}`}
@@ -82,9 +83,7 @@ export class FragmentTabList extends LitElement {
     this.tabs.forEach((tab, _) => {
       tab.removeAttribute("active");
     });
-    this.fragmentsController.activeIndex = Number(
-      (<HTMLDivElement>e.currentTarget).getAttribute("tabindex")
-    );
+
     dispatch({
       type: "active-fragment",
       detail: {

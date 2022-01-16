@@ -9,7 +9,7 @@ export class FragmentsController implements ReactiveController {
   private snippet: SnippetController;
 
   fragments!: Fragment[];
-  activeIndex = 0;
+  activeFragmentId = 0;
 
   constructor(host: ReactiveControllerHost) {
     this.snippet = new SnippetController(host);
@@ -56,7 +56,7 @@ export class FragmentsController implements ReactiveController {
   };
 
   private _activeFragmentListener = (e: CustomEvent): void => {
-    console.log("active fragment", e.detail);
+    this.activeFragmentId = e.detail.activeFragmentId;
   };
 
   setFragments(fragments: Fragment[]): Fragment[] {

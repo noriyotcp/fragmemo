@@ -28,9 +28,8 @@ export class SnippetController implements ReactiveController {
   private _selectSnippetListener = (e: CustomEvent): void => {
     this.selectedSnippet = JSON.parse(e.detail.selectedSnippet);
     console.info(
-      this.constructor.name,
-      "has selected snippet",
-      this.selectedSnippet
+      "previouslySelectedSnippet",
+      JSON.parse(e.detail.previouslySelectedSnippet)
     );
     this.host.requestUpdate();
   };

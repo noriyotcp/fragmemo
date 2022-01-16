@@ -63,10 +63,15 @@ export class SnippetList extends LitElement {
     this.snippetList.addEventListener("selection-change", ((
       e: CustomEvent
     ): void => {
+      const previouslySelectedSnippet = e.detail.previouslySelectedItems
+        ? e.detail.previouslySelectedItems[0].getAttribute("snippet")
+        : null;
+
       dispatch({
         type: "select-snippet",
         detail: {
           selectedSnippet: e.detail.selectedItems[0].getAttribute("snippet"),
+          previouslySelectedSnippet,
         },
       });
     }) as EventListener);

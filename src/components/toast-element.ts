@@ -1,10 +1,14 @@
 import { LitElement, html, TemplateResult } from "lit";
 import { customElement, property, query } from "lit/decorators.js";
 import "@ui5/webcomponents/dist/Toast.js";
+import { Override } from "index";
 
 @customElement("toast-element")
 export class ToastElement extends LitElement {
-  @query("#wcToastBE") private toast!: HTMLElement;
+  @query("#wcToastBE") private toast!: Override<
+    HTMLElement,
+    { show: () => void }
+  >;
   @property({ type: String })
   toastContent!: string;
 
@@ -31,7 +35,6 @@ export class ToastElement extends LitElement {
   }
 
   private _displayToastListener = (e: CustomEvent): void => {
-    // @ts-ignore
     this.toast.show();
     this.toastContent = e.detail.message || "Default text";
   };

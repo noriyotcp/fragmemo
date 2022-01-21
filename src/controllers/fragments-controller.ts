@@ -39,11 +39,10 @@ export class FragmentsController implements ReactiveController {
   };
 
   private _selectSnippetListener = (e: CustomEvent): void => {
-    this.snippet.selectedSnippet = JSON.parse(e.detail.message);
+    this.snippet.selectedSnippet = JSON.parse(e.detail.selectedSnippet);
     console.info(
-      this.constructor.name,
-      "has selected snippet",
-      this.snippet.selectedSnippet
+      "previouslySelectedSnippet",
+      JSON.parse(e.detail.previouslySelectedSnippet)
     );
     myAPI
       .fetchFragments(<number>this.snippet.selectedSnippet._id)

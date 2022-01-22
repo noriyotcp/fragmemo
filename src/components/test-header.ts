@@ -58,6 +58,11 @@ export class TestHeader extends LitElement {
   }
 
   async firstUpdated(): Promise<void> {
+    window.addEventListener(
+      "snippet-changed",
+      this._snippetChangedListener as EventListener
+    );
+
     // Give the browser a chance to paint
     await new Promise((r) => setTimeout(r, 0));
     myAPI.openByMenu((_e: Event, fileData: FileData) =>
@@ -84,6 +89,21 @@ export class TestHeader extends LitElement {
       console.log("Input has finished", highlightValue);
     });
   }
+
+  private _snippetChangedListener = (e: CustomEvent): void => {
+    console.info("Changed Data: ", e.detail.properties);
+    myAPI.updateSnippet(e.detail).then(({ status }) => {
+      console.log("myAPI.updateSnippet", status);
+      // dispatch event to update the list
+      dispatch({
+        type: "update-snippets",
+        detail: {
+          message: "Snippets updated",
+        },
+      });
+      this.requestUpdate();
+    });
+  };
 
   private _fileSaveAs(_e: Event): void {
     dispatch({ type: "file-save-as", detail: { message: "" } });

@@ -1,6 +1,4 @@
-import { dispatch } from "../events/dispatcher";
 import { ReactiveController, ReactiveControllerHost } from "lit";
-const { myAPI } = window;
 
 export class SnippetController implements ReactiveController {
   private host: ReactiveControllerHost;
@@ -18,11 +16,6 @@ export class SnippetController implements ReactiveController {
       this._selectSnippetListener as EventListener
     );
     console.info(this.constructor.name, "has connected");
-
-    window.addEventListener(
-      "snippet-changed",
-      this._snippetChangedListener as EventListener
-    );
   }
 
   private _selectSnippetListener = (e: CustomEvent): void => {
@@ -31,21 +24,6 @@ export class SnippetController implements ReactiveController {
       "previouslySelectedSnippet",
       JSON.parse(e.detail.previouslySelectedSnippet)
     );
-    this.host.requestUpdate();
-  };
-
-  private _snippetChangedListener = (e: CustomEvent): void => {
-    console.info("Changed Data: ", e.detail.properties);
-    myAPI.updateSnippet(e.detail).then(({ status }) => {
-      console.log("myAPI.updateSnippet", status);
-      // dispatch event to update the list
-      dispatch({
-        type: "update-snippets",
-        detail: {
-          message: "Snippets updated",
-        },
-      });
-    });
     this.host.requestUpdate();
   };
 }

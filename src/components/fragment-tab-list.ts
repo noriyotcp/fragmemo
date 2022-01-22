@@ -55,8 +55,7 @@ export class FragmentTabList extends LitElement {
               id="fragment-${fragment._id}"
               class="tab-item"
               fragmentId="${fragment._id}"
-              active="${fragment._id ===
-              this.fragmentsController.activeFragmentId}"
+              active="${this._isActive(fragment._id)}"
               @click="${this._onClickListener}"
             >
               ${fragment.title || `fragment ${fragment._id}`}
@@ -75,8 +74,17 @@ export class FragmentTabList extends LitElement {
     console.info("fragments updated", this.fragmentsController.fragments);
   }
 
+  private _isActive(fragmentId: number): boolean {
+    return fragmentId === this.fragmentsController.activeFragmentId;
+  }
+
   private _onClickListener(e: MouseEvent) {
     if (!e.currentTarget) return;
+    const fragmentId = Number(
+      (<HTMLDivElement>e.currentTarget).getAttribute("fragmentId")
+    );
+    // Do nothing if the fragment is already active
+    if (this._isActive(fragmentId)) return;
 
     this.tabs.forEach((tab, _) => {
       tab.removeAttribute("active");
@@ -85,9 +93,7 @@ export class FragmentTabList extends LitElement {
     dispatch({
       type: "active-fragment",
       detail: {
-        activeFragmentId: Number(
-          (<HTMLDivElement>e.currentTarget).getAttribute("fragmentId")
-        ),
+        activeFragmentId: fragmentId,
       },
     });
   }

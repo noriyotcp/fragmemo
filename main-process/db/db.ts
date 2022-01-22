@@ -22,6 +22,7 @@ class DB extends Realm {
       this.create("Snippet", {
         _id: this.currentMaxId("Snippet") + 1,
         title: title,
+        latestActiveFragmentId: 0, // initial value
         createdAt: new Date(),
         updatedAt: new Date(),
       });
@@ -41,7 +42,10 @@ class DB extends Realm {
       "Fragment",
       this.currentMaxId("Fragment")
     )!;
-    console.info("frament.snippet._id: ", latestFragment.snippet._id);
+
+    this.write(() => {
+      latestSnippet.latestActiveFragmentId = latestFragment._id;
+    });
   }
 
   createFragment(title: string, content: string, snippet: Snippet): void {

@@ -137,6 +137,13 @@ app.once("browser-window-created", () => {
     return { status: true };
   });
 
+  ipcMain.handle("get-snippet", async (event, snippetId) => {
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    const snippet: Realm.Object = db.objectForPrimaryKey("Snippet", snippetId)!;
+    console.log("Main process: get-snippet", snippet.toJSON());
+    return snippet.toJSON();
+  });
+
   ipcMain.handle("setup-storage", async () => {
     // await setTimeout(1000); // wait 1 seconds for testing
 

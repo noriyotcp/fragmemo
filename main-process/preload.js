@@ -9,6 +9,7 @@ contextBridge.exposeInMainWorld("myAPI", {
   updateSnippet: (data) => ipcRenderer.invoke("update-snippet", data),
   fetchFragments: (snippetId) =>
     ipcRenderer.invoke("fetch-fragments", snippetId),
+  getSnippet: (snippetId) => ipcRenderer.invoke("get-snippet", snippetId),
 });
 
 console.log("preload!");

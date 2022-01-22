@@ -40,6 +40,15 @@ export class FragmentsController implements ReactiveController {
 
   private _selectSnippetListener = (e: CustomEvent): void => {
     this.snippet.selectedSnippet = JSON.parse(e.detail.selectedSnippet);
+    // Get the snippet by id from Realm DB
+    myAPI
+      .getSnippet(<number>this.snippet.selectedSnippet._id)
+      .then((snippet) => {
+        this.snippet.selectedSnippet = snippet as unknown as Record<
+          string,
+          unknown
+        >;
+      });
     console.info(
       "previouslySelectedSnippet",
       JSON.parse(e.detail.previouslySelectedSnippet)
@@ -60,7 +69,6 @@ export class FragmentsController implements ReactiveController {
 
   private _activeFragmentListener = (e: CustomEvent): void => {
     this.activeFragmentId = e.detail.activeFragmentId;
-    this.host.requestUpdate();
   };
 
   setFragments(fragments: Fragment[]): Fragment[] {

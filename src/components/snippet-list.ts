@@ -27,10 +27,10 @@ export class SnippetList extends LitElement {
         height: 100vh;
         padding-top: -8px;
         --sapTextColor: ghostwhite;
-        --ui5-listitem-background-color: #323233;
-        --sapList_Hover_Background: #1e1e1e;
-        --sapList_Hover_SelectionBackground: #1e1e1e;
-        --sapList_SelectionBackgroundColor: #1e1e1e;
+        --ui5-listitem-background-color: #1e1e1e;
+        --sapList_Hover_Background: #323233;
+        --sapList_Hover_SelectionBackground: #323233;
+        --sapList_SelectionBackgroundColor: #323233;
       }
 
       ui5-li {

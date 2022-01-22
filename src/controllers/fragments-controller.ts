@@ -6,7 +6,7 @@ const { myAPI } = window;
 
 export class FragmentsController implements ReactiveController {
   private host: ReactiveControllerHost;
-  private snippet: SnippetController;
+  public snippet: SnippetController;
 
   fragments!: Fragment[];
   activeFragmentId = 0;
@@ -50,7 +50,9 @@ export class FragmentsController implements ReactiveController {
         this.fragments = fragments;
         this.fragments = this.setFragments(this.fragments);
         // set the first fragment as active
-        this.activeFragmentId = this.fragments[0]._id;
+        this.activeFragmentId = <number>(
+          this.snippet.selectedSnippet.latestActiveFragmentId
+        );
         console.log("Fetch fragments", this.fragments);
         this.host.requestUpdate();
       });

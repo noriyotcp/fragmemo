@@ -96,6 +96,16 @@ export class FragmentTabList extends LitElement {
         activeFragmentId: fragmentId,
       },
     });
+
+    dispatch({
+      type: "snippet-changed",
+      detail: {
+        _id: this.fragmentsController.snippet.selectedSnippet._id,
+        properties: {
+          latestActiveFragmentId: fragmentId,
+        },
+      },
+    });
   }
 
   private range(

@@ -23,7 +23,6 @@ class DB extends Realm {
       this.create("Snippet", {
         _id: this.currentMaxId("Snippet") + 1,
         title: title,
-        latestActiveFragmentId: 0, // initial value
         createdAt: new Date(),
         updatedAt: new Date(),
       });

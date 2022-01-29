@@ -5,7 +5,6 @@ const SnippetSchema: Realm.ObjectSchema = {
   properties: {
     _id: "int",
     title: "string?",
-    latestActiveFragmentId: "int",
     createdAt: "date",
     updatedAt: "date",
   },
@@ -15,7 +14,6 @@ const SnippetSchema: Realm.ObjectSchema = {
 class Snippet {
   _id = 0;
   title = "";
-  latestActiveFragmentId = 0;
   createdAt = new Date();
   updatedAt = new Date();
 

@@ -44,10 +44,6 @@ class DB extends Realm {
       this.currentMaxId("Fragment")
     )!;
 
-    // TODO: Remove this
-    this.write(() => {
-      latestSnippet.latestActiveFragmentId = latestFragment._id;
-    });
     this.createActiveFragment(latestFragment._id, latestSnippet._id);
   }
 

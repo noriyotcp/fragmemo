@@ -40,7 +40,6 @@ export class SetupStorageController implements ReactiveController {
       return new Snippet({
         _id: snippet._id,
         title: snippet.title,
-        latestActiveFragmentId: snippet.latestActiveFragmentId,
         createdAt: snippet.createdAt,
         updatedAt: snippet.updatedAt,
       });

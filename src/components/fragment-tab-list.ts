@@ -98,18 +98,6 @@ export class FragmentTabList extends LitElement {
         activeFragmentId: fragmentId,
       },
     });
-
-    myAPI
-      .updateSnippet({
-        _id: this.fragmentsController.snippet.selectedSnippet._id,
-        properties: {
-          latestActiveFragmentId: fragmentId,
-        },
-      })
-      .then(({ status }) => {
-        console.log("myAPI.updateSnippet", status);
-        this.requestUpdate();
-      });
   }
 
   private range(

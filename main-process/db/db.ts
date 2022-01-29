@@ -1,4 +1,5 @@
-import { Realm, realmSchema, Snippet, Fragment } from "./realm";
+import { Realm, realmSchema, Snippet, Fragment, ActiveFragment } from "./realm";
+type ActiveFragmentProperty = Pick<ActiveFragment, "fragmentId" | "snippetId">;
 
 class DB extends Realm {
   constructor(path: string) {
@@ -86,6 +87,19 @@ class DB extends Realm {
 
     const snippet = this.objectForPrimaryKey<Snippet>("Snippet", data._id);
     console.info("snippet title updated: ", snippet?.title);
+  }
+
+  async updateActiveFragment(data: {
+    properties: ActiveFragmentProperty;
+  }): Promise<void> {
+    const activeFragment = this.objects("ActiveFragment").filtered(
+      `snippetId = ${data.properties.snippetId}`
+    )[0] as unknown as ActiveFragment;
+    this.write(() => {
+      if (activeFragment) {
+        activeFragment.fragmentId = data.properties.fragmentId;
+      }
+    });
   }
 }
 

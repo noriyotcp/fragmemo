@@ -65,7 +65,7 @@ class ActiveFragment {
     },
   };
 
-  constructor(data: Required<ActiveFragment>) {
+  constructor(data: Partial<ActiveFragment>) {
     Object.assign(this, data);
   }
 }

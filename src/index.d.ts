@@ -25,6 +25,9 @@ export interface SandBox {
   updateSnippet: (data: object) => Promise<{
     status: boolean;
   }>;
+  updateActiveFragment: (data: object) => Promise<{
+    status: boolean;
+  }>;
   getSnippet: (snippetId: number) => Promise<JSON>;
   fetchFragments: (snippetId: number) => Promise<Fragment[]>;
   openByMenu: (

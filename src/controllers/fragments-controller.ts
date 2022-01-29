@@ -6,7 +6,7 @@ const { myAPI } = window;
 
 export class FragmentsController implements ReactiveController {
   private host: ReactiveControllerHost;
-  private snippet: SnippetController;
+  public snippet: SnippetController;
 
   fragments!: Fragment[];
   activeFragmentId = 0;
@@ -40,6 +40,15 @@ export class FragmentsController implements ReactiveController {
 
   private _selectSnippetListener = (e: CustomEvent): void => {
     this.snippet.selectedSnippet = JSON.parse(e.detail.selectedSnippet);
+    // Get the snippet by id from Realm DB
+    myAPI
+      .getSnippet(<number>this.snippet.selectedSnippet._id)
+      .then((snippet) => {
+        this.snippet.selectedSnippet = snippet as unknown as Record<
+          string,
+          unknown
+        >;
+      });
     console.info(
       "previouslySelectedSnippet",
       JSON.parse(e.detail.previouslySelectedSnippet)
@@ -50,7 +59,9 @@ export class FragmentsController implements ReactiveController {
         this.fragments = fragments;
         this.fragments = this.setFragments(this.fragments);
         // set the first fragment as active
-        this.activeFragmentId = this.fragments[0]._id;
+        this.activeFragmentId = <number>(
+          this.snippet.selectedSnippet.latestActiveFragmentId
+        );
         console.log("Fetch fragments", this.fragments);
         this.host.requestUpdate();
       });
@@ -58,7 +69,6 @@ export class FragmentsController implements ReactiveController {
 
   private _activeFragmentListener = (e: CustomEvent): void => {
     this.activeFragmentId = e.detail.activeFragmentId;
-    this.host.requestUpdate();
   };
 
   setFragments(fragments: Fragment[]): Fragment[] {

@@ -1,6 +1,7 @@
 class Snippet {
   _id = 0;
   title = "";
+  latestActiveFragmentId = 0;
   createdAt = new Date();
   updatedAt = new Date();
 

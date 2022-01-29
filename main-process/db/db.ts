@@ -43,9 +43,11 @@ class DB extends Realm {
       this.currentMaxId("Fragment")
     )!;
 
+    // TODO: Remove this
     this.write(() => {
       latestSnippet.latestActiveFragmentId = latestFragment._id;
     });
+    this.createActiveFragment(latestFragment._id, latestSnippet._id);
   }
 
   createFragment(title: string, content: string, snippet: Snippet): void {
@@ -57,6 +59,16 @@ class DB extends Realm {
         snippet: snippet,
         createdAt: new Date(),
         updatedAt: new Date(),
+      });
+    });
+  }
+
+  createActiveFragment(fragmentId: number, snippetId: number): void {
+    this.write(() => {
+      this.create("ActiveFragment", {
+        _id: this.currentMaxId("ActiveFragment") + 1,
+        fragmentId: fragmentId,
+        snippetId: snippetId,
       });
     });
   }

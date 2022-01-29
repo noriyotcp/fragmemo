@@ -50,6 +50,27 @@ class Fragment {
   }
 }
 
-const realmSchema = [SnippetSchema, FragmentSchema];
+class ActiveFragment {
+  public _id = 0;
+  public fragmentId = 0;
+  public snippetId = 0;
 
-export { Realm, realmSchema, Snippet, Fragment };
+  public static schema: Realm.ObjectSchema = {
+    name: "ActiveFragment",
+    primaryKey: "_id",
+    properties: {
+      _id: "int",
+      fragmentId: "int",
+      snippetId: "int",
+    },
+  };
+
+  constructor(data: Required<ActiveFragment>) {
+    Object.assign(this, data);
+  }
+}
+
+// TODO: Snippt and Fragment also have own schema in Class.
+const realmSchema = [SnippetSchema, FragmentSchema, ActiveFragment.schema];
+
+export { Realm, realmSchema, Snippet, Fragment, ActiveFragment };

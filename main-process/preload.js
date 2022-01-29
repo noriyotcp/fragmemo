@@ -12,6 +12,8 @@ contextBridge.exposeInMainWorld("myAPI", {
   fetchFragments: (snippetId) =>
     ipcRenderer.invoke("fetch-fragments", snippetId),
   getSnippet: (snippetId) => ipcRenderer.invoke("get-snippet", snippetId),
+  getActiveFragment: (snippetId) =>
+    ipcRenderer.invoke("get-active-fragment", snippetId),
 });
 
 console.log("preload!");

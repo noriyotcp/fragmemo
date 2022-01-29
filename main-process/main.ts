@@ -9,7 +9,7 @@ import DB from "./db/db";
 // import { createHash } from "node:crypto";
 import fs from "fs";
 
-import { Fragment } from "./db/realm";
+import { ActiveFragment, Fragment } from "./db/realm";
 import { Results } from "realm";
 
 const isDev = process.env.IS_DEV == "true" ? true : false;
@@ -151,6 +151,14 @@ app.once("browser-window-created", () => {
     const snippet: Realm.Object = db.objectForPrimaryKey("Snippet", snippetId)!;
     console.log("Main process: get-snippet", snippet.toJSON());
     return snippet.toJSON();
+  });
+
+  ipcMain.handle("get-active-fragment", async (event, snippetId) => {
+    const activeFragment = db
+      .objects("ActiveFragment")
+      .filtered(`snippetId = ${snippetId}`)[0];
+    console.log("Main process: get-active-fragment", activeFragment.toJSON());
+    return activeFragment.toJSON();
   });
 
   ipcMain.handle("setup-storage", async () => {

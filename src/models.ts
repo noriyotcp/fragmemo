@@ -23,4 +23,14 @@ class Fragment {
   }
 }
 
-export { Snippet, Fragment };
+class ActiveFragment {
+  public _id = 0;
+  public fragmentId = 0;
+  public snippetId = 0;
+
+  constructor(data: Partial<ActiveFragment>) {
+    Object.assign(this, data);
+  }
+}
+
+export { Snippet, Fragment, ActiveFragment };

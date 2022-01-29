@@ -64,7 +64,6 @@ export class FragmentsController implements ReactiveController {
       .then((fragments) => {
         this.fragments = fragments;
         this.fragments = this.setFragments(this.fragments);
-        // set the first fragment as active
         console.log("Fetch fragments", this.fragments, this.activeFragmentId);
         this.host.requestUpdate();
       });

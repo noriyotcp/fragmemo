@@ -9,7 +9,7 @@ import DB from "./db/db";
 // import { createHash } from "node:crypto";
 import fs from "fs";
 
-import { ActiveFragment, Fragment } from "./db/realm";
+import { Fragment } from "./db/realm";
 import { Results } from "realm";
 
 const isDev = process.env.IS_DEV == "true" ? true : false;
@@ -148,7 +148,7 @@ app.once("browser-window-created", () => {
 
   ipcMain.handle("get-snippet", async (event, snippetId) => {
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    const snippet: Realm.Object = db.objectForPrimaryKey("Snippet", snippetId)!;
+    const snippet = db.objectForPrimaryKey("Snippet", snippetId)!;
     console.log("Main process: get-snippet", snippet.toJSON());
     return snippet.toJSON();
   });
@@ -166,10 +166,6 @@ app.once("browser-window-created", () => {
 
     db = new DB(`${app.getPath("userData")}/fragmemoDB/fragmemo.realm`);
 
-    // Create a new snippet when no snippet exists only
-    // db.createSnippet(
-    //   createHash("md5").update(String(Date.now())).digest("hex")
-    // );
     return setupStorage(db);
   });
 

@@ -25,7 +25,7 @@ export class FragmentTabList extends LitElement {
     }
     .tab-item[active="true"] {
       background-color: var(--gray);
-      color: ghostwhite;
+      color: var(--text-color);
     }
     .tab-settings {
       user-select: none;

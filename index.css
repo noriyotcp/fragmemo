@@ -2,7 +2,7 @@ html,
 body {
   margin: 0;
   background-color: #1e1e1e;
-  color: ghostwhite;
+  color: var(--text-color);
 }
 
 body::-webkit-scrollbar,
@@ -29,4 +29,5 @@ snippet-list::-webkit-scrollbar {
 :root {
   --gray: #717172;
   --dark-gray: #323233;
+  --text-color: ghostwhite;
 }

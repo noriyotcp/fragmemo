@@ -137,11 +137,28 @@ app.once("browser-window-created", () => {
     return { status: true };
   });
 
+  ipcMain.handle("update-active-fragment", async (event, data) => {
+    console.info("Main process: update-active-fragment", {
+      className: "ActiveFragment",
+      data,
+    });
+    await db.updateActiveFragment(data);
+    return { status: true };
+  });
+
   ipcMain.handle("get-snippet", async (event, snippetId) => {
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    const snippet: Realm.Object = db.objectForPrimaryKey("Snippet", snippetId)!;
+    const snippet = db.objectForPrimaryKey("Snippet", snippetId)!;
     console.log("Main process: get-snippet", snippet.toJSON());
     return snippet.toJSON();
+  });
+
+  ipcMain.handle("get-active-fragment", async (event, snippetId) => {
+    const activeFragment = db
+      .objects("ActiveFragment")
+      .filtered(`snippetId = ${snippetId}`)[0];
+    console.log("Main process: get-active-fragment", activeFragment.toJSON());
+    return activeFragment.toJSON();
   });
 
   ipcMain.handle("setup-storage", async () => {
@@ -149,10 +166,6 @@ app.once("browser-window-created", () => {
 
     db = new DB(`${app.getPath("userData")}/fragmemoDB/fragmemo.realm`);
 
-    // Create a new snippet when no snippet exists only
-    // db.createSnippet(
-    //   createHash("md5").update(String(Date.now())).digest("hex")
-    // );
     return setupStorage(db);
   });
 

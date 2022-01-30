@@ -54,21 +54,35 @@ export class FragmentsController implements ReactiveController {
       JSON.parse(e.detail.previouslySelectedSnippet)
     );
     myAPI
+      .getActiveFragment(<number>this.snippet.selectedSnippet._id)
+      .then((activeFragment) => {
+        this.activeFragmentId = activeFragment.fragmentId;
+      });
+
+    myAPI
       .fetchFragments(<number>this.snippet.selectedSnippet._id)
       .then((fragments) => {
         this.fragments = fragments;
         this.fragments = this.setFragments(this.fragments);
-        // set the first fragment as active
-        this.activeFragmentId = <number>(
-          this.snippet.selectedSnippet.latestActiveFragmentId
-        );
-        console.log("Fetch fragments", this.fragments);
+        console.log("Fetch fragments", this.fragments, this.activeFragmentId);
         this.host.requestUpdate();
       });
   };
 
   private _activeFragmentListener = (e: CustomEvent): void => {
     this.activeFragmentId = e.detail.activeFragmentId;
+    // Update ActiveFragment in Realm DB
+    myAPI
+      .updateActiveFragment({
+        properties: {
+          fragmentId: this.activeFragmentId,
+          snippetId: this.snippet.selectedSnippet._id,
+        },
+      })
+      .then(({ status }) => {
+        console.log("myAPI.updateActiveFragment", status);
+        this.host.requestUpdate();
+      });
   };
 
   setFragments(fragments: Fragment[]): Fragment[] {

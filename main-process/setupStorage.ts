@@ -18,7 +18,6 @@ export const setupStorage = (db: DB): setupStorageResultType => {
     return new Snippet({
       _id: snippet._id,
       title: snippet.title,
-      latestActiveFragmentId: snippet.latestActiveFragmentId,
       createdAt: snippet.createdAt,
       updatedAt: snippet.updatedAt,
     });

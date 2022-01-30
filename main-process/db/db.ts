@@ -1,4 +1,5 @@
-import { Realm, realmSchema, Snippet, Fragment } from "./realm";
+import { Realm, realmSchema, Snippet, Fragment, ActiveFragment } from "./realm";
+type ActiveFragmentProperty = Pick<ActiveFragment, "fragmentId" | "snippetId">;
 
 class DB extends Realm {
   constructor(path: string) {
@@ -22,7 +23,6 @@ class DB extends Realm {
       this.create("Snippet", {
         _id: this.currentMaxId("Snippet") + 1,
         title: title,
-        latestActiveFragmentId: 0, // initial value
         createdAt: new Date(),
         updatedAt: new Date(),
       });
@@ -43,9 +43,7 @@ class DB extends Realm {
       this.currentMaxId("Fragment")
     )!;
 
-    this.write(() => {
-      latestSnippet.latestActiveFragmentId = latestFragment._id;
-    });
+    this.createActiveFragment(latestFragment._id, latestSnippet._id);
   }
 
   createFragment(title: string, content: string, snippet: Snippet): void {
@@ -57,6 +55,16 @@ class DB extends Realm {
         snippet: snippet,
         createdAt: new Date(),
         updatedAt: new Date(),
+      });
+    });
+  }
+
+  createActiveFragment(fragmentId: number, snippetId: number): void {
+    this.write(() => {
+      this.create("ActiveFragment", {
+        _id: this.currentMaxId("ActiveFragment") + 1,
+        fragmentId: fragmentId,
+        snippetId: snippetId,
       });
     });
   }
@@ -74,6 +82,19 @@ class DB extends Realm {
 
     const snippet = this.objectForPrimaryKey<Snippet>("Snippet", data._id);
     console.info("snippet title updated: ", snippet?.title);
+  }
+
+  async updateActiveFragment(data: {
+    properties: ActiveFragmentProperty;
+  }): Promise<void> {
+    const activeFragment = this.objects("ActiveFragment").filtered(
+      `snippetId = ${data.properties.snippetId}`
+    )[0] as unknown as ActiveFragment;
+    this.write(() => {
+      if (activeFragment) {
+        activeFragment.fragmentId = data.properties.fragmentId;
+      }
+    });
   }
 }
 

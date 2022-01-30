@@ -24,7 +24,7 @@ export class EditorElement extends LitElement {
         bottom: 0;
         left: 0;
         width: 100%;
-        background-color: #808080b5;
+        background-color: var(--dark-gray);
         height: 35px;
         display: flex;
         align-items: center;

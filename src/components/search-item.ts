@@ -8,9 +8,6 @@ export class SearchItem extends LitElement {
   static styles = [
     css`
       :host {
-        --mdc-theme-text-primary-on-background: var(--text-color);
-        --mdc-theme-text-secondary-on-background: var(--text-color);
-        --mdc-list-side-padding: 8px;
         background-color: #1e1e1e;
         position: sticky;
         top: 0;

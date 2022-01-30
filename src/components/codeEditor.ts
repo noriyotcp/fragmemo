@@ -132,6 +132,9 @@ export class CodeEditor extends LitElement {
 
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     this.editor = monaco.editor.create(this.container.value!, editorOptions);
+    // monaco.editor.setModelLanguage(this.editor.getModel()!, "html");
+    console.log(this.editor.getModel()?.getLanguageId());
+    console.log(monaco.languages.getLanguages());
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     // monaco.editor.setModelLanguage(this.editor.getModel()!, "c");
     this.editor.getModel()?.onDidChangeContent((e) => {

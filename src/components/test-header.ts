@@ -33,7 +33,7 @@ export class TestHeader extends LitElement {
       width: var(--textarea-width);
       background-color: inherit;
       border: none;
-      color: ghostwhite;
+      color: var(--text-color);
       font-size: 1.5em;
     }
   `;

@@ -18,6 +18,18 @@ export class EditorElement extends LitElement {
       header {
         max-height: 59px;
       }
+
+      footer {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        background-color: var(--dark-gray);
+        height: 35px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
     `,
   ];
 
@@ -39,6 +51,10 @@ export class EditorElement extends LitElement {
           language="typescript"
         ></code-editor>
       </header>
+      <footer>
+        <div>Language</div>
+        <div>Item</div>
+      </footer>
     `;
   }
 }

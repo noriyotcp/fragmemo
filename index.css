@@ -2,7 +2,7 @@ html,
 body {
   margin: 0;
   background-color: #1e1e1e;
-  color: ghostwhite;
+  color: var(--text-color);
 }
 
 body::-webkit-scrollbar,
@@ -24,4 +24,10 @@ snippet-list::-webkit-scrollbar {
 .gutter.gutter-horizontal {
   background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAeCAYAAADkftS9AAAAIklEQVQoU2M4c+bMfxAGAgYYmwGrIIiDjrELjpo5aiZeMwF+yNnOs5KSvgAAAABJRU5ErkJggg==");
   cursor: col-resize;
+}
+
+:root {
+  --gray: #717172;
+  --dark-gray: #323233;
+  --text-color: ghostwhite;
 }

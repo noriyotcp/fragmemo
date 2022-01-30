@@ -10,6 +10,7 @@ export class FragmentTabList extends LitElement {
 
   @query("sl-tab-group") tabGroup!: HTMLElement;
   @queryAll(".tab-item") tabs!: Array<HTMLElement>;
+  @query(".tab-item[active='true']") activeTab!: HTMLElement;
 
   static styles = css`
     :host {
@@ -71,7 +72,14 @@ export class FragmentTabList extends LitElement {
   }
 
   updated() {
-    console.info("fragments updated", this.fragmentsController.fragments);
+    const activeFragmentId = this.activeTab?.getAttribute("fragmentid");
+    this.dispatchEvent(
+      new CustomEvent("fragment-activated", {
+        detail: {
+          activeFragmentId,
+        },
+      })
+    );
   }
 
   private _isActive(fragmentId: number): boolean {

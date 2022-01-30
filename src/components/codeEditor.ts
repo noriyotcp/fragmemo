@@ -162,6 +162,10 @@ export class CodeEditor extends LitElement {
     });
   }
 
+  updated() {
+    this.setValue(this.code);
+  }
+
   private _openByMenuListener(fileData: FileData): boolean | void {
     // Give the browser a chance to paint
     // await new Promise((r) => setTimeout(r, 0));

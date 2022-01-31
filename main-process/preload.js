@@ -12,6 +12,7 @@ contextBridge.exposeInMainWorld("myAPI", {
   fetchFragments: (snippetId) =>
     ipcRenderer.invoke("fetch-fragments", snippetId),
   getSnippet: (snippetId) => ipcRenderer.invoke("get-snippet", snippetId),
+  getFragment: (fragmentId) => ipcRenderer.invoke("get-fragment", fragmentId),
   getActiveFragment: (snippetId) =>
     ipcRenderer.invoke("get-active-fragment", snippetId),
 });

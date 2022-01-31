@@ -1,5 +1,6 @@
 import { LitElement, html, css, TemplateResult } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
+const { myAPI } = window;
 
 @customElement("editor-element")
 export class EditorElement extends LitElement {
@@ -33,10 +34,13 @@ export class EditorElement extends LitElement {
     `,
   ];
 
-  activeFragment(e: CustomEvent): void {
+  fragmentContent(e: CustomEvent): void {
     console.log(e.type, e.detail.activeFragmentId);
-
-    this._code = e.detail.activeFragmentId;
+    // activeFragmentId can be undefined
+    if (isNaN(Number(e.detail.activeFragmentId))) return;
+    myAPI.getFragment(Number(e.detail.activeFragmentId)).then((fragment) => {
+      this._code = fragment.content;
+    });
   }
 
   render(): TemplateResult {
@@ -44,12 +48,9 @@ export class EditorElement extends LitElement {
       <header>
         <test-header textareaValue="${this._textareaValue}"></test-header>
         <fragment-tab-list
-          @fragment-activated=${this.activeFragment}
+          @fragment-activated=${this.fragmentContent}
         ></fragment-tab-list>
-        <code-editor
-          code="const num: number = ${this._code};"
-          language="typescript"
-        ></code-editor>
+        <code-editor code="${this._code}" language="typescript"></code-editor>
       </header>
       <footer>
         <div>Language</div>

@@ -25,6 +25,9 @@ export interface SandBox {
   updateSnippet: (data: object) => Promise<{
     status: boolean;
   }>;
+  updateFragment: (data: object) => Promise<{
+    status: boolean;
+  }>;
   updateActiveFragment: (data: object) => Promise<{
     status: boolean;
   }>;
@@ -38,6 +41,7 @@ export interface SandBox {
   openSettings: (
     listener: (_e: Event, elementName: string) => void
   ) => Electron.IpcRenderer;
+  saveFragment: (listener: (_e: Event) => void) => Electron.IpcRenderer;
 }
 
 // Override properties with type intersection

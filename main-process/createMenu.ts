@@ -44,6 +44,14 @@ export const createMenu = (win: BrowserWindow): void => {
               .catch((err) => console.log(`Error: ${err}`));
           },
         },
+        {
+          label: "Save",
+          accelerator: "CmdOrCtrl+S",
+          click: async () => {
+            win.webContents.send("save-fragment");
+            console.log("save");
+          },
+        },
       ],
     },
     { role: "editMenu" },

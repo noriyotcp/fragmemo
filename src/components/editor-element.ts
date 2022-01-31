@@ -1,5 +1,7 @@
 import { LitElement, html, css, TemplateResult } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
+import { Fragment } from "models";
+
 const { myAPI } = window;
 
 @customElement("editor-element")
@@ -8,6 +10,8 @@ export class EditorElement extends LitElement {
   _textareaValue = "";
   @state()
   private _code = "";
+  @state()
+  private _activeFragment!: Fragment;
 
   static styles = [
     css`
@@ -39,8 +43,13 @@ export class EditorElement extends LitElement {
     // activeFragmentId can be undefined
     if (isNaN(Number(e.detail.activeFragmentId))) return;
     myAPI.getFragment(Number(e.detail.activeFragmentId)).then((fragment) => {
+      this._activeFragment = fragment;
       this._code = fragment.content;
     });
+  }
+
+  changeText(e: CustomEvent) {
+    console.log(e.type, e.detail.text);
   }
 
   render(): TemplateResult {
@@ -50,12 +59,28 @@ export class EditorElement extends LitElement {
         <fragment-tab-list
           @fragment-activated=${this.fragmentContent}
         ></fragment-tab-list>
-        <code-editor code="${this._code}" language="typescript"></code-editor>
+        <code-editor
+          code="${this._code}"
+          language="typescript"
+          @change-text=${this.changeText}
+          @save-text=${this._saveText}
+        ></code-editor>
       </header>
       <footer>
         <div>Language</div>
         <div>Item</div>
       </footer>
     `;
+  }
+
+  private _saveText(e: CustomEvent): void {
+    myAPI
+      .updateFragment({
+        _id: this._activeFragment._id,
+        properties: { content: e.detail.text },
+      })
+      .then(({ status }) => {
+        console.log("myAPI.updateFragment", status);
+      });
   }
 }

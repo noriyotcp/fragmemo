@@ -27,17 +27,17 @@ export class FragmentTabList extends LitElement {
     }
     .tab-item-inner {
       width: 100%;
-      text-align: center;
-      display: inline-flex;
       justify-content: center;
     }
     .tab-item[active="true"] {
       background-color: var(--gray);
       color: var(--text-color);
     }
-    .tab-item-inner[active="true"] {
-      background-color: var(--gray);
-      color: var(--text-color);
+    .tab-icon {
+      display: inline-flex;
+      width: 19px;
+      padding: 0 5px;
+      justify-content: center;
     }
     .tab-settings {
       user-select: none;
@@ -74,7 +74,7 @@ export class FragmentTabList extends LitElement {
               <div class="tab-item-inner">
                 ${fragment.title || `fragment ${fragment._id}`}
               </div>
-              <sl-icon name="record-fill"></sl-icon>
+              <div class="tab-icon"><sl-icon name="record-fill"></sl-icon></div>
             </div>
           `;
         })}

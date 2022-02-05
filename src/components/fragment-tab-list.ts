@@ -22,8 +22,20 @@ export class FragmentTabList extends LitElement {
     .tab-item {
       width: 100%;
       text-align: center;
+      display: flex;
+      align-items: center;
+    }
+    .tab-item-inner {
+      width: 100%;
+      text-align: center;
+      display: inline-flex;
+      justify-content: center;
     }
     .tab-item[active="true"] {
+      background-color: var(--gray);
+      color: var(--text-color);
+    }
+    .tab-item-inner[active="true"] {
       background-color: var(--gray);
       color: var(--text-color);
     }
@@ -59,7 +71,10 @@ export class FragmentTabList extends LitElement {
               active="${this._isActive(fragment._id)}"
               @click="${this._onClickListener}"
             >
-              ${fragment.title || `fragment ${fragment._id}`}
+              <div class="tab-item-inner">
+                ${fragment.title || `fragment ${fragment._id}`}
+              </div>
+              <sl-icon name="record-fill"></sl-icon>
             </div>
           `;
         })}

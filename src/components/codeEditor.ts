@@ -138,13 +138,7 @@ export class CodeEditor extends LitElement {
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     // monaco.editor.setModelLanguage(this.editor.getModel()!, "c");
     this.editor.getModel()?.onDidChangeContent((e) => {
-      this.dispatchEvent(
-        new CustomEvent("change-text", {
-          detail: { text: this.getValue() },
-          bubbles: true,
-          composed: true,
-        })
-      );
+      this._changeText();
     });
     window
       .matchMedia("(prefers-color-scheme: dark)")
@@ -163,6 +157,8 @@ export class CodeEditor extends LitElement {
     this.editor.onDidBlurEditorText(() => {
       console.log("blur");
     });
+    // When Command or Control + S is pressed
+    myAPI.saveFragment((_e: Event) => this._saveText());
   }
 
   updated() {
@@ -183,5 +179,25 @@ export class CodeEditor extends LitElement {
     }
 
     this.setValue(fileData.text);
+  }
+
+  private _changeText() {
+    this.dispatchEvent(
+      new CustomEvent("change-text", {
+        detail: { text: this.getValue() },
+        bubbles: true,
+        composed: true,
+      })
+    );
+  }
+
+  private _saveText() {
+    this.dispatchEvent(
+      new CustomEvent("save-text", {
+        detail: { text: this.getValue() },
+        bubbles: true,
+        composed: true,
+      })
+    );
   }
 }

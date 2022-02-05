@@ -84,6 +84,20 @@ class DB extends Realm {
     console.info("snippet title updated: ", snippet?.title);
   }
 
+  async updateFragment(data: {
+    _id: number;
+    properties: typeof Snippet;
+  }): Promise<void> {
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    const fragment: Fragment = this.objectForPrimaryKey("Fragment", data._id)!;
+    this.write(() => {
+      Object.assign(fragment, data.properties);
+      fragment.updatedAt = new Date();
+    });
+
+    console.info("snippet title updated: ", fragment._id);
+  }
+
   async updateActiveFragment(data: {
     properties: ActiveFragmentProperty;
   }): Promise<void> {

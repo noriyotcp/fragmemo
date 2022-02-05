@@ -5,8 +5,10 @@ contextBridge.exposeInMainWorld("myAPI", {
   fileSaveAs: (fileData) => ipcRenderer.invoke("file-save-as", fileData),
   openByMenu: (listener) => ipcRenderer.on("open-by-menu", listener),
   openSettings: (listener) => ipcRenderer.on("open-settings", listener),
+  saveFragment: (listener) => ipcRenderer.on("save-fragment", listener),
   setupStorage: () => ipcRenderer.invoke("setup-storage"),
   updateSnippet: (data) => ipcRenderer.invoke("update-snippet", data),
+  updateFragment: (data) => ipcRenderer.invoke("update-fragment", data),
   updateActiveFragment: (data) =>
     ipcRenderer.invoke("update-active-fragment", data),
   fetchFragments: (snippetId) =>

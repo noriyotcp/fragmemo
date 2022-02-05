@@ -6,12 +6,8 @@ const { myAPI } = window;
 
 @customElement("editor-element")
 export class EditorElement extends LitElement {
-  @property()
-  _textareaValue = "";
-  @state()
-  private _code = "";
-  @state()
-  private _activeFragment!: Fragment;
+  @property() _textareaValue = "";
+  @state() private _activeFragment?: Fragment;
 
   static styles = [
     css`
@@ -44,7 +40,6 @@ export class EditorElement extends LitElement {
     if (isNaN(Number(e.detail.activeFragmentId))) return;
     myAPI.getFragment(Number(e.detail.activeFragmentId)).then((fragment) => {
       this._activeFragment = fragment;
-      this._code = fragment.content;
     });
   }
 
@@ -60,7 +55,7 @@ export class EditorElement extends LitElement {
           @fragment-activated=${this.fragmentContent}
         ></fragment-tab-list>
         <code-editor
-          code="${this._code}"
+          code="${this._activeFragment?.content}"
           language="typescript"
           @change-text=${this.changeText}
           @save-text=${this._saveText}
@@ -76,7 +71,7 @@ export class EditorElement extends LitElement {
   private _saveText(e: CustomEvent): void {
     myAPI
       .updateFragment({
-        _id: this._activeFragment._id,
+        _id: this._activeFragment?._id,
         properties: { content: e.detail.text },
       })
       .then(({ status }) => {

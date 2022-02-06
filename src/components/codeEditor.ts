@@ -138,6 +138,7 @@ export class CodeEditor extends LitElement {
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     // monaco.editor.setModelLanguage(this.editor.getModel()!, "c");
     this.editor.getModel()?.onDidChangeContent((e) => {
+      console.info(e);
       this._changeText();
     });
     window

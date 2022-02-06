@@ -44,7 +44,9 @@ export class EditorElement extends LitElement {
   }
 
   changeText(e: CustomEvent) {
-    console.log(e.type, e.detail.text);
+    // compare the previous and current text
+    const isChanged = this._activeFragment?.content !== e.detail.text;
+    console.info("Is text changed?:", isChanged);
   }
 
   render(): TemplateResult {
@@ -76,6 +78,11 @@ export class EditorElement extends LitElement {
       })
       .then(({ status }) => {
         console.log("myAPI.updateFragment", status);
+        if (status) {
+          if (this._activeFragment) {
+            this._activeFragment.content = e.detail.text;
+          }
+        }
       });
   }
 }

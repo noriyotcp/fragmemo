@@ -1,4 +1,3 @@
-import { dispatch } from "../events/dispatcher";
 import { LitElement, html, css, TemplateResult } from "lit";
 import { customElement, query, queryAll } from "lit/decorators.js";
 import { map } from "lit/directives/map.js";
@@ -13,19 +12,9 @@ export class FragmentTabList extends LitElement {
   @query(".tab-item[active='true']") activeTab!: HTMLElement;
 
   static styles = css`
-    :host {
-    }
     section {
       display: flex;
       flex-wrap: nowrap;
-    }
-    .tab-item {
-      width: 100%;
-      text-align: center;
-    }
-    .tab-item[active="true"] {
-      background-color: var(--gray);
-      color: var(--text-color);
     }
     .tab-settings {
       user-select: none;
@@ -52,15 +41,10 @@ export class FragmentTabList extends LitElement {
       <section>
         ${map(fragments, (fragment, _) => {
           return html`
-            <div
-              id="fragment-${fragment._id}"
-              class="tab-item"
-              fragmentId="${fragment._id}"
-              active="${this._isActive(fragment._id)}"
-              @click="${this._onClickListener}"
-            >
-              ${fragment.title || `fragment ${fragment._id}`}
-            </div>
+            <fragment-tab
+              fragment=${JSON.stringify(fragment)}
+              activeFragmentId="${this.fragmentsController.activeFragmentId}"
+            ></fragment-tab>
           `;
         })}
       </section>
@@ -72,45 +56,14 @@ export class FragmentTabList extends LitElement {
   }
 
   updated() {
-    const activeFragmentId = this.activeTab?.getAttribute("fragmentid");
-    this.dispatchEvent(
-      new CustomEvent("fragment-activated", {
-        detail: {
-          activeFragmentId,
-        },
-      })
-    );
-  }
-
-  private _isActive(fragmentId: number): boolean {
-    return fragmentId === this.fragmentsController.activeFragmentId;
-  }
-
-  private _onClickListener(e: MouseEvent) {
-    if (!e.currentTarget) return;
-    const fragmentId = Number(
-      (<HTMLDivElement>e.currentTarget).getAttribute("fragmentId")
-    );
-    // Do nothing if the fragment is already active
-    if (this._isActive(fragmentId)) return;
-
-    this.tabs.forEach((tab, _) => {
-      tab.removeAttribute("active");
-    });
-
-    dispatch({
-      type: "active-fragment",
-      detail: {
-        activeFragmentId: fragmentId,
-      },
-    });
-  }
-
-  private range(
-    start: number,
-    end: number,
-    length = end - start + 1
-  ): Array<number> {
-    return Array.from({ length }, (_, i) => start + i);
+    if (this.fragmentsController.activeFragmentId) {
+      this.dispatchEvent(
+        new CustomEvent("fragment-activated", {
+          detail: {
+            activeFragmentId: this.fragmentsController.activeFragmentId,
+          },
+        })
+      );
+    }
   }
 }

@@ -1,6 +1,12 @@
 import { dispatch } from "../events/dispatcher";
 import { LitElement, html, css, TemplateResult } from "lit";
-import { customElement, property, query, queryAll } from "lit/decorators.js";
+import {
+  customElement,
+  property,
+  query,
+  queryAll,
+  state,
+} from "lit/decorators.js";
 import { Fragment } from "models";
 
 @customElement("fragment-tab")
@@ -9,6 +15,8 @@ export class FragmentTab extends LitElement {
   @property({ type: Number }) activeFragmentId!: number;
   @queryAll(".tab-item") tabs!: Array<HTMLElement>;
   @query(".tab-item[active='true']") activeTab!: HTMLElement;
+
+  @state() private isEditing = false;
 
   static styles = css`
     :host {
@@ -39,6 +47,12 @@ export class FragmentTab extends LitElement {
     }
   `;
 
+  iconTemplate(): TemplateResult {
+    return this.isEditing
+      ? html` <sl-icon name="record-fill"></sl-icon> `
+      : html``;
+  }
+
   tabBarTemplate(): TemplateResult {
     return html`
       <div
@@ -51,7 +65,7 @@ export class FragmentTab extends LitElement {
         <div class="tab-item-inner">
           ${this.fragment.title || `fragment ${this.fragment._id}`}
         </div>
-        <div class="tab-icon"><sl-icon name="record-fill"></sl-icon></div>
+        <div class="tab-icon">${this.iconTemplate()}</div>
       </div>
     `;
   }
@@ -59,6 +73,29 @@ export class FragmentTab extends LitElement {
   render(): TemplateResult {
     return html`${this.tabBarTemplate()}`;
   }
+
+  firstUpdated(): void {
+    window.addEventListener(
+      "content-editing-state-changed",
+      this._stateChangedListener as EventListener
+    );
+  }
+
+  disconnectedCallback() {
+    window.removeEventListener(
+      "content-editing-state-changed",
+      this._stateChangedListener as EventListener
+    );
+    super.disconnectedCallback();
+  }
+
+  private _stateChangedListener = (e: CustomEvent): void => {
+    this.isEditing = !!e.detail.contentStore.getCell(
+      "editingStates",
+      `${this.fragment._id}`,
+      "isEditing"
+    );
+  };
 
   private _isActive(fragmentId: number): boolean {
     if (!this.activeFragmentId) return false;

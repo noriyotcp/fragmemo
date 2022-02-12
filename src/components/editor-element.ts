@@ -1,11 +1,25 @@
+import { dispatch } from "../events/dispatcher";
 import { LitElement, html, css, TemplateResult } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
 import { Fragment } from "models";
 
 const { myAPI } = window;
+const { createStore, Store } = TinyBase;
 
 @customElement("editor-element")
 export class EditorElement extends LitElement {
+  contentStore: typeof Store;
+  editingStatesSchema = {
+    editingStates: {
+      isEditing: { type: "boolean", default: false },
+    },
+  };
+
+  constructor() {
+    super();
+    this.contentStore = createStore().setSchema(this.editingStatesSchema);
+  }
+
   @property() _textareaValue = "";
   @state() private _activeFragment?: Fragment;
 
@@ -45,7 +59,22 @@ export class EditorElement extends LitElement {
 
   changeText(e: CustomEvent) {
     // compare the previous and current text
+    if (this._activeFragment === undefined) return;
+
     const isChanged = this._activeFragment?.content !== e.detail.text;
+    this.contentStore.setCell(
+      "editingStates",
+      `${this._activeFragment?._id}`,
+      "isEditing",
+      isChanged
+    );
+    dispatch({
+      type: "content-editing-state-changed",
+      detail: {
+        fragmentId: this._activeFragment?._id,
+        contentStore: this.contentStore,
+      },
+    });
     console.info("Is text changed?:", isChanged);
   }
 
@@ -81,6 +110,19 @@ export class EditorElement extends LitElement {
         if (status) {
           if (this._activeFragment) {
             this._activeFragment.content = e.detail.text;
+            this.contentStore.setCell(
+              "editingStates",
+              `${this._activeFragment?._id}`,
+              "isEditing",
+              false
+            );
+            dispatch({
+              type: "content-editing-state-changed",
+              detail: {
+                fragmentId: this._activeFragment?._id,
+                contentStore: this.contentStore,
+              },
+            });
           }
         }
       });

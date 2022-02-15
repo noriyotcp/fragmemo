@@ -90,8 +90,7 @@ export class FragmentTab extends LitElement {
   }
 
   private _stateChangedListener = (e: CustomEvent): void => {
-    this.isEditing = !!e.detail.contentStore.getCell(
-      "editingStates",
+    this.isEditing = !!e.detail.fragmentStore.getCell(
       `${this.fragment._id}`,
       "isEditing"
     );

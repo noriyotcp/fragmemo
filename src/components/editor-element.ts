@@ -43,7 +43,28 @@ export class EditorElement extends LitElement {
     `,
   ];
 
-  setContent(e: CustomEvent): void {
+  render(): TemplateResult {
+    return html`
+      <header>
+        <test-header textareaValue="${this._textareaValue}"></test-header>
+        <fragment-tab-list
+          @fragment-activated=${this._onFragmentActivated}
+        ></fragment-tab-list>
+        <code-editor
+          code="${this._content}"
+          language="typescript"
+          @change-text=${this._changeText}
+          @save-text=${this._saveText}
+        ></code-editor>
+      </header>
+      <footer>
+        <div>Language</div>
+        <div>Item</div>
+      </footer>
+    `;
+  }
+
+  private _onFragmentActivated(e: CustomEvent): void {
     console.log(e.type, e.detail.activeFragmentId);
     // activeFragmentId can be undefined
     if (isNaN(Number(e.detail.activeFragmentId))) return;
@@ -64,10 +85,10 @@ export class EditorElement extends LitElement {
     }
   }
 
-  changeText(e: CustomEvent) {
-    // compare the previous and current text
+  private _changeText(e: CustomEvent) {
     if (this._activeFragmentId === undefined) return;
 
+    // compare the previous and current text
     const isChanged =
       this.fragmentStore.getCell(`${this._activeFragmentId}`, "content") !==
       e.detail.text;
@@ -90,27 +111,6 @@ export class EditorElement extends LitElement {
       });
     }
     console.info("Is text changed?:", isChanged);
-  }
-
-  render(): TemplateResult {
-    return html`
-      <header>
-        <test-header textareaValue="${this._textareaValue}"></test-header>
-        <fragment-tab-list
-          @fragment-activated=${this.setContent}
-        ></fragment-tab-list>
-        <code-editor
-          code="${this._content}"
-          language="typescript"
-          @change-text=${this.changeText}
-          @save-text=${this._saveText}
-        ></code-editor>
-      </header>
-      <footer>
-        <div>Language</div>
-        <div>Item</div>
-      </footer>
-    `;
   }
 
   private _saveText(e: CustomEvent): void {

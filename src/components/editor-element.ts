@@ -1,23 +1,17 @@
 import { dispatch } from "../events/dispatcher";
 import { LitElement, html, css, TemplateResult } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
+import FragmentStore from "../stores";
 
 const { myAPI } = window;
-const { createStore, Store } = TinyBase;
 
 @customElement("editor-element")
 export class EditorElement extends LitElement {
-  contentStore: typeof Store;
-  editingStatesSchema = {
-    editingStates: {
-      content: { type: "string", default: "" },
-      isEditing: { type: "boolean", default: false },
-    },
-  };
+  fragmentStore: FragmentStore;
 
   constructor() {
     super();
-    this.contentStore = createStore().setSchema(this.editingStatesSchema);
+    this.fragmentStore = new FragmentStore();
   }
 
   @property() _textareaValue = "";
@@ -49,20 +43,16 @@ export class EditorElement extends LitElement {
     `,
   ];
 
-  fragmentContent(e: CustomEvent): void {
+  setContent(e: CustomEvent): void {
     console.log(e.type, e.detail.activeFragmentId);
     // activeFragmentId can be undefined
     if (isNaN(Number(e.detail.activeFragmentId))) return;
 
     this._activeFragmentId = e.detail.activeFragmentId;
-    // if the record for active fragment, set content of editingStates to _content state
-    // if not, get fragment from Realm DB, set content of editingStates to _content state
-    if (
-      !this.contentStore.hasRow("editingStates", `${this._activeFragmentId}`)
-    ) {
+    // if no records for the active fragment, it fetches a fragment from Realm DB
+    if (!this.fragmentStore.hasRow(`${this._activeFragmentId}`)) {
       myAPI.getFragment(Number(this._activeFragmentId)).then((fragment) => {
-        this.contentStore.setCell(
-          "editingStates",
+        this.fragmentStore.setCell(
           `${fragment._id}`,
           "content",
           fragment.content
@@ -79,18 +69,14 @@ export class EditorElement extends LitElement {
     if (this._activeFragmentId === undefined) return;
 
     const isChanged =
-      this.contentStore.getCell(
-        "editingStates",
-        `${this._activeFragmentId}`,
-        "content"
-      ) !== e.detail.text;
-    this.contentStore.setCell(
-      "editingStates",
+      this.fragmentStore.getCell(`${this._activeFragmentId}`, "content") !==
+      e.detail.text;
+    this.fragmentStore.setCell(
       `${this._activeFragmentId}`,
       "isEditing",
       isChanged
     );
-    this.contentStore.setRow("editingStates", `${this._activeFragmentId}`, {
+    this.fragmentStore.setRow(`${this._activeFragmentId}`, {
       content: e.detail.text,
       isEditing: isChanged,
     });
@@ -99,7 +85,7 @@ export class EditorElement extends LitElement {
       dispatch({
         type: "content-editing-state-changed",
         detail: {
-          contentStore: this.contentStore,
+          fragmentStore: this.fragmentStore,
         },
       });
     }
@@ -111,7 +97,7 @@ export class EditorElement extends LitElement {
       <header>
         <test-header textareaValue="${this._textareaValue}"></test-header>
         <fragment-tab-list
-          @fragment-activated=${this.fragmentContent}
+          @fragment-activated=${this.setContent}
         ></fragment-tab-list>
         <code-editor
           code="${this._content}"
@@ -136,15 +122,14 @@ export class EditorElement extends LitElement {
       .then(({ status }) => {
         console.log("myAPI.updateFragment", status);
         if (status) {
-          this.contentStore.setRow(
-            "editingStates",
-            `${this._activeFragmentId}`,
-            { content: e.detail.text, isEditing: false }
-          );
+          this.fragmentStore.setRow(`${this._activeFragmentId}`, {
+            content: e.detail.text,
+            isEditing: false,
+          });
           dispatch({
             type: "content-editing-state-changed",
             detail: {
-              contentStore: this.contentStore,
+              fragmentStore: this.fragmentStore,
             },
           });
         }
@@ -153,9 +138,7 @@ export class EditorElement extends LitElement {
 
   private _setContent(): void {
     if (this._activeFragmentId === undefined) return;
-
-    this._content = this.contentStore.getCell(
-      "editingStates",
+    this._content = this.fragmentStore.getCell(
       `${this._activeFragmentId}`,
       "content"
     );

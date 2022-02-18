@@ -43,6 +43,14 @@ export class EditorElement extends LitElement {
         align-items: center;
         justify-content: space-between;
       }
+
+      footer > select {
+        background: var(--dark-gray);
+        border: none;
+        color: var(--text-color);
+        height: 100%;
+        width: 6rem;
+      }
     `,
   ];
 
@@ -61,6 +69,15 @@ export class EditorElement extends LitElement {
         ></code-editor>
       </header>
       <footer>
+        <select
+          name="languages"
+          id="lang-select"
+          @change=${this._selectionChange}
+        >
+          <option value="plaintext">Plain Text</option>
+          <option value="typescript">TypeScript</option>
+          <option value="ruby">Ruby</option>
+        </select>
         <ui5-select class="select" @change=${this._selectionChange}>
           <ui5-option value="plaintext" selected>Plain Text</ui5-option>
           <ui5-option value="typescript">TypeScript</ui5-option>
@@ -72,8 +89,11 @@ export class EditorElement extends LitElement {
   }
 
   private _selectionChange(e: CustomEvent): void {
+    if (!e.currentTarget) return;
+
+    const target = <HTMLSelectElement>e.currentTarget;
+    this._language = target.value;
     this._setContent();
-    this._language = e.detail.selectedOption.value;
   }
 
   private _onFragmentActivated(e: CustomEvent): void {

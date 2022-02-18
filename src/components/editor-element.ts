@@ -2,8 +2,6 @@ import { dispatch } from "../events/dispatcher";
 import { LitElement, html, css, TemplateResult } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
 import FragmentStore from "../stores";
-import "@ui5/webcomponents/dist/Select";
-import "@ui5/webcomponents/dist/Option";
 
 const { myAPI } = window;
 
@@ -78,12 +76,6 @@ export class EditorElement extends LitElement {
           <option value="typescript">TypeScript</option>
           <option value="ruby">Ruby</option>
         </select>
-        <ui5-select class="select" @change=${this._selectionChange}>
-          <ui5-option value="plaintext" selected>Plain Text</ui5-option>
-          <ui5-option value="typescript">TypeScript</ui5-option>
-          <ui5-option value="ruby">Ruby</ui5-option>
-        </ui5-select>
-        <div>Item</div>
       </footer>
     `;
   }

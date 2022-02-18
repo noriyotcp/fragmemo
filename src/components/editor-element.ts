@@ -2,6 +2,8 @@ import { dispatch } from "../events/dispatcher";
 import { LitElement, html, css, TemplateResult } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
 import FragmentStore from "../stores";
+import "@ui5/webcomponents/dist/Select";
+import "@ui5/webcomponents/dist/Option";
 
 const { myAPI } = window;
 
@@ -17,6 +19,7 @@ export class EditorElement extends LitElement {
   @property() _textareaValue = "";
   @state() private _activeFragmentId?: number;
   @state() private _content = "";
+  @state() private _language = "plaintext";
 
   static styles = [
     css`
@@ -52,16 +55,25 @@ export class EditorElement extends LitElement {
         ></fragment-tab-list>
         <code-editor
           code="${this._content}"
-          language="typescript"
+          language="${this._language}"
           @change-text=${this._changeText}
           @save-text=${this._saveText}
         ></code-editor>
       </header>
       <footer>
-        <div>Language</div>
+        <ui5-select class="select" @change=${this._selectionChange}>
+          <ui5-option value="plaintext" selected>Plain Text</ui5-option>
+          <ui5-option value="typescript">TypeScript</ui5-option>
+          <ui5-option value="ruby">Ruby</ui5-option>
+        </ui5-select>
         <div>Item</div>
       </footer>
     `;
+  }
+
+  private _selectionChange(e: CustomEvent): void {
+    this._setContent();
+    this._language = e.detail.selectedOption.value;
   }
 
   private _onFragmentActivated(e: CustomEvent): void {

@@ -188,9 +188,15 @@ app.once("browser-window-created", () => {
     } catch (err) {
       console.error(err);
     }
-    // return snippets when setup is done
-    return setupStorage(db);
+    return returnSnippets(true);
   });
+
+  const returnSnippets = (status: boolean) => {
+    // return snippets when setup is done
+    if (status) {
+      return setupStorage(db);
+    }
+  };
 
   ipcMain.handle("fetch-fragments", (event, snippetId) => {
     const fragments = db

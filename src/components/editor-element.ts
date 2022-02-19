@@ -1,7 +1,9 @@
 import { dispatch } from "../events/dispatcher";
 import { LitElement, html, css, TemplateResult } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
+import { map } from "lit/directives/map.js";
 import FragmentStore from "../stores";
+import languages from "../languages";
 
 const { myAPI } = window;
 
@@ -17,6 +19,7 @@ export class EditorElement extends LitElement {
   @property() _textareaValue = "";
   @state() private _activeFragmentId?: number;
   @state() private _content = "";
+  @state() private _language = "plaintext";
 
   static styles = [
     css`
@@ -40,6 +43,14 @@ export class EditorElement extends LitElement {
         align-items: center;
         justify-content: space-between;
       }
+
+      footer > select {
+        background: var(--dark-gray);
+        border: none;
+        color: var(--text-color);
+        height: 100%;
+        width: 8rem;
+      }
     `,
   ];
 
@@ -52,16 +63,31 @@ export class EditorElement extends LitElement {
         ></fragment-tab-list>
         <code-editor
           code="${this._content}"
-          language="typescript"
+          language="${this._language}"
           @change-text=${this._changeText}
           @save-text=${this._saveText}
         ></code-editor>
       </header>
       <footer>
-        <div>Language</div>
-        <div>Item</div>
+        <select
+          name="languages"
+          id="lang-select"
+          @change=${this._selectionChange}
+        >
+          ${map(languages, (l) => {
+            return html`<option value=${l.id}>${l.alias}</option>`;
+          })}
+        </select>
       </footer>
     `;
+  }
+
+  private _selectionChange(e: CustomEvent): void {
+    if (!e.currentTarget) return;
+
+    const target = <HTMLSelectElement>e.currentTarget;
+    this._language = target.value;
+    this._setContent();
   }
 
   private _onFragmentActivated(e: CustomEvent): void {

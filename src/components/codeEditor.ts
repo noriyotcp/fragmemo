@@ -39,7 +39,7 @@ export class CodeEditor extends LitElement {
   editor?: monaco.editor.IStandaloneCodeEditor;
   @property({ type: Boolean, attribute: "readonly" }) readOnly?: boolean;
   @property() theme?: string;
-  @property() language?: string;
+  @property() language!: string;
   @property() code!: string;
 
   static styles = css`
@@ -83,11 +83,12 @@ export class CodeEditor extends LitElement {
   }
 
   private getLang() {
-    if (this.language) return this.language;
-    const file = this.getFile();
-    if (!file) return;
-    const type = <string>file.getAttribute("type");
-    return type.split("/").pop();
+    return this.language;
+    // TODO: get rid of this
+    // const file = this.getFile();
+    // if (!file) return;
+    // const type = <string>file.getAttribute("type");
+    // return type.split("/").pop();
   }
 
   private getTheme() {
@@ -133,8 +134,7 @@ export class CodeEditor extends LitElement {
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     this.editor = monaco.editor.create(this.container.value!, editorOptions);
     // monaco.editor.setModelLanguage(this.editor.getModel()!, "html");
-    console.log(this.editor.getModel()?.getLanguageId());
-    console.log(monaco.languages.getLanguages());
+    console.log(this._langaugesMap());
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     // monaco.editor.setModelLanguage(this.editor.getModel()!, "c");
     this.editor.getModel()?.onDidChangeContent((e) => {
@@ -163,6 +163,12 @@ export class CodeEditor extends LitElement {
   }
 
   updated() {
+    if (!this.editor) return;
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    monaco.editor.setModelLanguage(this.editor.getModel()!, this.getLang());
+    console.log(
+      `model language was changed to ${this.editor.getModel()?.getLanguageId()}`
+    );
     this.setValue(this.code);
   }
 
@@ -200,5 +206,11 @@ export class CodeEditor extends LitElement {
         composed: true,
       })
     );
+  }
+
+  private _langaugesMap(): object {
+    return monaco.languages.getLanguages().map((lang) => {
+      return { id: lang.id, alias: lang.aliases ? lang.aliases[0] : lang.id };
+    });
   }
 }

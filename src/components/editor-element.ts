@@ -1,7 +1,9 @@
 import { dispatch } from "../events/dispatcher";
 import { LitElement, html, css, TemplateResult } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
+import { map } from "lit/directives/map.js";
 import FragmentStore from "../stores";
+import languages from "../languages";
 
 const { myAPI } = window;
 
@@ -72,9 +74,9 @@ export class EditorElement extends LitElement {
           id="lang-select"
           @change=${this._selectionChange}
         >
-          <option value="plaintext">Plain Text</option>
-          <option value="typescript">TypeScript</option>
-          <option value="ruby">Ruby</option>
+          ${map(languages, (l) => {
+            return html`<option value=${l.id}>${l.alias}</option>`;
+          })}
         </select>
       </footer>
     `;

@@ -27,13 +27,16 @@ export class SetupStorageController implements ReactiveController {
   }
 
   async setupStorage(): Promise<void> {
-    await myAPI.setupStorage().then(({ status }) => {
-      if (status) {
+    await myAPI
+      .setupStorage()
+      .then(() => {
         this._loadSnippets();
-      } else {
+      })
+      .catch((err) => {
+        console.error(err);
         this.msg = "Setup failed";
-      }
-    });
+        this._displayToast();
+      });
   }
 
   private _loadSnippets() {

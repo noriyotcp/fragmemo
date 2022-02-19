@@ -17,9 +17,7 @@ export type FileData = {
 
 export interface SandBox {
   fileSaveAs: (fileData: string) => void;
-  setupStorage: () => Promise<{
-    status: boolean;
-  }>;
+  setupStorage: () => Promise<void>;
   updateSnippet: (data: object) => Promise<{
     status: boolean;
   }>;

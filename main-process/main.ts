@@ -181,7 +181,14 @@ app.once("browser-window-created", () => {
     // await setTimeout(1000); // wait 1 seconds for testing
 
     db = new DB(`${app.getPath("userData")}/fragmemoDB/fragmemo.realm`);
-
+    try {
+      if (db.empty) {
+        db.createSnippet("");
+      }
+    } catch (err) {
+      console.error(err);
+    }
+    // return snippets when setup is done
     return setupStorage(db);
   });
 

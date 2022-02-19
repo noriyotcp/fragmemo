@@ -9,9 +9,6 @@ type setupStorageResultType = {
 };
 
 export const setupStorage = (db: DB): setupStorageResultType => {
-  if (db.empty) {
-    db.createSnippet("");
-  }
   return returnSnippets(db);
 };
 

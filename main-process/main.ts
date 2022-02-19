@@ -2,7 +2,7 @@ import path from "path";
 import { app, BrowserWindow, ipcMain } from "electron";
 import { setFileSaveAs } from "./setFileSaveAs";
 import { createMenu } from "./createMenu";
-import { setupStorage } from "./setupStorage";
+import { setupStorage, returnSnippets } from "./setupStorage";
 import { JsonStorage, DatapathDoesNotExistError } from "./jsonStorage";
 import { setTimeout } from "timers/promises";
 import DB from "./db/db";
@@ -193,18 +193,11 @@ app.once("browser-window-created", () => {
 
   ipcMain.handle("load-snippets", (event) => {
     // TODO: do not pass boolean
-    const result = returnSnippets(true);
+    const result = returnSnippets(db);
     if (result) {
       return result.snippets;
     }
   });
-
-  const returnSnippets = (status: boolean) => {
-    // return snippets when setup is done
-    if (status) {
-      return setupStorage(db);
-    }
-  };
 
   ipcMain.handle("fetch-fragments", (event, snippetId) => {
     const fragments = db

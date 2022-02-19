@@ -11,7 +11,7 @@ export const setupStorage = (db: DB): setupStorageResultType => {
   return returnSnippets(db);
 };
 
-const returnSnippets = (db: DB): setupStorageResultType => {
+export const returnSnippets = (db: DB): setupStorageResultType => {
   const snippets = (
     db.reverseSortBy("Snippet", "updatedAt") as unknown as Results<Snippet>
   ).map((snippet) => {

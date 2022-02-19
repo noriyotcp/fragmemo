@@ -1,13 +1,18 @@
-import { Realm, realmSchema, Snippet, Fragment, ActiveFragment } from "./realm";
-import { Language } from "./models/language";
+import {
+  Realm,
+  realmSchema,
+  Snippet,
+  Fragment,
+  ActiveFragment,
+  Language,
+} from "./realm";
 import languages from "./seeds/languages";
 
 type ActiveFragmentProperty = Pick<ActiveFragment, "fragmentId" | "snippetId">;
 
 class DB extends Realm {
   constructor(path: string) {
-    const schema: Realm.ObjectSchema[] = realmSchema.concat(Language.schema);
-    super({ path, schema: schema });
+    super({ path, schema: realmSchema });
   }
 
   initLanguage(): void {

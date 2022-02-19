@@ -1,5 +1,4 @@
 import Realm from "realm";
-import { Language } from "./models/language";
 
 const SnippetSchema: Realm.ObjectSchema = {
   name: "Snippet",
@@ -71,7 +70,32 @@ class ActiveFragment {
   }
 }
 
-// TODO: Snippt and Fragment also have own schema in Class.
-const realmSchema = [SnippetSchema, FragmentSchema, ActiveFragment.schema];
+class Language {
+  public _idx = 0;
+  public name = "";
+  public alias = "";
 
-export { Realm, realmSchema, Snippet, Fragment, ActiveFragment };
+  public static schema: Realm.ObjectSchema = {
+    name: "Language",
+    properties: {
+      _idx: "int",
+      name: "string",
+      alias: "string",
+    },
+    primaryKey: "_idx",
+  };
+
+  constructor(data: Required<Language>) {
+    Object.assign(this, data);
+  }
+}
+
+// TODO: Snippt and Fragment also have own schema in Class.
+const realmSchema = [
+  SnippetSchema,
+  FragmentSchema,
+  ActiveFragment.schema,
+  Language.schema,
+];
+
+export { Realm, realmSchema, Snippet, Fragment, ActiveFragment, Language };

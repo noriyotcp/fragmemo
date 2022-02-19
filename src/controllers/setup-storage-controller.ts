@@ -28,13 +28,17 @@ export class SetupStorageController implements ReactiveController {
 
   async setupStorage(): Promise<void> {
     await myAPI.setupStorage().then(({ status, snippets }) => {
-      [this.status, this.msg, this.snippets] = [
-        status,
-        "Snippets loaded",
-        snippets,
-      ];
-      console.info("Snippet loaded: ", this.snippets);
-      this.host.requestUpdate();
+      if (status) {
+        [this.status, this.msg, this.snippets] = [
+          status,
+          "Snippets loaded",
+          snippets,
+        ];
+        console.info("Snippet loaded: ", this.snippets);
+        this.host.requestUpdate();
+      } else {
+        this.msg = "Loading snippets failed";
+      }
     });
   }
 

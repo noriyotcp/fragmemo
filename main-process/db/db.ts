@@ -7,6 +7,7 @@ import {
   Language,
 } from "./realm";
 import languages from "./seeds/languages";
+import * as fragments from "./seeds/fragments";
 
 type ActiveFragmentProperty = Pick<ActiveFragment, "fragmentId" | "snippetId">;
 
@@ -60,19 +61,9 @@ class DB extends Realm {
     )!;
 
     // create an empty fragment
-    // TODO: seed data
-    const content1 = `const hoge = 'hoge desu';
-const hoge2 = 'hoge desu desu';
-class Hoge {
-    hoge: any;
-    constructor(hoge) {
-        this.hoge = hoge;
-    }
-}`;
-    const content2 = `puts 'Hello Ruby desu'
-puts 'Hello Ruby desu2'`;
-    this.createFragment("", content1, latestSnippet, 0); // language == 'plaintext'
-    this.createFragment("", content2, latestSnippet, 0);
+    // TODO: seed data for testing
+    this.createFragment("", fragments.content1, latestSnippet, 0); // language == 'plaintext'
+    this.createFragment("", fragments.content2, latestSnippet, 0);
 
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const latestFragment: Fragment = this.objectForPrimaryKey(

@@ -216,6 +216,12 @@ app.once("browser-window-created", () => {
     return snippets;
   };
 
+  ipcMain.handle("load-languages", (event) => {
+    if (!db) return;
+
+    return db.sortBy("Language", "_idx").toJSON();
+  });
+
   ipcMain.handle("fetch-fragments", (event, snippetId) => {
     const fragments = db
       .objects("Fragment")

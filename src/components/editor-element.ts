@@ -3,7 +3,7 @@ import { LitElement, html, css, TemplateResult } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
 import { map } from "lit/directives/map.js";
 import FragmentStore from "../stores";
-import languages from "../languages";
+import { Language } from "models";
 
 const { myAPI } = window;
 
@@ -14,12 +14,16 @@ export class EditorElement extends LitElement {
   constructor() {
     super();
     this.fragmentStore = new FragmentStore();
+    myAPI.loadLanguages().then((languages) => {
+      this._languages = languages;
+    });
   }
 
   @property() _textareaValue = "";
   @state() private _activeFragmentId?: number;
   @state() private _content = "";
   @state() private _language = "plaintext";
+  @state() private _languages!: Language[];
 
   static styles = [
     css`
@@ -74,8 +78,8 @@ export class EditorElement extends LitElement {
           id="lang-select"
           @change=${this._selectionChange}
         >
-          ${map(languages, (l) => {
-            return html`<option value=${l.id}>${l.alias}</option>`;
+          ${map(this._languages, (l) => {
+            return html`<option value=${l.name}>${l.alias}</option>`;
           })}
         </select>
       </footer>

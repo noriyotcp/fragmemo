@@ -22,6 +22,10 @@ class DB extends Realm {
     });
   }
 
+  sortBy(className: string, property: string): Realm.Results<Realm.Object> {
+    return this.objects(className).sorted(property);
+  }
+
   reverseSortBy(
     className: string,
     property: string

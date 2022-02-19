@@ -9,11 +9,22 @@ class Snippet {
   }
 }
 
+class Language {
+  public _idx = 0;
+  public name = "";
+  public alias = "";
+
+  constructor(data: Required<Language>) {
+    Object.assign(this, data);
+  }
+}
+
 class Fragment {
   public _id = 0;
   public title = "";
   public content = "";
   public snippet!: Snippet; // TODO: Change required to optional?
+  public language?: Language;
   public createdAt = new Date();
   public updatedAt = new Date();
 
@@ -32,4 +43,4 @@ class ActiveFragment {
   }
 }
 
-export { Snippet, Fragment, ActiveFragment };
+export { Snippet, Fragment, ActiveFragment, Language };

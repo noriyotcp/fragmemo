@@ -49,7 +49,7 @@ export class EditorElement extends LitElement {
         border: none;
         color: var(--text-color);
         height: 100%;
-        width: 6rem;
+        width: 8rem;
       }
     `,
   ];

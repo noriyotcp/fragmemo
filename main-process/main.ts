@@ -188,7 +188,7 @@ app.once("browser-window-created", () => {
     } catch (err) {
       console.error(err);
     }
-    return returnSnippets(true);
+    return { status: true };
   });
 
   ipcMain.handle("load-snippets", (event) => {

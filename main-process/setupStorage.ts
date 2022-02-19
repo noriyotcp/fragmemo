@@ -19,12 +19,12 @@ const returnSnippets = (db: DB): setupStorageResultType => {
   const snippets = (
     db.reverseSortBy("Snippet", "updatedAt") as unknown as Results<Snippet>
   ).map((snippet) => {
-    return new Snippet({
+    return {
       _id: snippet._id,
       title: snippet.title,
       createdAt: snippet.createdAt,
       updatedAt: snippet.updatedAt,
-    });
+    };
   });
   return { status: true, msg: "Snippets loaded", snippets };
 };

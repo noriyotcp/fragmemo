@@ -2,16 +2,7 @@ import { Results } from "realm";
 import DB from "./db/db";
 import { Snippet } from "./db/realm";
 
-type setupStorageResultType = {
-  status: boolean;
-  snippets: Snippet[];
-};
-
-export const setupStorage = (db: DB): setupStorageResultType => {
-  return returnSnippets(db);
-};
-
-export const returnSnippets = (db: DB): setupStorageResultType => {
+export const returnSnippets = (db: DB): Snippet[] => {
   const snippets = (
     db.reverseSortBy("Snippet", "updatedAt") as unknown as Results<Snippet>
   ).map((snippet) => {
@@ -22,5 +13,5 @@ export const returnSnippets = (db: DB): setupStorageResultType => {
       updatedAt: snippet.updatedAt,
     };
   });
-  return { status: true, snippets };
+  return snippets;
 };

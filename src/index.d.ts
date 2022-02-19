@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 import { IpcRenderer } from "electron";
-import { Fragment, ActiveFragment } from "models";
+import { Fragment, ActiveFragment, Snippet } from "models";
 
 declare global {
   interface Window {
@@ -17,11 +17,7 @@ export type FileData = {
 
 export interface SandBox {
   fileSaveAs: (fileData: string) => void;
-  setupStorage: () => Promise<{
-    status: boolean;
-    msg: string;
-    snippets: [];
-  }>;
+  setupStorage: () => Promise<void>;
   updateSnippet: (data: object) => Promise<{
     status: boolean;
   }>;
@@ -34,6 +30,7 @@ export interface SandBox {
   getSnippet: (snippetId: number) => Promise<JSON>;
   getFragment: (fragmentId: number) => Promise<Fragment>;
   getActiveFragment: (snippetId: number) => Promise<ActiveFragment>;
+  loadSnippets: () => Promise<Snippet[]>;
   fetchFragments: (snippetId: number) => Promise<Fragment[]>;
   openByMenu: (
     listener: (_e: Event, fileData: FileData) => void

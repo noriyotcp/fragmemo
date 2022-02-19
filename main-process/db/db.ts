@@ -1,9 +1,25 @@
 import { Realm, realmSchema, Snippet, Fragment, ActiveFragment } from "./realm";
+import { Language } from "./models/language";
+import languages from "./seeds/languages";
+
 type ActiveFragmentProperty = Pick<ActiveFragment, "fragmentId" | "snippetId">;
 
 class DB extends Realm {
   constructor(path: string) {
-    super({ path, schema: realmSchema });
+    const schema: Realm.ObjectSchema[] = realmSchema.concat(Language.schema);
+    super({ path, schema: schema });
+  }
+
+  initLanguage(): void {
+    this.write(() => {
+      languages.forEach((language, i) => {
+        this.create("Language", {
+          _idx: i,
+          name: language.id,
+          alias: language.alias,
+        });
+      });
+    });
   }
 
   reverseSortBy(
@@ -35,7 +51,19 @@ class DB extends Realm {
     )!;
 
     // create an empty fragment
-    this.createFragment("", "", latestSnippet);
+    // TODO: seed data
+    const content1 = `const hoge = 'hoge desu';
+const hoge2 = 'hoge desu desu';
+class Hoge {
+    hoge: any;
+    constructor(hoge) {
+        this.hoge = hoge;
+    }
+}`;
+    const content2 = `puts 'Hello Ruby desu'
+puts 'Hello Ruby desu2'`;
+    this.createFragment("", content1, latestSnippet, 0); // language == 'plaintext'
+    this.createFragment("", content2, latestSnippet, 0);
 
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const latestFragment: Fragment = this.objectForPrimaryKey(
@@ -46,13 +74,19 @@ class DB extends Realm {
     this.createActiveFragment(latestFragment._id, latestSnippet._id);
   }
 
-  createFragment(title: string, content: string, snippet: Snippet): void {
+  createFragment(
+    title: string,
+    content: string,
+    snippet: Snippet,
+    languageIdx: number
+  ): void {
     this.write(() => {
       this.create("Fragment", {
         _id: this.currentMaxId("Fragment") + 1,
         title: title,
         content: content,
         snippet: snippet,
+        language: this.objectForPrimaryKey("Language", languageIdx) as Language,
         createdAt: new Date(),
         updatedAt: new Date(),
       });

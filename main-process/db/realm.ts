@@ -1,4 +1,5 @@
 import Realm from "realm";
+import { Language } from "./models/language";
 
 const SnippetSchema: Realm.ObjectSchema = {
   name: "Snippet",
@@ -29,6 +30,7 @@ const FragmentSchema: Realm.ObjectSchema = {
     title: "string?",
     content: "string?",
     snippet: "Snippet",
+    language: "Language",
     createdAt: "date",
     updatedAt: "date",
   },
@@ -40,6 +42,7 @@ class Fragment {
   public title = "";
   public content = "";
   public snippet!: Snippet; // TODO: Change required to optional?
+  public language!: Language;
   public createdAt = new Date();
   public updatedAt = new Date();
 

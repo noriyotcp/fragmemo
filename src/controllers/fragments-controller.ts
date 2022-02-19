@@ -63,7 +63,6 @@ export class FragmentsController implements ReactiveController {
       .fetchFragments(<number>this.snippet.selectedSnippet._id)
       .then((fragments) => {
         this.fragments = fragments;
-        this.fragments = this.setFragments(this.fragments);
         console.log("Fetch fragments", this.fragments, this.activeFragmentId);
         this.host.requestUpdate();
       });
@@ -86,17 +85,4 @@ export class FragmentsController implements ReactiveController {
         this.host.requestUpdate();
       });
   };
-
-  setFragments(fragments: Fragment[]): Fragment[] {
-    return fragments.map((fragment) => {
-      return new Fragment({
-        _id: fragment._id,
-        title: fragment.title,
-        content: fragment.content,
-        snippet: fragment.snippet,
-        createdAt: fragment.createdAt,
-        updatedAt: fragment.updatedAt,
-      });
-    });
-  }
 }

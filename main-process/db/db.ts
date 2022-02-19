@@ -1,9 +1,35 @@
-import { Realm, realmSchema, Snippet, Fragment, ActiveFragment } from "./realm";
+import {
+  Realm,
+  realmSchema,
+  Snippet,
+  Fragment,
+  ActiveFragment,
+  Language,
+} from "./realm";
+import languages from "./seeds/languages";
+import * as fragments from "./seeds/fragments";
+
 type ActiveFragmentProperty = Pick<ActiveFragment, "fragmentId" | "snippetId">;
 
 class DB extends Realm {
   constructor(path: string) {
     super({ path, schema: realmSchema });
+  }
+
+  initLanguage(): void {
+    this.write(() => {
+      languages.forEach((language, i) => {
+        this.create("Language", {
+          _idx: i,
+          name: language.id,
+          alias: language.alias,
+        });
+      });
+    });
+  }
+
+  sortBy(className: string, property: string): Realm.Results<Realm.Object> {
+    return this.objects(className).sorted(property);
   }
 
   reverseSortBy(
@@ -35,7 +61,9 @@ class DB extends Realm {
     )!;
 
     // create an empty fragment
-    this.createFragment("", "", latestSnippet);
+    // TODO: seed data for testing
+    this.createFragment("", fragments.content1, latestSnippet, 0); // language == 'plaintext'
+    this.createFragment("", fragments.content2, latestSnippet, 0);
 
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const latestFragment: Fragment = this.objectForPrimaryKey(
@@ -46,13 +74,19 @@ class DB extends Realm {
     this.createActiveFragment(latestFragment._id, latestSnippet._id);
   }
 
-  createFragment(title: string, content: string, snippet: Snippet): void {
+  createFragment(
+    title: string,
+    content: string,
+    snippet: Snippet,
+    languageIdx: number
+  ): void {
     this.write(() => {
       this.create("Fragment", {
         _id: this.currentMaxId("Fragment") + 1,
         title: title,
         content: content,
         snippet: snippet,
+        language: this.objectForPrimaryKey("Language", languageIdx) as Language,
         createdAt: new Date(),
         updatedAt: new Date(),
       });

@@ -29,6 +29,7 @@ const FragmentSchema: Realm.ObjectSchema = {
     title: "string?",
     content: "string?",
     snippet: "Snippet",
+    language: "Language",
     createdAt: "date",
     updatedAt: "date",
   },
@@ -40,6 +41,7 @@ class Fragment {
   public title = "";
   public content = "";
   public snippet!: Snippet; // TODO: Change required to optional?
+  public language!: Language;
   public createdAt = new Date();
   public updatedAt = new Date();
 
@@ -68,7 +70,32 @@ class ActiveFragment {
   }
 }
 
-// TODO: Snippt and Fragment also have own schema in Class.
-const realmSchema = [SnippetSchema, FragmentSchema, ActiveFragment.schema];
+class Language {
+  public _idx = 0;
+  public name = "";
+  public alias = "";
 
-export { Realm, realmSchema, Snippet, Fragment, ActiveFragment };
+  public static schema: Realm.ObjectSchema = {
+    name: "Language",
+    properties: {
+      _idx: "int",
+      name: "string",
+      alias: "string",
+    },
+    primaryKey: "_idx",
+  };
+
+  constructor(data: Required<Language>) {
+    Object.assign(this, data);
+  }
+}
+
+// TODO: Snippt and Fragment also have own schema in Class.
+const realmSchema = [
+  SnippetSchema,
+  FragmentSchema,
+  ActiveFragment.schema,
+  Language.schema,
+];
+
+export { Realm, realmSchema, Snippet, Fragment, ActiveFragment, Language };

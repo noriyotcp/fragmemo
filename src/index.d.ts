@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 import { IpcRenderer } from "electron";
-import { Fragment, ActiveFragment, Snippet } from "models";
+import { Fragment, ActiveFragment, Snippet, Language } from "models";
 
 declare global {
   interface Window {
@@ -31,6 +31,7 @@ export interface SandBox {
   getFragment: (fragmentId: number) => Promise<Fragment>;
   getActiveFragment: (snippetId: number) => Promise<ActiveFragment>;
   loadSnippets: () => Promise<Snippet[]>;
+  loadLanguages: () => Promise<Language[]>;
   fetchFragments: (snippetId: number) => Promise<Fragment[]>;
   openByMenu: (
     listener: (_e: Event, fileData: FileData) => void

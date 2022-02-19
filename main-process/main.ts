@@ -182,6 +182,7 @@ app.once("browser-window-created", () => {
     db = new DB(`${app.getPath("userData")}/fragmemoDB/fragmemo.realm`);
     try {
       if (db.empty) {
+        db.initLanguage();
         db.createSnippet("");
       }
     } catch (err) {
@@ -215,21 +216,17 @@ app.once("browser-window-created", () => {
     return snippets;
   };
 
+  ipcMain.handle("load-languages", (event) => {
+    if (!db) return;
+
+    return db.sortBy("Language", "_idx").toJSON();
+  });
+
   ipcMain.handle("fetch-fragments", (event, snippetId) => {
     const fragments = db
       .objects("Fragment")
       .filtered(`snippet._id == ${snippetId}`) as unknown as Results<Fragment>;
-
-    return fragments.map((fragment) => {
-      return new Fragment({
-        _id: fragment._id,
-        title: fragment.title,
-        content: fragment.content,
-        snippet: fragment.snippet,
-        createdAt: fragment.createdAt,
-        updatedAt: fragment.updatedAt,
-      });
-    });
+    return fragments.toJSON();
   });
 });
 

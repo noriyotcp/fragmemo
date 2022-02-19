@@ -2,7 +2,7 @@ import path from "path";
 import { app, BrowserWindow, ipcMain } from "electron";
 import { setFileSaveAs } from "./setFileSaveAs";
 import { createMenu } from "./createMenu";
-import { loadSnippets } from "./setupStorage";
+import { loadSnippets } from "./loadSnippets";
 import { JsonStorage, DatapathDoesNotExistError } from "./jsonStorage";
 import { setTimeout } from "timers/promises";
 import DB from "./db/db";

@@ -2,14 +2,13 @@ import path from "path";
 import { app, BrowserWindow, ipcMain } from "electron";
 import { setFileSaveAs } from "./setFileSaveAs";
 import { createMenu } from "./createMenu";
-import { loadSnippets } from "./loadSnippets";
 import { JsonStorage, DatapathDoesNotExistError } from "./jsonStorage";
 import { setTimeout } from "timers/promises";
 import DB from "./db/db";
 // import { createHash } from "node:crypto";
 import fs from "fs";
 
-import { Fragment } from "./db/realm";
+import { Fragment, Snippet } from "./db/realm";
 import { Results } from "realm";
 
 const isDev = process.env.IS_DEV == "true" ? true : false;
@@ -194,6 +193,20 @@ app.once("browser-window-created", () => {
   ipcMain.handle("load-snippets", (event) => {
     return loadSnippets(db);
   });
+
+  const loadSnippets = (db: DB): Snippet[] => {
+    const snippets = (
+      db.reverseSortBy("Snippet", "updatedAt") as unknown as Results<Snippet>
+    ).map((snippet) => {
+      return {
+        _id: snippet._id,
+        title: snippet.title,
+        createdAt: snippet.createdAt,
+        updatedAt: snippet.updatedAt,
+      };
+    });
+    return snippets;
+  };
 
   ipcMain.handle("fetch-fragments", (event, snippetId) => {
     const fragments = db

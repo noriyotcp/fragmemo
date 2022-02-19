@@ -33,20 +33,8 @@ export class SetupStorageController implements ReactiveController {
         "Snippets loaded",
         snippets,
       ];
-      this.snippets = this.setSnippets(this.snippets);
-      console.info("Snippet instances: ", this.snippets);
+      console.info("Snippet loaded: ", this.snippets);
       this.host.requestUpdate();
-    });
-  }
-
-  setSnippets(snippets: Snippet[]): Snippet[] {
-    return snippets.map((snippet) => {
-      return new Snippet({
-        _id: snippet._id,
-        title: snippet.title,
-        createdAt: snippet.createdAt,
-        updatedAt: snippet.updatedAt,
-      });
     });
   }
 

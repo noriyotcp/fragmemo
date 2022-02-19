@@ -135,7 +135,7 @@ export class CodeEditor extends LitElement {
     this.editor = monaco.editor.create(this.container.value!, editorOptions);
     // monaco.editor.setModelLanguage(this.editor.getModel()!, "html");
     console.log(this.editor.getModel()?.getLanguageId());
-    console.log(monaco.languages.getLanguages());
+    console.log(this._langaugesMap());
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     // monaco.editor.setModelLanguage(this.editor.getModel()!, "c");
     this.editor.getModel()?.onDidChangeContent((e) => {
@@ -207,5 +207,11 @@ export class CodeEditor extends LitElement {
         composed: true,
       })
     );
+  }
+
+  private _langaugesMap(): object {
+    return monaco.languages.getLanguages().map((lang) => {
+      return { id: lang.id, alias: lang.aliases ? lang.aliases[0] : lang.id };
+    });
   }
 }

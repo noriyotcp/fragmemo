@@ -19,7 +19,6 @@ export interface SandBox {
   fileSaveAs: (fileData: string) => void;
   setupStorage: () => Promise<{
     status: boolean;
-    msg: string;
     snippets: [];
   }>;
   updateSnippet: (data: object) => Promise<{

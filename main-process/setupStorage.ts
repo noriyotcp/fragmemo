@@ -4,7 +4,6 @@ import { Snippet } from "./db/realm";
 
 type setupStorageResultType = {
   status: boolean;
-  msg: string;
   snippets: Snippet[];
 };
 
@@ -23,5 +22,5 @@ const returnSnippets = (db: DB): setupStorageResultType => {
       updatedAt: snippet.updatedAt,
     };
   });
-  return { status: true, msg: "Snippets loaded", snippets };
+  return { status: true, snippets };
 };

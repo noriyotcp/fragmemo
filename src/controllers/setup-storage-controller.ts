@@ -37,7 +37,6 @@ export class SetupStorageController implements ReactiveController {
   }
 
   private _loadSnippets() {
-    this.msg = "Snippets loaded";
     myAPI.loadSnippets().then(({ status, snippets }) => {
       if (status) {
         this.snippets = snippets;
@@ -45,6 +44,8 @@ export class SetupStorageController implements ReactiveController {
         this.host.requestUpdate();
       } else {
         this.msg = "Snippets load failed";
+        this._displayToast();
+        console.error("Snippets load failed", status);
       }
     });
   }

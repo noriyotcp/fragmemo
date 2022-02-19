@@ -193,7 +193,12 @@ app.once("browser-window-created", () => {
   ipcMain.handle("load-snippets", (event) => {
     if (!db) return;
 
-    return loadSnippets(db);
+    try {
+      return loadSnippets(db);
+    } catch (error) {
+      console.error(error);
+      return { status: false, snippets: [] };
+    }
   });
 
   const loadSnippets = (db: DB): { status: boolean; snippets: Snippet[] } => {

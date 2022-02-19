@@ -38,9 +38,11 @@ export class SetupStorageController implements ReactiveController {
 
   private _loadingSnippets(snippets: Snippet[]) {
     this.msg = "Snippets loaded";
-    this.snippets = snippets;
-    console.info("Snippet loaded: ", this.snippets);
-    this.host.requestUpdate();
+    myAPI.loadSnippets().then((_snippets) => {
+      this.snippets = _snippets;
+      console.info("Snippet loaded: ", this.snippets);
+      this.host.requestUpdate();
+    });
   }
 
   private _updateSnippetsListener = (e: CustomEvent) => {

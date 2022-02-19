@@ -11,6 +11,7 @@ contextBridge.exposeInMainWorld("myAPI", {
   updateFragment: (data) => ipcRenderer.invoke("update-fragment", data),
   updateActiveFragment: (data) =>
     ipcRenderer.invoke("update-active-fragment", data),
+  loadSnippets: () => ipcRenderer.invoke("load-snippets"),
   fetchFragments: (snippetId) =>
     ipcRenderer.invoke("fetch-fragments", snippetId),
   getSnippet: (snippetId) => ipcRenderer.invoke("get-snippet", snippetId),

@@ -191,6 +191,14 @@ app.once("browser-window-created", () => {
     return returnSnippets(true);
   });
 
+  ipcMain.handle("load-snippets", (event) => {
+    // TODO: do not pass boolean
+    const result = returnSnippets(true);
+    if (result) {
+      return result.snippets;
+    }
+  });
+
   const returnSnippets = (status: boolean) => {
     // return snippets when setup is done
     if (status) {

@@ -197,7 +197,7 @@ app.once("browser-window-created", () => {
       return loadSnippets(db);
     } catch (error) {
       console.error(error);
-      return { status: false, snippets: [] };
+      throw error;
     }
   });
 

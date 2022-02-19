@@ -2,7 +2,7 @@ import path from "path";
 import { app, BrowserWindow, ipcMain } from "electron";
 import { setFileSaveAs } from "./setFileSaveAs";
 import { createMenu } from "./createMenu";
-import { returnSnippets } from "./setupStorage";
+import { loadSnippets } from "./setupStorage";
 import { JsonStorage, DatapathDoesNotExistError } from "./jsonStorage";
 import { setTimeout } from "timers/promises";
 import DB from "./db/db";
@@ -192,7 +192,7 @@ app.once("browser-window-created", () => {
   });
 
   ipcMain.handle("load-snippets", (event) => {
-    return returnSnippets(db);
+    return loadSnippets(db);
   });
 
   ipcMain.handle("fetch-fragments", (event, snippetId) => {

@@ -31,17 +31,21 @@ export class SetupStorageController implements ReactiveController {
       if (status) {
         this._loadingSnippets();
       } else {
-        this.msg = "Loading snippets failed";
+        this.msg = "Setup failed";
       }
     });
   }
 
   private _loadingSnippets() {
     this.msg = "Snippets loaded";
-    myAPI.loadSnippets().then((_snippets) => {
-      this.snippets = _snippets;
-      console.info("Snippet loaded: ", this.snippets);
-      this.host.requestUpdate();
+    myAPI.loadSnippets().then(({ status, snippets }) => {
+      if (status) {
+        this.snippets = snippets;
+        this.msg = "Snippets loaded";
+        this.host.requestUpdate();
+      } else {
+        this.msg = "Snippets load failed";
+      }
     });
   }
 

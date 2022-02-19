@@ -191,10 +191,12 @@ app.once("browser-window-created", () => {
   });
 
   ipcMain.handle("load-snippets", (event) => {
+    if (!db) return;
+
     return loadSnippets(db);
   });
 
-  const loadSnippets = (db: DB): Snippet[] => {
+  const loadSnippets = (db: DB): { status: boolean; snippets: Snippet[] } => {
     const snippets = (
       db.reverseSortBy("Snippet", "updatedAt") as unknown as Results<Snippet>
     ).map((snippet) => {
@@ -205,7 +207,7 @@ app.once("browser-window-created", () => {
         updatedAt: snippet.updatedAt,
       };
     });
-    return snippets;
+    return { status: true, snippets };
   };
 
   ipcMain.handle("fetch-fragments", (event, snippetId) => {

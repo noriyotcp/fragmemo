@@ -28,6 +28,7 @@ export interface SandBox {
     status: boolean;
   }>;
   getSnippet: (snippetId: number) => Promise<JSON>;
+  createSnippet: () => Promise<void>;
   getFragment: (fragmentId: number) => Promise<Fragment>;
   getActiveFragment: (snippetId: number) => Promise<ActiveFragment>;
   loadSnippets: () => Promise<Snippet[]>;

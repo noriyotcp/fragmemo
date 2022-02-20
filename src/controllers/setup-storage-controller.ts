@@ -56,7 +56,9 @@ export class SetupStorageController implements ReactiveController {
   };
 
   private _createSnippet() {
-    console.log("Create snippet");
+    myAPI.createSnippet().then(() => {
+      this._loadSnippets();
+    });
   }
 
   private _displayToast(message: string) {

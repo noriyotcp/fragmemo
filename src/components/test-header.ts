@@ -63,6 +63,11 @@ export class TestHeader extends LitElement {
       this._snippetChangedListener as EventListener
     );
 
+    window.addEventListener(
+      "select-snippet",
+      this._selectSnippetListener as EventListener
+    );
+
     // Give the browser a chance to paint
     await new Promise((r) => setTimeout(r, 0));
     myAPI.openByMenu((_e: Event, fileData: FileData) =>
@@ -103,6 +108,15 @@ export class TestHeader extends LitElement {
       });
       this.requestUpdate();
     });
+  };
+
+  private _selectSnippetListener = (e: CustomEvent): void => {
+    this.snippet.selectedSnippet = JSON.parse(e.detail.selectedSnippet);
+    console.info(
+      "previouslySelectedSnippet",
+      JSON.parse(e.detail.previouslySelectedSnippet)
+    );
+    this.requestUpdate();
   };
 
   private _fileSaveAs(_e: Event): void {

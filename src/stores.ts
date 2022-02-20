@@ -8,6 +8,7 @@ class FragmentStore {
     states: {
       content: { type: "string", default: "" },
       isEditing: { type: "boolean", default: false },
+      langIdx: { type: "number", default: 0 },
     },
   };
 
@@ -23,6 +24,10 @@ class FragmentStore {
     this.store.setRow(this.TABLE_NAME, `${rowId}`, cells);
   }
 
+  setPartialRow(rowId: string, cells: object) {
+    this.store.setPartialRow(this.TABLE_NAME, `${rowId}`, cells);
+  }
+
   getRow(rowId: string) {
     return this.store.getRow(this.TABLE_NAME, `${rowId}`);
   }
@@ -31,7 +36,7 @@ class FragmentStore {
     return this.store.getCell(this.TABLE_NAME, `${rowId}`, cell);
   }
 
-  setCell(rowId: string, cell: string, value: string | boolean) {
+  setCell(rowId: string, cell: string, value: string | boolean | number) {
     this.store.setCell(this.TABLE_NAME, `${rowId}`, cell, value);
   }
 }

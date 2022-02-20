@@ -1,6 +1,6 @@
 import { dispatch } from "../events/dispatcher";
 import { LitElement, html, css, TemplateResult } from "lit";
-import { customElement, property, state } from "lit/decorators.js";
+import { customElement, property, query, state } from "lit/decorators.js";
 import { map } from "lit/directives/map.js";
 import FragmentStore from "../stores";
 import { Language } from "models";
@@ -20,7 +20,9 @@ export class EditorElement extends LitElement {
   }
 
   @property() _textareaValue = "";
-  @state() private _activeFragmentId?: number;
+  @query("#lang-select") select!: HTMLSelectElement;
+  @state()
+  private _activeFragmentId?: number;
   @state() private _content = "";
   @state() private _language = "plaintext";
   @state() private _languages!: Language[];
@@ -79,7 +81,9 @@ export class EditorElement extends LitElement {
           @change=${this._selectionChange}
         >
           ${map(this._languages, (l) => {
-            return html`<option value=${l.name}>${l.alias}</option>`;
+            return html`<option _idx=${l._idx} value=${l.name}>
+              ${l.alias}
+            </option>`;
           })}
         </select>
       </footer>
@@ -90,7 +94,14 @@ export class EditorElement extends LitElement {
     if (!e.currentTarget) return;
 
     const target = <HTMLSelectElement>e.currentTarget;
-    this._language = target.value;
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    this._language = target.selectedOptions[0].getAttribute("value")!;
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    const _idx = target.selectedOptions[0].getAttribute("_idx")!;
+    myAPI.updateFragment({
+      _id: this._activeFragmentId,
+      properties: { language: { _idx: Number(_idx) } },
+    });
     this._setContent();
   }
 
@@ -103,16 +114,25 @@ export class EditorElement extends LitElement {
     // if no records for the active fragment, it fetches a fragment from Realm DB
     if (!this.fragmentStore.hasRow(`${this._activeFragmentId}`)) {
       myAPI.getFragment(Number(this._activeFragmentId)).then((fragment) => {
-        this.fragmentStore.setCell(
-          `${fragment._id}`,
-          "content",
-          fragment.content
-        );
+        this.fragmentStore.setPartialRow(`${fragment._id}`, {
+          content: fragment.content,
+          langIdx: fragment.language._idx,
+        });
+        this._selectOption(fragment.language._idx);
         this._setContent();
       });
     } else {
+      this._selectOption(
+        this.fragmentStore.getCell(`${this._activeFragmentId}`, "langIdx")
+      );
       this._setContent();
     }
+  }
+
+  private _selectOption(idx: number): void {
+    this.select.options[idx].selected = true;
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    this._language = this.select.selectedOptions[0].getAttribute("value")!;
   }
 
   private _changeText(e: CustomEvent) {
@@ -127,7 +147,7 @@ export class EditorElement extends LitElement {
       "isEditing",
       isChanged
     );
-    this.fragmentStore.setRow(`${this._activeFragmentId}`, {
+    this.fragmentStore.setPartialRow(`${this._activeFragmentId}`, {
       content: e.detail.text,
       isEditing: isChanged,
     });
@@ -152,7 +172,7 @@ export class EditorElement extends LitElement {
       .then(({ status }) => {
         console.log("myAPI.updateFragment", status);
         if (status) {
-          this.fragmentStore.setRow(`${this._activeFragmentId}`, {
+          this.fragmentStore.setPartialRow(`${this._activeFragmentId}`, {
             content: e.detail.text,
             isEditing: false,
           });

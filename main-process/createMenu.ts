@@ -13,6 +13,13 @@ export const createMenu = (win: BrowserWindow): void => {
       label: "File",
       submenu: [
         {
+          label: "New Snippet",
+          accelerator: "CmdOrCtrl+N",
+          click: async () => {
+            win.webContents.send("new-snippet");
+          },
+        },
+        {
           label: "Open...",
           accelerator: "CmdOrCtrl+O",
           click: async () => {

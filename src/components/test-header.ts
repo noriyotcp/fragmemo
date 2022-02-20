@@ -1,19 +1,19 @@
 import { LitElement, html, css, TemplateResult } from "lit";
-import { customElement, property, query } from "lit/decorators.js";
+import { customElement, property, query, state } from "lit/decorators.js";
 import { FileData, Override } from "index";
 import { dispatch } from "../events/dispatcher";
-import { SnippetController } from "../controllers/snippet-controller";
 import "@ui5/webcomponents/dist/Input.js";
+import { Snippet } from "models";
 
 const { myAPI } = window;
 
 @customElement("test-header")
 export class TestHeader extends LitElement {
-  private snippet = new SnippetController(this);
-
   @query("#btn-save") btnSave!: HTMLButtonElement;
   @query("#snippet-title") snippetTitle!: HTMLInputElement;
   @property({ type: String })
+  @state()
+  private _snippet?: Snippet;
   textareaValue!: string;
 
   constructor() {
@@ -44,7 +44,7 @@ export class TestHeader extends LitElement {
         id="snippet-title"
         type="text"
         placeholder="Snippet title..."
-        value="${this.snippet.selectedSnippet.title}"
+        value="${this._snippet?.title}"
         @input="${this._inputTitleDispatcher}"
       ></ui5-input>
       <button type="button" id="btn-save" @click="${this._displayToast}">
@@ -63,6 +63,11 @@ export class TestHeader extends LitElement {
       this._snippetChangedListener as EventListener
     );
 
+    window.addEventListener(
+      "select-snippet",
+      this._selectSnippetListener as EventListener
+    );
+
     // Give the browser a chance to paint
     await new Promise((r) => setTimeout(r, 0));
     myAPI.openByMenu((_e: Event, fileData: FileData) =>
@@ -71,18 +76,20 @@ export class TestHeader extends LitElement {
 
     // Fired when the input operation has finished by pressing Enter or on focusout
     this.snippetTitle.addEventListener("change", (e: Event) => {
+      if (!this._snippet) return;
+
       const { highlightValue } = e.currentTarget as Override<
         EventTarget,
         { highlightValue: string }
       >;
 
-      this.snippet.selectedSnippet.title = highlightValue;
+      this._snippet.title = highlightValue;
       dispatch({
         type: "snippet-changed",
         detail: {
-          _id: this.snippet.selectedSnippet._id,
+          _id: this._snippet._id,
           properties: {
-            title: this.snippet.selectedSnippet.title,
+            title: this._snippet.title,
           },
         },
       });
@@ -103,6 +110,15 @@ export class TestHeader extends LitElement {
       });
       this.requestUpdate();
     });
+  };
+
+  private _selectSnippetListener = (e: CustomEvent): void => {
+    this._snippet = JSON.parse(e.detail.selectedSnippet);
+    console.info(
+      "previouslySelectedSnippet",
+      JSON.parse(e.detail.previouslySelectedSnippet)
+    );
+    this.requestUpdate();
   };
 
   private _fileSaveAs(_e: Event): void {

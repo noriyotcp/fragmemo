@@ -28,6 +28,7 @@ export interface SandBox {
     status: boolean;
   }>;
   getSnippet: (snippetId: number) => Promise<JSON>;
+  createSnippet: () => Promise<void>;
   getFragment: (fragmentId: number) => Promise<Fragment>;
   getActiveFragment: (snippetId: number) => Promise<ActiveFragment>;
   loadSnippets: () => Promise<Snippet[]>;
@@ -40,6 +41,7 @@ export interface SandBox {
     listener: (_e: Event, elementName: string) => void
   ) => Electron.IpcRenderer;
   saveFragment: (listener: (_e: Event) => void) => Electron.IpcRenderer;
+  newSnippet: (listener: (_e: Event) => void) => Electron.IpcRenderer;
 }
 
 // Override properties with type intersection

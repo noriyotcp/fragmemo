@@ -176,6 +176,10 @@ app.once("browser-window-created", () => {
     return activeFragment.toJSON();
   });
 
+  ipcMain.handle("create-snippet", (event) => {
+    db.createSnippet("");
+  });
+
   ipcMain.handle("setup-storage", async () => {
     // await setTimeout(1000); // wait 1 seconds for testing
 

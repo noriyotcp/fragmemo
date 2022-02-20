@@ -102,6 +102,9 @@ export class EditorElement extends LitElement {
       _id: this._activeFragmentId,
       properties: { language: { _idx: Number(_idx) } },
     });
+    this.fragmentStore.setPartialRow(`${this._activeFragmentId}`, {
+      langIdx: Number(_idx),
+    });
     this._setContent();
   }
 

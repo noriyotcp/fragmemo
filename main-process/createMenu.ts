@@ -8,6 +8,28 @@ import {
 import * as fs from "fs";
 
 export const createMenu = (win: BrowserWindow): void => {
+  const switchTab = [
+    {
+      label: "Switch Tab",
+      submenu: [
+        {
+          label: "Next Tab",
+          accelerator: "CmdOrCtrl+Shift+]",
+          click: async () => {
+            console.log("Next Tab");
+          },
+        },
+        {
+          label: "Previous Tab",
+          accelerator: "CmdOrCtrl+Shift+[",
+          click: async () => {
+            console.log("Previous Tab");
+          },
+        },
+      ],
+    },
+  ];
+
   const template: MenuItemConstructorOptions[] = [
     {
       label: "File",
@@ -63,6 +85,7 @@ export const createMenu = (win: BrowserWindow): void => {
     },
     { role: "editMenu" },
     { role: "viewMenu" },
+    { label: "Go", submenu: [...switchTab] },
     { role: "windowMenu" },
     { role: "help", submenu: [{ role: "about" }] },
   ];

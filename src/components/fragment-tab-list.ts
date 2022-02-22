@@ -68,6 +68,7 @@ export class FragmentTabList extends LitElement {
     if (this.currentTabIndex > this.lastTabIndex) {
       this.currentTabIndex = 0;
     }
+    this._clickTab();
     console.log("nextTab", this.currentTabIndex);
   }
 
@@ -76,7 +77,16 @@ export class FragmentTabList extends LitElement {
     if (this.currentTabIndex < 0) {
       this.currentTabIndex = this.lastTabIndex;
     }
+    this._clickTab();
     console.log("previousTab", this.currentTabIndex);
+  }
+
+  private _clickTab() {
+    (
+      this.tabs[this.currentTabIndex].shadowRoot?.querySelector(
+        ".tab-item"
+      ) as HTMLElement
+    ).click();
   }
 
   public get lastTabIndex(): number {

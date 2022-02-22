@@ -8,6 +8,7 @@ export class FragmentsController implements ReactiveController {
 
   fragments!: Fragment[];
   activeFragmentId = 0;
+  currentTabIndex = 0;
   snippet?: Snippet;
 
   constructor(host: ReactiveControllerHost) {
@@ -54,7 +55,7 @@ export class FragmentsController implements ReactiveController {
 
     myAPI.fetchFragments(<number>this.snippet._id).then((fragments) => {
       this.fragments = fragments;
-      console.log("Fetch fragments", this.fragments, this.activeFragmentId);
+      this._setCurrentTabIndex();
       this.host.requestUpdate();
     });
   };
@@ -63,6 +64,7 @@ export class FragmentsController implements ReactiveController {
     if (!this.snippet) return;
 
     this.activeFragmentId = e.detail.activeFragmentId;
+    this._setCurrentTabIndex();
     // Update ActiveFragment in Realm DB
     myAPI
       .updateActiveFragment({
@@ -76,4 +78,10 @@ export class FragmentsController implements ReactiveController {
         this.host.requestUpdate();
       });
   };
+
+  private _setCurrentTabIndex() {
+    this.currentTabIndex = Array.from(this.fragments).findIndex(
+      (f) => f._id === this.activeFragmentId
+    );
+  }
 }

@@ -1,5 +1,5 @@
 import { LitElement, html, css, TemplateResult } from "lit";
-import { customElement, query, queryAll, state } from "lit/decorators.js";
+import { customElement, query, queryAll } from "lit/decorators.js";
 import { map } from "lit/directives/map.js";
 import { FragmentsController } from "../controllers/fragments-controller";
 
@@ -12,7 +12,6 @@ export class FragmentTabList extends LitElement {
   @query("sl-tab-group") tabGroup!: HTMLElement;
   @queryAll("fragment-tab") tabs!: Array<HTMLElement>;
   @query(".tab-item[active='true']") activeTab!: HTMLElement;
-  @state() private currentTabIndex = 0;
 
   static styles = css`
     section {
@@ -63,33 +62,33 @@ export class FragmentTabList extends LitElement {
     myAPI.previousTab((_e: Event) => this.previousTab());
   }
 
-  nextTab() {
-    this.currentTabIndex++;
-    if (this.currentTabIndex > this.lastTabIndex) {
-      this.currentTabIndex = 0;
+  private nextTab() {
+    this.fragmentsController.currentTabIndex++;
+    if (this.fragmentsController.currentTabIndex > this.lastTabIndex) {
+      this.fragmentsController.currentTabIndex = 0;
     }
     this._clickTab();
-    console.log("nextTab", this.currentTabIndex);
+    console.log("nextTab", this.fragmentsController.currentTabIndex);
   }
 
-  previousTab() {
-    this.currentTabIndex--;
-    if (this.currentTabIndex < 0) {
-      this.currentTabIndex = this.lastTabIndex;
+  private previousTab() {
+    this.fragmentsController.currentTabIndex--;
+    if (this.fragmentsController.currentTabIndex < 0) {
+      this.fragmentsController.currentTabIndex = this.lastTabIndex;
     }
     this._clickTab();
-    console.log("previousTab", this.currentTabIndex);
+    console.log("previousTab", this.fragmentsController.currentTabIndex);
   }
 
   private _clickTab() {
     (
-      this.tabs[this.currentTabIndex].shadowRoot?.querySelector(
-        ".tab-item"
-      ) as HTMLElement
+      this.tabs[
+        this.fragmentsController.currentTabIndex
+      ].shadowRoot?.querySelector(".tab-item") as HTMLElement
     ).click();
   }
 
-  public get lastTabIndex(): number {
+  private get lastTabIndex(): number {
     return this.tabs.length - 1;
   }
 

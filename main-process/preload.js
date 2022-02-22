@@ -6,6 +6,8 @@ contextBridge.exposeInMainWorld("myAPI", {
   openByMenu: (listener) => ipcRenderer.on("open-by-menu", listener),
   openSettings: (listener) => ipcRenderer.on("open-settings", listener),
   saveFragment: (listener) => ipcRenderer.on("save-fragment", listener),
+  nextTab: (listener) => ipcRenderer.on("next-tab", listener),
+  previousTab: (listener) => ipcRenderer.on("previous-tab", listener),
   newSnippet: (listener) => ipcRenderer.on("new-snippet", listener),
   createSnippet: () => ipcRenderer.invoke("create-snippet"),
   setupStorage: () => ipcRenderer.invoke("setup-storage"),

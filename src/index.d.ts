@@ -42,6 +42,8 @@ export interface SandBox {
   ) => Electron.IpcRenderer;
   saveFragment: (listener: (_e: Event) => void) => Electron.IpcRenderer;
   newSnippet: (listener: (_e: Event) => void) => Electron.IpcRenderer;
+  nextTab: (listener: (_e: Event) => void) => Electron.IpcRenderer;
+  previousTab: (listener: (_e: Event) => void) => Electron.IpcRenderer;
 }
 
 // Override properties with type intersection

@@ -16,14 +16,14 @@ export const createMenu = (win: BrowserWindow): void => {
           label: "Next Tab",
           accelerator: "CmdOrCtrl+Shift+]",
           click: async () => {
-            console.log("Next Tab");
+            win.webContents.send("next-tab");
           },
         },
         {
           label: "Previous Tab",
           accelerator: "CmdOrCtrl+Shift+[",
           click: async () => {
-            console.log("Previous Tab");
+            win.webContents.send("previous-tab");
           },
         },
       ],

@@ -1,5 +1,5 @@
 import { LitElement, html, css, TemplateResult } from "lit";
-import { customElement, query, queryAll } from "lit/decorators.js";
+import { customElement, query, queryAll, state } from "lit/decorators.js";
 import { map } from "lit/directives/map.js";
 import { FragmentsController } from "../controllers/fragments-controller";
 
@@ -10,8 +10,9 @@ export class FragmentTabList extends LitElement {
   private fragmentsController = new FragmentsController(this);
 
   @query("sl-tab-group") tabGroup!: HTMLElement;
-  @queryAll(".tab-item") tabs!: Array<HTMLElement>;
+  @queryAll("fragment-tab") tabs!: Array<HTMLElement>;
   @query(".tab-item[active='true']") activeTab!: HTMLElement;
+  @state() private currentTabIndex = 0;
 
   static styles = css`
     section {
@@ -58,8 +59,26 @@ export class FragmentTabList extends LitElement {
   }
 
   firstUpdated(): void {
-    myAPI.nextTab((_e: Event) => console.log("nextTab"));
-    myAPI.previousTab((_e: Event) => console.log("previousTab"));
+    myAPI.nextTab((_e: Event) => this.nextTab());
+    myAPI.previousTab((_e: Event) => this.previousTab());
+  }
+
+  nextTab() {
+    if (this.tabs.length - 1 === this.currentTabIndex) {
+      this.currentTabIndex = 0;
+    } else {
+      this.currentTabIndex++;
+    }
+    console.log("nextTab", this.currentTabIndex);
+  }
+
+  previousTab() {
+    if (this.currentTabIndex <= 0) {
+      this.currentTabIndex = this.tabs.length - 1;
+    } else {
+      this.currentTabIndex--;
+    }
+    console.log("previousTab", this.currentTabIndex);
   }
 
   updated() {

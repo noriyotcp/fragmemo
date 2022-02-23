@@ -1,40 +1,26 @@
 import Realm from "realm";
 
-const SnippetSchema: Realm.ObjectSchema = {
-  name: "Snippet",
-  properties: {
-    _id: "int",
-    title: "string?",
-    createdAt: "date",
-    updatedAt: "date",
-  },
-  primaryKey: "_id",
-};
-
 class Snippet {
   _id = 0;
   title = "";
   createdAt = new Date();
   updatedAt = new Date();
 
+  public static schema: Realm.ObjectSchema = {
+    name: "Snippet",
+    properties: {
+      _id: "int",
+      title: "string?",
+      createdAt: "date",
+      updatedAt: "date",
+    },
+    primaryKey: "_id",
+  };
+
   constructor(data: Required<Snippet>) {
     Object.assign(this, data);
   }
 }
-
-const FragmentSchema: Realm.ObjectSchema = {
-  name: "Fragment",
-  properties: {
-    _id: "int",
-    title: "string?",
-    content: "string?",
-    snippet: "Snippet",
-    language: "Language",
-    createdAt: "date",
-    updatedAt: "date",
-  },
-  primaryKey: "_id",
-};
 
 class Fragment {
   public _id = 0;
@@ -44,6 +30,20 @@ class Fragment {
   public language!: Language;
   public createdAt = new Date();
   public updatedAt = new Date();
+
+  public static schema: Realm.ObjectSchema = {
+    name: "Fragment",
+    properties: {
+      _id: "int",
+      title: "string?",
+      content: "string?",
+      snippet: "Snippet",
+      language: "Language",
+      createdAt: "date",
+      updatedAt: "date",
+    },
+    primaryKey: "_id",
+  };
 
   constructor(data: Partial<Fragment>) {
     Object.assign(this, data);
@@ -90,12 +90,4 @@ class Language {
   }
 }
 
-// TODO: Snippt and Fragment also have own schema in Class.
-const realmSchema = [
-  SnippetSchema,
-  FragmentSchema,
-  ActiveFragment.schema,
-  Language.schema,
-];
-
-export { Realm, realmSchema, Snippet, Fragment, ActiveFragment, Language };
+export { Realm, Snippet, Fragment, ActiveFragment, Language };

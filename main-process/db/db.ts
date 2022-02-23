@@ -54,7 +54,7 @@ class DB extends Realm {
   initSnippet(title: string): void {
     const snippetUpdate = this.createSnippetUpdate();
 
-    const latestSnippet: Snippet = this.createNewSnippet(title, snippetUpdate);
+    const latestSnippet: Snippet = this.createSnippet(title, snippetUpdate);
 
     // create an empty fragment
     // TODO: seed data for testing
@@ -69,7 +69,7 @@ class DB extends Realm {
     this.createActiveFragment(latestFragment._id, latestSnippet._id);
   }
 
-  private createNewSnippet(title: string, snippetUpdate: SnippetUpdate) {
+  private createSnippet(title: string, snippetUpdate: SnippetUpdate) {
     let snippet!: Snippet;
     this.write(() => {
       snippet = this.create("Snippet", {

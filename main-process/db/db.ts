@@ -52,13 +52,15 @@ class DB extends Realm {
   }
 
   createSnippet(title: string): void {
+    const snippetUpdate = this.createSnippetUpdate();
+
     this.write(() => {
       this.create("Snippet", {
         _id: this.currentMaxId("Snippet") + 1,
         title: title,
         createdAt: new Date(),
         updatedAt: new Date(),
-        snippetUpdate: this.createSnippetUpdate(),
+        snippetUpdate: snippetUpdate,
       });
     });
 
@@ -111,12 +113,16 @@ class DB extends Realm {
     });
   }
 
-  // return a new SnippetUpdate object, must be called in write() transaction
+  // return a new SnippetUpdate object
   createSnippetUpdate(): SnippetUpdate {
-    return this.create("SnippetUpdate", {
-      _id: this.currentMaxId("SnippetUpdate") + 1,
-      updatedAt: new Date(),
+    let snippetUpdate!: SnippetUpdate;
+    this.write(() => {
+      snippetUpdate = this.create("SnippetUpdate", {
+        _id: this.currentMaxId("SnippetUpdate") + 1,
+        updatedAt: new Date(),
+      });
     });
+    return snippetUpdate;
   }
 
   async updateSnippet(data: {

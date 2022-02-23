@@ -51,37 +51,33 @@ class DB extends Realm {
     return <number>this.objects(className).max("_id") || 0;
   }
 
-  createSnippet(title: string): void {
+  initSnippet(title: string): void {
     const snippetUpdate = this.createSnippetUpdate();
-
-    this.write(() => {
-      this.create("Snippet", {
-        _id: this.currentMaxId("Snippet") + 1,
-        title: title,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        snippetUpdate: snippetUpdate,
-      });
-    });
-
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    const latestSnippet: Snippet = this.objectForPrimaryKey(
-      "Snippet",
-      this.currentMaxId("Snippet")
-    )!;
+    const latestSnippet = this.createSnippet(title, snippetUpdate);
 
     // create an empty fragment
     // TODO: seed data for testing
     this.createFragment("", fragments.content1, latestSnippet, 0); // language == 'plaintext'
-    this.createFragment("", fragments.content2, latestSnippet, 0);
-
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    const latestFragment: Fragment = this.objectForPrimaryKey(
-      "Fragment",
-      this.currentMaxId("Fragment")
-    )!;
+    const latestFragment = this.createFragment(
+      "",
+      fragments.content2,
+      latestSnippet,
+      0
+    );
 
     this.createActiveFragment(latestFragment._id, latestSnippet._id);
+  }
+
+  private createSnippet(title: string, snippetUpdate: SnippetUpdate) {
+    let snippet!: Snippet;
+    this.write(() => {
+      snippet = this.create("Snippet", {
+        _id: this.currentMaxId("Snippet") + 1,
+        title: title,
+        snippetUpdate: snippetUpdate,
+      });
+    });
+    return snippet;
   }
 
   createFragment(
@@ -89,31 +85,32 @@ class DB extends Realm {
     content: string,
     snippet: Snippet,
     languageIdx: number
-  ): void {
+  ): Fragment {
+    let fragment!: Fragment;
     this.write(() => {
-      this.create("Fragment", {
+      fragment = this.create("Fragment", {
         _id: this.currentMaxId("Fragment") + 1,
         title: title,
         content: content,
         snippet: snippet,
         language: this.objectForPrimaryKey("Language", languageIdx) as Language,
-        createdAt: new Date(),
-        updatedAt: new Date(),
       });
     });
+    return fragment;
   }
 
-  createActiveFragment(fragmentId: number, snippetId: number): void {
+  createActiveFragment(fragmentId: number, snippetId: number): ActiveFragment {
+    let activeFragment!: ActiveFragment;
     this.write(() => {
-      this.create("ActiveFragment", {
+      activeFragment = this.create("ActiveFragment", {
         _id: this.currentMaxId("ActiveFragment") + 1,
         fragmentId: fragmentId,
         snippetId: snippetId,
       });
     });
+    return activeFragment;
   }
 
-  // return a new SnippetUpdate object
   createSnippetUpdate(): SnippetUpdate {
     let snippetUpdate!: SnippetUpdate;
     this.write(() => {
@@ -133,7 +130,6 @@ class DB extends Realm {
     const snippet: Snippet = this.objectForPrimaryKey("Snippet", data._id)!;
     this.write(() => {
       Object.assign(snippet, data.properties);
-      snippet.updatedAt = new Date();
       snippet.snippetUpdate.updatedAt = new Date();
     });
   }
@@ -151,7 +147,6 @@ class DB extends Realm {
     )!;
     this.write(() => {
       Object.assign(fragment, data.properties);
-      fragment.updatedAt = new Date();
       snippetUpdate.updatedAt = new Date();
     });
   }

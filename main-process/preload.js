@@ -9,7 +9,7 @@ contextBridge.exposeInMainWorld("myAPI", {
   nextTab: (listener) => ipcRenderer.on("next-tab", listener),
   previousTab: (listener) => ipcRenderer.on("previous-tab", listener),
   newSnippet: (listener) => ipcRenderer.on("new-snippet", listener),
-  createSnippet: () => ipcRenderer.invoke("create-snippet"),
+  initSnippet: () => ipcRenderer.invoke("init-snippet"),
   setupStorage: () => ipcRenderer.invoke("setup-storage"),
   updateSnippet: (data) => ipcRenderer.invoke("update-snippet", data),
   updateFragment: (data) => ipcRenderer.invoke("update-fragment", data),

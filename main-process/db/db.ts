@@ -73,13 +73,12 @@ class DB extends Realm {
     // create an empty fragment
     // TODO: seed data for testing
     this.createFragment("", fragments.content1, latestSnippet, 0); // language == 'plaintext'
-    this.createFragment("", fragments.content2, latestSnippet, 0);
-
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    const latestFragment: Fragment = this.objectForPrimaryKey(
-      "Fragment",
-      this.currentMaxId("Fragment")
-    )!;
+    const latestFragment: Fragment = this.createFragment(
+      "",
+      fragments.content2,
+      latestSnippet,
+      0
+    );
 
     this.createActiveFragment(latestFragment._id, latestSnippet._id);
   }
@@ -89,9 +88,10 @@ class DB extends Realm {
     content: string,
     snippet: Snippet,
     languageIdx: number
-  ): void {
+  ): Fragment {
+    let fragment!: Fragment;
     this.write(() => {
-      this.create("Fragment", {
+      fragment = this.create("Fragment", {
         _id: this.currentMaxId("Fragment") + 1,
         title: title,
         content: content,
@@ -101,6 +101,7 @@ class DB extends Realm {
         updatedAt: new Date(),
       });
     });
+    return fragment;
   }
 
   createActiveFragment(fragmentId: number, snippetId: number): void {
@@ -113,7 +114,6 @@ class DB extends Realm {
     });
   }
 
-  // return a new SnippetUpdate object
   createSnippetUpdate(): SnippetUpdate {
     let snippetUpdate!: SnippetUpdate;
     this.write(() => {

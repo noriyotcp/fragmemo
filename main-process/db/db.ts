@@ -54,21 +54,7 @@ class DB extends Realm {
   createSnippet(title: string): void {
     const snippetUpdate = this.createSnippetUpdate();
 
-    this.write(() => {
-      this.create("Snippet", {
-        _id: this.currentMaxId("Snippet") + 1,
-        title: title,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        snippetUpdate: snippetUpdate,
-      });
-    });
-
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    const latestSnippet: Snippet = this.objectForPrimaryKey(
-      "Snippet",
-      this.currentMaxId("Snippet")
-    )!;
+    const latestSnippet: Snippet = this.createNewSnippet(title, snippetUpdate);
 
     // create an empty fragment
     // TODO: seed data for testing
@@ -81,6 +67,20 @@ class DB extends Realm {
     );
 
     this.createActiveFragment(latestFragment._id, latestSnippet._id);
+  }
+
+  private createNewSnippet(title: string, snippetUpdate: SnippetUpdate) {
+    let snippet!: Snippet;
+    this.write(() => {
+      snippet = this.create("Snippet", {
+        _id: this.currentMaxId("Snippet") + 1,
+        title: title,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        snippetUpdate: snippetUpdate,
+      });
+    });
+    return snippet;
   }
 
   createFragment(

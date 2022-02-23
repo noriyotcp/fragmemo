@@ -177,7 +177,7 @@ app.once("browser-window-created", () => {
   });
 
   ipcMain.handle("create-snippet", (event) => {
-    db.createSnippet("");
+    db.initSnippet("");
   });
 
   ipcMain.handle("setup-storage", async () => {
@@ -187,7 +187,7 @@ app.once("browser-window-created", () => {
     try {
       if (db.empty) {
         db.initLanguage();
-        db.createSnippet("");
+        db.initSnippet("");
       }
     } catch (err) {
       console.error(err);

@@ -51,7 +51,7 @@ class DB extends Realm {
     return <number>this.objects(className).max("_id") || 0;
   }
 
-  createSnippet(title: string): void {
+  initSnippet(title: string): void {
     const snippetUpdate = this.createSnippetUpdate();
 
     const latestSnippet: Snippet = this.createNewSnippet(title, snippetUpdate);

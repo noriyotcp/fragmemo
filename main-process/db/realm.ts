@@ -1,7 +1,6 @@
 import Realm from "realm";
 
 class Snippet {
-  [x: string]: any; // for toJSON()
   public _id = 0;
   public title = "";
   public createdAt = new Date();

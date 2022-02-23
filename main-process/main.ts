@@ -207,15 +207,11 @@ app.once("browser-window-created", () => {
   });
 
   const loadSnippets = (db: DB): Snippet[] => {
-    const snippets = (
-      db.reverseSortBy(
-        "Snippet",
-        "snippetUpdate.updatedAt"
-      ) as unknown as Results<Snippet>
-    ).map((snippet: Snippet) => {
-      return snippet.toJSON();
-    });
-    return snippets;
+    const snippets = db.reverseSortBy(
+      "Snippet",
+      "snippetUpdate.updatedAt"
+    ) as unknown as Results<Snippet>;
+    return snippets.toJSON();
   };
 
   ipcMain.handle("load-languages", (event) => {

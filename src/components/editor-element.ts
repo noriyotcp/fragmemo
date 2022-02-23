@@ -185,6 +185,13 @@ export class EditorElement extends LitElement {
               fragmentStore: this.fragmentStore,
             },
           });
+          // change the order of snippets list
+          dispatch({
+            type: "update-snippets",
+            detail: {
+              message: "Snippets updated",
+            },
+          });
         }
       });
   }

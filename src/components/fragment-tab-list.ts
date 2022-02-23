@@ -1,5 +1,5 @@
 import { LitElement, html, css, TemplateResult } from "lit";
-import { customElement, query, queryAll } from "lit/decorators.js";
+import { customElement, queryAll } from "lit/decorators.js";
 import { map } from "lit/directives/map.js";
 import { FragmentsController } from "../controllers/fragments-controller";
 
@@ -9,9 +9,7 @@ const { myAPI } = window;
 export class FragmentTabList extends LitElement {
   private fragmentsController = new FragmentsController(this);
 
-  @query("sl-tab-group") tabGroup!: HTMLElement;
   @queryAll("fragment-tab") tabs!: Array<HTMLElement>;
-  @query(".tab-item[active='true']") activeTab!: HTMLElement;
 
   static styles = css`
     section {

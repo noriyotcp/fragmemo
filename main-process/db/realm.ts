@@ -2,11 +2,11 @@ import Realm from "realm";
 
 class Snippet {
   [x: string]: any; // for toJSON()
-  _id = 0;
-  title = "";
-  createdAt = new Date();
-  updatedAt = new Date();
-  snippetUpdate!: SnippetUpdate;
+  public _id = 0;
+  public title = "";
+  public createdAt = new Date();
+  public updatedAt = new Date();
+  public snippetUpdate!: SnippetUpdate;
 
   public static schema: Realm.ObjectSchema = {
     name: "Snippet",
@@ -19,10 +19,6 @@ class Snippet {
     },
     primaryKey: "_id",
   };
-
-  constructor(data: Required<Snippet>) {
-    Object.assign(this, data);
-  }
 }
 
 class Fragment {

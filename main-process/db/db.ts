@@ -1,10 +1,10 @@
 import {
   Realm,
-  realmSchema,
   Snippet,
   Fragment,
   ActiveFragment,
   Language,
+  SnippetUpdate,
 } from "./realm";
 import languages from "./seeds/languages";
 import * as fragments from "./seeds/fragments";
@@ -13,7 +13,14 @@ type ActiveFragmentProperty = Pick<ActiveFragment, "fragmentId" | "snippetId">;
 
 class DB extends Realm {
   constructor(path: string) {
-    super({ path, schema: realmSchema });
+    const schema = [
+      Snippet.schema,
+      Fragment.schema,
+      ActiveFragment.schema,
+      Language.schema,
+      SnippetUpdate.schema,
+    ];
+    super({ path, schema });
   }
 
   initLanguage(): void {
@@ -45,12 +52,15 @@ class DB extends Realm {
   }
 
   createSnippet(title: string): void {
+    const snippetUpdate = this.createSnippetUpdate();
+
     this.write(() => {
       this.create("Snippet", {
         _id: this.currentMaxId("Snippet") + 1,
         title: title,
         createdAt: new Date(),
         updatedAt: new Date(),
+        snippetUpdate: snippetUpdate,
       });
     });
 
@@ -103,24 +113,34 @@ class DB extends Realm {
     });
   }
 
+  // return a new SnippetUpdate object
+  createSnippetUpdate(): SnippetUpdate {
+    let snippetUpdate!: SnippetUpdate;
+    this.write(() => {
+      snippetUpdate = this.create("SnippetUpdate", {
+        _id: this.currentMaxId("SnippetUpdate") + 1,
+        updatedAt: new Date(),
+      });
+    });
+    return snippetUpdate;
+  }
+
   async updateSnippet(data: {
     _id: number;
     properties: typeof Snippet;
   }): Promise<void> {
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    const findObject: Snippet = this.objectForPrimaryKey("Snippet", data._id)!;
+    const snippet: Snippet = this.objectForPrimaryKey("Snippet", data._id)!;
     this.write(() => {
-      Object.assign(findObject, data.properties);
-      findObject.updatedAt = new Date();
+      Object.assign(snippet, data.properties);
+      snippet.updatedAt = new Date();
+      snippet.snippetUpdate.updatedAt = new Date();
     });
-
-    const snippet = this.objectForPrimaryKey<Snippet>("Snippet", data._id);
-    console.info("snippet title updated: ", snippet?.title);
   }
 
   async updateFragment(data: {
     _id: number;
-    properties: typeof Snippet;
+    properties: typeof Fragment;
   }): Promise<void> {
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const fragment: Fragment = this.objectForPrimaryKey("Fragment", data._id)!;
@@ -128,8 +148,6 @@ class DB extends Realm {
       Object.assign(fragment, data.properties);
       fragment.updatedAt = new Date();
     });
-
-    console.info("snippet title updated: ", fragment._id);
   }
 
   async updateActiveFragment(data: {

@@ -1,10 +1,12 @@
 import Realm from "realm";
 
 class Snippet {
+  [x: string]: any; // for toJSON()
   _id = 0;
   title = "";
   createdAt = new Date();
   updatedAt = new Date();
+  snippetUpdate!: SnippetUpdate;
 
   public static schema: Realm.ObjectSchema = {
     name: "Snippet",
@@ -13,6 +15,7 @@ class Snippet {
       title: "string?",
       createdAt: "date",
       updatedAt: "date",
+      snippetUpdate: "SnippetUpdate",
     },
     primaryKey: "_id",
   };
@@ -57,12 +60,12 @@ class ActiveFragment {
 
   public static schema: Realm.ObjectSchema = {
     name: "ActiveFragment",
-    primaryKey: "_id",
     properties: {
       _id: "int",
       fragmentId: "int",
       snippetId: "int",
     },
+    primaryKey: "_id",
   };
 
   constructor(data: Partial<ActiveFragment>) {
@@ -90,4 +93,18 @@ class Language {
   }
 }
 
-export { Realm, Snippet, Fragment, ActiveFragment, Language };
+class SnippetUpdate {
+  public _id = 0;
+  public updatedAt = new Date();
+
+  public static schema: Realm.ObjectSchema = {
+    name: "SnippetUpdate",
+    properties: {
+      _id: "int",
+      updatedAt: "date",
+    },
+    primaryKey: "_id",
+  };
+}
+
+export { Realm, Snippet, Fragment, ActiveFragment, Language, SnippetUpdate };

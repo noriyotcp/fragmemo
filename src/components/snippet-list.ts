@@ -48,7 +48,9 @@ export class SnippetList extends LitElement {
           (snippet: Snippet) => snippet._id,
           (snippet: Snippet) =>
             html`<ui5-li
-              description="${this.formatDatetime(snippet.updatedAt)}"
+              description="${this.formatDatetime(
+                snippet.snippetUpdate.updatedAt
+              )}"
               additional-text="snippet"
               additional-text-state="Success"
               snippet=${JSON.stringify(snippet)}

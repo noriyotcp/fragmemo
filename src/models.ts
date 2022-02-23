@@ -3,6 +3,7 @@ class Snippet {
   title = "";
   createdAt = new Date();
   updatedAt = new Date();
+  snippetUpdate!: SnippetUpdate;
 
   constructor(data: Required<Snippet>) {
     Object.assign(this, data);
@@ -43,4 +44,9 @@ class ActiveFragment {
   }
 }
 
-export { Snippet, Fragment, ActiveFragment, Language };
+class SnippetUpdate {
+  public _id = 0;
+  public updatedAt!: Date;
+}
+
+export { Snippet, Fragment, ActiveFragment, Language, SnippetUpdate };

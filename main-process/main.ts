@@ -208,14 +208,12 @@ app.once("browser-window-created", () => {
 
   const loadSnippets = (db: DB): Snippet[] => {
     const snippets = (
-      db.reverseSortBy("Snippet", "updatedAt") as unknown as Results<Snippet>
-    ).map((snippet) => {
-      return {
-        _id: snippet._id,
-        title: snippet.title,
-        createdAt: snippet.createdAt,
-        updatedAt: snippet.updatedAt,
-      };
+      db.reverseSortBy(
+        "Snippet",
+        "snippetUpdate.updatedAt"
+      ) as unknown as Results<Snippet>
+    ).map((snippet: Snippet) => {
+      return snippet.toJSON();
     });
     return snippets;
   };

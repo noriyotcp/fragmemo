@@ -1,4 +1,11 @@
-import { Realm, Snippet, Fragment, ActiveFragment, Language } from "./realm";
+import {
+  Realm,
+  Snippet,
+  Fragment,
+  ActiveFragment,
+  Language,
+  SnippetUpdate,
+} from "./realm";
 import languages from "./seeds/languages";
 import * as fragments from "./seeds/fragments";
 
@@ -11,6 +18,7 @@ class DB extends Realm {
       Fragment.schema,
       ActiveFragment.schema,
       Language.schema,
+      SnippetUpdate.schema,
     ];
     super({ path, schema });
   }
@@ -50,6 +58,7 @@ class DB extends Realm {
         title: title,
         createdAt: new Date(),
         updatedAt: new Date(),
+        snippetUpdate: this.createSnippetUpdate(),
       });
     });
 
@@ -102,6 +111,14 @@ class DB extends Realm {
     });
   }
 
+  // return a new SnippetUpdate object, must be called in write() transaction
+  createSnippetUpdate(): SnippetUpdate {
+    return this.create("SnippetUpdate", {
+      _id: this.currentMaxId("SnippetUpdate") + 1,
+      updatedAt: new Date(),
+    });
+  }
+
   async updateSnippet(data: {
     _id: number;
     properties: typeof Snippet;
@@ -111,6 +128,7 @@ class DB extends Realm {
     this.write(() => {
       Object.assign(snippet, data.properties);
       snippet.updatedAt = new Date();
+      snippet.snippetUpdate.updatedAt = new Date();
     });
   }
 

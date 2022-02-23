@@ -104,14 +104,16 @@ class DB extends Realm {
     return fragment;
   }
 
-  createActiveFragment(fragmentId: number, snippetId: number): void {
+  createActiveFragment(fragmentId: number, snippetId: number): ActiveFragment {
+    let activeFragment!: ActiveFragment;
     this.write(() => {
-      this.create("ActiveFragment", {
+      activeFragment = this.create("ActiveFragment", {
         _id: this.currentMaxId("ActiveFragment") + 1,
         fragmentId: fragmentId,
         snippetId: snippetId,
       });
     });
+    return activeFragment;
   }
 
   createSnippetUpdate(): SnippetUpdate {

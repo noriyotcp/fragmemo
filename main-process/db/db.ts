@@ -144,9 +144,15 @@ class DB extends Realm {
   }): Promise<void> {
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const fragment: Fragment = this.objectForPrimaryKey("Fragment", data._id)!;
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    const snippetUpdate: SnippetUpdate = this.objectForPrimaryKey(
+      "SnippetUpdate",
+      fragment.snippet.snippetUpdate._id
+    )!;
     this.write(() => {
       Object.assign(fragment, data.properties);
       fragment.updatedAt = new Date();
+      snippetUpdate.updatedAt = new Date();
     });
   }
 

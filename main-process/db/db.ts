@@ -53,13 +53,12 @@ class DB extends Realm {
 
   initSnippet(title: string): void {
     const snippetUpdate = this.createSnippetUpdate();
-
-    const latestSnippet: Snippet = this.createSnippet(title, snippetUpdate);
+    const latestSnippet = this.createSnippet(title, snippetUpdate);
 
     // create an empty fragment
     // TODO: seed data for testing
     this.createFragment("", fragments.content1, latestSnippet, 0); // language == 'plaintext'
-    const latestFragment: Fragment = this.createFragment(
+    const latestFragment = this.createFragment(
       "",
       fragments.content2,
       latestSnippet,

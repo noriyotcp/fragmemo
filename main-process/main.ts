@@ -176,7 +176,7 @@ app.once("browser-window-created", () => {
     return activeFragment.toJSON();
   });
 
-  ipcMain.handle("create-snippet", (event) => {
+  ipcMain.handle("init-snippet", (event) => {
     db.initSnippet("");
   });
 

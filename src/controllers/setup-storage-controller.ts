@@ -21,7 +21,7 @@ export class SetupStorageController implements ReactiveController {
       this._updateSnippetsListener as EventListener
     );
     // When Command or Control + N is pressed
-    myAPI.newSnippet((_e: Event) => this._createSnippet());
+    myAPI.newSnippet((_e: Event) => this._initSnippet());
   }
 
   async setupStorage(): Promise<void> {
@@ -55,8 +55,8 @@ export class SetupStorageController implements ReactiveController {
     this._displayToast(e.detail.message);
   };
 
-  private _createSnippet() {
-    myAPI.createSnippet().then(() => {
+  private _initSnippet() {
+    myAPI.initSnippet().then(() => {
       this._loadSnippets();
     });
   }

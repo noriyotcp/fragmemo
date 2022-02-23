@@ -1,8 +1,6 @@
 class Snippet {
   _id = 0;
   title = "";
-  createdAt = new Date();
-  updatedAt = new Date();
   snippetUpdate!: SnippetUpdate;
 
   constructor(data: Required<Snippet>) {
@@ -26,8 +24,6 @@ class Fragment {
   public content = "";
   public snippet!: Snippet; // TODO: Change required to optional?
   public language!: Language;
-  public createdAt = new Date();
-  public updatedAt = new Date();
 
   constructor(data: Partial<Fragment>) {
     Object.assign(this, data);

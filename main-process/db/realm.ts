@@ -3,8 +3,6 @@ import Realm from "realm";
 class Snippet {
   public _id = 0;
   public title = "";
-  public createdAt = new Date();
-  public updatedAt = new Date();
   public snippetUpdate!: SnippetUpdate;
 
   public static schema: Realm.ObjectSchema = {
@@ -12,8 +10,6 @@ class Snippet {
     properties: {
       _id: "int",
       title: "string?",
-      createdAt: "date",
-      updatedAt: "date",
       snippetUpdate: "SnippetUpdate",
     },
     primaryKey: "_id",
@@ -26,8 +22,6 @@ class Fragment {
   public content = "";
   public snippet!: Snippet; // TODO: Change required to optional?
   public language!: Language;
-  public createdAt = new Date();
-  public updatedAt = new Date();
 
   public static schema: Realm.ObjectSchema = {
     name: "Fragment",
@@ -37,8 +31,6 @@ class Fragment {
       content: "string?",
       snippet: "Snippet",
       language: "Language",
-      createdAt: "date",
-      updatedAt: "date",
     },
     primaryKey: "_id",
   };

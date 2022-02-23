@@ -74,8 +74,6 @@ class DB extends Realm {
       snippet = this.create("Snippet", {
         _id: this.currentMaxId("Snippet") + 1,
         title: title,
-        createdAt: new Date(),
-        updatedAt: new Date(),
         snippetUpdate: snippetUpdate,
       });
     });
@@ -96,8 +94,6 @@ class DB extends Realm {
         content: content,
         snippet: snippet,
         language: this.objectForPrimaryKey("Language", languageIdx) as Language,
-        createdAt: new Date(),
-        updatedAt: new Date(),
       });
     });
     return fragment;
@@ -134,7 +130,6 @@ class DB extends Realm {
     const snippet: Snippet = this.objectForPrimaryKey("Snippet", data._id)!;
     this.write(() => {
       Object.assign(snippet, data.properties);
-      snippet.updatedAt = new Date();
       snippet.snippetUpdate.updatedAt = new Date();
     });
   }
@@ -152,7 +147,6 @@ class DB extends Realm {
     )!;
     this.write(() => {
       Object.assign(fragment, data.properties);
-      fragment.updatedAt = new Date();
       snippetUpdate.updatedAt = new Date();
     });
   }

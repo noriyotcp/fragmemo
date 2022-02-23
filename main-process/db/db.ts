@@ -68,6 +68,26 @@ class DB extends Realm {
     this.createActiveFragment(latestFragment._id, latestSnippet._id);
   }
 
+  initFragment(snippetId: number): void {
+    const snippet: Snippet | undefined = this.objectForPrimaryKey(
+      "Snippet",
+      snippetId
+    );
+
+    if (!snippet) {
+      throw new Error("snippet not found");
+    }
+
+    const fragment = this.createFragment("", "", snippet, 0);
+
+    this.updateActiveFragment({
+      properties: { snippetId: snippetId, fragmentId: fragment._id },
+    });
+    this.write(() => {
+      snippet.snippetUpdate.updatedAt = new Date();
+    });
+  }
+
   private createSnippet(title: string, snippetUpdate: SnippetUpdate) {
     let snippet!: Snippet;
     this.write(() => {

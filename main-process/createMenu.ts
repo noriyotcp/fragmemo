@@ -42,6 +42,13 @@ export const createMenu = (win: BrowserWindow): void => {
           },
         },
         {
+          label: "New Fragment",
+          accelerator: "CmdOrCtrl+T",
+          click: async () => {
+            win.webContents.send("new-fragment");
+          },
+        },
+        {
           label: "Open...",
           accelerator: "CmdOrCtrl+O",
           click: async () => {

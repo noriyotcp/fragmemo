@@ -29,6 +29,7 @@ export interface SandBox {
   }>;
   getSnippet: (snippetId: number) => Promise<JSON>;
   initSnippet: () => Promise<void>;
+  initFragment: (snippetId: number) => Promise<void>;
   getFragment: (fragmentId: number) => Promise<Fragment>;
   getActiveFragment: (snippetId: number) => Promise<ActiveFragment>;
   loadSnippets: () => Promise<Snippet[]>;
@@ -42,6 +43,7 @@ export interface SandBox {
   ) => Electron.IpcRenderer;
   saveFragment: (listener: (_e: Event) => void) => Electron.IpcRenderer;
   newSnippet: (listener: (_e: Event) => void) => Electron.IpcRenderer;
+  newFragment: (listener: (_e: Event) => void) => Electron.IpcRenderer;
   nextTab: (listener: (_e: Event) => void) => Electron.IpcRenderer;
   previousTab: (listener: (_e: Event) => void) => Electron.IpcRenderer;
 }

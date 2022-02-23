@@ -1,3 +1,4 @@
+import { dispatch } from "../events/dispatcher";
 import { ReactiveController, ReactiveControllerHost } from "lit";
 import { Fragment, Snippet } from "../models";
 
@@ -29,6 +30,21 @@ export class FragmentsController implements ReactiveController {
       "active-fragment",
       this._activeFragmentListener as EventListener
     );
+    // When Command or Control + T is pressed
+    myAPI.newFragment((_e: Event) => this._initFragment());
+  }
+
+  private _initFragment() {
+    if (!this.snippet) return;
+
+    myAPI.initFragment(this.snippet._id).then(() => {
+      dispatch({
+        type: "update-snippets",
+        detail: {
+          message: "Fragment created",
+        },
+      });
+    });
   }
 
   private _titleChangedListener = (e: CustomEvent) => {

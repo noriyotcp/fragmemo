@@ -180,6 +180,10 @@ app.once("browser-window-created", () => {
     db.initSnippet("");
   });
 
+  ipcMain.handle("init-fragment", (event, snippetId) => {
+    db.initFragment(snippetId);
+  });
+
   ipcMain.handle("setup-storage", async () => {
     // await setTimeout(1000); // wait 1 seconds for testing
 

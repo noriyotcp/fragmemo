@@ -1,15 +1,33 @@
 import { LitElement, html, css, TemplateResult } from "lit";
-import { customElement, queryAll } from "lit/decorators.js";
+import { customElement, queryAll, state } from "lit/decorators.js";
 import { map } from "lit/directives/map.js";
 import { styleMap } from "lit/directives/style-map.js";
 import { FragmentsController } from "../controllers/fragments-controller";
+import { Override } from "index";
+import { Fragment } from "models";
 
 const { myAPI } = window;
+
+interface IContext {
+  fragmentId: number;
+  tabIndex: number;
+}
+
+interface FragmentIdToDelete {
+  fragmentId: number;
+  nextActiveFragmentId?: number;
+}
+
+type TabType = Override<
+  HTMLElement,
+  { fragment: Fragment; activeFragmentId: number }
+>;
 
 @customElement("fragment-tab-list")
 export class FragmentTabList extends LitElement {
   private fragmentsController = new FragmentsController(this);
 
+  @state() private onContext!: IContext;
   @queryAll("fragment-tab") tabs!: Array<HTMLElement>;
 
   static styles = css`
@@ -41,11 +59,12 @@ export class FragmentTabList extends LitElement {
     const styles = { display: fragments?.length === 1 ? "none" : "" };
     return html`
       <section style=${styleMap(styles)}>
-        ${map(fragments, (fragment, _) => {
+        ${map(fragments, (fragment, index) => {
           return html`
             <fragment-tab
               fragment=${JSON.stringify(fragment)}
               activeFragmentId="${this.fragmentsController.activeFragmentId}"
+              tabIndex="${index}"
               @contextmenu="${this._showContextMenu}"
             ></fragment-tab>
           `;
@@ -68,12 +87,53 @@ export class FragmentTabList extends LitElement {
 
   private _showContextMenu(e: MouseEvent): void {
     e.preventDefault();
-    // e.stopImmediatePropagation();
+    const fragment = JSON.parse(
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      (<HTMLElement>e.currentTarget).getAttribute("fragment")!
+    );
+
+    this.onContext = {
+      fragmentId: fragment._id,
+      tabIndex: Number((<HTMLElement>e.currentTarget).getAttribute("tabIndex")),
+    };
     myAPI.showContextMenu();
   }
+
+  fragmentIdToDelete({ fragmentId, tabIndex }: IContext): FragmentIdToDelete {
+    const tab = Array.from(this.tabs).find(
+      (tab) => (<TabType>tab).fragment._id === fragmentId
+    ) as TabType;
+
+    const isActiveTab = tab.fragment._id === tab.activeFragmentId;
+
+    const nextActiveIndex = () => {
+      if (tabIndex <= 0) {
+        return tabIndex + 1;
+      } else {
+        return tabIndex - 1;
+      }
+    };
+
+    const nextActiveTab = Array.from(this.tabs).find(
+      (tab) => (<TabType>tab).tabIndex === nextActiveIndex()
+    ) as TabType;
+
+    if (isActiveTab) {
+      return {
+        fragmentId: tab.fragment._id,
+        nextActiveFragmentId: nextActiveTab.fragment._id,
+      };
+    } else {
+      return {
+        fragmentId: tab.fragment._id,
+      };
+    }
+  }
+
   private _contextMenuCommand(e: Event, command: string): void {
-    console.log(e);
-    console.log(command);
+    if (command === "delete-fragment") {
+      console.info(this.fragmentIdToDelete(this.onContext));
+    }
   }
 
   private nextTab() {

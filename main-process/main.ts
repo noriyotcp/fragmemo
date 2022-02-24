@@ -186,15 +186,13 @@ app.once("browser-window-created", () => {
   ipcMain.handle("show-context-menu", (event) => {
     const template: MenuItemConstructorOptions[] = [
       {
-        label: "Menu Item 1",
+        label: "Delete fragment",
         type: "normal",
-        id: "menu-item",
+        id: "delete-fragment",
         click: () => {
-          event.sender.send("context-menu-command", "menu-item-1");
+          event.sender.send("context-menu-command", "delete-fragment");
         },
       },
-      { type: "separator" },
-      { label: "Menu Item 2", type: "normal" },
     ];
     const menu = Menu.buildFromTemplate(template);
     menu.popup(<PopupOptions>BrowserWindow.fromWebContents(event.sender));

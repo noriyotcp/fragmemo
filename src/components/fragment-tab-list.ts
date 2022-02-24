@@ -1,6 +1,7 @@
 import { LitElement, html, css, TemplateResult } from "lit";
 import { customElement, queryAll } from "lit/decorators.js";
 import { map } from "lit/directives/map.js";
+import { styleMap } from "lit/directives/style-map.js";
 import { FragmentsController } from "../controllers/fragments-controller";
 
 const { myAPI } = window;
@@ -37,8 +38,9 @@ export class FragmentTabList extends LitElement {
 
   tabBarTemplate(): TemplateResult {
     const fragments = this.fragmentsController.fragments;
+    const styles = { display: fragments?.length === 1 ? "none" : "" };
     return html`
-      <section>
+      <section style=${styleMap(styles)}>
         ${map(fragments, (fragment, _) => {
           return html`
             <fragment-tab

@@ -57,7 +57,7 @@ class DB extends Realm {
 
     // create an empty fragment
     // TODO: seed data for testing
-    this.createFragment("", fragments.content1, latestSnippet, 0); // language == 'plaintext'
+    // this.createFragment("", fragments.content1, latestSnippet, 0); // language == 'plaintext'
     const latestFragment = this.createFragment(
       "",
       fragments.content2,

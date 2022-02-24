@@ -10,6 +10,8 @@ contextBridge.exposeInMainWorld("myAPI", {
   previousTab: (listener) => ipcRenderer.on("previous-tab", listener),
   newSnippet: (listener) => ipcRenderer.on("new-snippet", listener),
   newFragment: (listener) => ipcRenderer.on("new-fragment", listener),
+  contextMenuCommand: (listener) =>
+    ipcRenderer.on("context-menu-command", listener),
   initSnippet: () => ipcRenderer.invoke("init-snippet"),
   initFragment: (snippetId) => ipcRenderer.invoke("init-fragment", snippetId),
   setupStorage: () => ipcRenderer.invoke("setup-storage"),
@@ -25,6 +27,7 @@ contextBridge.exposeInMainWorld("myAPI", {
   getFragment: (fragmentId) => ipcRenderer.invoke("get-fragment", fragmentId),
   getActiveFragment: (snippetId) =>
     ipcRenderer.invoke("get-active-fragment", snippetId),
+  showContextMenu: () => ipcRenderer.invoke("show-context-menu"),
 });
 
 console.log("preload!");

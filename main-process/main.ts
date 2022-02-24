@@ -1,5 +1,12 @@
 import path from "path";
-import { app, BrowserWindow, ipcMain } from "electron";
+import {
+  app,
+  BrowserWindow,
+  ipcMain,
+  Menu,
+  MenuItemConstructorOptions,
+  PopupOptions,
+} from "electron";
 import { setFileSaveAs } from "./setFileSaveAs";
 import { createMenu } from "./createMenu";
 import { JsonStorage, DatapathDoesNotExistError } from "./jsonStorage";
@@ -174,6 +181,23 @@ app.once("browser-window-created", () => {
       .filtered(`snippetId = ${snippetId}`)[0];
     console.log("Main process: get-active-fragment", activeFragment.toJSON());
     return activeFragment.toJSON();
+  });
+
+  ipcMain.handle("show-context-menu", (event) => {
+    const template: MenuItemConstructorOptions[] = [
+      {
+        label: "Menu Item 1",
+        type: "normal",
+        id: "menu-item",
+        click: () => {
+          event.sender.send("context-menu-command", "menu-item-1");
+        },
+      },
+      { type: "separator" },
+      { label: "Menu Item 2", type: "normal" },
+    ];
+    const menu = Menu.buildFromTemplate(template);
+    menu.popup(<PopupOptions>BrowserWindow.fromWebContents(event.sender));
   });
 
   ipcMain.handle("init-snippet", (event) => {

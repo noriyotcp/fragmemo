@@ -32,6 +32,7 @@ export interface SandBox {
   initFragment: (snippetId: number) => Promise<void>;
   getFragment: (fragmentId: number) => Promise<Fragment>;
   getActiveFragment: (snippetId: number) => Promise<ActiveFragment>;
+  showContextMenu: () => void;
   loadSnippets: () => Promise<Snippet[]>;
   loadLanguages: () => Promise<Language[]>;
   fetchFragments: (snippetId: number) => Promise<Fragment[]>;
@@ -46,6 +47,9 @@ export interface SandBox {
   newFragment: (listener: (_e: Event) => void) => Electron.IpcRenderer;
   nextTab: (listener: (_e: Event) => void) => Electron.IpcRenderer;
   previousTab: (listener: (_e: Event) => void) => Electron.IpcRenderer;
+  contextMenuCommand: (
+    listener: (_e: Event, command: string) => void
+  ) => Electron.IpcRenderer;
 }
 
 // Override properties with type intersection

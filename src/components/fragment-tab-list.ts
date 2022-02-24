@@ -46,6 +46,7 @@ export class FragmentTabList extends LitElement {
             <fragment-tab
               fragment=${JSON.stringify(fragment)}
               activeFragmentId="${this.fragmentsController.activeFragmentId}"
+              @contextmenu="${this._showContextMenu}"
             ></fragment-tab>
           `;
         })}
@@ -60,6 +61,19 @@ export class FragmentTabList extends LitElement {
   firstUpdated(): void {
     myAPI.nextTab((_e: Event) => this.nextTab());
     myAPI.previousTab((_e: Event) => this.previousTab());
+    myAPI.contextMenuCommand((_e: Event, command) =>
+      this._contextMenuCommand(_e, command)
+    );
+  }
+
+  private _showContextMenu(e: MouseEvent): void {
+    e.preventDefault();
+    // e.stopImmediatePropagation();
+    myAPI.showContextMenu();
+  }
+  private _contextMenuCommand(e: Event, command: string): void {
+    console.log(e);
+    console.log(command);
   }
 
   private nextTab() {

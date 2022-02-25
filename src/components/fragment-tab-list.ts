@@ -94,7 +94,7 @@ export class FragmentTabList extends LitElement {
     myAPI.showContextMenu();
   }
 
-  fragmentIdToDelete({
+  private _idsOnDeleteFragment({
     fragmentId,
     tabIndex,
   }: ITabOnContext): IdsOnDeleteFragment {
@@ -130,7 +130,7 @@ export class FragmentTabList extends LitElement {
 
   private _contextMenuCommand(e: Event, command: string): void {
     if (command === "delete-fragment") {
-      myAPI.deleteFragment(this.fragmentIdToDelete(this.tabOnContext));
+      myAPI.deleteFragment(this._idsOnDeleteFragment(this.tabOnContext));
     }
   }
 

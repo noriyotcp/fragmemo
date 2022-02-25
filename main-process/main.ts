@@ -1,5 +1,12 @@
 import path from "path";
-import { app, BrowserWindow, ipcMain } from "electron";
+import {
+  app,
+  BrowserWindow,
+  ipcMain,
+  Menu,
+  MenuItemConstructorOptions,
+  PopupOptions,
+} from "electron";
 import { setFileSaveAs } from "./setFileSaveAs";
 import { createMenu } from "./createMenu";
 import { JsonStorage, DatapathDoesNotExistError } from "./jsonStorage";
@@ -175,6 +182,28 @@ app.once("browser-window-created", () => {
     console.log("Main process: get-active-fragment", activeFragment.toJSON());
     return activeFragment.toJSON();
   });
+
+  ipcMain.handle("show-context-menu", (event) => {
+    const template: MenuItemConstructorOptions[] = [
+      {
+        label: "Delete fragment",
+        type: "normal",
+        id: "delete-fragment",
+        click: () => {
+          event.sender.send("context-menu-command", "delete-fragment");
+        },
+      },
+    ];
+    const menu = Menu.buildFromTemplate(template);
+    menu.popup(<PopupOptions>BrowserWindow.fromWebContents(event.sender));
+  });
+
+  ipcMain.handle(
+    "delete-fragment",
+    (event, ids: { fragmentId: number; nextActiveFragmentId: number }) => {
+      db.deleteFragment(ids.fragmentId, ids.nextActiveFragmentId);
+    }
+  );
 
   ipcMain.handle("init-snippet", (event) => {
     db.initSnippet("");

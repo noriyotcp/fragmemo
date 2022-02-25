@@ -57,7 +57,7 @@ class DB extends Realm {
 
     // create an empty fragment
     // TODO: seed data for testing
-    this.createFragment("", fragments.content1, latestSnippet, 0); // language == 'plaintext'
+    // this.createFragment("", fragments.content1, latestSnippet, 0); // language == 'plaintext'
     const latestFragment = this.createFragment(
       "",
       fragments.content2,
@@ -82,6 +82,29 @@ class DB extends Realm {
 
     this.updateActiveFragment({
       properties: { snippetId: snippetId, fragmentId: fragment._id },
+    });
+    this.write(() => {
+      snippet.snippetUpdate.updatedAt = new Date();
+    });
+  }
+
+  deleteFragment(fragmentId: number, nextActiveFragmentId: number): void {
+    const fragment: Fragment | undefined = this.objectForPrimaryKey(
+      "Fragment",
+      fragmentId
+    );
+
+    if (!fragment) {
+      throw new Error("fragment not found");
+    }
+
+    const snippet: Snippet = fragment.snippet;
+
+    this.write(() => {
+      this.delete(fragment);
+    });
+    this.updateActiveFragment({
+      properties: { snippetId: snippet._id, fragmentId: nextActiveFragmentId },
     });
     this.write(() => {
       snippet.snippetUpdate.updatedAt = new Date();

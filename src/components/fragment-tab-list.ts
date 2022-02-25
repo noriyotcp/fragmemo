@@ -135,7 +135,7 @@ export class FragmentTabList extends LitElement {
 
   private _contextMenuCommand(e: Event, command: string): void {
     if (command === "delete-fragment") {
-      console.info(this.fragmentIdToDelete(this.tabOnContext));
+      myAPI.deleteFragment(this.fragmentIdToDelete(this.tabOnContext));
     }
   }
 

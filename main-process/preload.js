@@ -3,6 +3,7 @@ const { contextBridge, ipcRenderer } = require("electron");
 
 contextBridge.exposeInMainWorld("myAPI", {
   fileSaveAs: (fileData) => ipcRenderer.invoke("file-save-as", fileData),
+  // main process -> renderer process
   openByMenu: (listener) => ipcRenderer.on("open-by-menu", listener),
   openSettings: (listener) => ipcRenderer.on("open-settings", listener),
   saveFragment: (listener) => ipcRenderer.on("save-fragment", listener),
@@ -12,11 +13,13 @@ contextBridge.exposeInMainWorld("myAPI", {
   newFragment: (listener) => ipcRenderer.on("new-fragment", listener),
   contextMenuCommand: (listener) =>
     ipcRenderer.on("context-menu-command", listener),
+  // renderer process -> main process
   initSnippet: () => ipcRenderer.invoke("init-snippet"),
   initFragment: (snippetId) => ipcRenderer.invoke("init-fragment", snippetId),
   setupStorage: () => ipcRenderer.invoke("setup-storage"),
   updateSnippet: (data) => ipcRenderer.invoke("update-snippet", data),
   updateFragment: (data) => ipcRenderer.invoke("update-fragment", data),
+  deleteFragment: (data) => ipcRenderer.invoke("delete-fragment", data),
   updateActiveFragment: (data) =>
     ipcRenderer.invoke("update-active-fragment", data),
   loadSnippets: () => ipcRenderer.invoke("load-snippets"),

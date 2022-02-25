@@ -24,6 +24,7 @@ export interface SandBox {
   updateFragment: (data: object) => Promise<{
     status: boolean;
   }>;
+  deleteFragment: (data: object) => Promise<void>;
   updateActiveFragment: (data: object) => Promise<{
     status: boolean;
   }>;

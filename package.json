@@ -35,7 +35,7 @@
   },
   "devDependencies": {
     "@swc/core": "1.2.138",
-    "@swc/jest": "^0.2.18",
+    "@swc/jest": "^0.2.20",
     "@types/electron-json-storage": "^4.5.0",
     "@types/jest": "^27.4.1",
     "@types/node": "^17.0.21",

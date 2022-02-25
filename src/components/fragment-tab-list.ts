@@ -3,7 +3,6 @@ import { customElement, queryAll, state } from "lit/decorators.js";
 import { map } from "lit/directives/map.js";
 import { styleMap } from "lit/directives/style-map.js";
 import { FragmentsController } from "../controllers/fragments-controller";
-import { Override } from "index";
 import { Fragment } from "models";
 
 const { myAPI } = window;
@@ -18,10 +17,10 @@ interface FragmentIdToDelete {
   nextActiveFragmentId?: number;
 }
 
-type TabType = Override<
-  HTMLElement,
-  { fragment: Fragment; activeFragmentId: number }
->;
+interface TabType extends HTMLElement {
+  fragment: Fragment;
+  activeFragmentId: number;
+}
 
 @customElement("fragment-tab-list")
 export class FragmentTabList extends LitElement {

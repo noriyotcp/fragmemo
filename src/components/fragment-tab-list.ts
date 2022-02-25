@@ -8,7 +8,7 @@ import { Fragment } from "models";
 
 const { myAPI } = window;
 
-interface IContext {
+interface ITabOnContext {
   fragmentId: number;
   tabIndex: number;
 }
@@ -27,7 +27,7 @@ type TabType = Override<
 export class FragmentTabList extends LitElement {
   private fragmentsController = new FragmentsController(this);
 
-  @state() private onContext!: IContext;
+  @state() private tabOnContext!: ITabOnContext;
   @queryAll("fragment-tab") tabs!: Array<HTMLElement>;
 
   static styles = css`
@@ -92,14 +92,17 @@ export class FragmentTabList extends LitElement {
       (<HTMLElement>e.currentTarget).getAttribute("fragment")!
     );
 
-    this.onContext = {
+    this.tabOnContext = {
       fragmentId: fragment._id,
       tabIndex: Number((<HTMLElement>e.currentTarget).getAttribute("tabIndex")),
     };
     myAPI.showContextMenu();
   }
 
-  fragmentIdToDelete({ fragmentId, tabIndex }: IContext): FragmentIdToDelete {
+  fragmentIdToDelete({
+    fragmentId,
+    tabIndex,
+  }: ITabOnContext): FragmentIdToDelete {
     const tab = Array.from(this.tabs).find(
       (tab) => (<TabType>tab).fragment._id === fragmentId
     ) as TabType;
@@ -132,7 +135,7 @@ export class FragmentTabList extends LitElement {
 
   private _contextMenuCommand(e: Event, command: string): void {
     if (command === "delete-fragment") {
-      console.info(this.fragmentIdToDelete(this.onContext));
+      console.info(this.fragmentIdToDelete(this.tabOnContext));
     }
   }
 

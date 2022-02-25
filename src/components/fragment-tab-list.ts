@@ -73,8 +73,8 @@ export class FragmentTabList extends LitElement {
   }
 
   firstUpdated(): void {
-    myAPI.nextTab((_e: Event) => this.nextTab());
-    myAPI.previousTab((_e: Event) => this.previousTab());
+    myAPI.nextTab((_e: Event) => this._nextTab());
+    myAPI.previousTab((_e: Event) => this._previousTab());
     myAPI.contextMenuCommand((_e: Event, command) =>
       this._contextMenuCommand(_e, command)
     );
@@ -134,7 +134,7 @@ export class FragmentTabList extends LitElement {
     }
   }
 
-  private nextTab() {
+  private _nextTab() {
     this.fragmentsController.currentTabIndex++;
     if (this.fragmentsController.currentTabIndex > this.lastTabIndex) {
       this.fragmentsController.currentTabIndex = 0;
@@ -143,7 +143,7 @@ export class FragmentTabList extends LitElement {
     console.log("nextTab", this.fragmentsController.currentTabIndex);
   }
 
-  private previousTab() {
+  private _previousTab() {
     this.fragmentsController.currentTabIndex--;
     if (this.fragmentsController.currentTabIndex < 0) {
       this.fragmentsController.currentTabIndex = this.lastTabIndex;

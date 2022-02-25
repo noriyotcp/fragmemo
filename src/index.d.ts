@@ -15,6 +15,11 @@ export type FileData = {
   text: string;
 };
 
+export interface IdsOnDeleteFragment {
+  fragmentId: number;
+  nextActiveFragmentId?: number;
+}
+
 export interface SandBox {
   fileSaveAs: (fileData: string) => void;
   setupStorage: () => Promise<void>;
@@ -24,7 +29,7 @@ export interface SandBox {
   updateFragment: (data: object) => Promise<{
     status: boolean;
   }>;
-  deleteFragment: (data: object) => Promise<void>;
+  deleteFragment: (data: IdsOnDeleteFragment) => Promise<void>;
   updateActiveFragment: (data: object) => Promise<{
     status: boolean;
   }>;

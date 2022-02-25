@@ -4,17 +4,13 @@ import { map } from "lit/directives/map.js";
 import { styleMap } from "lit/directives/style-map.js";
 import { FragmentsController } from "../controllers/fragments-controller";
 import { Fragment } from "models";
+import { IdsOnDeleteFragment } from "index";
 
 const { myAPI } = window;
 
 interface ITabOnContext {
   fragmentId: number;
   tabIndex: number;
-}
-
-interface FragmentIdToDelete {
-  fragmentId: number;
-  nextActiveFragmentId?: number;
 }
 
 interface TabType extends HTMLElement {
@@ -101,7 +97,7 @@ export class FragmentTabList extends LitElement {
   fragmentIdToDelete({
     fragmentId,
     tabIndex,
-  }: ITabOnContext): FragmentIdToDelete {
+  }: ITabOnContext): IdsOnDeleteFragment {
     const tab = Array.from(this.tabs).find(
       (tab) => (<TabType>tab).fragment._id === fragmentId
     ) as TabType;

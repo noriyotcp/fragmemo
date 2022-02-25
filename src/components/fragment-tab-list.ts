@@ -5,6 +5,7 @@ import { styleMap } from "lit/directives/style-map.js";
 import { FragmentsController } from "../controllers/fragments-controller";
 import { Fragment } from "models";
 import { IdsOnDeleteFragment } from "index";
+import { dispatch } from "../events/dispatcher";
 
 const { myAPI } = window;
 
@@ -130,7 +131,16 @@ export class FragmentTabList extends LitElement {
 
   private _contextMenuCommand(e: Event, command: string): void {
     if (command === "delete-fragment") {
-      myAPI.deleteFragment(this._idsOnDeleteFragment(this.tabOnContext));
+      myAPI
+        .deleteFragment(this._idsOnDeleteFragment(this.tabOnContext))
+        .then(() => {
+          dispatch({
+            type: "update-snippets",
+            detail: {
+              message: "Fragment deleted",
+            },
+          });
+        });
     }
   }
 

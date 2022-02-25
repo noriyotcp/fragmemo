@@ -88,6 +88,29 @@ class DB extends Realm {
     });
   }
 
+  deleteFragment(fragmentId: number, nextActiveFragmentId: number): void {
+    const fragment: Fragment | undefined = this.objectForPrimaryKey(
+      "Fragment",
+      fragmentId
+    );
+
+    if (!fragment) {
+      throw new Error("fragment not found");
+    }
+
+    const snippet: Snippet = fragment.snippet;
+
+    this.write(() => {
+      this.delete(fragment);
+    });
+    this.updateActiveFragment({
+      properties: { snippetId: snippet._id, fragmentId: nextActiveFragmentId },
+    });
+    this.write(() => {
+      snippet.snippetUpdate.updatedAt = new Date();
+    });
+  }
+
   private createSnippet(title: string, snippetUpdate: SnippetUpdate) {
     let snippet!: Snippet;
     this.write(() => {

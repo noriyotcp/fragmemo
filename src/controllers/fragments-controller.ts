@@ -9,6 +9,7 @@ export class FragmentsController implements ReactiveController {
 
   fragments!: Fragment[];
   activeFragmentId = 0;
+  inactiveFragmentId: number | null = null;
   currentTabIndex = 0;
   snippet?: Snippet;
 
@@ -67,6 +68,14 @@ export class FragmentsController implements ReactiveController {
     );
     myAPI.getActiveFragment(<number>this.snippet._id).then((activeFragment) => {
       this.activeFragmentId = activeFragment.fragmentId;
+      dispatch({
+        type: "snippet-selected",
+        detail: {
+          to: this.activeFragmentId,
+          from: null,
+          snippetId: this.snippet?._id,
+        },
+      });
     });
 
     myAPI.fetchFragments(<number>this.snippet._id).then((fragments) => {
@@ -79,7 +88,16 @@ export class FragmentsController implements ReactiveController {
   private _activeFragmentListener = (e: CustomEvent): void => {
     if (!this.snippet) return;
 
+    this.inactiveFragmentId = this.activeFragmentId;
     this.activeFragmentId = e.detail.activeFragmentId;
+    dispatch({
+      type: "fragment-switched",
+      detail: {
+        from: this.inactiveFragmentId,
+        to: this.activeFragmentId,
+      },
+    });
+
     this._setCurrentTabIndex();
     // Update ActiveFragment in Realm DB
     myAPI

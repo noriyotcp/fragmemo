@@ -174,7 +174,7 @@ export class FragmentTabList extends LitElement {
     return this.tabs.length - 1;
   }
 
-  updated() {
+  updated(): void {
     if (this.fragmentsController.activeFragmentId) {
       this.dispatchEvent(
         new CustomEvent("fragment-activated", {

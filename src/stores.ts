@@ -48,4 +48,28 @@ class FragmentStore extends BaseStore {
   }
 }
 
-export default FragmentStore;
+class ViewStateStore extends BaseStore {
+  // rowId: fragmentId
+  schema = {
+    states: {
+      viewState: { type: "string", default: "" },
+    },
+  };
+
+  constructor() {
+    super();
+    this.store.addCellListener(
+      null,
+      null,
+      null,
+      (store, tableId, rowId, cellId) => {
+        console.log(
+          `${cellId} cell in ${rowId} row in ${tableId} table changed`
+        );
+        console.info("viewStateStore status:", this.store.getTable("states"));
+      }
+    );
+  }
+}
+
+export { FragmentStore, ViewStateStore };

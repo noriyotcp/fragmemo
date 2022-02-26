@@ -1,16 +1,9 @@
 const { createStore, Store } = TinyBase;
 
-class FragmentStore {
+class BaseStore {
   store: typeof Store;
   readonly TABLE_NAME = "states";
-
-  schema = {
-    states: {
-      content: { type: "string", default: "" },
-      isEditing: { type: "boolean", default: false },
-      langIdx: { type: "number", default: 0 },
-    },
-  };
+  schema = {};
 
   constructor() {
     this.store = createStore().setSchema(this.schema);
@@ -38,6 +31,20 @@ class FragmentStore {
 
   setCell(rowId: string, cell: string, value: string | boolean | number) {
     this.store.setCell(this.TABLE_NAME, `${rowId}`, cell, value);
+  }
+}
+
+class FragmentStore extends BaseStore {
+  schema = {
+    states: {
+      content: { type: "string", default: "" },
+      isEditing: { type: "boolean", default: false },
+      langIdx: { type: "number", default: 0 },
+    },
+  };
+
+  constructor() {
+    super();
   }
 }
 

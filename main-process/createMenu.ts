@@ -49,38 +49,6 @@ export const createMenu = (win: BrowserWindow): void => {
           },
         },
         {
-          label: "Open...",
-          accelerator: "CmdOrCtrl+O",
-          click: async () => {
-            dialog
-              .showOpenDialog(win, {
-                properties: ["openFile", "showHiddenFiles"],
-                title: "ファイルを選択する",
-                filters: [
-                  {
-                    name: "All Files",
-                    extensions: ["*"],
-                  },
-                ],
-              })
-              .then((result) => {
-                if (result.canceled) {
-                  return;
-                }
-
-                const path = result.filePaths[0];
-                const buff = fs.readFileSync(path);
-                const fileData = {
-                  status: true,
-                  path: path,
-                  text: buff.toString(),
-                };
-                win.webContents.send("open-by-menu", fileData);
-              })
-              .catch((err) => console.log(`Error: ${err}`));
-          },
-        },
-        {
           label: "Save",
           accelerator: "CmdOrCtrl+S",
           click: async () => {

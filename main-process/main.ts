@@ -7,7 +7,6 @@ import {
   MenuItemConstructorOptions,
   PopupOptions,
 } from "electron";
-import { setFileSaveAs } from "./setFileSaveAs";
 import { createMenu } from "./createMenu";
 import { JsonStorage, DatapathDoesNotExistError } from "./jsonStorage";
 import { setTimeout } from "timers/promises";
@@ -78,7 +77,6 @@ function createWindow() {
   });
 
   createMenu(mainWindow);
-  setFileSaveAs(mainWindow);
 
   // and load the index.html of the app.
   // win.loadFile("index.html");
@@ -121,8 +119,6 @@ app.whenReady().then(() => {
     await createWindowSettings();
     createWindow();
     app.on("activate", function () {
-      // To avoid attempting to register the same handler due to re-create a window
-      ipcMain.removeHandler("file-save-as");
       // On macOS it's common to re-create a window in the app when the
       // dock icon is clicked and there are no other windows open.
       if (BrowserWindow.getAllWindows().length === 0) createWindow();
@@ -134,12 +130,12 @@ app.whenReady().then(() => {
 
 app.once("browser-window-created", () => {
   console.log("browser-window-created");
-  ipcMain.handle("update-snippet", async (event, data) => {
+  ipcMain.handle("update-snippet", async (event, props) => {
     console.info("Main process: update-snippet", {
       className: "Snippet",
-      data,
+      props,
     });
-    await db.updateSnippet(data);
+    await db.updateSnippet(props);
     return { status: true };
   });
 

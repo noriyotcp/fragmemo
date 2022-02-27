@@ -9,21 +9,21 @@ declare global {
   }
 }
 
-export type FileData = {
-  status: true;
-  path: string;
-  text: string;
-};
-
 export interface IdsOnDeleteFragment {
   fragmentId: number;
   nextActiveFragmentId?: number;
 }
 
+export interface ISnippetProps {
+  _id: number;
+  properties: {
+    title: string;
+  };
+}
+
 export interface SandBox {
-  fileSaveAs: (fileData: string) => void;
   setupStorage: () => Promise<void>;
-  updateSnippet: (data: object) => Promise<{
+  updateSnippet: (props: ISnippetProps) => Promise<{
     status: boolean;
   }>;
   updateFragment: (data: object) => Promise<{
@@ -42,9 +42,6 @@ export interface SandBox {
   loadSnippets: () => Promise<Snippet[]>;
   loadLanguages: () => Promise<Language[]>;
   fetchFragments: (snippetId: number) => Promise<Fragment[]>;
-  openByMenu: (
-    listener: (_e: Event, fileData: FileData) => void
-  ) => Electron.IpcRenderer;
   openSettings: (
     listener: (_e: Event, elementName: string) => void
   ) => Electron.IpcRenderer;

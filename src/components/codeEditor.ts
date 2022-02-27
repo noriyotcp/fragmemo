@@ -11,7 +11,6 @@ import cssWorker from "monaco-editor/esm/vs/language/css/css.worker?worker";
 import htmlWorker from "monaco-editor/esm/vs/language/html/html.worker?worker";
 import tsWorker from "monaco-editor/esm/vs/language/typescript/ts.worker?worker";
 
-import { FileData } from "index";
 import { ViewStateStore } from "../stores";
 import { ViewStatesController } from "../controllers/view-states-controller";
 
@@ -72,9 +71,6 @@ export class CodeEditor extends LitElement {
   constructor() {
     super();
     this.viewStateStore = new ViewStateStore();
-    window.addEventListener("file-save-as", ((e: CustomEvent) => {
-      myAPI.fileSaveAs(this.getValue());
-    }) as EventListener);
   }
 
   private getFile() {
@@ -153,10 +149,6 @@ export class CodeEditor extends LitElement {
         monaco.editor.setTheme(this.getTheme());
       });
 
-    myAPI.openByMenu((_e: Event, fileData: FileData) =>
-      this._openByMenuListener(fileData)
-    );
-
     console.log(this.editor.hasTextFocus());
     this.editor.onDidFocusEditorText(() => {
       console.log("focus");
@@ -215,22 +207,6 @@ export class CodeEditor extends LitElement {
       "viewState"
     );
     this.editor?.restoreViewState(JSON.parse(viewState));
-  }
-
-  private _openByMenuListener(fileData: FileData): boolean | void {
-    // Give the browser a chance to paint
-    // await new Promise((r) => setTimeout(r, 0));
-
-    if (fileData.status === undefined) {
-      return false;
-    }
-
-    if (!fileData.status) {
-      alert(`ファイルが開けませんでした\n${fileData.path}`);
-      return false;
-    }
-
-    this.setValue(fileData.text);
   }
 
   private _changeText() {

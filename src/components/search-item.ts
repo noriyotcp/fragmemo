@@ -3,7 +3,7 @@ import { customElement, query } from "lit/decorators.js";
 
 @customElement("search-item")
 export class SearchItem extends LitElement {
-  @query("#search-message") searchMessage!: HTMLSpanElement;
+  @query("#search-message") searchMessage?: HTMLSpanElement;
 
   static styles = [
     css`
@@ -61,6 +61,8 @@ export class SearchItem extends LitElement {
   }
 
   private _inputTitleListener = (e: CustomEvent): void => {
-    this.searchMessage.textContent = e.detail.message;
+    if (this.searchMessage) {
+      this.searchMessage.textContent = e.detail.message;
+    }
   };
 }

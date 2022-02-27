@@ -59,11 +59,6 @@ export class TestHeader extends LitElement {
 
   async firstUpdated(): Promise<void> {
     window.addEventListener(
-      "snippet-title-changed",
-      this._snippetTitleChangedListener as EventListener
-    );
-
-    window.addEventListener(
       "select-snippet",
       this._selectSnippetListener as EventListener
     );
@@ -84,33 +79,27 @@ export class TestHeader extends LitElement {
       >;
 
       this._snippet.title = highlightValue;
-      dispatch({
-        type: "snippet-title-changed",
-        detail: {
-          _id: this._snippet._id,
-          properties: {
-            title: this._snippet.title,
-          },
+      const detail = {
+        _id: this._snippet._id,
+        properties: {
+          title: this._snippet.title,
         },
+      };
+      myAPI.updateSnippet(detail).then(({ status }) => {
+        console.log("myAPI.updateSnippet", status);
+        // dispatch event to update the list
+        if (status) {
+          dispatch({
+            type: "update-snippets",
+            detail: {
+              message: "Snippets updated",
+            },
+          });
+          this.requestUpdate();
+        }
       });
-      console.log("Input has finished", highlightValue);
     });
   }
-
-  private _snippetTitleChangedListener = (e: CustomEvent): void => {
-    console.info("Changed Data: ", e.detail.properties);
-    myAPI.updateSnippet(e.detail).then(({ status }) => {
-      console.log("myAPI.updateSnippet", status);
-      // dispatch event to update the list
-      dispatch({
-        type: "update-snippets",
-        detail: {
-          message: "Snippets updated",
-        },
-      });
-      this.requestUpdate();
-    });
-  };
 
   private _selectSnippetListener = (e: CustomEvent): void => {
     this._snippet = JSON.parse(e.detail.selectedSnippet);

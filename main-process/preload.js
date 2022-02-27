@@ -2,7 +2,6 @@
 const { contextBridge, ipcRenderer } = require("electron");
 
 contextBridge.exposeInMainWorld("myAPI", {
-  fileSaveAs: (fileData) => ipcRenderer.invoke("file-save-as", fileData),
   // main process -> renderer process
   openByMenu: (listener) => ipcRenderer.on("open-by-menu", listener),
   openSettings: (listener) => ipcRenderer.on("open-settings", listener),

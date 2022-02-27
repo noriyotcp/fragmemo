@@ -21,7 +21,6 @@ export interface IdsOnDeleteFragment {
 }
 
 export interface SandBox {
-  fileSaveAs: (fileData: string) => void;
   setupStorage: () => Promise<void>;
   updateSnippet: (data: object) => Promise<{
     status: boolean;

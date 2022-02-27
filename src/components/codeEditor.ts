@@ -72,9 +72,6 @@ export class CodeEditor extends LitElement {
   constructor() {
     super();
     this.viewStateStore = new ViewStateStore();
-    window.addEventListener("file-save-as", ((e: CustomEvent) => {
-      myAPI.fileSaveAs(this.getValue());
-    }) as EventListener);
   }
 
   private getFile() {

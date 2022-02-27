@@ -110,10 +110,6 @@ export class TestHeader extends LitElement {
     this.requestUpdate();
   };
 
-  private _fileSaveAs(_e: Event): void {
-    dispatch({ type: "file-save-as", detail: { message: "" } });
-  }
-
   private async _openByMenuListener(
     fileData: FileData
   ): Promise<boolean | void> {

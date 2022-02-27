@@ -130,12 +130,12 @@ app.whenReady().then(() => {
 
 app.once("browser-window-created", () => {
   console.log("browser-window-created");
-  ipcMain.handle("update-snippet", async (event, data) => {
+  ipcMain.handle("update-snippet", async (event, props) => {
     console.info("Main process: update-snippet", {
       className: "Snippet",
-      data,
+      props,
     });
-    await db.updateSnippet(data);
+    await db.updateSnippet(props);
     return { status: true };
   });
 

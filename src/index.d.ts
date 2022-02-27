@@ -23,7 +23,7 @@ export interface ISnippetProps {
 
 export interface SandBox {
   setupStorage: () => Promise<void>;
-  updateSnippet: (data: ISnippetProps) => Promise<{
+  updateSnippet: (props: ISnippetProps) => Promise<{
     status: boolean;
   }>;
   updateFragment: (data: object) => Promise<{

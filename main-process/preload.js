@@ -15,7 +15,7 @@ contextBridge.exposeInMainWorld("myAPI", {
   initSnippet: () => ipcRenderer.invoke("init-snippet"),
   initFragment: (snippetId) => ipcRenderer.invoke("init-fragment", snippetId),
   setupStorage: () => ipcRenderer.invoke("setup-storage"),
-  updateSnippet: (data) => ipcRenderer.invoke("update-snippet", data),
+  updateSnippet: (props) => ipcRenderer.invoke("update-snippet", props),
   updateFragment: (data) => ipcRenderer.invoke("update-fragment", data),
   deleteFragment: (data) => ipcRenderer.invoke("delete-fragment", data),
   updateActiveFragment: (data) =>

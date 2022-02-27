@@ -14,9 +14,16 @@ export interface IdsOnDeleteFragment {
   nextActiveFragmentId?: number;
 }
 
+export interface ISnippetProps {
+  _id: number;
+  properties: {
+    title: string;
+  };
+}
+
 export interface SandBox {
   setupStorage: () => Promise<void>;
-  updateSnippet: (data: object) => Promise<{
+  updateSnippet: (data: ISnippetProps) => Promise<{
     status: boolean;
   }>;
   updateFragment: (data: object) => Promise<{

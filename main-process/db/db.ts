@@ -165,14 +165,14 @@ class DB extends Realm {
     return snippetUpdate;
   }
 
-  async updateSnippet(data: {
+  async updateSnippet(props: {
     _id: number;
     properties: typeof Snippet;
   }): Promise<void> {
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    const snippet: Snippet = this.objectForPrimaryKey("Snippet", data._id)!;
+    const snippet: Snippet = this.objectForPrimaryKey("Snippet", props._id)!;
     this.write(() => {
-      Object.assign(snippet, data.properties);
+      Object.assign(snippet, props.properties);
       snippet.snippetUpdate.updatedAt = new Date();
     });
   }

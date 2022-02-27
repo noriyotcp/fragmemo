@@ -7,7 +7,6 @@ import {
   MenuItemConstructorOptions,
   PopupOptions,
 } from "electron";
-import { setFileSaveAs } from "./setFileSaveAs";
 import { createMenu } from "./createMenu";
 import { JsonStorage, DatapathDoesNotExistError } from "./jsonStorage";
 import { setTimeout } from "timers/promises";
@@ -78,7 +77,6 @@ function createWindow() {
   });
 
   createMenu(mainWindow);
-  setFileSaveAs(mainWindow);
 
   // and load the index.html of the app.
   // win.loadFile("index.html");

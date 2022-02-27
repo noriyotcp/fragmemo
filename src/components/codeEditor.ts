@@ -10,7 +10,10 @@ import jsonWorker from "monaco-editor/esm/vs/language/json/json.worker?worker";
 import cssWorker from "monaco-editor/esm/vs/language/css/css.worker?worker";
 import htmlWorker from "monaco-editor/esm/vs/language/html/html.worker?worker";
 import tsWorker from "monaco-editor/esm/vs/language/typescript/ts.worker?worker";
+
 import { FileData } from "index";
+import { ViewStateStore } from "../stores";
+import { ViewStatesController } from "../controllers/view-states-controller";
 
 const { myAPI } = window;
 
@@ -35,6 +38,9 @@ self.MonacoEnvironment = {
 
 @customElement("code-editor")
 export class CodeEditor extends LitElement {
+  viewStateStore: ViewStateStore;
+  private viewStatesController = new ViewStatesController(this);
+
   private container: Ref<HTMLElement> = createRef();
   editor?: monaco.editor.IStandaloneCodeEditor;
   @property({ type: Boolean, attribute: "readonly" }) readOnly?: boolean;
@@ -65,6 +71,7 @@ export class CodeEditor extends LitElement {
 
   constructor() {
     super();
+    this.viewStateStore = new ViewStateStore();
     window.addEventListener("file-save-as", ((e: CustomEvent) => {
       myAPI.fileSaveAs(this.getValue());
     }) as EventListener);
@@ -130,7 +137,6 @@ export class CodeEditor extends LitElement {
       automaticLayout: true,
       readOnly: this.readOnly ?? false,
     };
-
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     this.editor = monaco.editor.create(this.container.value!, editorOptions);
     // monaco.editor.setModelLanguage(this.editor.getModel()!, "html");
@@ -163,6 +169,21 @@ export class CodeEditor extends LitElement {
   }
 
   updated() {
+    // switch snippets
+    if (this.viewStatesController.isSnippetSwitched) {
+      // reset the all view states
+      this.viewStateStore.store.forEachRow("states", (rowId: string): void => {
+        this.viewStateStore.store.delRow("states", `${rowId}`);
+      });
+    } else {
+      // if switched to a new fragment, save the previous view state
+      if (this.viewStatesController.previousFragmentId) {
+        this._saveCurrentViewState(
+          this.viewStatesController.previousFragmentId
+        );
+      }
+    }
+
     if (!this.editor) return;
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     monaco.editor.setModelLanguage(this.editor.getModel()!, this.getLang());
@@ -170,6 +191,30 @@ export class CodeEditor extends LitElement {
       `model language was changed to ${this.editor.getModel()?.getLanguageId()}`
     );
     this.setValue(this.code);
+
+    console.info("updated", this.viewStateStore.store.getTable("states"));
+    if (
+      this.viewStateStore.hasRow(
+        `${this.viewStatesController.currentFragmentId}`
+      )
+    ) {
+      this._restoreCurrentViewState();
+    }
+  }
+
+  private _saveCurrentViewState(fragmentId: number) {
+    const viewState = this.editor?.saveViewState();
+    this.viewStateStore.setPartialRow(`${fragmentId}`, {
+      viewState: JSON.stringify(viewState),
+    });
+  }
+
+  private _restoreCurrentViewState() {
+    const viewState = this.viewStateStore.getCell(
+      `${this.viewStatesController.currentFragmentId}`,
+      "viewState"
+    );
+    this.editor?.restoreViewState(JSON.parse(viewState));
   }
 
   private _openByMenuListener(fileData: FileData): boolean | void {
@@ -199,6 +244,9 @@ export class CodeEditor extends LitElement {
   }
 
   private _saveText() {
+    this._saveCurrentViewState(this.viewStatesController.currentFragmentId!);
+    this.viewStatesController.previousFragmentId = null;
+
     this.dispatchEvent(
       new CustomEvent("save-text", {
         detail: { text: this.getValue() },

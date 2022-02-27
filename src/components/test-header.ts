@@ -59,8 +59,8 @@ export class TestHeader extends LitElement {
 
   async firstUpdated(): Promise<void> {
     window.addEventListener(
-      "snippet-changed",
-      this._snippetChangedListener as EventListener
+      "snippet-title-changed",
+      this._snippetTitleChangedListener as EventListener
     );
 
     window.addEventListener(
@@ -85,7 +85,7 @@ export class TestHeader extends LitElement {
 
       this._snippet.title = highlightValue;
       dispatch({
-        type: "snippet-changed",
+        type: "snippet-title-changed",
         detail: {
           _id: this._snippet._id,
           properties: {
@@ -97,7 +97,7 @@ export class TestHeader extends LitElement {
     });
   }
 
-  private _snippetChangedListener = (e: CustomEvent): void => {
+  private _snippetTitleChangedListener = (e: CustomEvent): void => {
     console.info("Changed Data: ", e.detail.properties);
     myAPI.updateSnippet(e.detail).then(({ status }) => {
       console.log("myAPI.updateSnippet", status);

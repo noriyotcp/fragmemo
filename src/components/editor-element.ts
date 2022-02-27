@@ -2,7 +2,7 @@ import { dispatch } from "../events/dispatcher";
 import { LitElement, html, css, TemplateResult } from "lit";
 import { customElement, property, query, state } from "lit/decorators.js";
 import { map } from "lit/directives/map.js";
-import FragmentStore from "../stores";
+import { FragmentStore } from "../stores";
 import { Language } from "models";
 
 const { myAPI } = window;

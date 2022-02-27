@@ -3,7 +3,6 @@ const { contextBridge, ipcRenderer } = require("electron");
 
 contextBridge.exposeInMainWorld("myAPI", {
   // main process -> renderer process
-  openByMenu: (listener) => ipcRenderer.on("open-by-menu", listener),
   openSettings: (listener) => ipcRenderer.on("open-settings", listener),
   saveFragment: (listener) => ipcRenderer.on("save-fragment", listener),
   nextTab: (listener) => ipcRenderer.on("next-tab", listener),

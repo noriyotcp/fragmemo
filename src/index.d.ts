@@ -9,12 +9,6 @@ declare global {
   }
 }
 
-export type FileData = {
-  status: true;
-  path: string;
-  text: string;
-};
-
 export interface IdsOnDeleteFragment {
   fragmentId: number;
   nextActiveFragmentId?: number;
@@ -41,9 +35,6 @@ export interface SandBox {
   loadSnippets: () => Promise<Snippet[]>;
   loadLanguages: () => Promise<Language[]>;
   fetchFragments: (snippetId: number) => Promise<Fragment[]>;
-  openByMenu: (
-    listener: (_e: Event, fileData: FileData) => void
-  ) => Electron.IpcRenderer;
   openSettings: (
     listener: (_e: Event, elementName: string) => void
   ) => Electron.IpcRenderer;

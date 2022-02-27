@@ -1,6 +1,6 @@
 import { LitElement, html, css, TemplateResult } from "lit";
 import { customElement, property, query, state } from "lit/decorators.js";
-import { FileData, Override } from "index";
+import { Override } from "index";
 import { dispatch } from "../events/dispatcher";
 import "@ui5/webcomponents/dist/Input.js";
 import { Snippet } from "models";
@@ -65,9 +65,6 @@ export class TestHeader extends LitElement {
 
     // Give the browser a chance to paint
     await new Promise((r) => setTimeout(r, 0));
-    myAPI.openByMenu((_e: Event, fileData: FileData) =>
-      this._openByMenuListener(fileData)
-    );
 
     // Fired when the input operation has finished by pressing Enter or on focusout
     this.snippetTitle.addEventListener("change", (e: Event) => {
@@ -109,24 +106,6 @@ export class TestHeader extends LitElement {
     );
     this.requestUpdate();
   };
-
-  private async _openByMenuListener(
-    fileData: FileData
-  ): Promise<boolean | void> {
-    // Give the browser a chance to paint
-    await new Promise((r) => setTimeout(r, 0));
-
-    if (fileData.status === undefined) {
-      return false;
-    }
-
-    if (!fileData.status) {
-      alert(`ファイルが開けませんでした\n${fileData.path}`);
-      return false;
-    }
-
-    this.textareaValue = fileData.text;
-  }
 
   private _displayToast(): void {
     dispatch({

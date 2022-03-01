@@ -3,7 +3,7 @@ import { customElement, property, query, state } from "lit/decorators.js";
 import { ISnippetProps, Override } from "index";
 import { dispatch } from "../events/dispatcher";
 import "@ui5/webcomponents/dist/Input.js";
-import { Snippet } from "models";
+import { Snippet } from "models.d";
 
 const { myAPI } = window;
 

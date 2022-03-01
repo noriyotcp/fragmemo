@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-vars */
 import { IpcRenderer } from "electron";
 import { Fragment, ActiveFragment, Snippet, Language } from "models.d";
+import { ISnippetProps, IFragmentProps } from "props.d";
 
 declare global {
   interface Window {
@@ -12,21 +13,6 @@ declare global {
 export interface IdsOnDeleteFragment {
   fragmentId: number;
   nextActiveFragmentId?: number;
-}
-
-export interface ISnippetProps {
-  _id: number;
-  properties: {
-    title: string;
-  };
-}
-
-export interface IFragmentProps {
-  _id?: number;
-  properties: {
-    content?: string;
-    language?: Partial<Language>;
-  };
 }
 
 export interface SandBox {

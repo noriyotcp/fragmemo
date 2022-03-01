@@ -2,8 +2,9 @@ import { LitElement, html, css, TemplateResult } from "lit";
 import { customElement, property, query, state } from "lit/decorators.js";
 import { dispatch } from "../events/dispatcher";
 import "@ui5/webcomponents/dist/Input.js";
-import { ISnippetProps, Override } from "index.d";
+import { Override } from "index.d";
 import { Snippet } from "models.d";
+import { ISnippetProps } from "props.d";
 
 const { myAPI } = window;
 

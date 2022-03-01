@@ -34,7 +34,7 @@ export interface SandBox {
   updateSnippet: (props: ISnippetProps) => Promise<{
     status: boolean;
   }>;
-  updateFragment: (data: IFragmentProps) => Promise<{
+  updateFragment: (props: IFragmentProps) => Promise<{
     status: boolean;
   }>;
   deleteFragment: (data: IdsOnDeleteFragment) => Promise<void>;

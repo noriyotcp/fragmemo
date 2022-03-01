@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-vars */
 import { IpcRenderer } from "electron";
 import { Fragment, ActiveFragment, Snippet, Language } from "models.d";
+import { ISnippetProps, IFragmentProps } from "props.d";
 
 declare global {
   interface Window {
@@ -14,19 +15,12 @@ export interface IdsOnDeleteFragment {
   nextActiveFragmentId?: number;
 }
 
-export interface ISnippetProps {
-  _id: number;
-  properties: {
-    title: string;
-  };
-}
-
 export interface SandBox {
   setupStorage: () => Promise<void>;
   updateSnippet: (props: ISnippetProps) => Promise<{
     status: boolean;
   }>;
-  updateFragment: (data: object) => Promise<{
+  updateFragment: (props: IFragmentProps) => Promise<{
     status: boolean;
   }>;
   deleteFragment: (data: IdsOnDeleteFragment) => Promise<void>;

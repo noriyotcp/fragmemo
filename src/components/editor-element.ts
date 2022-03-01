@@ -170,7 +170,7 @@ export class EditorElement extends LitElement {
     myAPI
       .updateFragment({
         _id: this._activeFragmentId,
-        properties: { content: e.detail.text },
+        properties: { content: e.detail.text as string },
       })
       .then(({ status }) => {
         console.log("myAPI.updateFragment", status);

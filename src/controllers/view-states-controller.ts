@@ -3,7 +3,7 @@ import { ReactiveController, ReactiveControllerHost } from "lit";
 export class ViewStatesController implements ReactiveController {
   private host: ReactiveControllerHost;
 
-  currentFragmentId: number | null = null;
+  currentFragmentId!: number;
   previousFragmentId: number | null = null;
   currentSnippetId: number | null = null;
   isSnippetSwitched = false;

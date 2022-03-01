@@ -1,11 +1,4 @@
-import {
-  app,
-  BrowserWindow,
-  dialog,
-  Menu,
-  MenuItemConstructorOptions,
-} from "electron";
-import * as fs from "fs";
+import { app, BrowserWindow, Menu, MenuItemConstructorOptions } from "electron";
 
 export const createMenu = (win: BrowserWindow): void => {
   const switchTab = [

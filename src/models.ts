@@ -2,42 +2,26 @@ class Snippet {
   _id = 0;
   title = "";
   snippetUpdate!: SnippetUpdate;
-
-  constructor(data: Required<Snippet>) {
-    Object.assign(this, data);
-  }
 }
 
 class Language {
   public _idx = 0;
   public name = "";
   public alias = "";
-
-  constructor(data: Required<Language>) {
-    Object.assign(this, data);
-  }
 }
 
 class Fragment {
   public _id = 0;
   public title = "";
   public content = "";
-  public snippet!: Snippet; // TODO: Change required to optional?
+  public snippet!: Snippet;
   public language!: Language;
-
-  constructor(data: Partial<Fragment>) {
-    Object.assign(this, data);
-  }
 }
 
 class ActiveFragment {
   public _id = 0;
   public fragmentId = 0;
   public snippetId = 0;
-
-  constructor(data: Partial<ActiveFragment>) {
-    Object.assign(this, data);
-  }
 }
 
 class SnippetUpdate {
@@ -45,4 +29,4 @@ class SnippetUpdate {
   public updatedAt!: Date;
 }
 
-export { Snippet, Fragment, ActiveFragment, Language, SnippetUpdate };
+export { Snippet, Language, Fragment, ActiveFragment, SnippetUpdate };

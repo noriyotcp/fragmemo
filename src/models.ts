@@ -1,32 +1,32 @@
-class Snippet {
-  _id = 0;
-  title = "";
-  snippetUpdate!: SnippetUpdate;
+interface Snippet {
+  _id: number;
+  title: string;
+  snippetUpdate: SnippetUpdate;
 }
 
-class Language {
-  public _idx = 0;
-  public name = "";
-  public alias = "";
+interface Language {
+  _idx: number;
+  name: string;
+  alias: string;
 }
 
-class Fragment {
-  public _id = 0;
-  public title = "";
-  public content = "";
-  public snippet!: Snippet;
-  public language!: Language;
+interface Fragment {
+  _id: number;
+  title: string;
+  content: string;
+  snippet: Snippet;
+  language: Language;
 }
 
-class ActiveFragment {
-  public _id = 0;
-  public fragmentId = 0;
-  public snippetId = 0;
+interface ActiveFragment {
+  _id: number;
+  fragmentId: number;
+  snippetId: number;
 }
 
-class SnippetUpdate {
-  public _id = 0;
-  public updatedAt!: Date;
+interface SnippetUpdate {
+  _id: number;
+  updatedAt: Date;
 }
 
 export { Snippet, Language, Fragment, ActiveFragment, SnippetUpdate };

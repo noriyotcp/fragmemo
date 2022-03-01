@@ -21,12 +21,22 @@ export interface ISnippetProps {
   };
 }
 
+export interface IFragmentProps {
+  _id?: number;
+  properties: {
+    content?: string;
+    language?: {
+      _idx: number;
+    };
+  };
+}
+
 export interface SandBox {
   setupStorage: () => Promise<void>;
   updateSnippet: (props: ISnippetProps) => Promise<{
     status: boolean;
   }>;
-  updateFragment: (data: object) => Promise<{
+  updateFragment: (data: IFragmentProps) => Promise<{
     status: boolean;
   }>;
   deleteFragment: (data: IdsOnDeleteFragment) => Promise<void>;

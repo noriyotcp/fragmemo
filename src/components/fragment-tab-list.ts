@@ -4,7 +4,7 @@ import { map } from "lit/directives/map.js";
 import { styleMap } from "lit/directives/style-map.js";
 import { FragmentsController } from "../controllers/fragments-controller";
 import { Fragment } from "models.d";
-import { IdsOnDeleteFragment } from "index";
+import { IdsOnDeleteFragment } from "index.d";
 import { dispatch } from "../events/dispatcher";
 
 const { myAPI } = window;

@@ -3,9 +3,9 @@ import { customElement, queryAll, state } from "lit/decorators.js";
 import { map } from "lit/directives/map.js";
 import { styleMap } from "lit/directives/style-map.js";
 import { FragmentsController } from "../controllers/fragments-controller";
-import { Fragment } from "models";
-import { IdsOnDeleteFragment } from "index";
 import { dispatch } from "../events/dispatcher";
+import { IdsOnDeleteFragment } from "index.d";
+import { Fragment } from "models.d";
 
 const { myAPI } = window;
 

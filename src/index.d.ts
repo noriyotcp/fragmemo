@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 import { IpcRenderer } from "electron";
-import { Fragment, ActiveFragment, Snippet, Language } from "models";
+import { Fragment, ActiveFragment, Snippet, Language } from "models.d";
 
 declare global {
   interface Window {

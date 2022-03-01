@@ -7,7 +7,7 @@ import {
   queryAll,
   state,
 } from "lit/decorators.js";
-import { Fragment } from "models";
+import { Fragment } from "models.d";
 
 @customElement("fragment-tab")
 export class FragmentTab extends LitElement {

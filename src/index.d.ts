@@ -25,9 +25,7 @@ export interface IFragmentProps {
   _id?: number;
   properties: {
     content?: string;
-    language?: {
-      _idx: number;
-    };
+    language?: Partial<Language>;
   };
 }
 

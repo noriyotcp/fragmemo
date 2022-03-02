@@ -31,11 +31,7 @@ export class EditorElement extends LitElement {
     css`
       :host {
         display: block;
-        margin-top: 51px;
-      }
-
-      header {
-        max-height: 59px;
+        margin-top: var(--header-height);
       }
 
       footer {

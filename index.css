@@ -30,4 +30,5 @@ snippet-list::-webkit-scrollbar {
   --gray: #717172;
   --dark-gray: #323233;
   --text-color: ghostwhite;
+  --header-height: 51px;
 }

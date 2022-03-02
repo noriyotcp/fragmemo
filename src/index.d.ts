@@ -32,9 +32,7 @@ export interface SandBox {
   initSnippet: () => Promise<void>;
   initFragment: (snippetId: number) => Promise<void>;
   setupStorage: () => Promise<void>;
-  updateSnippet: (props: ISnippetProps) => Promise<{
-    status: boolean;
-  }>;
+  updateSnippet: (props: ISnippetProps) => Promise<void>;
   updateFragment: (props: IFragmentProps) => Promise<{
     status: boolean;
   }>;

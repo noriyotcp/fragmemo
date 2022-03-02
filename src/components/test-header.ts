@@ -49,9 +49,6 @@ export class TestHeader extends LitElement {
         value="${this._snippet?.title}"
         @input="${this._inputTitleDispatcher}"
       ></ui5-input>
-      <button type="button" id="btn-save" @click="${this._displayToast}">
-        Toast
-      </button>
     `;
   }
 
@@ -85,10 +82,11 @@ export class TestHeader extends LitElement {
         },
       };
 
-      myAPI.updateSnippet(snippetProps).then(({ status }) => {
-        console.log("myAPI.updateSnippet", status);
-        // dispatch event to update the list
-        if (status) {
+      myAPI
+        .updateSnippet(snippetProps)
+        .then(() => {
+          console.log("myAPI.updateSnippet", status);
+          // dispatch event to update the list
           dispatch({
             type: "update-snippets",
             detail: {
@@ -96,8 +94,11 @@ export class TestHeader extends LitElement {
             },
           });
           this.requestUpdate();
-        }
-      });
+        })
+        .catch((err) => {
+          console.error(err);
+          this._displayToast("Snippet update failed");
+        });
     });
   }
 
@@ -110,11 +111,11 @@ export class TestHeader extends LitElement {
     this.requestUpdate();
   };
 
-  private _displayToast(): void {
+  private _displayToast(msg?: string): void {
     dispatch({
       type: "display-toast",
       detail: {
-        message: this.snippetTitle?.value,
+        message: msg,
       },
     });
   }

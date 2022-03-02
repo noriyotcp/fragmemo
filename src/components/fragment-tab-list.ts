@@ -30,6 +30,8 @@ export class FragmentTabList extends LitElement {
     section {
       display: flex;
       flex-wrap: nowrap;
+      height: 22px;
+      border: 1px solid var(--gray);
     }
     .tab-settings {
       user-select: none;

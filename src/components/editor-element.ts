@@ -31,11 +31,7 @@ export class EditorElement extends LitElement {
     css`
       :host {
         display: block;
-        margin-top: 41px;
-      }
-
-      header {
-        max-height: 59px;
+        margin-top: var(--header-height);
       }
 
       footer {
@@ -44,7 +40,7 @@ export class EditorElement extends LitElement {
         left: 0;
         width: 100%;
         background-color: var(--dark-gray);
-        height: 35px;
+        height: calc(var(--header-height) - var(--header-height-offset));
         display: flex;
         align-items: center;
         justify-content: space-between;
@@ -54,6 +50,7 @@ export class EditorElement extends LitElement {
         background: var(--dark-gray);
         border: none;
         color: var(--text-color);
+        padding-left: 1em;
         height: 100%;
         width: 8rem;
       }
@@ -62,7 +59,7 @@ export class EditorElement extends LitElement {
 
   render(): TemplateResult {
     return html`
-      <header>
+      <section>
         <test-header textareaValue="${this._textareaValue}"></test-header>
         <fragment-tab-list
           @fragment-activated=${this._onFragmentActivated}
@@ -73,7 +70,7 @@ export class EditorElement extends LitElement {
           @change-text=${this._changeText}
           @save-text=${this._saveText}
         ></code-editor>
-      </header>
+      </section>
       <footer>
         <select
           name="languages"

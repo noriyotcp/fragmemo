@@ -25,17 +25,18 @@ export class TestHeader extends LitElement {
     :host {
       position: fixed;
       top: 0;
-      height: 41px;
+      height: var(--header-height);
       width: 100%;
       z-index: 9999;
       --textarea-width: 67%;
     }
     #snippet-title {
+      height: 100%;
       width: var(--textarea-width);
       background-color: inherit;
       border: none;
       color: var(--text-color);
-      font-size: 1.5em;
+      font-size: 1.3em;
     }
   `;
 

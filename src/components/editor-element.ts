@@ -50,6 +50,7 @@ export class EditorElement extends LitElement {
         background: var(--dark-gray);
         border: none;
         color: var(--text-color);
+        padding-left: 1em;
         height: 100%;
         width: 8rem;
       }

@@ -246,7 +246,7 @@ app.once("browser-window-created", () => {
     return db.sortBy("Language", "_idx").toJSON();
   });
 
-  ipcMain.handle("fetch-fragments", (event, snippetId) => {
+  ipcMain.handle("load-fragments", (event, snippetId) => {
     const fragments = db
       .objects("Fragment")
       .filtered(`snippet._id == ${snippetId}`) as unknown as Results<Fragment>;

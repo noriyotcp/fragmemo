@@ -78,7 +78,7 @@ export class FragmentsController implements ReactiveController {
       });
     });
 
-    myAPI.fetchFragments(<number>this.snippet._id).then((fragments) => {
+    myAPI.loadFragments(<number>this.snippet._id).then((fragments) => {
       this.fragments = fragments;
       this._setCurrentTabIndex();
       this.host.requestUpdate();

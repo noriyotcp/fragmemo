@@ -37,7 +37,7 @@ export interface SandBox {
   showContextMenu: () => void;
   loadSnippets: () => Promise<Snippet[]>;
   loadLanguages: () => Promise<Language[]>;
-  fetchFragments: (snippetId: number) => Promise<Fragment[]>;
+  loadFragments: (snippetId: number) => Promise<Fragment[]>;
   openSettings: (
     listener: (_e: Event, elementName: string) => void
   ) => Electron.IpcRenderer;

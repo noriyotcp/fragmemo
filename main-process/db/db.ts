@@ -9,7 +9,9 @@ import {
 import languages from "./seeds/languages";
 import * as fragments from "./seeds/fragments";
 
-type ActiveFragmentProperty = Pick<ActiveFragment, "fragmentId" | "snippetId">;
+interface ActiveFragmentProps {
+  properties: Pick<ActiveFragment, "fragmentId" | "snippetId">;
+}
 
 class DB extends Realm {
   constructor(path: string) {
@@ -194,15 +196,15 @@ class DB extends Realm {
     });
   }
 
-  async updateActiveFragment(data: {
-    properties: ActiveFragmentProperty;
-  }): Promise<void> {
+  async updateActiveFragment({
+    properties,
+  }: ActiveFragmentProps): Promise<void> {
     const activeFragment = this.objects("ActiveFragment").filtered(
-      `snippetId = ${data.properties.snippetId}`
+      `snippetId = ${properties.snippetId}`
     )[0] as unknown as ActiveFragment;
     this.write(() => {
       if (activeFragment) {
-        activeFragment.fragmentId = data.properties.fragmentId;
+        activeFragment.fragmentId = properties.fragmentId;
       }
     });
   }

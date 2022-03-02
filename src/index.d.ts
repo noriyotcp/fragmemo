@@ -24,7 +24,9 @@ export interface SandBox {
     status: boolean;
   }>;
   deleteFragment: (ids: IdsOnDeleteFragment) => Promise<void>;
-  updateActiveFragment: (data: object) => Promise<{
+  updateActiveFragment: (props: {
+    properties: { fragmentId: number; snippetId: number };
+  }) => Promise<{
     status: boolean;
   }>;
   getSnippet: (snippetId: number) => Promise<JSON>;

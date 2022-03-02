@@ -148,12 +148,12 @@ app.once("browser-window-created", () => {
     return { status: true };
   });
 
-  ipcMain.handle("update-active-fragment", async (event, data) => {
+  ipcMain.handle("update-active-fragment", async (event, props) => {
     console.info("Main process: update-active-fragment", {
       className: "ActiveFragment",
-      data,
+      props,
     });
-    await db.updateActiveFragment(data);
+    await db.updateActiveFragment(props);
     return { status: true };
   });
 

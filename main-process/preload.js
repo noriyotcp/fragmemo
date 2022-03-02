@@ -18,8 +18,8 @@ contextBridge.exposeInMainWorld("myAPI", {
   updateSnippet: (props) => ipcRenderer.invoke("update-snippet", props),
   updateFragment: (props) => ipcRenderer.invoke("update-fragment", props),
   deleteFragment: (ids) => ipcRenderer.invoke("delete-fragment", ids),
-  updateActiveFragment: (data) =>
-    ipcRenderer.invoke("update-active-fragment", data),
+  updateActiveFragment: (props) =>
+    ipcRenderer.invoke("update-active-fragment", props),
   loadSnippets: () => ipcRenderer.invoke("load-snippets"),
   loadLanguages: () => ipcRenderer.invoke("load-languages"),
   fetchFragments: (snippetId) =>

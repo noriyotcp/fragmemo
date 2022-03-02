@@ -85,10 +85,11 @@ export class TestHeader extends LitElement {
         },
       };
 
-      myAPI.updateSnippet(snippetProps).then(({ status }) => {
-        console.log("myAPI.updateSnippet", status);
-        // dispatch event to update the list
-        if (status) {
+      myAPI
+        .updateSnippet(snippetProps)
+        .then(() => {
+          console.log("myAPI.updateSnippet", status);
+          // dispatch event to update the list
           dispatch({
             type: "update-snippets",
             detail: {
@@ -96,8 +97,10 @@ export class TestHeader extends LitElement {
             },
           });
           this.requestUpdate();
-        }
-      });
+        })
+        .catch((err) => {
+          console.error(err);
+        });
     });
   }
 

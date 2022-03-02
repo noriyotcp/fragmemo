@@ -167,10 +167,7 @@ class DB extends Realm {
     return snippetUpdate;
   }
 
-  async updateSnippet(props: {
-    _id: number;
-    properties: typeof Snippet;
-  }): Promise<void> {
+  updateSnippet(props: { _id: number; properties: typeof Snippet }): void {
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const snippet: Snippet = this.objectForPrimaryKey("Snippet", props._id)!;
     this.write(() => {

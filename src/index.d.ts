@@ -28,7 +28,9 @@ export interface SandBox {
   contextMenuCommand: (
     listener: (_e: Event, command: string) => void
   ) => Electron.IpcRenderer;
-
+  // renderer process -> main process
+  initSnippet: () => Promise<void>;
+  initFragment: (snippetId: number) => Promise<void>;
   setupStorage: () => Promise<void>;
   updateSnippet: (props: ISnippetProps) => Promise<{
     status: boolean;
@@ -42,15 +44,13 @@ export interface SandBox {
   }) => Promise<{
     status: boolean;
   }>;
-  getSnippet: (snippetId: number) => Promise<JSON>;
-  initSnippet: () => Promise<void>;
-  initFragment: (snippetId: number) => Promise<void>;
-  getFragment: (fragmentId: number) => Promise<Fragment>;
-  getActiveFragment: (snippetId: number) => Promise<ActiveFragment>;
-  showContextMenu: () => void;
   loadSnippets: () => Promise<Snippet[]>;
   loadLanguages: () => Promise<Language[]>;
   loadFragments: (snippetId: number) => Promise<Fragment[]>;
+  getSnippet: (snippetId: number) => Promise<JSON>;
+  getFragment: (fragmentId: number) => Promise<Fragment>;
+  getActiveFragment: (snippetId: number) => Promise<ActiveFragment>;
+  showContextMenu: () => void;
 }
 
 // Override properties with type intersection

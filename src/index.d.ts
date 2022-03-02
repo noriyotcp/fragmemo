@@ -23,7 +23,7 @@ export interface SandBox {
   updateFragment: (props: IFragmentProps) => Promise<{
     status: boolean;
   }>;
-  deleteFragment: (data: IdsOnDeleteFragment) => Promise<void>;
+  deleteFragment: (ids: IdsOnDeleteFragment) => Promise<void>;
   updateActiveFragment: (data: object) => Promise<{
     status: boolean;
   }>;

@@ -194,12 +194,9 @@ app.once("browser-window-created", () => {
     menu.popup(<PopupOptions>BrowserWindow.fromWebContents(event.sender));
   });
 
-  ipcMain.handle(
-    "delete-fragment",
-    (event, ids: { fragmentId: number; nextActiveFragmentId: number }) => {
-      db.deleteFragment(ids.fragmentId, ids.nextActiveFragmentId);
-    }
-  );
+  ipcMain.handle("delete-fragment", (event, ids) => {
+    db.deleteFragment(ids.fragmentId, ids.nextActiveFragmentId);
+  });
 
   ipcMain.handle("init-snippet", (event) => {
     db.initSnippet("");

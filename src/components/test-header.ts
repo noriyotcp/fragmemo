@@ -97,6 +97,7 @@ export class TestHeader extends LitElement {
         })
         .catch((err) => {
           console.error(err);
+          this._displayToast("Snippet update failed");
         });
     });
   }
@@ -110,11 +111,11 @@ export class TestHeader extends LitElement {
     this.requestUpdate();
   };
 
-  private _displayToast(): void {
+  private _displayToast(msg?: string): void {
     dispatch({
       type: "display-toast",
       detail: {
-        message: this.snippetTitle?.value,
+        message: msg,
       },
     });
   }

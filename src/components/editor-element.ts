@@ -40,7 +40,7 @@ export class EditorElement extends LitElement {
         left: 0;
         width: 100%;
         background-color: var(--dark-gray);
-        height: 25px;
+        height: calc(var(--header-height) - var(--header-height-offset));
         display: flex;
         align-items: center;
         justify-content: space-between;

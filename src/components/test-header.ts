@@ -49,9 +49,6 @@ export class TestHeader extends LitElement {
         value="${this._snippet?.title}"
         @input="${this._inputTitleDispatcher}"
       ></ui5-input>
-      <button type="button" id="btn-save" @click="${this._displayToast}">
-        Toast
-      </button>
     `;
   }
 

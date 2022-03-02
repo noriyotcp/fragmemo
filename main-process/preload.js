@@ -17,13 +17,12 @@ contextBridge.exposeInMainWorld("myAPI", {
   setupStorage: () => ipcRenderer.invoke("setup-storage"),
   updateSnippet: (props) => ipcRenderer.invoke("update-snippet", props),
   updateFragment: (props) => ipcRenderer.invoke("update-fragment", props),
-  deleteFragment: (data) => ipcRenderer.invoke("delete-fragment", data),
-  updateActiveFragment: (data) =>
-    ipcRenderer.invoke("update-active-fragment", data),
+  deleteFragment: (ids) => ipcRenderer.invoke("delete-fragment", ids),
+  updateActiveFragment: (props) =>
+    ipcRenderer.invoke("update-active-fragment", props),
   loadSnippets: () => ipcRenderer.invoke("load-snippets"),
   loadLanguages: () => ipcRenderer.invoke("load-languages"),
-  fetchFragments: (snippetId) =>
-    ipcRenderer.invoke("fetch-fragments", snippetId),
+  loadFragments: (snippetId) => ipcRenderer.invoke("load-fragments", snippetId),
   getSnippet: (snippetId) => ipcRenderer.invoke("get-snippet", snippetId),
   getFragment: (fragmentId) => ipcRenderer.invoke("get-fragment", fragmentId),
   getActiveFragment: (snippetId) =>

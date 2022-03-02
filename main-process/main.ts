@@ -148,12 +148,12 @@ app.once("browser-window-created", () => {
     return { status: true };
   });
 
-  ipcMain.handle("update-active-fragment", async (event, data) => {
+  ipcMain.handle("update-active-fragment", async (event, props) => {
     console.info("Main process: update-active-fragment", {
       className: "ActiveFragment",
-      data,
+      props,
     });
-    await db.updateActiveFragment(data);
+    await db.updateActiveFragment(props);
     return { status: true };
   });
 
@@ -194,12 +194,9 @@ app.once("browser-window-created", () => {
     menu.popup(<PopupOptions>BrowserWindow.fromWebContents(event.sender));
   });
 
-  ipcMain.handle(
-    "delete-fragment",
-    (event, ids: { fragmentId: number; nextActiveFragmentId: number }) => {
-      db.deleteFragment(ids.fragmentId, ids.nextActiveFragmentId);
-    }
-  );
+  ipcMain.handle("delete-fragment", (event, ids) => {
+    db.deleteFragment(ids.fragmentId, ids.nextActiveFragmentId);
+  });
 
   ipcMain.handle("init-snippet", (event) => {
     db.initSnippet("");
@@ -249,7 +246,7 @@ app.once("browser-window-created", () => {
     return db.sortBy("Language", "_idx").toJSON();
   });
 
-  ipcMain.handle("fetch-fragments", (event, snippetId) => {
+  ipcMain.handle("load-fragments", (event, snippetId) => {
     const fragments = db
       .objects("Fragment")
       .filtered(`snippet._id == ${snippetId}`) as unknown as Results<Fragment>;

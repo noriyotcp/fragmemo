@@ -16,6 +16,21 @@ export interface IdsOnDeleteFragment {
 }
 
 export interface SandBox {
+  // main process -> renderer process
+  openSettings: (
+    listener: (_e: Event, elementName: string) => void
+  ) => Electron.IpcRenderer;
+  saveFragment: (listener: (_e: Event) => void) => Electron.IpcRenderer;
+  nextTab: (listener: (_e: Event) => void) => Electron.IpcRenderer;
+  previousTab: (listener: (_e: Event) => void) => Electron.IpcRenderer;
+  newSnippet: (listener: (_e: Event) => void) => Electron.IpcRenderer;
+  newFragment: (listener: (_e: Event) => void) => Electron.IpcRenderer;
+  contextMenuCommand: (
+    listener: (_e: Event, command: string) => void
+  ) => Electron.IpcRenderer;
+  // renderer process -> main process
+  initSnippet: () => Promise<void>;
+  initFragment: (snippetId: number) => Promise<void>;
   setupStorage: () => Promise<void>;
   updateSnippet: (props: ISnippetProps) => Promise<{
     status: boolean;
@@ -23,30 +38,19 @@ export interface SandBox {
   updateFragment: (props: IFragmentProps) => Promise<{
     status: boolean;
   }>;
-  deleteFragment: (data: IdsOnDeleteFragment) => Promise<void>;
-  updateActiveFragment: (data: object) => Promise<{
+  deleteFragment: (ids: IdsOnDeleteFragment) => Promise<void>;
+  updateActiveFragment: (props: {
+    properties: { fragmentId: number; snippetId: number };
+  }) => Promise<{
     status: boolean;
   }>;
+  loadSnippets: () => Promise<Snippet[]>;
+  loadLanguages: () => Promise<Language[]>;
+  loadFragments: (snippetId: number) => Promise<Fragment[]>;
   getSnippet: (snippetId: number) => Promise<JSON>;
-  initSnippet: () => Promise<void>;
-  initFragment: (snippetId: number) => Promise<void>;
   getFragment: (fragmentId: number) => Promise<Fragment>;
   getActiveFragment: (snippetId: number) => Promise<ActiveFragment>;
   showContextMenu: () => void;
-  loadSnippets: () => Promise<Snippet[]>;
-  loadLanguages: () => Promise<Language[]>;
-  fetchFragments: (snippetId: number) => Promise<Fragment[]>;
-  openSettings: (
-    listener: (_e: Event, elementName: string) => void
-  ) => Electron.IpcRenderer;
-  saveFragment: (listener: (_e: Event) => void) => Electron.IpcRenderer;
-  newSnippet: (listener: (_e: Event) => void) => Electron.IpcRenderer;
-  newFragment: (listener: (_e: Event) => void) => Electron.IpcRenderer;
-  nextTab: (listener: (_e: Event) => void) => Electron.IpcRenderer;
-  previousTab: (listener: (_e: Event) => void) => Electron.IpcRenderer;
-  contextMenuCommand: (
-    listener: (_e: Event, command: string) => void
-  ) => Electron.IpcRenderer;
 }
 
 // Override properties with type intersection

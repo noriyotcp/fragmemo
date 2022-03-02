@@ -103,19 +103,15 @@ export class FragmentTabList extends LitElement {
       (tab) => (<TabType>tab).fragment._id === fragmentId
     ) as TabType;
 
-    const isActiveTab = tab.fragment._id === tab.activeFragmentId;
-
     const nextActiveIndex = () => {
-      if (tabIndex <= 0) {
-        return tabIndex + 1;
-      } else {
-        return tabIndex - 1;
-      }
+      return tabIndex <= 0 ? tabIndex + 1 : tabIndex - 1;
     };
 
-    const nextActiveTab = Array.from(this.tabs).find(
-      (tab) => (<TabType>tab).tabIndex === nextActiveIndex()
-    ) as TabType;
+    const nextActiveTab = Array.from(this.tabs).find((tab) => {
+      return (<TabType>tab).tabIndex === nextActiveIndex();
+    }) as TabType;
+
+    const isActiveTab = tab.fragment._id === tab.activeFragmentId;
 
     if (isActiveTab) {
       return {

@@ -1,5 +1,5 @@
 import { LitElement, html, css, TemplateResult } from "lit";
-import { customElement, property, query, state } from "lit/decorators.js";
+import { customElement, query, state } from "lit/decorators.js";
 import { dispatch } from "../events/dispatcher";
 import "@ui5/webcomponents/dist/Input.js";
 import { Override } from "index.d";
@@ -10,16 +10,8 @@ const { myAPI } = window;
 
 @customElement("test-header")
 export class TestHeader extends LitElement {
-  @query("#btn-save") btnSave!: HTMLButtonElement;
   @query("#snippet-title") snippetTitle!: HTMLInputElement;
-  @property({ type: String })
-  @state()
-  private _snippet?: Snippet;
-  textareaValue!: string;
-
-  constructor() {
-    super();
-  }
+  @state() private _snippet?: Snippet;
 
   static styles = css`
     :host {
@@ -85,7 +77,6 @@ export class TestHeader extends LitElement {
       myAPI
         .updateSnippet(snippetProps)
         .then(() => {
-          console.log("myAPI.updateSnippet", status);
           // dispatch event to update the list
           dispatch({
             type: "update-snippets",

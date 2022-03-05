@@ -39,13 +39,8 @@ export class TestHeader extends LitElement {
         type="text"
         placeholder="Snippet title..."
         value="${this._snippet?.title}"
-        @input="${this._inputTitleDispatcher}"
       ></ui5-input>
     `;
-  }
-
-  private _inputTitleDispatcher(e: { target: { value: string } }) {
-    dispatch({ type: "input-title", detail: { message: e.target.value } });
   }
 
   async firstUpdated(): Promise<void> {

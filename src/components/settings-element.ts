@@ -34,7 +34,7 @@ export class SettingsElement extends LitElement {
     `;
   }
 
-  private async _toggleSettings(): Promise<void> {
+  private _toggleSettings(): void {
     if (this.drawer.open) {
       this._closeSettings();
     } else {

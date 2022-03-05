@@ -29,7 +29,6 @@ export class HomeElement extends LitElement {
       return html`
         ${this.toastTemplate()}
         <editor-element></editor-element>
-        <footer>This is the footer</footer>
       `;
     } else {
       return html`

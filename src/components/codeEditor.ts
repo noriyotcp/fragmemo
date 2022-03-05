@@ -41,9 +41,8 @@ export class CodeEditor extends LitElement {
   private viewStatesController = new ViewStatesController(this);
 
   private container: Ref<HTMLElement> = createRef();
-  editor?: monaco.editor.IStandaloneCodeEditor;
+  editor!: monaco.editor.IStandaloneCodeEditor;
   @property({ type: Boolean, attribute: "readonly" }) readOnly?: boolean;
-  @property() theme?: string;
   @property() language!: string;
   @property() code!: string;
 
@@ -73,29 +72,15 @@ export class CodeEditor extends LitElement {
     this.viewStateStore = new ViewStateStore();
   }
 
-  private getFile() {
-    if (this.children.length > 0) return this.children[0];
-    return null;
-  }
-
   private getCode(): string {
-    if (this.code) return this.code;
-    const file = this.getFile();
-    if (!file) return "";
-    return file.innerHTML.trim();
+    return this.code;
   }
 
   private getLang() {
     return this.language;
-    // TODO: get rid of this
-    // const file = this.getFile();
-    // if (!file) return;
-    // const type = <string>file.getAttribute("type");
-    // return type.split("/").pop();
   }
 
   private getTheme() {
-    if (this.theme) return this.theme;
     if (this.isDark()) return "vs-dark";
     return "vs-light";
   }
@@ -108,11 +93,11 @@ export class CodeEditor extends LitElement {
   }
 
   setValue(value: string): void {
-    this.editor?.setValue(value);
+    this.editor.setValue(value);
   }
 
   getValue(): string {
-    const value = this.editor?.getValue();
+    const value = this.editor.getValue();
     return value || "";
   }
 
@@ -122,24 +107,26 @@ export class CodeEditor extends LitElement {
   }
 
   setOptions(value: monaco.editor.IStandaloneEditorConstructionOptions): void {
-    this.editor?.updateOptions(value);
+    this.editor.updateOptions(value);
+  }
+
+  get model(): monaco.editor.IModel {
+    const model = this.editor?.getModel();
+    if (model) return model;
+    return monaco.editor.createModel(this.getCode(), this.getLang());
   }
 
   firstUpdated(): void {
-    const model = monaco.editor.createModel(this.getCode(), this.getLang());
     const editorOptions = {
-      model,
+      model: this.model,
       theme: this.getTheme(),
       automaticLayout: true,
       readOnly: this.readOnly ?? false,
     };
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     this.editor = monaco.editor.create(this.container.value!, editorOptions);
-    // monaco.editor.setModelLanguage(this.editor.getModel()!, "html");
     console.log(this._langaugesMap());
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    // monaco.editor.setModelLanguage(this.editor.getModel()!, "c");
-    this.editor.getModel()?.onDidChangeContent((e) => {
+    this.model.onDidChangeContent((e) => {
       console.info(e);
       this._changeText();
     });
@@ -176,12 +163,8 @@ export class CodeEditor extends LitElement {
       }
     }
 
-    if (!this.editor) return;
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    monaco.editor.setModelLanguage(this.editor.getModel()!, this.getLang());
-    console.log(
-      `model language was changed to ${this.editor.getModel()?.getLanguageId()}`
-    );
+    monaco.editor.setModelLanguage(this.model, this.getLang());
+    console.log(`model language was changed to ${this.model.getLanguageId()}`);
     this.setValue(this.code);
 
     console.info("updated", this.viewStateStore.store.getTable("states"));
@@ -195,7 +178,7 @@ export class CodeEditor extends LitElement {
   }
 
   private _saveCurrentViewState(fragmentId: number) {
-    const viewState = this.editor?.saveViewState();
+    const viewState = this.editor.saveViewState();
     this.viewStateStore.setPartialRow(`${fragmentId}`, {
       viewState: JSON.stringify(viewState),
     });
@@ -206,7 +189,7 @@ export class CodeEditor extends LitElement {
       `${this.viewStatesController.currentFragmentId}`,
       "viewState"
     );
-    this.editor?.restoreViewState(JSON.parse(viewState));
+    this.editor.restoreViewState(JSON.parse(viewState));
   }
 
   private _changeText() {
@@ -220,7 +203,7 @@ export class CodeEditor extends LitElement {
   }
 
   private _saveText() {
-    this._saveCurrentViewState(this.viewStatesController.currentFragmentId!);
+    this._saveCurrentViewState(this.viewStatesController.currentFragmentId);
     this.viewStatesController.previousFragmentId = null;
 
     this.dispatchEvent(

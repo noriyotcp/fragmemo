@@ -10,7 +10,7 @@ export class SearchItem extends LitElement {
         position: sticky;
         top: 0;
         height: 100px;
-        z-index: 9999;
+        z-index: 600;
         display: block;
       }
     `,

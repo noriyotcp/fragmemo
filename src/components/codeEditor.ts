@@ -161,7 +161,6 @@ export class CodeEditor extends LitElement {
       }
     }
 
-    if (!this.editor) return;
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     monaco.editor.setModelLanguage(this.editor.getModel()!, this.getLang());
     console.log(

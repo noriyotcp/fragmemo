@@ -110,10 +110,15 @@ export class CodeEditor extends LitElement {
     this.editor.updateOptions(value);
   }
 
+  get model(): monaco.editor.IModel {
+    const model = this.editor?.getModel();
+    if (model) return model;
+    return monaco.editor.createModel(this.getCode(), this.getLang());
+  }
+
   firstUpdated(): void {
-    const model = monaco.editor.createModel(this.getCode(), this.getLang());
     const editorOptions = {
-      model,
+      model: this.model,
       theme: this.getTheme(),
       automaticLayout: true,
       readOnly: this.readOnly ?? false,

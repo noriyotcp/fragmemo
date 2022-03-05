@@ -33,24 +33,7 @@ export class FragmentTabList extends LitElement {
       height: 22px;
       border: 1px solid var(--gray);
     }
-    .tab-settings {
-      user-select: none;
-    }
-    .tab-settings > input {
-      pointer-events: none;
-    }
   `;
-
-  settingsTemplate(): TemplateResult {
-    return html`
-      <sl-tab slot="nav" panel="tab-settings" closable class="tab-settings"
-        ><input type="text" value="Settings" readonly
-      /></sl-tab>
-      <sl-tab-panel name="tab-settings">
-        <settings-element></settings-element>
-      </sl-tab-panel>
-    `;
-  }
 
   tabBarTemplate(): TemplateResult {
     const fragments = this.fragmentsController.fragments;

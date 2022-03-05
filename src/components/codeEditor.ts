@@ -43,7 +43,6 @@ export class CodeEditor extends LitElement {
   private container: Ref<HTMLElement> = createRef();
   editor?: monaco.editor.IStandaloneCodeEditor;
   @property({ type: Boolean, attribute: "readonly" }) readOnly?: boolean;
-  @property() theme?: string;
   @property() language!: string;
   @property() code!: string;
 
@@ -82,7 +81,6 @@ export class CodeEditor extends LitElement {
   }
 
   private getTheme() {
-    if (this.theme) return this.theme;
     if (this.isDark()) return "vs-dark";
     return "vs-light";
   }

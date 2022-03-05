@@ -9,13 +9,13 @@ export class DrawerElement extends LitElement {
   constructor() {
     super();
     myAPI.openSettings((_e: Event, elementName: string) => {
-      this._openSettings(elementName);
+      this._toggleSettings(elementName);
     });
   }
 
   @query(".settings") drawer!: Override<
     HTMLElement,
-    { show: () => void; hide: () => void }
+    { show: () => void; hide: () => void; open: boolean }
   >;
 
   render(): TemplateResult {
@@ -34,9 +34,17 @@ export class DrawerElement extends LitElement {
     `;
   }
 
-  private async _openSettings(elementName: string): Promise<void> {
-    this.drawer.show();
+  private async _toggleSettings(elementName: string): Promise<void> {
+    if (this.drawer.open) {
+      this._closeSettings();
+    } else {
+      this._openSettings();
+    }
     console.log(elementName);
+  }
+
+  private _openSettings() {
+    this.drawer.show();
   }
 
   private _closeSettings() {

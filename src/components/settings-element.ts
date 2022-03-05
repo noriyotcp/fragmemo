@@ -8,7 +8,7 @@ const { myAPI } = window;
 export class SettingsElement extends LitElement {
   constructor() {
     super();
-    myAPI.openSettings((_e: Event) => {
+    myAPI.toggleSettings((_e: Event) => {
       this._toggleSettings();
     });
   }

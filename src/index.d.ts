@@ -17,7 +17,7 @@ export interface IdsOnDeleteFragment {
 
 export interface SandBox {
   // main process -> renderer process
-  openSettings: (listener: (_e: Event) => void) => Electron.IpcRenderer;
+  toggleSettings: (listener: (_e: Event) => void) => Electron.IpcRenderer;
   saveFragment: (listener: (_e: Event) => void) => Electron.IpcRenderer;
   nextTab: (listener: (_e: Event) => void) => Electron.IpcRenderer;
   previousTab: (listener: (_e: Event) => void) => Electron.IpcRenderer;

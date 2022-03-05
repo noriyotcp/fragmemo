@@ -166,13 +166,8 @@ export class CodeEditor extends LitElement {
       }
     }
 
-    const model = this.editor.getModel();
-    if (model) {
-      monaco.editor.setModelLanguage(model, this.getLang());
-      console.log(`model language was changed to ${model.getLanguageId()}`);
-    } else {
-      console.error("editor model is null");
-    }
+    monaco.editor.setModelLanguage(this.model, this.getLang());
+    console.log(`model language was changed to ${this.model.getLanguageId()}`);
     this.setValue(this.code);
 
     console.info("updated", this.viewStateStore.store.getTable("states"));

@@ -3,15 +3,19 @@ import { customElement } from "lit/decorators.js";
 
 @customElement("search-item")
 export class SearchItem extends LitElement {
+  // Get rid of border on sl-input
   static styles = [
     css`
       :host {
-        background-color: #1e1e1e;
         position: sticky;
         top: 0;
-        height: 100px;
-        z-index: 600;
+        width: 100%;
         display: block;
+        z-index: 600;
+        --sl-input-border-color-focus: transparent;
+        --sl-focus-ring: none;
+        --sl-input-border-width: 0;
+        --sl-input-border-color: transparent;
       }
     `,
   ];
@@ -19,31 +23,26 @@ export class SearchItem extends LitElement {
   render(): TemplateResult {
     return html`
       <header>
-        <button>Save</button>
-        <input
-          type="text"
+        <sl-input
           id="search"
-          name="search"
           placeholder="Search..."
-          value=""
-        />
-        <span id="search-message"></span>
-        <sl-button type="default" size="small">
-          <sl-icon slot="prefix" name="gear"></sl-icon>
-          Settings
-        </sl-button>
-
-        <sl-button type="default" size="small">
-          <sl-icon slot="suffix" name="arrow-counterclockwise"></sl-icon>
-          Refresh
-        </sl-button>
-
-        <sl-button type="default" size="small">
-          <sl-icon slot="prefix" name="link-45deg"></sl-icon>
-          <sl-icon slot="suffix" name="box-arrow-up-right"></sl-icon>
-          Open
-        </sl-button>
+          size="large"
+          type="search"
+          inputmode="search"
+          clearable
+          @sl-input="${this._search}"
+          @sl-clear="${this._clear}"
+        ></sl-input>
       </header>
     `;
   }
+
+  private _search = (e: Event): void => {
+    const target = <HTMLInputElement>e.currentTarget;
+    console.log("search:", target.value);
+  };
+
+  private _clear = (e: Event): void => {
+    console.log("Clear:", e);
+  };
 }

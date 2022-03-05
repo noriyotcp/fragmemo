@@ -9,4 +9,3 @@ import "./components/toast-element";
 import "./components/fragment-tab";
 import "./components/fragment-tab-list";
 import "./components/fragment-title";
-import "./components/drawer-element";

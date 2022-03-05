@@ -41,7 +41,7 @@ export class CodeEditor extends LitElement {
   private viewStatesController = new ViewStatesController(this);
 
   private container: Ref<HTMLElement> = createRef();
-  editor?: monaco.editor.IStandaloneCodeEditor;
+  editor!: monaco.editor.IStandaloneCodeEditor;
   @property({ type: Boolean, attribute: "readonly" }) readOnly?: boolean;
   @property() language!: string;
   @property() code!: string;
@@ -93,11 +93,11 @@ export class CodeEditor extends LitElement {
   }
 
   setValue(value: string): void {
-    this.editor?.setValue(value);
+    this.editor.setValue(value);
   }
 
   getValue(): string {
-    const value = this.editor?.getValue();
+    const value = this.editor.getValue();
     return value || "";
   }
 
@@ -107,7 +107,7 @@ export class CodeEditor extends LitElement {
   }
 
   setOptions(value: monaco.editor.IStandaloneEditorConstructionOptions): void {
-    this.editor?.updateOptions(value);
+    this.editor.updateOptions(value);
   }
 
   firstUpdated(): void {
@@ -180,7 +180,7 @@ export class CodeEditor extends LitElement {
   }
 
   private _saveCurrentViewState(fragmentId: number) {
-    const viewState = this.editor?.saveViewState();
+    const viewState = this.editor.saveViewState();
     this.viewStateStore.setPartialRow(`${fragmentId}`, {
       viewState: JSON.stringify(viewState),
     });
@@ -191,7 +191,7 @@ export class CodeEditor extends LitElement {
       `${this.viewStatesController.currentFragmentId}`,
       "viewState"
     );
-    this.editor?.restoreViewState(JSON.parse(viewState));
+    this.editor.restoreViewState(JSON.parse(viewState));
   }
 
   private _changeText() {

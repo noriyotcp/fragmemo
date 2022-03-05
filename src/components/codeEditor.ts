@@ -161,11 +161,13 @@ export class CodeEditor extends LitElement {
       }
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    monaco.editor.setModelLanguage(this.editor.getModel()!, this.getLang());
-    console.log(
-      `model language was changed to ${this.editor.getModel()?.getLanguageId()}`
-    );
+    const model = this.editor.getModel();
+    if (model) {
+      monaco.editor.setModelLanguage(model, this.getLang());
+      console.log(`model language was changed to ${model.getLanguageId()}`);
+    } else {
+      console.error("editor model is null");
+    }
     this.setValue(this.code);
 
     console.info("updated", this.viewStateStore.store.getTable("states"));

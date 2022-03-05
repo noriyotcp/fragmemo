@@ -8,8 +8,8 @@ const { myAPI } = window;
 export class SettingsElement extends LitElement {
   constructor() {
     super();
-    myAPI.openSettings((_e: Event, elementName: string) => {
-      this._toggleSettings(elementName);
+    myAPI.openSettings((_e: Event) => {
+      this._toggleSettings();
     });
   }
 
@@ -34,13 +34,12 @@ export class SettingsElement extends LitElement {
     `;
   }
 
-  private async _toggleSettings(elementName: string): Promise<void> {
+  private async _toggleSettings(): Promise<void> {
     if (this.drawer.open) {
       this._closeSettings();
     } else {
       this._openSettings();
     }
-    console.log(elementName);
   }
 
   private _openSettings() {

@@ -1,10 +1,8 @@
 import { LitElement, html, css, TemplateResult } from "lit";
-import { customElement, query } from "lit/decorators.js";
+import { customElement } from "lit/decorators.js";
 
 @customElement("search-item")
 export class SearchItem extends LitElement {
-  @query("#search-message") searchMessage?: HTMLSpanElement;
-
   static styles = [
     css`
       :host {
@@ -29,10 +27,7 @@ export class SearchItem extends LitElement {
           placeholder="Search..."
           value=""
         />
-        <span
-          id="search-message"
-          @input-title="${this._inputTitleListener}"
-        ></span>
+        <span id="search-message"></span>
         <sl-button type="default" size="small">
           <sl-icon slot="prefix" name="gear"></sl-icon>
           Settings
@@ -51,18 +46,4 @@ export class SearchItem extends LitElement {
       </header>
     `;
   }
-
-  constructor() {
-    super();
-    window.addEventListener(
-      "input-title",
-      this._inputTitleListener as EventListener
-    );
-  }
-
-  private _inputTitleListener = (e: CustomEvent): void => {
-    if (this.searchMessage) {
-      this.searchMessage.textContent = e.detail.message;
-    }
-  };
 }

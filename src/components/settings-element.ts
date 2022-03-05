@@ -1,44 +1,52 @@
-import { LitElement, html, TemplateResult, css } from "lit";
-import { customElement } from "lit/decorators.js";
+import { Override } from "index";
+import { LitElement, html, TemplateResult } from "lit";
+import { customElement, query } from "lit/decorators.js";
+
+const { myAPI } = window;
 
 @customElement("settings-element")
 export class SettingsElement extends LitElement {
-  static styles = [
-    css`
-      :host {
-        display: block;
-        height: 100vh;
-        margin-right: 20%;
-      }
-      header {
-        display: grid;
-        grid-template-columns: 7fr 1fr;
-        align-items: center;
-        justify-content: spece-between;
-      }
-      div.close {
-        text-align: center;
-        cursor: pointer;
-      }
-    `,
-  ];
+  constructor() {
+    super();
+    myAPI.toggleSettings((_e: Event) => {
+      this._toggleSettings();
+    });
+  }
+
+  @query(".settings") drawer!: Override<
+    HTMLElement,
+    { show: () => void; hide: () => void; open: boolean }
+  >;
 
   render(): TemplateResult {
     return html`
-      <header>
-        <h1>Settings</h1>
-        <div class="close" @click=${this._dispatchBackToHome}>
-          <span>X</span>
+      <sl-drawer label="Settings" class="settings" style="--size: 100vw">
+        This drawer width is always 100% of the viewport.
+        <div
+          style="height: 150vh; border: dashed 2px var(--sl-color-neutral-200); padding: 0 1rem;"
+        >
+          <p>Scroll down and give it a try! 👇</p>
         </div>
-        <textarea></textarea>
-      </header>
+        <sl-button slot="footer" variant="primary" @click=${this._closeSettings}
+          >Close</sl-button
+        >
+      </sl-drawer>
     `;
   }
 
-  private _dispatchBackToHome() {
-    const options = {
-      detail: { elementName: "home-element" },
-    };
-    this.dispatchEvent(new CustomEvent("back-to-home", options));
+  private _toggleSettings(): void {
+    if (this.drawer.open) {
+      this._closeSettings();
+    } else {
+      this._openSettings();
+    }
+  }
+
+  private _openSettings() {
+    this.drawer.show();
+  }
+
+  private _closeSettings() {
+    this.drawer.hide();
   }
 }

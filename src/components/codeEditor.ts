@@ -205,7 +205,7 @@ export class CodeEditor extends LitElement {
   }
 
   private _saveText() {
-    this._saveCurrentViewState(this.viewStatesController.currentFragmentId!);
+    this._saveCurrentViewState(this.viewStatesController.currentFragmentId);
     this.viewStatesController.previousFragmentId = null;
 
     this.dispatchEvent(

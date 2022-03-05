@@ -73,25 +73,12 @@ export class CodeEditor extends LitElement {
     this.viewStateStore = new ViewStateStore();
   }
 
-  private getFile() {
-    if (this.children.length > 0) return this.children[0];
-    return null;
-  }
-
   private getCode(): string {
-    if (this.code) return this.code;
-    const file = this.getFile();
-    if (!file) return "";
-    return file.innerHTML.trim();
+    return this.code;
   }
 
   private getLang() {
     return this.language;
-    // TODO: get rid of this
-    // const file = this.getFile();
-    // if (!file) return;
-    // const type = <string>file.getAttribute("type");
-    // return type.split("/").pop();
   }
 
   private getTheme() {

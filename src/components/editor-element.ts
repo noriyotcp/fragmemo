@@ -2,18 +2,33 @@ import { dispatch } from "../events/dispatcher";
 import { LitElement, html, css, TemplateResult } from "lit";
 import { customElement, property, query, state } from "lit/decorators.js";
 import { map } from "lit/directives/map.js";
-import { FragmentStore } from "../stores";
+import { createFragmentStore, Store } from "../stores";
 import { Language } from "models.d";
 
 const { myAPI } = window;
 
 @customElement("editor-element")
 export class EditorElement extends LitElement {
-  fragmentStore: FragmentStore;
+  fragmentStore: typeof Store;
 
   constructor() {
     super();
-    this.fragmentStore = new FragmentStore();
+    this.fragmentStore = createFragmentStore();
+    this.fragmentStore.addCellListener(
+      null,
+      null,
+      null,
+      (store, tableId, rowId, cellId) => {
+        console.log(
+          `${cellId} cell in ${rowId} row in ${tableId} table changed`
+        );
+        console.info(
+          "FragmentStore status:",
+          this.fragmentStore.getTable("states")
+        );
+      }
+    );
+
     myAPI.loadLanguages().then((languages) => {
       this._languages = languages;
     });
@@ -99,7 +114,7 @@ export class EditorElement extends LitElement {
       _id: this._activeFragmentId,
       properties: { language: { _idx: Number(_idx) } },
     });
-    this.fragmentStore.setPartialRow(`${this._activeFragmentId}`, {
+    this.fragmentStore.setPartialRow("states", `${this._activeFragmentId}`, {
       langIdx: Number(_idx),
     });
     this._setContent();
@@ -112,9 +127,9 @@ export class EditorElement extends LitElement {
 
     this._activeFragmentId = e.detail.activeFragmentId;
     // if no records for the active fragment, it fetches a fragment from Realm DB
-    if (!this.fragmentStore.hasRow(`${this._activeFragmentId}`)) {
+    if (!this.fragmentStore.hasRow("states", `${this._activeFragmentId}`)) {
       myAPI.getFragment(Number(this._activeFragmentId)).then((fragment) => {
-        this.fragmentStore.setPartialRow(`${fragment._id}`, {
+        this.fragmentStore.setPartialRow("states", `${fragment._id}`, {
           content: fragment.content,
           langIdx: fragment.language._idx,
         });
@@ -123,7 +138,11 @@ export class EditorElement extends LitElement {
       });
     } else {
       this._selectOption(
-        this.fragmentStore.getCell(`${this._activeFragmentId}`, "langIdx")
+        this.fragmentStore.getCell(
+          "states",
+          `${this._activeFragmentId}`,
+          "langIdx"
+        )
       );
       this._setContent();
     }
@@ -139,28 +158,28 @@ export class EditorElement extends LitElement {
     if (this._activeFragmentId === undefined) return;
 
     // compare the previous and current text
-    const isChanged =
-      this.fragmentStore.getCell(`${this._activeFragmentId}`, "content") !==
-      e.detail.text;
-    this.fragmentStore.setCell(
-      `${this._activeFragmentId}`,
-      "isEditing",
-      isChanged
-    );
-    this.fragmentStore.setPartialRow(`${this._activeFragmentId}`, {
-      content: e.detail.text,
-      isEditing: isChanged,
+    myAPI.getFragment(this._activeFragmentId).then((fragment) => {
+      if (fragment.content !== e.detail.text) {
+        this.fragmentStore.setCell("states", `${this._activeFragmentId}`, {
+          content: e.detail.text,
+        });
+        this.fragmentStore.setPartialRow(
+          "states",
+          `${this._activeFragmentId}`,
+          {
+            content: e.detail.text,
+            isEditing: true,
+          }
+        );
+        dispatch({
+          type: "content-editing-state-changed",
+          detail: {
+            _id: this._activeFragmentId,
+            fragmentStore: this.fragmentStore,
+          },
+        });
+      }
     });
-
-    if (isChanged) {
-      dispatch({
-        type: "content-editing-state-changed",
-        detail: {
-          fragmentStore: this.fragmentStore,
-        },
-      });
-    }
-    console.info("Is text changed?:", isChanged);
   }
 
   private _saveText(e: CustomEvent): void {
@@ -172,13 +191,18 @@ export class EditorElement extends LitElement {
       .then(({ status }) => {
         console.log("myAPI.updateFragment", status);
         if (status) {
-          this.fragmentStore.setPartialRow(`${this._activeFragmentId}`, {
-            content: e.detail.text,
-            isEditing: false,
-          });
+          this.fragmentStore.setPartialRow(
+            "states",
+            `${this._activeFragmentId}`,
+            {
+              content: e.detail.text,
+              isEditing: false,
+            }
+          );
           dispatch({
             type: "content-editing-state-changed",
             detail: {
+              _id: this._activeFragmentId,
               fragmentStore: this.fragmentStore,
             },
           });
@@ -196,6 +220,7 @@ export class EditorElement extends LitElement {
   private _setContent(): void {
     if (this._activeFragmentId === undefined) return;
     this._content = this.fragmentStore.getCell(
+      "states",
       `${this._activeFragmentId}`,
       "content"
     );

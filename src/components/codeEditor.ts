@@ -126,8 +126,7 @@ export class CodeEditor extends LitElement {
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     this.editor = monaco.editor.create(this.container.value!, editorOptions);
     console.log(this._langaugesMap());
-    this.model.onDidChangeContent((e) => {
-      console.info(e);
+    this.model.onDidChangeContent((_e) => {
       this._changeText();
     });
     window

@@ -19,6 +19,7 @@ export interface SandBox {
   // main process -> renderer process
   toggleSettings: (listener: (_e: Event) => void) => Electron.IpcRenderer;
   saveFragment: (listener: (_e: Event) => void) => Electron.IpcRenderer;
+  selectLanguage: (listener: (_e: Event) => void) => Electron.IpcRenderer;
   nextTab: (listener: (_e: Event) => void) => Electron.IpcRenderer;
   previousTab: (listener: (_e: Event) => void) => Electron.IpcRenderer;
   newSnippet: (listener: (_e: Event) => void) => Electron.IpcRenderer;

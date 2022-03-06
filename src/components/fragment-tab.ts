@@ -48,9 +48,11 @@ export class FragmentTab extends LitElement {
   `;
 
   iconTemplate(): TemplateResult {
-    return this.isEditing
-      ? html` <sl-icon name="record-fill"></sl-icon> `
-      : html``;
+    // TODO: Do not display icon temporarily
+    return html``;
+    // return this.isEditing
+    //   ? html` <sl-icon name="record-fill"></sl-icon> `
+    //   : html``;
   }
 
   tabBarTemplate(): TemplateResult {

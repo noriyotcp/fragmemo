@@ -99,9 +99,13 @@ export class EditorElement extends LitElement {
       _id: this._activeFragmentId,
       properties: { language: { _idx: Number(_idx) } },
     });
-    this.fragmentStore.setPartialRow(`${this._activeFragmentId}`, {
-      langIdx: Number(_idx),
-    });
+    this.fragmentStore.store.setPartialRow(
+      "states",
+      `${this._activeFragmentId}`,
+      {
+        langIdx: Number(_idx),
+      }
+    );
     this._setContent();
   }
 
@@ -112,9 +116,11 @@ export class EditorElement extends LitElement {
 
     this._activeFragmentId = e.detail.activeFragmentId;
     // if no records for the active fragment, it fetches a fragment from Realm DB
-    if (!this.fragmentStore.hasRow(`${this._activeFragmentId}`)) {
+    if (
+      !this.fragmentStore.store.hasRow("states", `${this._activeFragmentId}`)
+    ) {
       myAPI.getFragment(Number(this._activeFragmentId)).then((fragment) => {
-        this.fragmentStore.setPartialRow(`${fragment._id}`, {
+        this.fragmentStore.store.setPartialRow("states", `${fragment._id}`, {
           content: fragment.content,
           langIdx: fragment.language._idx,
         });
@@ -147,10 +153,14 @@ export class EditorElement extends LitElement {
       "isEditing",
       isChanged
     );
-    this.fragmentStore.setPartialRow(`${this._activeFragmentId}`, {
-      content: e.detail.text,
-      isEditing: isChanged,
-    });
+    this.fragmentStore.store.setPartialRow(
+      "states",
+      `${this._activeFragmentId}`,
+      {
+        content: e.detail.text,
+        isEditing: isChanged,
+      }
+    );
 
     if (isChanged) {
       dispatch({
@@ -172,10 +182,14 @@ export class EditorElement extends LitElement {
       .then(({ status }) => {
         console.log("myAPI.updateFragment", status);
         if (status) {
-          this.fragmentStore.setPartialRow(`${this._activeFragmentId}`, {
-            content: e.detail.text,
-            isEditing: false,
-          });
+          this.fragmentStore.store.setPartialRow(
+            "states",
+            `${this._activeFragmentId}`,
+            {
+              content: e.detail.text,
+              isEditing: false,
+            }
+          );
           dispatch({
             type: "content-editing-state-changed",
             detail: {

@@ -155,11 +155,6 @@ export class EditorElement extends LitElement {
         `${this._activeFragmentId}`,
         "content"
       ) !== e.detail.text;
-    this.fragmentStore.setCell(
-      `${this._activeFragmentId}`,
-      "isEditing",
-      isChanged
-    );
     this.fragmentStore.store.setPartialRow(
       "states",
       `${this._activeFragmentId}`,

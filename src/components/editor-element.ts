@@ -32,6 +32,9 @@ export class EditorElement extends LitElement {
     myAPI.loadLanguages().then((languages) => {
       this._languages = languages;
     });
+    myAPI.selectLanguage((_e: Event) => {
+      this._selectLanguage();
+    });
   }
 
   @property() _textareaValue = "";
@@ -100,6 +103,10 @@ export class EditorElement extends LitElement {
         </select>
       </footer>
     `;
+  }
+
+  private _selectLanguage() {
+    this.select.focus();
   }
 
   private _selectionChange(e: CustomEvent): void {

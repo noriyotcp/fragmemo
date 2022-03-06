@@ -5,6 +5,7 @@ contextBridge.exposeInMainWorld("myAPI", {
   // main process -> renderer process
   toggleSettings: (listener) => ipcRenderer.on("toggle-settings", listener),
   saveFragment: (listener) => ipcRenderer.on("save-fragment", listener),
+  selectLanguage: (listener) => ipcRenderer.on("select-language", listener),
   nextTab: (listener) => ipcRenderer.on("next-tab", listener),
   previousTab: (listener) => ipcRenderer.on("previous-tab", listener),
   newSnippet: (listener) => ipcRenderer.on("new-snippet", listener),

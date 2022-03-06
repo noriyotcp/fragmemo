@@ -1,5 +1,6 @@
 import { LitElement, html, css, TemplateResult } from "lit";
 import { customElement, query, queryAll } from "lit/decorators.js";
+import { until } from "lit/directives/until.js";
 import { repeat } from "lit/directives/repeat.js";
 import "@ui5/webcomponents/dist/List.js";
 import "@ui5/webcomponents/dist/StandardListItem.js";
@@ -7,6 +8,8 @@ import "@ui5/webcomponents/dist/StandardListItem.js";
 import { SetupStorageController } from "../controllers/setup-storage-controller";
 import { dispatch } from "../events/dispatcher";
 import { Snippet } from "../models";
+
+const { myAPI } = window;
 
 @customElement("snippet-list")
 export class SnippetList extends LitElement {
@@ -51,7 +54,10 @@ export class SnippetList extends LitElement {
               description="${this.formatDatetime(
                 snippet.snippetUpdate.updatedAt
               )}"
-              additional-text="snippet"
+              additional-text="${until(
+                this._fragmentsCount(snippet._id),
+                "0"
+              )} memos"
               additional-text-state="Success"
               snippet=${JSON.stringify(snippet)}
               >${snippet.title}</ui5-li
@@ -110,5 +116,10 @@ export class SnippetList extends LitElement {
       dateStyle: "short",
       timeStyle: "medium",
     }).format(datetime);
+  }
+
+  private async _fragmentsCount(snippetId: number): Promise<number> {
+    const fragments = await myAPI.loadFragments(snippetId);
+    return fragments.length;
   }
 }

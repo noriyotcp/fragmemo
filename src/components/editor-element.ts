@@ -129,7 +129,11 @@ export class EditorElement extends LitElement {
       });
     } else {
       this._selectOption(
-        this.fragmentStore.getCell(`${this._activeFragmentId}`, "langIdx")
+        this.fragmentStore.store.getCell(
+          "states",
+          `${this._activeFragmentId}`,
+          "langIdx"
+        )
       );
       this._setContent();
     }
@@ -146,8 +150,11 @@ export class EditorElement extends LitElement {
 
     // compare the previous and current text
     const isChanged =
-      this.fragmentStore.getCell(`${this._activeFragmentId}`, "content") !==
-      e.detail.text;
+      this.fragmentStore.store.getCell(
+        "states",
+        `${this._activeFragmentId}`,
+        "content"
+      ) !== e.detail.text;
     this.fragmentStore.setCell(
       `${this._activeFragmentId}`,
       "isEditing",
@@ -209,7 +216,8 @@ export class EditorElement extends LitElement {
 
   private _setContent(): void {
     if (this._activeFragmentId === undefined) return;
-    this._content = this.fragmentStore.getCell(
+    this._content = this.fragmentStore.store.getCell(
+      "states",
       `${this._activeFragmentId}`,
       "content"
     );

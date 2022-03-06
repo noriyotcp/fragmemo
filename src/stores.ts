@@ -45,6 +45,17 @@ class FragmentStore extends BaseStore {
 
   constructor() {
     super();
+    this.store.addCellListener(
+      null,
+      null,
+      null,
+      (store, tableId, rowId, cellId) => {
+        console.log(
+          `${cellId} cell in ${rowId} row in ${tableId} table changed`
+        );
+        console.info("FragmentStore status:", this.store.getTable("states"));
+      }
+    );
   }
 }
 

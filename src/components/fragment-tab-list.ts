@@ -28,7 +28,6 @@ export class FragmentTabList extends LitElement {
 
   static styles = css`
     section {
-      display: flex;
       flex-wrap: nowrap;
       height: 22px;
       border: 1px solid var(--gray);
@@ -37,7 +36,7 @@ export class FragmentTabList extends LitElement {
 
   tabBarTemplate(): TemplateResult {
     const fragments = this.fragmentsController.fragments;
-    const styles = { display: fragments?.length === 1 ? "none" : "" };
+    const styles = { display: fragments?.length === 1 ? "none" : "flex" };
     return html`
       <section style=${styleMap(styles)}>
         ${map(fragments, (fragment, index) => {

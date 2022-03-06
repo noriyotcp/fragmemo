@@ -1,13 +1,8 @@
 import { dispatch } from "../events/dispatcher";
 import { LitElement, html, css, TemplateResult } from "lit";
-import {
-  customElement,
-  property,
-  query,
-  queryAll,
-  state,
-} from "lit/decorators.js";
+import { customElement, property, query, queryAll } from "lit/decorators.js";
 import { Fragment } from "models.d";
+import { Store } from "stores";
 
 @customElement("fragment-tab")
 export class FragmentTab extends LitElement {
@@ -15,8 +10,6 @@ export class FragmentTab extends LitElement {
   @property({ type: Number }) activeFragmentId!: number;
   @queryAll(".tab-item") tabs!: Array<HTMLElement>;
   @query(".tab-item[active='true']") activeTab!: HTMLElement;
-
-  @state() private isEditing = false;
 
   static styles = css`
     :host {
@@ -46,13 +39,13 @@ export class FragmentTab extends LitElement {
       align-items: center;
     }
   `;
+  private _fragmentStore: typeof Store;
 
   iconTemplate(): TemplateResult {
     // TODO: Do not display icon temporarily
-    return html``;
-    // return this.isEditing
-    //   ? html` <sl-icon name="record-fill"></sl-icon> `
-    //   : html``;
+    return this._isEditing
+      ? html` <sl-icon name="record-fill"></sl-icon> `
+      : html``;
   }
 
   tabBarTemplate(): TemplateResult {
@@ -92,12 +85,20 @@ export class FragmentTab extends LitElement {
   }
 
   private _stateChangedListener = (e: CustomEvent): void => {
-    this.isEditing = !!e.detail.fragmentStore.getCell(
+    this._fragmentStore = e.detail.fragmentStore;
+    if (this.fragment._id !== e.detail._id) return;
+
+    this._fragmentStore.getCell("states", `${e.detail._id}`, "isEditing");
+    this.requestUpdate();
+  };
+
+  private get _isEditing(): boolean {
+    return !!this._fragmentStore?.getCell(
       "states",
       `${this.fragment._id}`,
       "isEditing"
     );
-  };
+  }
 
   private _isActive(fragmentId: number): boolean {
     if (!this.activeFragmentId) return false;

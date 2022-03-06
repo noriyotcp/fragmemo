@@ -69,4 +69,4 @@ class ViewStateStore extends BaseStore {
   }
 }
 
-export { ViewStateStore, createFragmentStore };
+export { ViewStateStore, createFragmentStore, Store };

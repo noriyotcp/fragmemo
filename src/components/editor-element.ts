@@ -2,11 +2,10 @@ import { dispatch } from "../events/dispatcher";
 import { LitElement, html, css, TemplateResult } from "lit";
 import { customElement, property, query, state } from "lit/decorators.js";
 import { map } from "lit/directives/map.js";
-import { createFragmentStore } from "../stores";
+import { createFragmentStore, Store } from "../stores";
 import { Language } from "models.d";
 
 const { myAPI } = window;
-const { Store } = TinyBase;
 
 @customElement("editor-element")
 export class EditorElement extends LitElement {
@@ -159,26 +158,28 @@ export class EditorElement extends LitElement {
     if (this._activeFragmentId === undefined) return;
 
     // compare the previous and current text
-    const isChanged =
-      this.fragmentStore.getCell(
-        "states",
-        `${this._activeFragmentId}`,
-        "content"
-      ) !== e.detail.text;
-    this.fragmentStore.setPartialRow("states", `${this._activeFragmentId}`, {
-      content: e.detail.text,
-      isEditing: isChanged,
+    myAPI.getFragment(this._activeFragmentId).then((fragment) => {
+      if (fragment.content !== e.detail.text) {
+        this.fragmentStore.setCell("states", `${this._activeFragmentId}`, {
+          content: e.detail.text,
+        });
+        this.fragmentStore.setPartialRow(
+          "states",
+          `${this._activeFragmentId}`,
+          {
+            content: e.detail.text,
+            isEditing: true,
+          }
+        );
+        dispatch({
+          type: "content-editing-state-changed",
+          detail: {
+            _id: this._activeFragmentId,
+            fragmentStore: this.fragmentStore,
+          },
+        });
+      }
     });
-
-    if (isChanged) {
-      dispatch({
-        type: "content-editing-state-changed",
-        detail: {
-          fragmentStore: this.fragmentStore,
-        },
-      });
-    }
-    console.info("Is text changed?:", isChanged);
   }
 
   private _saveText(e: CustomEvent): void {
@@ -201,6 +202,7 @@ export class EditorElement extends LitElement {
           dispatch({
             type: "content-editing-state-changed",
             detail: {
+              _id: this._activeFragmentId,
               fragmentStore: this.fragmentStore,
             },
           });

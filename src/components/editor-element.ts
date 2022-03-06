@@ -2,18 +2,34 @@ import { dispatch } from "../events/dispatcher";
 import { LitElement, html, css, TemplateResult } from "lit";
 import { customElement, property, query, state } from "lit/decorators.js";
 import { map } from "lit/directives/map.js";
-import { FragmentStore } from "../stores";
+import { createFragmentStore } from "../stores";
 import { Language } from "models.d";
 
 const { myAPI } = window;
+const { Store } = TinyBase;
 
 @customElement("editor-element")
 export class EditorElement extends LitElement {
-  fragmentStore: FragmentStore;
+  fragmentStore: typeof Store;
 
   constructor() {
     super();
-    this.fragmentStore = new FragmentStore();
+    this.fragmentStore = createFragmentStore();
+    this.fragmentStore.addCellListener(
+      null,
+      null,
+      null,
+      (store, tableId, rowId, cellId) => {
+        console.log(
+          `${cellId} cell in ${rowId} row in ${tableId} table changed`
+        );
+        console.info(
+          "FragmentStore status:",
+          this.fragmentStore.getTable("states")
+        );
+      }
+    );
+
     myAPI.loadLanguages().then((languages) => {
       this._languages = languages;
     });
@@ -99,13 +115,9 @@ export class EditorElement extends LitElement {
       _id: this._activeFragmentId,
       properties: { language: { _idx: Number(_idx) } },
     });
-    this.fragmentStore.store.setPartialRow(
-      "states",
-      `${this._activeFragmentId}`,
-      {
-        langIdx: Number(_idx),
-      }
-    );
+    this.fragmentStore.setPartialRow("states", `${this._activeFragmentId}`, {
+      langIdx: Number(_idx),
+    });
     this._setContent();
   }
 
@@ -116,11 +128,9 @@ export class EditorElement extends LitElement {
 
     this._activeFragmentId = e.detail.activeFragmentId;
     // if no records for the active fragment, it fetches a fragment from Realm DB
-    if (
-      !this.fragmentStore.store.hasRow("states", `${this._activeFragmentId}`)
-    ) {
+    if (!this.fragmentStore.hasRow("states", `${this._activeFragmentId}`)) {
       myAPI.getFragment(Number(this._activeFragmentId)).then((fragment) => {
-        this.fragmentStore.store.setPartialRow("states", `${fragment._id}`, {
+        this.fragmentStore.setPartialRow("states", `${fragment._id}`, {
           content: fragment.content,
           langIdx: fragment.language._idx,
         });
@@ -129,7 +139,7 @@ export class EditorElement extends LitElement {
       });
     } else {
       this._selectOption(
-        this.fragmentStore.store.getCell(
+        this.fragmentStore.getCell(
           "states",
           `${this._activeFragmentId}`,
           "langIdx"
@@ -150,19 +160,15 @@ export class EditorElement extends LitElement {
 
     // compare the previous and current text
     const isChanged =
-      this.fragmentStore.store.getCell(
+      this.fragmentStore.getCell(
         "states",
         `${this._activeFragmentId}`,
         "content"
       ) !== e.detail.text;
-    this.fragmentStore.store.setPartialRow(
-      "states",
-      `${this._activeFragmentId}`,
-      {
-        content: e.detail.text,
-        isEditing: isChanged,
-      }
-    );
+    this.fragmentStore.setPartialRow("states", `${this._activeFragmentId}`, {
+      content: e.detail.text,
+      isEditing: isChanged,
+    });
 
     if (isChanged) {
       dispatch({
@@ -184,7 +190,7 @@ export class EditorElement extends LitElement {
       .then(({ status }) => {
         console.log("myAPI.updateFragment", status);
         if (status) {
-          this.fragmentStore.store.setPartialRow(
+          this.fragmentStore.setPartialRow(
             "states",
             `${this._activeFragmentId}`,
             {
@@ -211,7 +217,7 @@ export class EditorElement extends LitElement {
 
   private _setContent(): void {
     if (this._activeFragmentId === undefined) return;
-    this._content = this.fragmentStore.store.getCell(
+    this._content = this.fragmentStore.getCell(
       "states",
       `${this._activeFragmentId}`,
       "content"

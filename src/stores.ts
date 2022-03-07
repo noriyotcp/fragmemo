@@ -45,6 +45,15 @@ const createFragmentStore = (): typeof Store => {
   return createStore().setSchema(schema);
 };
 
+const createViewStateStore = (): typeof Store => {
+  const schema = {
+    states: {
+      viewState: { type: "string", default: "" },
+    },
+  };
+  return createStore().setSchema(schema);
+};
+
 class ViewStateStore extends BaseStore {
   // rowId: fragmentId
   schema = {
@@ -69,4 +78,4 @@ class ViewStateStore extends BaseStore {
   }
 }
 
-export { ViewStateStore, createFragmentStore, Store };
+export { ViewStateStore, createFragmentStore, createViewStateStore, Store };

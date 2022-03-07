@@ -86,24 +86,10 @@ export class CodeEditor extends LitElement {
     );
   }
 
-  private getCode(): string {
-    return this.code;
-  }
-
-  private getLang() {
-    return this.language;
-  }
-
   private getTheme() {
-    if (this.isDark()) return "vs-dark";
-    return "vs-light";
-  }
-
-  private isDark() {
-    return (
-      window.matchMedia &&
-      window.matchMedia("(prefers-color-scheme: dark)").matches
-    );
+    return "vs-dark";
+    // Builtin themes: "vs", "vs-dark", "hc-black"
+    // https://github.com/microsoft/monaco-editor/blob/db5039b702941f2b75bdb367251ec3c8d00a7488/website/typedoc/monaco.d.ts#L1019
   }
 
   setValue(value: string): void {
@@ -111,8 +97,7 @@ export class CodeEditor extends LitElement {
   }
 
   getValue(): string {
-    const value = this.editor.getValue();
-    return value || "";
+    return this.editor.getValue();
   }
 
   setReadOnly(value: boolean): void {
@@ -127,7 +112,7 @@ export class CodeEditor extends LitElement {
   get model(): monaco.editor.IModel {
     const model = this.editor?.getModel();
     if (model) return model;
-    return monaco.editor.createModel(this.getCode(), this.getLang());
+    return monaco.editor.createModel(this.code, this.language);
   }
 
   firstUpdated(): void {
@@ -143,11 +128,6 @@ export class CodeEditor extends LitElement {
     this.model.onDidChangeContent((_e) => {
       this._changeText();
     });
-    window
-      .matchMedia("(prefers-color-scheme: dark)")
-      .addEventListener("change", () => {
-        monaco.editor.setTheme(this.getTheme());
-      });
 
     console.log(this.editor.hasTextFocus());
     this.editor.onDidFocusEditorText(() => {
@@ -176,7 +156,7 @@ export class CodeEditor extends LitElement {
       }
     }
 
-    monaco.editor.setModelLanguage(this.model, this.getLang());
+    monaco.editor.setModelLanguage(this.model, this.language);
     console.log(`model language was changed to ${this.model.getLanguageId()}`);
     this.setValue(this.code);
 

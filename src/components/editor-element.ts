@@ -106,7 +106,7 @@ export class EditorElement extends LitElement {
   }
 
   private _selectLanguage() {
-    this.select.focus();
+    this.select?.focus();
   }
 
   private _selectionChange(e: CustomEvent): void {

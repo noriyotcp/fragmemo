@@ -86,10 +86,6 @@ export class CodeEditor extends LitElement {
     );
   }
 
-  private getLang() {
-    return this.language;
-  }
-
   private getTheme() {
     return "vs-dark";
     // Builtin themes: "vs", "vs-dark", "hc-black"
@@ -116,7 +112,7 @@ export class CodeEditor extends LitElement {
   get model(): monaco.editor.IModel {
     const model = this.editor?.getModel();
     if (model) return model;
-    return monaco.editor.createModel(this.code, this.getLang());
+    return monaco.editor.createModel(this.code, this.language);
   }
 
   firstUpdated(): void {
@@ -160,7 +156,7 @@ export class CodeEditor extends LitElement {
       }
     }
 
-    monaco.editor.setModelLanguage(this.model, this.getLang());
+    monaco.editor.setModelLanguage(this.model, this.language);
     console.log(`model language was changed to ${this.model.getLanguageId()}`);
     this.setValue(this.code);
 

@@ -95,15 +95,9 @@ export class CodeEditor extends LitElement {
   }
 
   private getTheme() {
-    if (this.isDark()) return "vs-dark";
-    return "vs-light";
-  }
-
-  private isDark() {
-    return (
-      window.matchMedia &&
-      window.matchMedia("(prefers-color-scheme: dark)").matches
-    );
+    return "vs-dark";
+    // Builtin themes: "vs", "vs-dark", "hc-black"
+    // https://github.com/microsoft/monaco-editor/blob/db5039b702941f2b75bdb367251ec3c8d00a7488/website/typedoc/monaco.d.ts#L1019
   }
 
   setValue(value: string): void {
@@ -142,11 +136,6 @@ export class CodeEditor extends LitElement {
     this.model.onDidChangeContent((_e) => {
       this._changeText();
     });
-    window
-      .matchMedia("(prefers-color-scheme: dark)")
-      .addEventListener("change", () => {
-        monaco.editor.setTheme(this.getTheme());
-      });
 
     console.log(this.editor.hasTextFocus());
     this.editor.onDidFocusEditorText(() => {

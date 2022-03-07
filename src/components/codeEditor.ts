@@ -11,7 +11,7 @@ import cssWorker from "monaco-editor/esm/vs/language/css/css.worker?worker";
 import htmlWorker from "monaco-editor/esm/vs/language/html/html.worker?worker";
 import tsWorker from "monaco-editor/esm/vs/language/typescript/ts.worker?worker";
 
-import { ViewStateStore } from "../stores";
+import { createViewStateStore, Store } from "../stores";
 import { ViewStatesController } from "../controllers/view-states-controller";
 
 const { myAPI } = window;
@@ -37,7 +37,7 @@ self.MonacoEnvironment = {
 
 @customElement("code-editor")
 export class CodeEditor extends LitElement {
-  viewStateStore: ViewStateStore;
+  viewStateStore: typeof Store;
   private viewStatesController = new ViewStatesController(this);
 
   private container: Ref<HTMLElement> = createRef();
@@ -69,7 +69,21 @@ export class CodeEditor extends LitElement {
 
   constructor() {
     super();
-    this.viewStateStore = new ViewStateStore();
+    this.viewStateStore = createViewStateStore();
+    this.viewStateStore.addCellListener(
+      null,
+      null,
+      null,
+      (store, tableId, rowId, cellId) => {
+        console.log(
+          `${cellId} cell in ${rowId} row in ${tableId} table changed`
+        );
+        console.info(
+          "viewStateStore status:",
+          this.viewStateStore.getTable("states")
+        );
+      }
+    );
   }
 
   private getCode(): string {
@@ -150,8 +164,8 @@ export class CodeEditor extends LitElement {
     // switch snippets
     if (this.viewStatesController.isSnippetSwitched) {
       // reset the all view states
-      this.viewStateStore.store.forEachRow("states", (rowId: string): void => {
-        this.viewStateStore.store.delRow("states", `${rowId}`);
+      this.viewStateStore.forEachRow("states", (rowId: string): void => {
+        this.viewStateStore.delRow("states", `${rowId}`);
       });
     } else {
       // if switched to a new fragment, save the previous view state
@@ -166,9 +180,10 @@ export class CodeEditor extends LitElement {
     console.log(`model language was changed to ${this.model.getLanguageId()}`);
     this.setValue(this.code);
 
-    console.info("updated", this.viewStateStore.store.getTable("states"));
+    console.info("updated", this.viewStateStore.getTable("states"));
     if (
       this.viewStateStore.hasRow(
+        "states",
         `${this.viewStatesController.currentFragmentId}`
       )
     ) {
@@ -178,13 +193,14 @@ export class CodeEditor extends LitElement {
 
   private _saveCurrentViewState(fragmentId: number) {
     const viewState = this.editor.saveViewState();
-    this.viewStateStore.setPartialRow(`${fragmentId}`, {
+    this.viewStateStore.setPartialRow("states", `${fragmentId}`, {
       viewState: JSON.stringify(viewState),
     });
   }
 
   private _restoreCurrentViewState() {
     const viewState = this.viewStateStore.getCell(
+      "states",
       `${this.viewStatesController.currentFragmentId}`,
       "viewState"
     );

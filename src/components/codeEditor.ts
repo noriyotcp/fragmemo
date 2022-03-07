@@ -86,10 +86,6 @@ export class CodeEditor extends LitElement {
     );
   }
 
-  private getCode(): string {
-    return this.code;
-  }
-
   private getLang() {
     return this.language;
   }
@@ -120,7 +116,7 @@ export class CodeEditor extends LitElement {
   get model(): monaco.editor.IModel {
     const model = this.editor?.getModel();
     if (model) return model;
-    return monaco.editor.createModel(this.getCode(), this.getLang());
+    return monaco.editor.createModel(this.code, this.getLang());
   }
 
   firstUpdated(): void {

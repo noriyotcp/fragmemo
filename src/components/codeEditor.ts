@@ -111,8 +111,7 @@ export class CodeEditor extends LitElement {
   }
 
   getValue(): string {
-    const value = this.editor.getValue();
-    return value || "";
+    return this.editor.getValue();
   }
 
   setReadOnly(value: boolean): void {

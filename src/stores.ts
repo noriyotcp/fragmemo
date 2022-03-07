@@ -47,6 +47,7 @@ const createFragmentStore = (): typeof Store => {
 
 const createViewStateStore = (): typeof Store => {
   const schema = {
+    // rowId: fragmentId
     states: {
       viewState: { type: "string", default: "" },
     },
@@ -54,28 +55,4 @@ const createViewStateStore = (): typeof Store => {
   return createStore().setSchema(schema);
 };
 
-class ViewStateStore extends BaseStore {
-  // rowId: fragmentId
-  schema = {
-    states: {
-      viewState: { type: "string", default: "" },
-    },
-  };
-
-  constructor() {
-    super();
-    this.store.addCellListener(
-      null,
-      null,
-      null,
-      (store, tableId, rowId, cellId) => {
-        console.log(
-          `${cellId} cell in ${rowId} row in ${tableId} table changed`
-        );
-        console.info("viewStateStore status:", this.store.getTable("states"));
-      }
-    );
-  }
-}
-
-export { ViewStateStore, createFragmentStore, createViewStateStore, Store };
+export { createFragmentStore, createViewStateStore, Store };

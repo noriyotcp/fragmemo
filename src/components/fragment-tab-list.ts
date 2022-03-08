@@ -130,7 +130,6 @@ export class FragmentTabList extends LitElement {
       this.fragmentsController.currentTabIndex = 0;
     }
     this._clickTab();
-    console.log("nextTab", this.fragmentsController.currentTabIndex);
   }
 
   private _previousTab() {
@@ -139,7 +138,6 @@ export class FragmentTabList extends LitElement {
       this.fragmentsController.currentTabIndex = this.lastTabIndex;
     }
     this._clickTab();
-    console.log("previousTab", this.fragmentsController.currentTabIndex);
   }
 
   private _clickTab() {

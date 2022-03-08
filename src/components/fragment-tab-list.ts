@@ -23,7 +23,7 @@ interface TabType extends HTMLElement {
 export class FragmentTabList extends LitElement {
   private fragmentsController = new FragmentsController(this);
 
-  @state() private tabOnContext!: ITabOnContext;
+  private tabOnContext!: ITabOnContext;
   @queryAll("fragment-tab") tabs!: Array<HTMLElement>;
 
   static styles = css`

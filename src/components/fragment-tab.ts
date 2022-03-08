@@ -41,7 +41,6 @@ export class FragmentTab extends LitElement {
   private _fragmentStore: typeof Store;
 
   iconTemplate(): TemplateResult {
-    // TODO: Do not display icon temporarily
     return this._isEditing
       ? html` <sl-icon name="record-fill"></sl-icon> `
       : html``;

@@ -65,6 +65,18 @@ export class FragmentTabList extends LitElement {
     );
   }
 
+  updated(): void {
+    if (this.fragmentsController.activeFragmentId) {
+      this.dispatchEvent(
+        new CustomEvent("fragment-activated", {
+          detail: {
+            activeFragmentId: this.fragmentsController.activeFragmentId,
+          },
+        })
+      );
+    }
+  }
+
   private _showContextMenu(e: MouseEvent): void {
     e.preventDefault();
     const fragment = JSON.parse(
@@ -148,17 +160,5 @@ export class FragmentTabList extends LitElement {
 
   private get lastTabIndex(): number {
     return this.tabs.length - 1;
-  }
-
-  updated(): void {
-    if (this.fragmentsController.activeFragmentId) {
-      this.dispatchEvent(
-        new CustomEvent("fragment-activated", {
-          detail: {
-            activeFragmentId: this.fragmentsController.activeFragmentId,
-          },
-        })
-      );
-    }
   }
 }

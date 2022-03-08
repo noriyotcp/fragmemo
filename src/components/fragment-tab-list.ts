@@ -76,7 +76,7 @@ export class FragmentTabList extends LitElement {
       fragmentId: fragment._id,
       tabIndex: Number((<HTMLElement>e.currentTarget).getAttribute("tabIndex")),
     };
-    myAPI.showContextMenu();
+    myAPI.showContextMenuOnFragmentTab();
   }
 
   private _idsOnDeleteFragment({

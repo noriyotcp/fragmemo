@@ -14,7 +14,7 @@ interface ITabOnContext {
   tabIndex: number;
 }
 
-interface TabType extends HTMLElement {
+interface IFragmentTab extends HTMLElement {
   fragment: Fragment;
   activeFragmentId: number;
 }
@@ -23,7 +23,7 @@ interface TabType extends HTMLElement {
 export class FragmentTabList extends LitElement {
   private fragmentsController = new FragmentsController(this);
 
-  @state() private tabOnContext!: ITabOnContext;
+  private tabOnContext!: ITabOnContext;
   @queryAll("fragment-tab") tabs!: Array<HTMLElement>;
 
   static styles = css`
@@ -65,6 +65,18 @@ export class FragmentTabList extends LitElement {
     );
   }
 
+  updated(): void {
+    if (this.fragmentsController.activeFragmentId) {
+      this.dispatchEvent(
+        new CustomEvent("fragment-activated", {
+          detail: {
+            activeFragmentId: this.fragmentsController.activeFragmentId,
+          },
+        })
+      );
+    }
+  }
+
   private _showContextMenu(e: MouseEvent): void {
     e.preventDefault();
     const fragment = JSON.parse(
@@ -76,7 +88,7 @@ export class FragmentTabList extends LitElement {
       fragmentId: fragment._id,
       tabIndex: Number((<HTMLElement>e.currentTarget).getAttribute("tabIndex")),
     };
-    myAPI.showContextMenu();
+    myAPI.showContextMenuOnFragmentTab();
   }
 
   private _idsOnDeleteFragment({
@@ -84,20 +96,18 @@ export class FragmentTabList extends LitElement {
     tabIndex,
   }: ITabOnContext): IdsOnDeleteFragment {
     const tab = Array.from(this.tabs).find(
-      (tab) => (<TabType>tab).fragment._id === fragmentId
-    ) as TabType;
+      (tab) => (<IFragmentTab>tab).fragment._id === fragmentId
+    ) as IFragmentTab;
 
     const nextActiveIndex = () => {
       return tabIndex <= 0 ? tabIndex + 1 : tabIndex - 1;
     };
 
     const nextActiveTab = Array.from(this.tabs).find((tab) => {
-      return (<TabType>tab).tabIndex === nextActiveIndex();
-    }) as TabType;
+      return (<IFragmentTab>tab).tabIndex === nextActiveIndex();
+    }) as IFragmentTab;
 
-    const isActiveTab = tab.fragment._id === tab.activeFragmentId;
-
-    if (isActiveTab) {
+    if (tab.fragment._id === tab.activeFragmentId) {
       return {
         fragmentId: tab.fragment._id,
         nextActiveFragmentId: nextActiveTab.fragment._id,
@@ -130,7 +140,6 @@ export class FragmentTabList extends LitElement {
       this.fragmentsController.currentTabIndex = 0;
     }
     this._clickTab();
-    console.log("nextTab", this.fragmentsController.currentTabIndex);
   }
 
   private _previousTab() {
@@ -139,7 +148,6 @@ export class FragmentTabList extends LitElement {
       this.fragmentsController.currentTabIndex = this.lastTabIndex;
     }
     this._clickTab();
-    console.log("previousTab", this.fragmentsController.currentTabIndex);
   }
 
   private _clickTab() {
@@ -152,17 +160,5 @@ export class FragmentTabList extends LitElement {
 
   private get lastTabIndex(): number {
     return this.tabs.length - 1;
-  }
-
-  updated(): void {
-    if (this.fragmentsController.activeFragmentId) {
-      this.dispatchEvent(
-        new CustomEvent("fragment-activated", {
-          detail: {
-            activeFragmentId: this.fragmentsController.activeFragmentId,
-          },
-        })
-      );
-    }
   }
 }

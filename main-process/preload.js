@@ -28,7 +28,8 @@ contextBridge.exposeInMainWorld("myAPI", {
   getFragment: (fragmentId) => ipcRenderer.invoke("get-fragment", fragmentId),
   getActiveFragment: (snippetId) =>
     ipcRenderer.invoke("get-active-fragment", snippetId),
-  showContextMenu: () => ipcRenderer.invoke("show-context-menu"),
+  showContextMenuOnFragmentTab: () =>
+    ipcRenderer.invoke("show-context-menu-on-fragment-tab"),
 });
 
 console.log("preload!");

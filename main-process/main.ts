@@ -183,7 +183,7 @@ app.once("browser-window-created", () => {
     return activeFragment.toJSON();
   });
 
-  ipcMain.handle("show-context-menu", (event) => {
+  ipcMain.handle("show-context-menu-on-fragment-tab", (event) => {
     const template: MenuItemConstructorOptions[] = [
       {
         label: "Delete fragment",

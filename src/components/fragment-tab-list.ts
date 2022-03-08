@@ -14,7 +14,7 @@ interface ITabOnContext {
   tabIndex: number;
 }
 
-interface TabType extends HTMLElement {
+interface IFragmentTab extends HTMLElement {
   fragment: Fragment;
   activeFragmentId: number;
 }
@@ -84,16 +84,16 @@ export class FragmentTabList extends LitElement {
     tabIndex,
   }: ITabOnContext): IdsOnDeleteFragment {
     const tab = Array.from(this.tabs).find(
-      (tab) => (<TabType>tab).fragment._id === fragmentId
-    ) as TabType;
+      (tab) => (<IFragmentTab>tab).fragment._id === fragmentId
+    ) as IFragmentTab;
 
     const nextActiveIndex = () => {
       return tabIndex <= 0 ? tabIndex + 1 : tabIndex - 1;
     };
 
     const nextActiveTab = Array.from(this.tabs).find((tab) => {
-      return (<TabType>tab).tabIndex === nextActiveIndex();
-    }) as TabType;
+      return (<IFragmentTab>tab).tabIndex === nextActiveIndex();
+    }) as IFragmentTab;
 
     if (tab.fragment._id === tab.activeFragmentId) {
       return {

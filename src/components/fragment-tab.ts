@@ -46,7 +46,7 @@ export class FragmentTab extends LitElement {
       : html``;
   }
 
-  tabBarTemplate(): TemplateResult {
+  render(): TemplateResult {
     return html`
       <div
         id="fragment-${this.fragment._id}"
@@ -61,10 +61,6 @@ export class FragmentTab extends LitElement {
         <div class="tab-icon">${this.iconTemplate()}</div>
       </div>
     `;
-  }
-
-  render(): TemplateResult {
-    return html`${this.tabBarTemplate()}`;
   }
 
   firstUpdated(): void {

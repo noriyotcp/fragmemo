@@ -1,6 +1,6 @@
 import { dispatch } from "../events/dispatcher";
 import { LitElement, html, css, TemplateResult } from "lit";
-import { customElement, property, query, queryAll } from "lit/decorators.js";
+import { customElement, property, queryAll } from "lit/decorators.js";
 import { Fragment } from "models.d";
 import { Store } from "stores";
 
@@ -9,7 +9,6 @@ export class FragmentTab extends LitElement {
   @property({ type: Object }) fragment!: Fragment;
   @property({ type: Number }) activeFragmentId!: number;
   @queryAll(".tab-item") tabs!: Array<HTMLElement>;
-  @query(".tab-item[active='true']") activeTab!: HTMLElement;
 
   static styles = css`
     :host {

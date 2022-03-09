@@ -1,6 +1,6 @@
 import { dispatch } from "../events/dispatcher";
 import { LitElement, html, css, TemplateResult } from "lit";
-import { customElement, property, query, state } from "lit/decorators.js";
+import { customElement, query, state } from "lit/decorators.js";
 import { map } from "lit/directives/map.js";
 import { createFragmentStore, Store } from "../stores";
 import { Language } from "models.d";
@@ -37,7 +37,6 @@ export class EditorElement extends LitElement {
     });
   }
 
-  @property() _textareaValue = "";
   @query("#lang-select") select!: HTMLSelectElement;
   @state()
   private _activeFragmentId?: number;
@@ -78,7 +77,7 @@ export class EditorElement extends LitElement {
   render(): TemplateResult {
     return html`
       <section>
-        <test-header textareaValue="${this._textareaValue}"></test-header>
+        <test-header></test-header>
         <fragment-tab-list
           @fragment-activated=${this._onFragmentActivated}
         ></fragment-tab-list>

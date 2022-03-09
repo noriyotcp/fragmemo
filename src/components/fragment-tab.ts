@@ -1,6 +1,6 @@
 import { dispatch } from "../events/dispatcher";
 import { LitElement, html, css, TemplateResult } from "lit";
-import { customElement, property, query, queryAll } from "lit/decorators.js";
+import { customElement, property, queryAll } from "lit/decorators.js";
 import { Fragment } from "models.d";
 import { Store } from "stores";
 
@@ -9,7 +9,6 @@ export class FragmentTab extends LitElement {
   @property({ type: Object }) fragment!: Fragment;
   @property({ type: Number }) activeFragmentId!: number;
   @queryAll(".tab-item") tabs!: Array<HTMLElement>;
-  @query(".tab-item[active='true']") activeTab!: HTMLElement;
 
   static styles = css`
     :host {
@@ -42,13 +41,12 @@ export class FragmentTab extends LitElement {
   private _fragmentStore: typeof Store;
 
   iconTemplate(): TemplateResult {
-    // TODO: Do not display icon temporarily
     return this._isEditing
       ? html` <sl-icon name="record-fill"></sl-icon> `
       : html``;
   }
 
-  tabBarTemplate(): TemplateResult {
+  render(): TemplateResult {
     return html`
       <div
         id="fragment-${this.fragment._id}"
@@ -63,10 +61,6 @@ export class FragmentTab extends LitElement {
         <div class="tab-icon">${this.iconTemplate()}</div>
       </div>
     `;
-  }
-
-  render(): TemplateResult {
-    return html`${this.tabBarTemplate()}`;
   }
 
   firstUpdated(): void {

@@ -57,7 +57,7 @@ export class SnippetList extends LitElement {
               additional-text="${until(
                 this._fragmentsCount(snippet._id),
                 "0"
-              )} memos"
+              )} 📄"
               additional-text-state="Success"
               snippet=${JSON.stringify(snippet)}
               >${snippet.title}</ui5-li
@@ -85,8 +85,7 @@ export class SnippetList extends LitElement {
     }) as EventListener);
   }
 
-  // eslint-disable-next-line no-unused-vars
-  updated(changedProps: Map<string, unknown>): void {
+  updated(): void {
     if (!this.snippetItems[0]) return;
     // Select the first item on the top of the list
     this._updateSelectedItem(this.snippetItems[0]);

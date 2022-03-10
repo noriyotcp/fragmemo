@@ -31,6 +31,8 @@ export class FragmentTabList extends LitElement {
       flex-wrap: nowrap;
       height: 22px;
       border: 1px solid var(--gray);
+      border-right: none;
+      border-left: none;
     }
   `;
 

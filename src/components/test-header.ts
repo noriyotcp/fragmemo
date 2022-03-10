@@ -79,6 +79,7 @@ export class TestHeader extends LitElement {
               message: "Snippets updated",
             },
           });
+          this._displayToast("Snippet updated");
           this.requestUpdate();
         })
         .catch((err) => {
@@ -99,7 +100,7 @@ export class TestHeader extends LitElement {
 
   private _displayToast(msg?: string): void {
     dispatch({
-      type: "display-toast",
+      type: "display-stack-toast",
       detail: {
         message: msg,
       },

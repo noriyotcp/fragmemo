@@ -19,7 +19,7 @@ export class HomeElement extends LitElement {
 
   render(): TemplateResult {
     return html`
-      <toast-element></toast-element>
+      <stack-toast-element></stack-toast-element>
       <editor-element></editor-element>
     `;
   }

@@ -57,7 +57,7 @@ export class SnippetList extends LitElement {
               additional-text="${until(
                 this._fragmentsCount(snippet._id),
                 "0"
-              )} memos"
+              )} 📄"
               additional-text-state="Success"
               snippet=${JSON.stringify(snippet)}
               >${snippet.title}</ui5-li

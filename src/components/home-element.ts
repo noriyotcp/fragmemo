@@ -12,6 +12,7 @@ export class HomeElement extends LitElement {
         top: 0;
         right: 0;
         overflow: hidden;
+        border-left: 1px solid var(--dark-gray);
       }
     `,
   ];

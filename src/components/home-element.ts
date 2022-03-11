@@ -1,4 +1,4 @@
-import { StackToastController } from "../controllers/stack-toast-controller";
+import { StackToastController } from "../controllers/toast-stack-controller";
 import { LitElement, html, css, TemplateResult } from "lit";
 import { customElement } from "lit/decorators.js";
 

@@ -63,7 +63,7 @@ export class SetupStorageController implements ReactiveController {
 
   private _displayToast(message: string) {
     dispatch({
-      type: "display-stack-toast",
+      type: "display-toast-stack",
       detail: {
         message,
       },

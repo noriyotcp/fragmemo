@@ -100,7 +100,7 @@ export class TestHeader extends LitElement {
 
   private _displayToast(msg?: string): void {
     dispatch({
-      type: "display-stack-toast",
+      type: "display-toast-stack",
       detail: {
         message: msg,
       },

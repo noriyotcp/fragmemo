@@ -27,7 +27,7 @@ export class StackToastController implements ReactiveController {
 
   hostConnected(): void {
     window.addEventListener(
-      "display-stack-toast",
+      "display-toast-stack",
       this._displayToastListener as EventListener
     );
   }

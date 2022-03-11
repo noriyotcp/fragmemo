@@ -1,8 +1,14 @@
+import { ToastStackController } from "../controllers/toast-stack-controller";
 import { LitElement, html, css, TemplateResult } from "lit";
 import { customElement } from "lit/decorators.js";
 
 @customElement("home-element")
 export class HomeElement extends LitElement {
+  constructor() {
+    super();
+    new ToastStackController(this);
+  }
+
   static styles = [
     css`
       :host {
@@ -18,9 +24,6 @@ export class HomeElement extends LitElement {
   ];
 
   render(): TemplateResult {
-    return html`
-      <toast-element></toast-element>
-      <editor-element></editor-element>
-    `;
+    return html` <editor-element></editor-element> `;
   }
 }

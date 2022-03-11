@@ -28,6 +28,11 @@ snippet-list::-webkit-scrollbar {
   cursor: col-resize;
 }
 
+.sl-toast-stack {
+  top: unset !important;
+  bottom: 0;
+}
+
 :root {
   --gray: #717172;
   --dark-gray: #323233;

@@ -15,7 +15,7 @@ type PropsType = {
   duration?: number;
 };
 
-export class StackToastController implements ReactiveController {
+export class ToastStackController implements ReactiveController {
   private host: ReactiveControllerHost;
 
   count = 0;

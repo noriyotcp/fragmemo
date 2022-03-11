@@ -1,4 +1,4 @@
-import { StackToastController } from "../controllers/toast-stack-controller";
+import { ToastStackController } from "../controllers/toast-stack-controller";
 import { LitElement, html, css, TemplateResult } from "lit";
 import { customElement } from "lit/decorators.js";
 
@@ -6,7 +6,7 @@ import { customElement } from "lit/decorators.js";
 export class HomeElement extends LitElement {
   constructor() {
     super();
-    new StackToastController(this);
+    new ToastStackController(this);
   }
 
   static styles = [

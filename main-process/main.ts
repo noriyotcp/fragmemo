@@ -204,6 +204,7 @@ app.once("browser-window-created", () => {
 
   ipcMain.handle("init-snippet", (event) => {
     db.initSnippet("");
+    return db.reverseSortBy("Snippet", "_id")[0].toJSON();
   });
 
   ipcMain.handle("init-fragment", (event, snippetId) => {

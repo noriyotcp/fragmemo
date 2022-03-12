@@ -34,7 +34,7 @@ export interface SandBox {
     listener: (_e: Event, command: string) => void
   ) => Electron.IpcRenderer;
   // renderer process -> main process
-  initSnippet: () => Promise<void>;
+  initSnippet: () => Promise<Snippet>;
   initFragment: (snippetId: number) => Promise<void>;
   setupStorage: () => Promise<void>;
   newActiveSnippetHistory: (snippetId: number) => Promise<void>;

@@ -94,11 +94,23 @@ export class SnippetList extends LitElement {
 
   updated(): void {
     if (!this.snippetItems[0]) return;
-    // Select the first item on the top of the list
-    const topItem = Array.from(this.snippetItems).find(
-      (item) => item.getAttribute("itemindex") === "0"
+    console.info(
+      "snippet-list:updated",
+      this.setupStorage.activeSnippetHistory
     );
-    this._updateSelectedItem(topItem!);
+
+    // topItem is the first item in the list or the item that was selected before
+    let topItem = this.snippetItems[0];
+    if (this.setupStorage.activeSnippetHistory) {
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      topItem = Array.from(this.snippetItems).find(
+        (item) =>
+          Number(item.getAttribute("snippet-id")) ===
+          this.setupStorage.activeSnippetHistory.snippetId
+      )!;
+    }
+
+    this._updateSelectedItem(topItem);
   }
 
   private _updateSelectedItem(item: HTMLLIElement): void {
@@ -113,10 +125,7 @@ export class SnippetList extends LitElement {
       detail: { selectedItems: [item] },
     });
     this.snippetList.dispatchEvent(event);
-    this.scroll({ top: 0, behavior: "smooth" });
-    // e.g. scroll to the top of the second item
-    // this.snippetItems[1] &&
-    //   this.scroll({ top: this.snippetItems[1].offsetTop, behavior: "smooth" });
+    this.scroll({ top: item.offsetTop, behavior: "smooth" });
   }
 
   private formatDatetime(datetime: Date): string {

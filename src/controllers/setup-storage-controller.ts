@@ -1,12 +1,13 @@
 import { dispatch } from "../events/dispatcher";
 import { ReactiveController, ReactiveControllerHost } from "lit";
-import { Snippet } from "../models";
+import { Snippet, ActiveSnippetHistory } from "../models";
 const { myAPI } = window;
 
 export class SetupStorageController implements ReactiveController {
   private host: ReactiveControllerHost;
 
   snippets: Snippet[] = [];
+  activeSnippetHistory!: ActiveSnippetHistory;
 
   constructor(host: ReactiveControllerHost) {
     this.host = host;
@@ -35,12 +36,6 @@ export class SetupStorageController implements ReactiveController {
         console.error(err);
         this._displayToast("Setup failed");
       });
-    await this._getLatestActiveSnippetId();
-  }
-
-  private async _getLatestActiveSnippetId(): Promise<void> {
-    const history = await myAPI.getLatestActiveSnippetHistory();
-    console.info(history);
   }
 
   private _loadSnippets() {
@@ -54,7 +49,10 @@ export class SetupStorageController implements ReactiveController {
         this._displayToast("Snippets load failed");
       })
       .finally(() => {
-        this.host.requestUpdate();
+        myAPI.getLatestActiveSnippetHistory().then((activeSnippetHistory) => {
+          this.activeSnippetHistory = activeSnippetHistory;
+          this.host.requestUpdate();
+        });
       });
   }
 

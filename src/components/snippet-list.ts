@@ -49,7 +49,7 @@ export class SnippetList extends LitElement {
         ${repeat(
           this.setupStorage.snippets,
           (snippet: Snippet) => snippet._id,
-          (snippet: Snippet) =>
+          (snippet: Snippet, index) =>
             html`<ui5-li
               description="${this.formatDatetime(
                 snippet.snippetUpdate.updatedAt
@@ -60,6 +60,7 @@ export class SnippetList extends LitElement {
               )} 📄"
               additional-text-state="Success"
               snippet=${JSON.stringify(snippet)}
+              itemindex="${index}"
               >${snippet.title}</ui5-li
             >`
         )}
@@ -88,7 +89,10 @@ export class SnippetList extends LitElement {
   updated(): void {
     if (!this.snippetItems[0]) return;
     // Select the first item on the top of the list
-    this._updateSelectedItem(this.snippetItems[0]);
+    const topItem = Array.from(this.snippetItems).find(
+      (item) => item.getAttribute("itemindex") === "0"
+    );
+    this._updateSelectedItem(topItem!);
   }
 
   private _updateSelectedItem(item: HTMLLIElement): void {

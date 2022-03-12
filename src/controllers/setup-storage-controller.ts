@@ -42,11 +42,13 @@ export class SetupStorageController implements ReactiveController {
       .loadSnippets()
       .then((snippets) => {
         this.snippets = snippets;
-        this.host.requestUpdate();
       })
       .catch((err) => {
         console.error(err);
         this._displayToast("Snippets load failed");
+      })
+      .finally(() => {
+        this.host.requestUpdate();
       });
   }
 

@@ -50,7 +50,7 @@ export class SnippetList extends LitElement {
         ${repeat(
           this.setupStorage.snippets,
           (snippet: Snippet) => snippet._id,
-          (snippet: Snippet, index) =>
+          (snippet: Snippet) =>
             html`<ui5-li
               description="${this.formatDatetime(
                 snippet.snippetUpdate.updatedAt
@@ -62,7 +62,6 @@ export class SnippetList extends LitElement {
               additional-text-state="Success"
               snippet=${JSON.stringify(snippet)}
               snippet-id=${snippet._id}
-              itemindex="${index}"
               >${snippet.title}</ui5-li
             >`
         )}

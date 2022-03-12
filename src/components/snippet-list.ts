@@ -17,6 +17,7 @@ export class SnippetList extends LitElement {
 
   @query("#snippetList") snippetList!: HTMLElement;
   @queryAll("ui5-li") snippetItems!: HTMLLIElement[];
+  snippet!: Snippet;
 
   constructor() {
     super();
@@ -60,6 +61,7 @@ export class SnippetList extends LitElement {
               )} 📄"
               additional-text-state="Success"
               snippet=${JSON.stringify(snippet)}
+              snippet-id=${snippet._id}
               itemindex="${index}"
               >${snippet.title}</ui5-li
             >`
@@ -72,6 +74,10 @@ export class SnippetList extends LitElement {
     this.snippetList.addEventListener("selection-change", ((
       e: CustomEvent
     ): void => {
+      this.snippet = JSON.parse(
+        e.detail.selectedItems[0].getAttribute("snippet")
+      );
+
       const previouslySelectedSnippet = e.detail.previouslySelectedItems
         ? e.detail.previouslySelectedItems[0].getAttribute("snippet")
         : null;

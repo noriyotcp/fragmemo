@@ -1,6 +1,12 @@
 /* eslint-disable no-unused-vars */
 import { IpcRenderer } from "electron";
-import { Fragment, ActiveFragment, Snippet, Language } from "models.d";
+import {
+  Fragment,
+  ActiveFragment,
+  Snippet,
+  Language,
+  ActiveSnippetHistory,
+} from "models.d";
 import { ISnippetProps, IFragmentProps } from "props.d";
 
 declare global {
@@ -28,9 +34,10 @@ export interface SandBox {
     listener: (_e: Event, command: string) => void
   ) => Electron.IpcRenderer;
   // renderer process -> main process
-  initSnippet: () => Promise<void>;
+  initSnippet: () => Promise<Snippet>;
   initFragment: (snippetId: number) => Promise<void>;
   setupStorage: () => Promise<void>;
+  newActiveSnippetHistory: (snippetId: number) => Promise<void>;
   updateSnippet: (props: ISnippetProps) => Promise<void>;
   updateFragment: (props: IFragmentProps) => Promise<{
     status: boolean;
@@ -47,6 +54,7 @@ export interface SandBox {
   getSnippet: (snippetId: number) => Promise<JSON>;
   getFragment: (fragmentId: number) => Promise<Fragment>;
   getActiveFragment: (snippetId: number) => Promise<ActiveFragment>;
+  getLatestActiveSnippetHistory: () => Promise<ActiveSnippetHistory>;
   showContextMenuOnFragmentTab: () => void;
 }
 

@@ -58,6 +58,8 @@ export class FragmentsController implements ReactiveController {
     this.snippet = JSON.parse(e.detail.selectedSnippet);
     if (!this.snippet) return;
 
+    myAPI.newActiveSnippetHistory(<number>this.snippet._id);
+
     // Get the snippet by id from Realm DB
     myAPI.getSnippet(<number>this.snippet._id).then((snippet) => {
       this.snippet = snippet as unknown as Snippet;

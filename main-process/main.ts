@@ -204,6 +204,7 @@ app.once("browser-window-created", () => {
 
   ipcMain.handle("init-snippet", (event) => {
     db.initSnippet("");
+    return db.reverseSortBy("Snippet", "_id")[0].toJSON();
   });
 
   ipcMain.handle("init-fragment", (event, snippetId) => {
@@ -256,13 +257,25 @@ app.once("browser-window-created", () => {
       .filtered(`snippet._id == ${snippetId}`) as unknown as Results<Fragment>;
     return fragments.toJSON();
   });
+
+  ipcMain.handle("new-active-snippet-history", (event, snippetId) => {
+    db.createActiveSnippetHistory(snippetId);
+  });
+
+  ipcMain.handle("get-latest-active-snippet-history", (event) => {
+    return db.reverseSortBy("ActiveSnippetHistory", "_id")[0]?.toJSON();
+  });
+});
+
+app.on("will-quit", () => {
+  db.resetActiveSnippetHistory();
+  db.close();
 });
 
 // Quit when all windows are closed, except on macOS. There, it's common
 // for applications and their menu bar to stay active until the user quits
 // explicitly with Cmd + Q.
 app.on("window-all-closed", () => {
-  db.close();
   if (process.platform !== "darwin") {
     app.quit();
   }

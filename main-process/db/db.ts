@@ -5,6 +5,7 @@ import {
   ActiveFragment,
   Language,
   SnippetUpdate,
+  ActiveSnippetHistory,
 } from "./realm";
 import languages from "./seeds/languages";
 import * as fragments from "./seeds/fragments";
@@ -21,6 +22,7 @@ class DB extends Realm {
       ActiveFragment.schema,
       Language.schema,
       SnippetUpdate.schema,
+      ActiveSnippetHistory.schema,
     ];
     super({ path, schema });
   }
@@ -167,6 +169,15 @@ class DB extends Realm {
     return snippetUpdate;
   }
 
+  createActiveSnippetHistory(snippetId: number): void {
+    this.write(() => {
+      this.create("ActiveSnippetHistory", {
+        _id: this.currentMaxId("ActiveSnippetHistory") + 1,
+        snippetId,
+      });
+    });
+  }
+
   updateSnippet(props: { _id: number; properties: typeof Snippet }): void {
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const snippet: Snippet = this.objectForPrimaryKey("Snippet", props._id)!;
@@ -202,6 +213,26 @@ class DB extends Realm {
     this.write(() => {
       if (activeFragment) {
         activeFragment.fragmentId = properties.fragmentId;
+      }
+    });
+  }
+
+  resetActiveSnippetHistory(): void {
+    this.write(() => {
+      // delete all activeSnippetHistory except the latest one
+      this.delete(
+        this.objects("ActiveSnippetHistory").filtered(
+          `_id != ${this.currentMaxId("ActiveSnippetHistory")}`
+        )
+      );
+      // update _id of the latest one to 1
+      const latestOne: ActiveSnippetHistory | undefined =
+        this.objectForPrimaryKey(
+          "ActiveSnippetHistory",
+          this.currentMaxId("ActiveSnippetHistory")
+        );
+      if (latestOne) {
+        latestOne._id = 1;
       }
     });
   }

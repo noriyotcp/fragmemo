@@ -17,6 +17,7 @@ export class SnippetList extends LitElement {
 
   @query("#snippetList") snippetList!: HTMLElement;
   @queryAll("ui5-li") snippetItems!: HTMLLIElement[];
+  snippet!: Snippet;
 
   constructor() {
     super();
@@ -60,6 +61,7 @@ export class SnippetList extends LitElement {
               )} 📄"
               additional-text-state="Success"
               snippet=${JSON.stringify(snippet)}
+              snippet-id=${snippet._id}
               >${snippet.title}</ui5-li
             >`
         )}
@@ -71,6 +73,10 @@ export class SnippetList extends LitElement {
     this.snippetList.addEventListener("selection-change", ((
       e: CustomEvent
     ): void => {
+      this.snippet = JSON.parse(
+        e.detail.selectedItems[0].getAttribute("snippet")
+      );
+
       const previouslySelectedSnippet = e.detail.previouslySelectedItems
         ? e.detail.previouslySelectedItems[0].getAttribute("snippet")
         : null;
@@ -87,8 +93,23 @@ export class SnippetList extends LitElement {
 
   updated(): void {
     if (!this.snippetItems[0]) return;
-    // Select the first item on the top of the list
-    this._updateSelectedItem(this.snippetItems[0]);
+    console.info(
+      "snippet-list:updated",
+      this.setupStorage.activeSnippetHistory
+    );
+
+    // topItem is the first item in the list or the item that was selected before
+    let topItem = this.snippetItems[0];
+    if (this.setupStorage.activeSnippetHistory) {
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      topItem = Array.from(this.snippetItems).find(
+        (item) =>
+          Number(item.getAttribute("snippet-id")) ===
+          this.setupStorage.activeSnippetHistory.snippetId
+      )!;
+    }
+
+    this._updateSelectedItem(topItem);
   }
 
   private _updateSelectedItem(item: HTMLLIElement): void {
@@ -103,10 +124,7 @@ export class SnippetList extends LitElement {
       detail: { selectedItems: [item] },
     });
     this.snippetList.dispatchEvent(event);
-    this.scroll({ top: 0, behavior: "smooth" });
-    // e.g. scroll to the top of the second item
-    // this.snippetItems[1] &&
-    //   this.scroll({ top: this.snippetItems[1].offsetTop, behavior: "smooth" });
+    this.scroll({ top: item.offsetTop, behavior: "smooth" });
   }
 
   private formatDatetime(datetime: Date): string {

@@ -16,6 +16,8 @@ contextBridge.exposeInMainWorld("myAPI", {
   initSnippet: () => ipcRenderer.invoke("init-snippet"),
   initFragment: (snippetId) => ipcRenderer.invoke("init-fragment", snippetId),
   setupStorage: () => ipcRenderer.invoke("setup-storage"),
+  newActiveSnippetHistory: (snippetId) =>
+    ipcRenderer.invoke("new-active-snippet-history", snippetId),
   updateSnippet: (props) => ipcRenderer.invoke("update-snippet", props),
   updateFragment: (props) => ipcRenderer.invoke("update-fragment", props),
   deleteFragment: (ids) => ipcRenderer.invoke("delete-fragment", ids),
@@ -28,6 +30,8 @@ contextBridge.exposeInMainWorld("myAPI", {
   getFragment: (fragmentId) => ipcRenderer.invoke("get-fragment", fragmentId),
   getActiveFragment: (snippetId) =>
     ipcRenderer.invoke("get-active-fragment", snippetId),
+  getLatestActiveSnippetHistory: () =>
+    ipcRenderer.invoke("get-latest-active-snippet-history"),
   showContextMenuOnFragmentTab: () =>
     ipcRenderer.invoke("show-context-menu-on-fragment-tab"),
 });

@@ -94,4 +94,26 @@ class SnippetUpdate {
   };
 }
 
-export { Realm, Snippet, Fragment, ActiveFragment, Language, SnippetUpdate };
+class ActiveSnippetHistory {
+  public _id = 0;
+  public snippetId = 0;
+
+  public static schema: Realm.ObjectSchema = {
+    name: "ActiveSnippetHistory",
+    properties: {
+      _id: "int",
+      snippetId: "int",
+    },
+    primaryKey: "_id",
+  };
+}
+
+export {
+  Realm,
+  Snippet,
+  Fragment,
+  ActiveFragment,
+  Language,
+  SnippetUpdate,
+  ActiveSnippetHistory,
+};

@@ -29,4 +29,16 @@ interface SnippetUpdate {
   updatedAt: Date;
 }
 
-export { Snippet, Language, Fragment, ActiveFragment, SnippetUpdate };
+interface ActiveSnippetHistory {
+  _id: number;
+  snippetId: number;
+}
+
+export {
+  Snippet,
+  Language,
+  Fragment,
+  ActiveFragment,
+  SnippetUpdate,
+  ActiveSnippetHistory,
+};

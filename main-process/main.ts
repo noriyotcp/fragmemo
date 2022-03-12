@@ -260,6 +260,10 @@ app.once("browser-window-created", () => {
   ipcMain.handle("new-active-snippet-history", (event, snippetId) => {
     db.createActiveSnippetHistory(snippetId);
   });
+
+  ipcMain.handle("get-latest-active-snippet-history", (event) => {
+    return db.reverseSortBy("ActiveSnippetHistory", "_id")[0].toJSON();
+  });
 });
 
 // Quit when all windows are closed, except on macOS. There, it's common

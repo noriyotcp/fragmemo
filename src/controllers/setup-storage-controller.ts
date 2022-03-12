@@ -35,6 +35,12 @@ export class SetupStorageController implements ReactiveController {
         console.error(err);
         this._displayToast("Setup failed");
       });
+    await this._getLatestActiveSnippetId();
+  }
+
+  private async _getLatestActiveSnippetId(): Promise<void> {
+    const history = await myAPI.getLatestActiveSnippetHistory();
+    console.info(history);
   }
 
   private _loadSnippets() {

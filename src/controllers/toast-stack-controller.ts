@@ -51,7 +51,7 @@ export class ToastStackController implements ReactiveController {
       `,
     });
 
-    document.body.insertAdjacentText("beforeend", alert.innerHTML);
+    document.body.append(alert);
     return alert.toast?.();
   }
 

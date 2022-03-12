@@ -256,6 +256,10 @@ app.once("browser-window-created", () => {
       .filtered(`snippet._id == ${snippetId}`) as unknown as Results<Fragment>;
     return fragments.toJSON();
   });
+
+  ipcMain.handle("new-active-snippet-history", (event, snippetId) => {
+    db.createActiveSnippetHistory(snippetId);
+  });
 });
 
 // Quit when all windows are closed, except on macOS. There, it's common

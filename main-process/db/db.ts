@@ -5,6 +5,7 @@ import {
   ActiveFragment,
   Language,
   SnippetUpdate,
+  ActiveSnippetHistory,
 } from "./realm";
 import languages from "./seeds/languages";
 import * as fragments from "./seeds/fragments";
@@ -21,6 +22,7 @@ class DB extends Realm {
       ActiveFragment.schema,
       Language.schema,
       SnippetUpdate.schema,
+      ActiveSnippetHistory.schema,
     ];
     super({ path, schema });
   }
@@ -165,6 +167,15 @@ class DB extends Realm {
       });
     });
     return snippetUpdate;
+  }
+
+  createActiveSnippetHistory(snippetId: number): void {
+    this.write(() => {
+      this.create("ActiveSnippetHistory", {
+        _id: this.currentMaxId("ActiveSnippetHistory") + 1,
+        snippetId,
+      });
+    });
   }
 
   updateSnippet(props: { _id: number; properties: typeof Snippet }): void {

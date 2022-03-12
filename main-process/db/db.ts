@@ -216,6 +216,26 @@ class DB extends Realm {
       }
     });
   }
+
+  resetActiveSnippetHistory(): void {
+    this.write(() => {
+      // delete all activeSnippetHistory except the latest one
+      this.delete(
+        this.objects("ActiveSnippetHistory").filtered(
+          `_id != ${this.currentMaxId("ActiveSnippetHistory")}`
+        )
+      );
+      // update _id of the latest one to 1
+      const latestOne: ActiveSnippetHistory | undefined =
+        this.objectForPrimaryKey(
+          "ActiveSnippetHistory",
+          this.currentMaxId("ActiveSnippetHistory")
+        );
+      if (latestOne) {
+        latestOne._id = 1;
+      }
+    });
+  }
 }
 
 export default DB;

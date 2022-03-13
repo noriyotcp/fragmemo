@@ -198,6 +198,21 @@ app.once("browser-window-created", () => {
     menu.popup(<PopupOptions>BrowserWindow.fromWebContents(event.sender));
   });
 
+  ipcMain.handle("show-context-menu-on-snippet-item", (event) => {
+    const template: MenuItemConstructorOptions[] = [
+      {
+        label: "Delete snippet",
+        type: "normal",
+        id: "delete-snippet",
+        click: () => {
+          event.sender.send("context-menu-command", "delete-snippet");
+        },
+      },
+    ];
+    const menu = Menu.buildFromTemplate(template);
+    menu.popup(<PopupOptions>BrowserWindow.fromWebContents(event.sender));
+  });
+
   ipcMain.handle("delete-fragment", (event, ids) => {
     db.deleteFragment(ids.fragmentId, ids.nextActiveFragmentId);
   });

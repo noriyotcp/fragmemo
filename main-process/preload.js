@@ -34,6 +34,8 @@ contextBridge.exposeInMainWorld("myAPI", {
     ipcRenderer.invoke("get-latest-active-snippet-history"),
   showContextMenuOnFragmentTab: () =>
     ipcRenderer.invoke("show-context-menu-on-fragment-tab"),
+  showContextMenuOnSnippetItem: () =>
+    ipcRenderer.invoke("show-context-menu-on-snippet-item"),
 });
 
 console.log("preload!");

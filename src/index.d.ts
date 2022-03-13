@@ -56,6 +56,7 @@ export interface SandBox {
   getActiveFragment: (snippetId: number) => Promise<ActiveFragment>;
   getLatestActiveSnippetHistory: () => Promise<ActiveSnippetHistory>;
   showContextMenuOnFragmentTab: () => void;
+  showContextMenuOnSnippetItem: () => void;
 }
 
 // Override properties with type intersection

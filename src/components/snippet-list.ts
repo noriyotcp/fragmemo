@@ -62,6 +62,7 @@ export class SnippetList extends LitElement {
               additional-text-state="Success"
               snippet=${JSON.stringify(snippet)}
               snippet-id=${snippet._id}
+              @contextmenu="${this._showContextMenu}"
               >${snippet.title}</ui5-li
             >`
         )}
@@ -89,6 +90,10 @@ export class SnippetList extends LitElement {
         },
       });
     }) as EventListener);
+
+    myAPI.contextMenuCommand((_e: Event, command) =>
+      this._contextMenuCommand(_e, command)
+    );
   }
 
   updated(): void {
@@ -110,6 +115,21 @@ export class SnippetList extends LitElement {
     }
 
     this._updateSelectedItem(topItem);
+  }
+
+  private _showContextMenu(e: MouseEvent): void {
+    e.preventDefault();
+    this.snippet = JSON.parse(
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      (<HTMLElement>e.currentTarget).getAttribute("snippet")!
+    );
+    myAPI.showContextMenuOnSnippetItem();
+  }
+
+  private _contextMenuCommand(e: Event, command: string): void {
+    if (command === "delete-snippet") {
+      console.log("delete-snippet", this.snippet);
+    }
   }
 
   private _updateSelectedItem(item: HTMLLIElement): void {

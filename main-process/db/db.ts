@@ -217,6 +217,37 @@ class DB extends Realm {
     });
   }
 
+  deleteSnippet(snippetId: number): void {
+    const snippet = this.objectForPrimaryKey("Snippet", snippetId);
+    if (!snippet) {
+      throw new Error("snippet not found");
+    }
+
+    const fragments = this.objects("Fragment").filtered(
+      "snippet = $0",
+      snippet
+    );
+    const activeFragments = this.objects("ActiveFragment").filtered(
+      "snippetId = $0",
+      snippetId
+    );
+    const snippetUpdates = this.objects("SnippetUpdate").filtered(
+      "_id = $0",
+      snippetId
+    );
+    const activeSnippetHistories = this.objects(
+      "ActiveSnippetHistory"
+    ).filtered("snippetId = $0", snippetId);
+
+    this.write(() => {
+      this.delete(snippet);
+      this.delete(fragments);
+      this.delete(activeFragments);
+      this.delete(snippetUpdates);
+      this.delete(activeSnippetHistories);
+    });
+  }
+
   resetActiveSnippetHistory(): void {
     this.write(() => {
       // delete all activeSnippetHistory except the latest one

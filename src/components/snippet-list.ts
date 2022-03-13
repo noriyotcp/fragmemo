@@ -128,7 +128,14 @@ export class SnippetList extends LitElement {
 
   private _contextMenuCommand(e: Event, command: string): void {
     if (command === "delete-snippet") {
-      console.log("delete-snippet", this.snippet);
+      myAPI.deleteSnippet(this.snippet._id).then(() => {
+        dispatch({
+          type: "update-snippets",
+          detail: {
+            message: "Snippet deleted",
+          },
+        });
+      });
     }
   }
 

@@ -217,6 +217,10 @@ app.once("browser-window-created", () => {
     db.deleteFragment(ids.fragmentId, ids.nextActiveFragmentId);
   });
 
+  ipcMain.handle("delete-snippet", (event, snippetId) => {
+    db.deleteSnippet(snippetId);
+  });
+
   ipcMain.handle("init-snippet", (event) => {
     db.initSnippet("");
     return db.reverseSortBy("Snippet", "_id")[0].toJSON();

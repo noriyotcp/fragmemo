@@ -224,27 +224,24 @@ class DB extends Realm {
     }
 
     const fragments = this.objects("Fragment").filtered(
-      "snippet = $0",
-      snippet
+      `snippet._id == ${snippetId}`
     );
     const activeFragments = this.objects("ActiveFragment").filtered(
-      "snippetId = $0",
-      snippetId
+      `snippetId == ${snippetId}`
     );
     const snippetUpdates = this.objects("SnippetUpdate").filtered(
-      "_id = $0",
-      snippetId
+      `_id == ${snippetId}`
     );
     const activeSnippetHistories = this.objects(
       "ActiveSnippetHistory"
-    ).filtered("snippetId = $0", snippetId);
+    ).filtered(`snippetId == ${snippetId}`);
 
     this.write(() => {
-      this.delete(snippet);
       this.delete(fragments);
       this.delete(activeFragments);
       this.delete(snippetUpdates);
       this.delete(activeSnippetHistories);
+      this.delete(snippet);
     });
   }
 

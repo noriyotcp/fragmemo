@@ -21,6 +21,7 @@ contextBridge.exposeInMainWorld("myAPI", {
   updateSnippet: (props) => ipcRenderer.invoke("update-snippet", props),
   updateFragment: (props) => ipcRenderer.invoke("update-fragment", props),
   deleteFragment: (ids) => ipcRenderer.invoke("delete-fragment", ids),
+  deleteSnippet: (snippetId) => ipcRenderer.invoke("delete-snippet", snippetId),
   updateActiveFragment: (props) =>
     ipcRenderer.invoke("update-active-fragment", props),
   loadSnippets: () => ipcRenderer.invoke("load-snippets"),
@@ -34,6 +35,8 @@ contextBridge.exposeInMainWorld("myAPI", {
     ipcRenderer.invoke("get-latest-active-snippet-history"),
   showContextMenuOnFragmentTab: () =>
     ipcRenderer.invoke("show-context-menu-on-fragment-tab"),
+  showContextMenuOnSnippetItem: () =>
+    ipcRenderer.invoke("show-context-menu-on-snippet-item"),
 });
 
 console.log("preload!");

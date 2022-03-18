@@ -43,6 +43,7 @@ export interface SandBox {
     status: boolean;
   }>;
   deleteFragment: (ids: IdsOnDeleteFragment) => Promise<void>;
+  deleteSnippet: (snippetId: number) => Promise<void>;
   updateActiveFragment: (props: {
     properties: { fragmentId: number; snippetId: number };
   }) => Promise<{
@@ -56,6 +57,7 @@ export interface SandBox {
   getActiveFragment: (snippetId: number) => Promise<ActiveFragment>;
   getLatestActiveSnippetHistory: () => Promise<ActiveSnippetHistory>;
   showContextMenuOnFragmentTab: () => void;
+  showContextMenuOnSnippetItem: () => void;
 }
 
 // Override properties with type intersection

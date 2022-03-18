@@ -128,14 +128,21 @@ export class SnippetList extends LitElement {
 
   private _contextMenuCommand(e: Event, command: string): void {
     if (command === "delete-snippet") {
-      myAPI.deleteSnippet(this.snippet._id).then(() => {
-        dispatch({
-          type: "update-snippets",
-          detail: {
-            message: "Snippet deleted",
-          },
-        });
-      });
+      if (this.snippetItems.length <= 1) {
+        alert("You can't delete the last snippet");
+      } else {
+        const message = `Are you sure you want to delete "${this.snippet.title}"?`;
+        if (confirm(message)) {
+          myAPI.deleteSnippet(this.snippet._id).then(() => {
+            dispatch({
+              type: "update-snippets",
+              detail: {
+                message: "Snippet deleted",
+              },
+            });
+          });
+        }
+      }
     }
   }
 

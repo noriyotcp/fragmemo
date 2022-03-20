@@ -37,23 +37,12 @@ export class FragmentTab extends LitElement {
       justify-content: center;
       align-items: center;
     }
-    .rotate-icon {
-      animation: rotation 2s linear infinite;
-    }
-    @keyframes rotation {
-      from {
-        transform: rotate(0deg);
-      }
-      to {
-        transform: rotate(359deg);
-      }
-    }
   `;
   private _fragmentStore: typeof Store;
 
   iconTemplate(): TemplateResult {
     return this._isEditing
-      ? html` <sl-icon name="arrow-repeat" class="rotate-icon"></sl-icon> `
+      ? html` <sl-icon name="record-fill"></sl-icon> `
       : html``;
   }
 

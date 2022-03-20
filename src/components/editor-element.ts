@@ -42,7 +42,7 @@ export class EditorElement extends LitElement {
   private _activeFragmentId?: number;
   @state() private _content = "";
   @state() private _language = "plaintext";
-  @state() private _languages!: Language[];
+  private _languages!: Language[];
 
   static styles = [
     css`
@@ -100,6 +100,7 @@ export class EditorElement extends LitElement {
             </option>`;
           })}
         </select>
+        <editing-state-icon></editing-state-icon>
       </footer>
     `;
   }

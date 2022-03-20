@@ -8,3 +8,4 @@ import "./components/search-item";
 import "./components/fragment-tab";
 import "./components/fragment-tab-list";
 import "./components/fragment-title";
+import "./components/editing-state-icon";

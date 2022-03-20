@@ -100,6 +100,7 @@ export class EditorElement extends LitElement {
             </option>`;
           })}
         </select>
+        <editing-state-icon></editing-state-icon>
       </footer>
     `;
   }

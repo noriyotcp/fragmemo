@@ -4,6 +4,7 @@ import { customElement, query, state } from "lit/decorators.js";
 import { map } from "lit/directives/map.js";
 import { createFragmentStore, Store } from "../stores";
 import { Language } from "models.d";
+import { saveContentAsync } from "../saveContent";
 
 const { myAPI } = window;
 
@@ -178,6 +179,13 @@ export class EditorElement extends LitElement {
             isEditing: true,
           }
         );
+
+        saveContentAsync(
+          this._activeFragmentId,
+          e.detail.text,
+          this.fragmentStore
+        );
+
         dispatch({
           type: "content-editing-state-changed",
           detail: {

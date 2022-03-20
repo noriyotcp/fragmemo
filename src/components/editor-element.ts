@@ -123,6 +123,7 @@ export class EditorElement extends LitElement {
     this.fragmentStore.setPartialRow("states", `${this._activeFragmentId}`, {
       langIdx: Number(_idx),
     });
+    this._setContent();
   }
 
   private _onFragmentActivated(e: CustomEvent): void {

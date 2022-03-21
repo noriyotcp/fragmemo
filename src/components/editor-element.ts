@@ -188,6 +188,7 @@ export class EditorElement extends LitElement {
           },
         });
 
+        // auto save
         saveContentAsync(
           this._activeFragmentId,
           e.detail.text,

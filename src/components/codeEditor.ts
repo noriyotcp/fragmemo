@@ -153,6 +153,8 @@ export class CodeEditor extends LitElement {
         this._saveCurrentViewState(
           this.viewStatesController.previousFragmentId
         );
+      } else {
+        this._saveCurrentViewState(this.viewStatesController.currentFragmentId);
       }
     }
 

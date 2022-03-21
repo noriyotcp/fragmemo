@@ -26,14 +26,14 @@ function _saveContentAsync(content: string, fragmentStore: typeof Store): void {
   // Compare the current and next IDs (next ID could be undefined)
   // Save the content of current fragment, if the ID is different
   if (currentFragmentId && currentFragmentId !== nextFragmentId) {
-    saveContent(currentFragmentId, fragmentStore, content);
+    saveContent(currentFragmentId, content, fragmentStore);
   }
 }
 
 function saveContent(
   fragmentId: number,
-  fragmentStore: typeof Store,
-  content: string
+  content: string,
+  fragmentStore: typeof Store
 ): void {
   myAPI
     .updateFragment({
@@ -65,4 +65,4 @@ function saveContent(
     });
 }
 
-export { saveContentAsync };
+export { saveContentAsync, saveContent };

@@ -4,7 +4,7 @@ import { customElement, query, state } from "lit/decorators.js";
 import { map } from "lit/directives/map.js";
 import { createFragmentStore, Store } from "../stores";
 import { Language } from "models.d";
-import { saveContentAsync } from "../saveContent";
+import { saveContentAsync, saveContent } from "../saveContent";
 
 const { myAPI } = window;
 
@@ -180,12 +180,6 @@ export class EditorElement extends LitElement {
           }
         );
 
-        saveContentAsync(
-          this._activeFragmentId,
-          e.detail.text,
-          this.fragmentStore
-        );
-
         dispatch({
           type: "content-editing-state-changed",
           detail: {
@@ -193,43 +187,20 @@ export class EditorElement extends LitElement {
             fragmentStore: this.fragmentStore,
           },
         });
+
+        saveContentAsync(
+          this._activeFragmentId,
+          e.detail.text,
+          this.fragmentStore
+        );
       }
     });
   }
 
   private _saveText(e: CustomEvent): void {
-    myAPI
-      .updateFragment({
-        _id: this._activeFragmentId,
-        properties: { content: e.detail.text as string },
-      })
-      .then(({ status }) => {
-        console.log("myAPI.updateFragment", status);
-        if (status) {
-          this.fragmentStore.setPartialRow(
-            "states",
-            `${this._activeFragmentId}`,
-            {
-              content: e.detail.text,
-              isEditing: false,
-            }
-          );
-          dispatch({
-            type: "content-editing-state-changed",
-            detail: {
-              _id: this._activeFragmentId,
-              fragmentStore: this.fragmentStore,
-            },
-          });
-          // change the order of snippets list
-          dispatch({
-            type: "update-snippets",
-            detail: {
-              message: "Snippets updated",
-            },
-          });
-        }
-      });
+    if (this._activeFragmentId === undefined) return;
+
+    saveContent(this._activeFragmentId, e.detail.text, this.fragmentStore);
   }
 
   private _setContent(): void {

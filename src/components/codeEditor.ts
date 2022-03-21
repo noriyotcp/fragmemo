@@ -125,10 +125,9 @@ export class CodeEditor extends LitElement {
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     this.editor = monaco.editor.create(this.container.value!, editorOptions);
     console.log(this._langaugesMap());
-    this.model.onDidChangeContent((_e) => {
-      this._changeText();
+    this.editor.onKeyUp((e) => {
+      this._changeText(e.browserEvent.isComposing);
     });
-
     console.log(this.editor.hasTextFocus());
     this.editor.onDidFocusEditorText(() => {
       console.log("focus");
@@ -189,10 +188,10 @@ export class CodeEditor extends LitElement {
     this.editor.restoreViewState(JSON.parse(viewState));
   }
 
-  private _changeText() {
+  private _changeText(isComposing: boolean) {
     this.dispatchEvent(
       new CustomEvent("change-text", {
-        detail: { text: this.getValue() },
+        detail: { text: this.getValue(), isComposing },
         bubbles: true,
         composed: true,
       })

@@ -189,11 +189,13 @@ export class EditorElement extends LitElement {
         });
 
         // auto save
-        saveContentAsync(
-          this._activeFragmentId,
-          e.detail.text,
-          this.fragmentStore
-        );
+        if (!e.detail.isComposing) {
+          saveContentAsync(
+            this._activeFragmentId,
+            e.detail.text,
+            this.fragmentStore
+          );
+        }
       }
     });
   }

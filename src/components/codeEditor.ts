@@ -132,8 +132,8 @@ export class CodeEditor extends LitElement {
     this.editor.onDidFocusEditorText(() => {
       console.log("focus");
     });
-    this.editor.onDidBlurEditorText(() => {
-      console.log("blur");
+    this.editor.onDidBlurEditorText((e) => {
+      this.dispatchEvent(new CustomEvent("blur-editor"));
     });
     // When Command or Control + S is pressed
     myAPI.saveFragment((_e: Event) => this._saveText());

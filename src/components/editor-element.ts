@@ -87,6 +87,7 @@ export class EditorElement extends LitElement {
           language="${this._language}"
           @change-text=${this._changeText}
           @save-text=${this._saveText}
+          @blur-editor=${this._onBlurEditor}
         ></code-editor>
       </section>
       <footer>
@@ -191,7 +192,7 @@ export class EditorElement extends LitElement {
         // auto save
         if (!e.detail.isComposing) {
           saveContentAsync(
-            this._activeFragmentId,
+            this._activeFragmentId as number,
             e.detail.text,
             this.fragmentStore
           );
@@ -204,6 +205,15 @@ export class EditorElement extends LitElement {
     if (this._activeFragmentId === undefined) return;
 
     saveContent(this._activeFragmentId, e.detail.text, this.fragmentStore);
+  }
+
+  private _onBlurEditor(e: CustomEvent): void {
+    dispatch({
+      type: "update-snippets",
+      detail: {
+        message: "Snippets updated",
+      },
+    });
   }
 
   private _setContent(): void {

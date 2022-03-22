@@ -8,26 +8,27 @@ const _sleep = (ms: number) =>
   new Promise((resolve) => setTimeout(resolve, ms));
 
 async function saveContentAsync(
-  fragmentId: number | undefined,
+  fragmentId: number,
   content: string,
   fragmentStore: typeof Store
 ): Promise<void> {
-  if (fragmentId === undefined) return;
-
   queue.push(fragmentId);
-  // Sleep by specified milliseconds
-  await _sleep(3000);
-  _saveContentAsync(content, fragmentStore);
-}
 
-function _saveContentAsync(content: string, fragmentStore: typeof Store): void {
-  const currentFragmentId = queue.shift();
+  const currentFragmentId = queue.shift() as number;
   const nextFragmentId = queue[0];
+
   // Compare the current and next IDs (next ID could be undefined)
   // Save the content of current fragment, if the ID is different
-  if (currentFragmentId && currentFragmentId !== nextFragmentId) {
-    saveContent(currentFragmentId, content, fragmentStore);
-  }
+  if (currentFragmentId === nextFragmentId) return;
+
+  // Sleep by specified milliseconds
+  await _sleep(2000);
+
+  console.info(
+    `_saveContentAsync: currentFragmentId: ${currentFragmentId} nextFragmentId: ${nextFragmentId} content: ${content}`
+  );
+
+  saveContent(currentFragmentId, content, fragmentStore);
 }
 
 function saveContent(
@@ -40,28 +41,18 @@ function saveContent(
       _id: fragmentId,
       properties: { content: content },
     })
-    .then(({ status }) => {
-      console.log("myAPI.updateFragment", status);
-      if (status) {
-        fragmentStore.setPartialRow("states", `${fragmentId}`, {
-          content: content,
-          isEditing: false,
-        });
-        dispatch({
-          type: "content-editing-state-changed",
-          detail: {
-            _id: fragmentId,
-            fragmentStore: fragmentStore,
-          },
-        });
-        // change the order of snippets list
-        dispatch({
-          type: "update-snippets",
-          detail: {
-            message: "Snippets updated",
-          },
-        });
-      }
+    .then(() => {
+      fragmentStore.setPartialRow("states", `${fragmentId}`, {
+        content: content,
+        isEditing: false,
+      });
+      dispatch({
+        type: "content-editing-state-changed",
+        detail: {
+          _id: fragmentId,
+          fragmentStore: fragmentStore,
+        },
+      });
     });
 }
 

@@ -15,6 +15,7 @@ export class FragmentTitle extends LitElement {
   static styles = [
     css`
       :host {
+        width: 100%;
       }
 
       input {
@@ -22,6 +23,7 @@ export class FragmentTitle extends LitElement {
         color: white;
         border: none;
         text-align: center;
+        width: 100%;
       }
       input[readonly] {
         outline: none;

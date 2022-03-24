@@ -30,7 +30,10 @@ export class SetupStorageController implements ReactiveController {
       .setupStorage()
       .then(() => {
         this._loadSnippets();
-        displayToast("Snippets loaded");
+        displayToast("Snippets loaded", {
+          variant: "primary",
+          icon: "check2-circle",
+        });
       })
       .catch((err) => {
         console.error(err);

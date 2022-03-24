@@ -77,7 +77,10 @@ export class TestHeader extends LitElement {
           dispatch({
             type: "update-snippets",
           });
-          displayToast("Snippet updated");
+          displayToast("Snippet updated", {
+            variant: "primary",
+            icon: "check2-circle",
+          });
           this.requestUpdate();
         })
         .catch((err) => {

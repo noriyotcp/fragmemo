@@ -1,6 +1,7 @@
 import { LitElement, html, css, TemplateResult } from "lit";
 import { customElement, query, state } from "lit/decorators.js";
 import { dispatch } from "../events/dispatcher";
+import { displayToast } from "../displayToast";
 import "@ui5/webcomponents/dist/Input.js";
 import { Override } from "index.d";
 import { Snippet } from "models.d";
@@ -76,12 +77,12 @@ export class TestHeader extends LitElement {
           dispatch({
             type: "update-snippets",
           });
-          this._displayToast("Snippet updated");
+          displayToast("Snippet updated");
           this.requestUpdate();
         })
         .catch((err) => {
           console.error(err);
-          this._displayToast("Snippet update failed");
+          displayToast("Snippet update failed");
         });
     });
   }
@@ -94,13 +95,4 @@ export class TestHeader extends LitElement {
     );
     this.requestUpdate();
   };
-
-  private _displayToast(msg?: string): void {
-    dispatch({
-      type: "display-toast-stack",
-      detail: {
-        message: msg,
-      },
-    });
-  }
 }

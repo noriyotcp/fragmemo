@@ -1,4 +1,4 @@
-import { dispatch } from "../events/dispatcher";
+import { displayToast } from "../displayToast";
 import { ReactiveController, ReactiveControllerHost } from "lit";
 import { Snippet, ActiveSnippetHistory } from "../models";
 const { myAPI } = window;
@@ -30,11 +30,11 @@ export class SetupStorageController implements ReactiveController {
       .setupStorage()
       .then(() => {
         this._loadSnippets();
-        this._displayToast("Snippets loaded");
+        displayToast("Snippets loaded");
       })
       .catch((err) => {
         console.error(err);
-        this._displayToast("Setup failed");
+        displayToast("Setup failed");
       });
   }
 
@@ -46,7 +46,7 @@ export class SetupStorageController implements ReactiveController {
       })
       .catch((err) => {
         console.error(err);
-        this._displayToast("Snippets load failed");
+        displayToast("Snippets load failed");
       })
       .finally(() => {
         myAPI.getLatestActiveSnippetHistory().then((activeSnippetHistory) => {
@@ -64,15 +64,6 @@ export class SetupStorageController implements ReactiveController {
     myAPI.initSnippet().then((snippet) => {
       myAPI.newActiveSnippetHistory(snippet._id);
       this._loadSnippets();
-    });
-  }
-
-  private _displayToast(message: string) {
-    dispatch({
-      type: "display-toast-stack",
-      detail: {
-        message,
-      },
     });
   }
 }

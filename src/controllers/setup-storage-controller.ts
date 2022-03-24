@@ -52,7 +52,10 @@ export class SetupStorageController implements ReactiveController {
       })
       .catch((err) => {
         console.error(err);
-        displayToast("Snippets load failed");
+        displayToast("Snippets load failed", {
+          variant: "danger",
+          icon: "exclamation-octagon",
+        });
       })
       .finally(() => {
         myAPI.getLatestActiveSnippetHistory().then((activeSnippetHistory) => {

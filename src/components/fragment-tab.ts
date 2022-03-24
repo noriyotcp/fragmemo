@@ -56,7 +56,9 @@ export class FragmentTab extends LitElement {
         @click="${this._onClickListener}"
       >
         <div class="tab-item-inner">
-          ${this.fragment.title || `fragment ${this.fragment._id}`}
+          <fragment-title
+            fragment=${JSON.stringify(this.fragment)}
+          ></fragment-title>
         </div>
         <div class="tab-icon">${this.iconTemplate()}</div>
       </div>

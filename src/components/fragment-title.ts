@@ -1,16 +1,18 @@
 import { LitElement, html, TemplateResult, css } from "lit";
-import { customElement, property, query } from "lit/decorators.js";
+import { customElement, property, query, state } from "lit/decorators.js";
+import { live } from "lit/directives/live.js";
+import { Fragment } from "models.d";
 import { dispatch } from "../events/dispatcher";
 
 @customElement("fragment-title")
 export class FragmentTitle extends LitElement {
   @query("input") private inputElement!: HTMLInputElement;
   @property({ type: String })
-  initialValue!: string;
-  @property({ type: String })
   title = "";
   @property({ type: Number })
   fragmentId!: number;
+  @property({ type: Object }) fragment!: Fragment;
+  @state() editable = false;
 
   static styles = [
     css`
@@ -36,7 +38,7 @@ export class FragmentTitle extends LitElement {
     return html`
       <input
         type="text"
-        value="${this.title}"
+        .value=${live(this.fragment.title) || "untitled"}
         placeholder="untitled"
         readonly
         @dblclick="${this._enableEdit}"
@@ -48,7 +50,6 @@ export class FragmentTitle extends LitElement {
 
   private _enableEdit(e: MouseEvent) {
     const target = <HTMLInputElement>e.currentTarget;
-    this.initialValue = this.inputElement.value;
     target.removeAttribute("readonly");
     target.select();
   }
@@ -61,7 +62,7 @@ export class FragmentTitle extends LitElement {
         this._titleChanged();
       }
       if (e.key === "Escape") {
-        target.value = this.initialValue;
+        target.value = this.fragment.title;
         target.setAttribute("readonly", "true");
         this._titleChanged();
       }
@@ -77,7 +78,7 @@ export class FragmentTitle extends LitElement {
     dispatch({
       type: "fragment-title-changed",
       detail: {
-        fragmentId: this.fragmentId,
+        fragmentId: this.fragment._id,
         title: this.inputElement.value,
       },
     });

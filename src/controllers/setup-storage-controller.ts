@@ -29,15 +29,18 @@ export class SetupStorageController implements ReactiveController {
     await myAPI
       .setupStorage()
       .then(() => {
-        this._loadSnippets();
-        displayToast("Snippets loaded", {
+        displayToast("Setup storage", {
           variant: "primary",
           icon: "check2-circle",
         });
+        this._loadSnippets();
       })
       .catch((err) => {
         console.error(err);
-        displayToast("Setup failed");
+        displayToast("Setup storage failed", {
+          variant: "danger",
+          icon: "exclamation-octagon",
+        });
       });
   }
 

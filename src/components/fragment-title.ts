@@ -9,8 +9,6 @@ export class FragmentTitle extends LitElement {
   @query("input") private inputElement!: HTMLInputElement;
   @property({ type: String })
   title = "";
-  @property({ type: Number })
-  fragmentId!: number;
   @property({ type: Object }) fragment!: Fragment;
   @state() editable = false;
 
@@ -31,6 +29,9 @@ export class FragmentTitle extends LitElement {
       input:not([readonly]):focus-visible {
         outline: var(--sl-color-primary-600) solid 1px;
       }
+      input::placeholder {
+        color: var(--placeholder-color);
+      }
     `,
   ];
 
@@ -38,7 +39,7 @@ export class FragmentTitle extends LitElement {
     return html`
       <input
         type="text"
-        .value=${live(this.fragment.title) || "untitled"}
+        .value=${live(this.fragment.title)}
         placeholder="untitled"
         readonly
         @dblclick="${this._enableEdit}"

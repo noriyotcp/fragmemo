@@ -37,6 +37,7 @@ snippet-list::-webkit-scrollbar {
   --gray: #717172;
   --dark-gray: #323233;
   --text-color: ghostwhite;
+  --placeholder-color: rgb(190, 190, 190);
   --header-height: 51px;
   --header-height-offset: 26px;
 }

@@ -75,9 +75,6 @@ export class TestHeader extends LitElement {
           // dispatch event to update the list
           dispatch({
             type: "update-snippets",
-            detail: {
-              message: "Snippets updated",
-            },
           });
           this._displayToast("Snippet updated");
           this.requestUpdate();

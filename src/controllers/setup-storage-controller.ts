@@ -58,7 +58,6 @@ export class SetupStorageController implements ReactiveController {
 
   private _updateSnippetsListener = (e: CustomEvent) => {
     this._loadSnippets();
-    this._displayToast(e.detail.message);
   };
 
   private _initSnippet() {

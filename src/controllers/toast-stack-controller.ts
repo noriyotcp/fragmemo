@@ -58,8 +58,8 @@ export class ToastStackController implements ReactiveController {
   private _displayToastListener = (e: CustomEvent): void => {
     this.notify({
       message: `${e.detail.message} #${++this.count}`,
-      variant: "primary",
-      icon: "info-circle",
+      variant: e.detail.variant,
+      icon: e.detail.icon,
       duration: 5000,
     });
   };

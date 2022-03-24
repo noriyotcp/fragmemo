@@ -1,6 +1,6 @@
 type dispatchType = {
   type: string;
-  detail: object;
+  detail?: object;
 };
 
 export const dispatch = ({ type, detail }: dispatchType): void => {

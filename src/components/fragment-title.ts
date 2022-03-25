@@ -4,6 +4,8 @@ import { live } from "lit/directives/live.js";
 import { Fragment } from "models.d";
 import { dispatch } from "../events/dispatcher";
 
+const { myAPI } = window;
+
 @customElement("fragment-title")
 export class FragmentTitle extends LitElement {
   @query("input") private inputElement!: HTMLInputElement;
@@ -62,12 +64,12 @@ export class FragmentTitle extends LitElement {
     if (!e.isComposing) {
       if (e.key === "Enter") {
         target.setAttribute("readonly", "true");
+        this._updateFragmentTitle();
         this._titleChanged();
       }
       if (e.key === "Escape") {
         target.value = this.fragment.title;
         target.setAttribute("readonly", "true");
-        this._titleChanged();
       }
     }
   }
@@ -75,6 +77,21 @@ export class FragmentTitle extends LitElement {
   private _disableEditOnBlur(e: FocusEvent) {
     const target = <HTMLInputElement>e.currentTarget;
     target.setAttribute("readonly", "true");
+  }
+
+  private _updateFragmentTitle() {
+    myAPI
+      .updateFragment({
+        _id: this.fragment._id,
+        properties: {
+          title: this.inputElement.value,
+        },
+      })
+      .then(() => {
+        dispatch({
+          type: "update-snippets",
+        });
+      });
   }
 
   private _titleChanged() {

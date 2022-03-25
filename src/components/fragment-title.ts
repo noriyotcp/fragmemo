@@ -1,5 +1,5 @@
 import { LitElement, html, TemplateResult, css } from "lit";
-import { customElement, property, query, state } from "lit/decorators.js";
+import { customElement, property, query } from "lit/decorators.js";
 import { live } from "lit/directives/live.js";
 import { Fragment } from "models.d";
 import { dispatch } from "../events/dispatcher";
@@ -9,10 +9,7 @@ const { myAPI } = window;
 @customElement("fragment-title")
 export class FragmentTitle extends LitElement {
   @query("input") private inputElement!: HTMLInputElement;
-  @property({ type: String })
-  title = "";
   @property({ type: Object }) fragment!: Fragment;
-  @state() editable = false;
 
   static styles = [
     css`

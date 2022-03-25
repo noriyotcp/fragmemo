@@ -1,33 +1,36 @@
 import { LitElement, html, TemplateResult, css } from "lit";
 import { customElement, property, query } from "lit/decorators.js";
+import { live } from "lit/directives/live.js";
 import { dispatch } from "../events/dispatcher";
+import { Fragment } from "models.d";
+
+const { myAPI } = window;
 
 @customElement("fragment-title")
 export class FragmentTitle extends LitElement {
   @query("input") private inputElement!: HTMLInputElement;
-  @property({ type: String })
-  initialValue!: string;
-  @property({ type: String })
-  title = "";
-  @property({ type: Number })
-  fragmentId!: number;
+  @property({ type: Object }) fragment!: Fragment;
 
   static styles = [
     css`
       :host {
+        width: 100%;
       }
-
       input {
         background-color: transparent;
         color: white;
         border: none;
         text-align: center;
+        width: 100%;
       }
       input[readonly] {
         outline: none;
       }
       input:not([readonly]):focus-visible {
         outline: var(--sl-color-primary-600) solid 1px;
+      }
+      input::placeholder {
+        color: var(--placeholder-color);
       }
     `,
   ];
@@ -36,7 +39,7 @@ export class FragmentTitle extends LitElement {
     return html`
       <input
         type="text"
-        value="${this.title}"
+        .value=${live(this.fragment.title)}
         placeholder="untitled"
         readonly
         @dblclick="${this._enableEdit}"
@@ -48,7 +51,6 @@ export class FragmentTitle extends LitElement {
 
   private _enableEdit(e: MouseEvent) {
     const target = <HTMLInputElement>e.currentTarget;
-    this.initialValue = this.inputElement.value;
     target.removeAttribute("readonly");
     target.select();
   }
@@ -58,12 +60,11 @@ export class FragmentTitle extends LitElement {
     if (!e.isComposing) {
       if (e.key === "Enter") {
         target.setAttribute("readonly", "true");
-        this._titleChanged();
+        this._updateFragmentTitle();
       }
       if (e.key === "Escape") {
-        target.value = this.initialValue;
+        target.value = this.fragment.title;
         target.setAttribute("readonly", "true");
-        this._titleChanged();
       }
     }
   }
@@ -71,15 +72,21 @@ export class FragmentTitle extends LitElement {
   private _disableEditOnBlur(e: FocusEvent) {
     const target = <HTMLInputElement>e.currentTarget;
     target.setAttribute("readonly", "true");
+    this._updateFragmentTitle();
   }
 
-  private _titleChanged() {
-    dispatch({
-      type: "fragment-title-changed",
-      detail: {
-        fragmentId: this.fragmentId,
-        title: this.inputElement.value,
-      },
-    });
+  private _updateFragmentTitle() {
+    myAPI
+      .updateFragment({
+        _id: this.fragment._id,
+        properties: {
+          title: this.inputElement.value,
+        },
+      })
+      .then(() => {
+        dispatch({
+          type: "update-snippets",
+        });
+      });
   }
 }

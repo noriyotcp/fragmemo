@@ -10,6 +10,7 @@ export interface ISnippetProps {
 export interface IFragmentProps {
   _id?: number;
   properties: {
+    title?: string;
     content?: string;
     language?: Partial<Language>;
   };

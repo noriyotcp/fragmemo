@@ -1,8 +1,8 @@
 import { LitElement, html, TemplateResult, css } from "lit";
 import { customElement, property, query } from "lit/decorators.js";
 import { live } from "lit/directives/live.js";
-import { Fragment } from "models.d";
 import { dispatch } from "../events/dispatcher";
+import { Fragment } from "models.d";
 
 const { myAPI } = window;
 
@@ -16,7 +16,6 @@ export class FragmentTitle extends LitElement {
       :host {
         width: 100%;
       }
-
       input {
         background-color: transparent;
         color: white;

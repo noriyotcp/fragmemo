@@ -65,7 +65,6 @@ export class FragmentTitle extends LitElement {
       if (e.key === "Enter") {
         target.setAttribute("readonly", "true");
         this._updateFragmentTitle();
-        this._titleChanged();
       }
       if (e.key === "Escape") {
         target.value = this.fragment.title;
@@ -93,15 +92,5 @@ export class FragmentTitle extends LitElement {
           type: "update-snippets",
         });
       });
-  }
-
-  private _titleChanged() {
-    dispatch({
-      type: "fragment-title-changed",
-      detail: {
-        fragmentId: this.fragment._id,
-        title: this.inputElement.value,
-      },
-    });
   }
 }

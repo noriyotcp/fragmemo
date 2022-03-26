@@ -128,9 +128,6 @@ export class FragmentTabList extends LitElement {
         .then(() => {
           dispatch({
             type: "update-snippets",
-            detail: {
-              message: "Fragment deleted",
-            },
           });
         });
     }

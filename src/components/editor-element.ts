@@ -210,9 +210,6 @@ export class EditorElement extends LitElement {
   private _onBlurEditor(e: CustomEvent): void {
     dispatch({
       type: "update-snippets",
-      detail: {
-        message: "Snippets updated",
-      },
     });
   }
 

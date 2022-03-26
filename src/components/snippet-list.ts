@@ -136,9 +136,6 @@ export class SnippetList extends LitElement {
           myAPI.deleteSnippet(this.snippet._id).then(() => {
             dispatch({
               type: "update-snippets",
-              detail: {
-                message: "Snippet deleted",
-              },
             });
           });
         }

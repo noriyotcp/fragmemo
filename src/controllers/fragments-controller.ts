@@ -37,9 +37,6 @@ export class FragmentsController implements ReactiveController {
     myAPI.initFragment(this.snippet._id).then(() => {
       dispatch({
         type: "update-snippets",
-        detail: {
-          message: "Fragment created",
-        },
       });
     });
   }

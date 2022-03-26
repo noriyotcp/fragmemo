@@ -18,8 +18,6 @@ type PropsType = {
 export class ToastStackController implements ReactiveController {
   private host: ReactiveControllerHost;
 
-  count = 0;
-
   constructor(host: ReactiveControllerHost) {
     this.host = host;
     host.addController(this);
@@ -57,7 +55,7 @@ export class ToastStackController implements ReactiveController {
 
   private _displayToastListener = (e: CustomEvent): void => {
     this.notify({
-      message: `${e.detail.message} #${++this.count}`,
+      message: `${e.detail.message}`,
       variant: e.detail.variant,
       icon: e.detail.icon,
       duration: 5000,

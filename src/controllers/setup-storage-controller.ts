@@ -1,19 +1,19 @@
 import { displayToast } from "../displayToast";
 import { ReactiveController, ReactiveControllerHost } from "lit";
 import { Snippet, ActiveSnippetHistory } from "../models";
-import { IsSearchingController } from "./is-searching-controller";
+import { SearchQueryController } from "./search-query-controller";
 const { myAPI } = window;
 
 export class SetupStorageController implements ReactiveController {
   private host: ReactiveControllerHost;
-  isSearching: IsSearchingController;
+  searchQuery: SearchQueryController;
 
   snippets: Snippet[] = [];
   activeSnippetHistory!: ActiveSnippetHistory;
 
   constructor(host: ReactiveControllerHost) {
     this.host = host;
-    this.isSearching = new IsSearchingController(host);
+    this.searchQuery = new SearchQueryController(host);
     host.addController(this);
   }
 
@@ -30,10 +30,6 @@ export class SetupStorageController implements ReactiveController {
     );
     // When Command or Control + N is pressed
     myAPI.newSnippet((_e: Event) => this._initSnippet());
-  }
-
-  get searching() {
-    return this.isSearching.searching;
   }
 
   async setupStorage(): Promise<void> {
@@ -55,11 +51,14 @@ export class SetupStorageController implements ReactiveController {
       });
   }
 
-  private _loadSnippets() {
+  private _loadSnippets(query = "", preSnippets: Snippet[] = []) {
     myAPI
       .loadSnippets()
       .then((snippets) => {
-        this.snippets = snippets;
+        const filtered = snippets.filter((snippet) =>
+          snippet.title.includes(query)
+        );
+        this.snippets = preSnippets.concat(filtered);
       })
       .catch((err) => {
         console.error(err);
@@ -77,15 +76,13 @@ export class SetupStorageController implements ReactiveController {
   }
 
   private _updateSnippetsListener = (e: CustomEvent) => {
-    if (this.isSearching.searching) return;
-
-    this._loadSnippets();
+    this._loadSnippets(this.searchQuery.query);
   };
 
   private _initSnippet() {
     myAPI.initSnippet().then((snippet) => {
       myAPI.newActiveSnippetHistory(snippet._id);
-      this._loadSnippets();
+      this._loadSnippets(this.searchQuery.query, [snippet]);
     });
   }
 

@@ -1,7 +1,6 @@
 import { ReactiveController, ReactiveControllerHost } from "lit";
 
-export class IsSearchingController implements ReactiveController {
-  isSearching = false;
+export class SearchQueryController implements ReactiveController {
   query = "";
 
   constructor(host: ReactiveControllerHost) {
@@ -19,17 +18,11 @@ export class IsSearchingController implements ReactiveController {
     );
   }
 
-  get searching() {
-    return this.isSearching;
-  }
-
   private _searchSnippetsListener = (e: CustomEvent) => {
-    this.isSearching = true;
     this.query = e.detail.query;
   };
 
   private _clearSearchSnippetsListener = (e: CustomEvent) => {
-    this.isSearching = false;
     this.query = "";
   };
 }

@@ -96,7 +96,7 @@ export class SnippetList extends LitElement {
   }
 
   updated(): void {
-    if (!this.snippetItems[0] || this.setupStorage.searching) return;
+    if (!this.snippetItems[0]) return;
     console.info(
       "snippet-list:updated",
       this.setupStorage.activeSnippetHistory
@@ -112,6 +112,7 @@ export class SnippetList extends LitElement {
           this.setupStorage.activeSnippetHistory.snippetId
       )!;
     }
+    if (!topItem) return;
 
     this._updateSelectedItem(topItem);
   }

@@ -1,3 +1,4 @@
+import { dispatch } from "../events/dispatcher";
 import { LitElement, html, css, TemplateResult } from "lit";
 import { customElement } from "lit/decorators.js";
 
@@ -30,19 +31,33 @@ export class SearchItem extends LitElement {
           type="search"
           inputmode="search"
           clearable
-          @sl-input="${this._search}"
+          @input="${this._search}"
+          @compositionend="${this._search}"
           @sl-clear="${this._clear}"
         ></sl-input>
       </header>
     `;
   }
 
-  private _search = (e: Event): void => {
+  private _search = (e: InputEvent): void => {
     const target = <HTMLInputElement>e.currentTarget;
-    console.log("search:", target.value);
+    if (e.isComposing) return;
+
+    dispatch({
+      type: "search-snippets",
+      detail: {
+        query: target.value,
+      },
+    });
   };
 
   private _clear = (e: Event): void => {
-    console.log("Clear:", e);
+    dispatch({
+      type: "clear-search-snippets",
+    });
+
+    dispatch({
+      type: "update-snippets",
+    });
   };
 }

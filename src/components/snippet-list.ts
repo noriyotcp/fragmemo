@@ -77,8 +77,7 @@ export class SnippetList extends LitElement {
       this.snippet = JSON.parse(
         e.detail.selectedItems[0].getAttribute("snippet")
       );
-
-      const previouslySelectedSnippet = e.detail.previouslySelectedItems
+      const previouslySelectedSnippet = e.detail.previouslySelectedItems?.[0]
         ? e.detail.previouslySelectedItems[0].getAttribute("snippet")
         : null;
 
@@ -97,7 +96,7 @@ export class SnippetList extends LitElement {
   }
 
   updated(): void {
-    if (!this.snippetItems[0]) return;
+    if (!this.snippetItems[0] || this.setupStorage.searching) return;
     console.info(
       "snippet-list:updated",
       this.setupStorage.activeSnippetHistory

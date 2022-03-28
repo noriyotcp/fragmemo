@@ -43,7 +43,7 @@ export class FragmentTitle extends LitElement {
         placeholder="untitled"
         readonly
         @dblclick="${this._enableEdit}"
-        @keydown="${this._disableEditOnEnter}"
+        @keydown="${this._disableEdit}"
         @blur="${this._disableEditOnBlur}"
       />
     `;
@@ -55,7 +55,7 @@ export class FragmentTitle extends LitElement {
     target.select();
   }
 
-  private _disableEditOnEnter(e: KeyboardEvent) {
+  private _disableEdit(e: KeyboardEvent) {
     const target = <HTMLInputElement>e.currentTarget;
     if (!e.isComposing) {
       if (e.key === "Enter") {

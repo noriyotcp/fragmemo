@@ -129,7 +129,7 @@ export class SnippetList extends LitElement {
   private _contextMenuCommand(e: Event, command: string): void {
     if (command === "delete-snippet") {
       if (this.snippetItems.length <= 1) {
-        alert("You can't delete the last snippet");
+        alert("You can't delete the last snippet in the list");
       } else {
         const message = `Are you sure you want to delete "${this.snippet.title}"?`;
         if (confirm(message)) {

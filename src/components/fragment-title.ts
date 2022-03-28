@@ -71,8 +71,8 @@ export class FragmentTitle extends LitElement {
 
   private _disableEditOnBlur(e: FocusEvent) {
     const target = <HTMLInputElement>e.currentTarget;
+    target.value = this.fragment.title;
     target.setAttribute("readonly", "true");
-    this._updateFragmentTitle();
   }
 
   private _updateFragmentTitle() {

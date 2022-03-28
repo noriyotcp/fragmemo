@@ -26,7 +26,7 @@ export class SearchItem extends LitElement {
       <header>
         <sl-input
           id="search"
-          placeholder="Search..."
+          placeholder="Input or press enter..."
           size="large"
           type="search"
           inputmode="search"

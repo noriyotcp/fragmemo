@@ -69,7 +69,7 @@ export class SearchItem extends LitElement {
 
   private _clear = (e: Event): void => {
     dispatch({
-      type: "clear-search-snippets",
+      type: "clear-internal-search-query",
     });
 
     dispatch({

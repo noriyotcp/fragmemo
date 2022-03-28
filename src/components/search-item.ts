@@ -32,6 +32,7 @@ export class SearchItem extends LitElement {
           inputmode="search"
           clearable
           @input="${this._search}"
+          @keydown="${this._searchByEnter}"
           @compositionend="${this._search}"
           @sl-clear="${this._clear}"
         ></sl-input>
@@ -42,6 +43,21 @@ export class SearchItem extends LitElement {
   private _search = (e: InputEvent): void => {
     const target = <HTMLInputElement>e.currentTarget;
     if (e.isComposing) return;
+
+    dispatch({
+      type: "search-snippets",
+      detail: {
+        query: target.value,
+      },
+    });
+  };
+
+  private _searchByEnter = (e: KeyboardEvent): void => {
+    if (e.key !== "Enter" || e.isComposing) return;
+
+    const target = <HTMLInputElement>e.currentTarget;
+
+    if (!target.value) return;
 
     dispatch({
       type: "search-snippets",

@@ -10,7 +10,7 @@ export class SearchQueryController implements ReactiveController {
   hostConnected(): void {
     window.addEventListener(
       "search-snippets",
-      this._searchSnippetsListener as EventListener
+      this._searchSnippets as EventListener
     );
     window.addEventListener(
       "clear-internal-search-query",
@@ -18,7 +18,7 @@ export class SearchQueryController implements ReactiveController {
     );
   }
 
-  private _searchSnippetsListener = (e: CustomEvent) => {
+  private _searchSnippets = (e: CustomEvent) => {
     this.query = e.detail.query;
   };
 

@@ -127,6 +127,10 @@ export class FragmentTabList extends LitElement {
         .deleteFragment(this._idsOnDeleteFragment(this.tabOnContext))
         .then(() => {
           dispatch({
+            type: "clear-internal-search-query",
+          });
+
+          dispatch({
             type: "update-snippets",
           });
         });

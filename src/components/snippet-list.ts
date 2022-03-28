@@ -77,8 +77,7 @@ export class SnippetList extends LitElement {
       this.snippet = JSON.parse(
         e.detail.selectedItems[0].getAttribute("snippet")
       );
-
-      const previouslySelectedSnippet = e.detail.previouslySelectedItems
+      const previouslySelectedSnippet = e.detail.previouslySelectedItems?.[0]
         ? e.detail.previouslySelectedItems[0].getAttribute("snippet")
         : null;
 
@@ -113,6 +112,7 @@ export class SnippetList extends LitElement {
           this.setupStorage.activeSnippetHistory.snippetId
       )!;
     }
+    if (!topItem) return;
 
     this._updateSelectedItem(topItem);
   }
@@ -129,11 +129,15 @@ export class SnippetList extends LitElement {
   private _contextMenuCommand(e: Event, command: string): void {
     if (command === "delete-snippet") {
       if (this.snippetItems.length <= 1) {
-        alert("You can't delete the last snippet");
+        alert("You can't delete the last snippet in the list");
       } else {
         const message = `Are you sure you want to delete "${this.snippet.title}"?`;
         if (confirm(message)) {
           myAPI.deleteSnippet(this.snippet._id).then(() => {
+            dispatch({
+              type: "clear-internal-search-query",
+            });
+
             dispatch({
               type: "update-snippets",
             });

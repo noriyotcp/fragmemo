@@ -36,6 +36,10 @@ export class FragmentsController implements ReactiveController {
 
     myAPI.initFragment(this.snippet._id).then(() => {
       dispatch({
+        type: "clear-internal-search-query",
+      });
+
+      dispatch({
         type: "update-snippets",
       });
     });

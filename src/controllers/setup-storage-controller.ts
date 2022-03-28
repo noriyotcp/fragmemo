@@ -1,16 +1,19 @@
 import { displayToast } from "../displayToast";
 import { ReactiveController, ReactiveControllerHost } from "lit";
 import { Snippet, ActiveSnippetHistory } from "../models";
+import { SearchQueryController } from "./search-query-controller";
 const { myAPI } = window;
 
 export class SetupStorageController implements ReactiveController {
   private host: ReactiveControllerHost;
+  searchQuery: SearchQueryController;
 
   snippets: Snippet[] = [];
   activeSnippetHistory!: ActiveSnippetHistory;
 
   constructor(host: ReactiveControllerHost) {
     this.host = host;
+    this.searchQuery = new SearchQueryController(host);
     host.addController(this);
   }
 
@@ -20,6 +23,10 @@ export class SetupStorageController implements ReactiveController {
     window.addEventListener(
       "update-snippets",
       this._updateSnippetsListener as EventListener
+    );
+    window.addEventListener(
+      "search-snippets",
+      this._searchSnippetsListener as EventListener
     );
     // When Command or Control + N is pressed
     myAPI.newSnippet((_e: Event) => this._initSnippet());
@@ -44,11 +51,14 @@ export class SetupStorageController implements ReactiveController {
       });
   }
 
-  private _loadSnippets() {
+  private _loadSnippets(query = "", preSnippets: Snippet[] = []) {
     myAPI
       .loadSnippets()
       .then((snippets) => {
-        this.snippets = snippets;
+        const filtered = snippets.filter((snippet) =>
+          snippet.title.includes(query)
+        );
+        this.snippets = preSnippets.concat(filtered);
       })
       .catch((err) => {
         console.error(err);
@@ -66,7 +76,7 @@ export class SetupStorageController implements ReactiveController {
   }
 
   private _updateSnippetsListener = (e: CustomEvent) => {
-    this._loadSnippets();
+    this._loadSnippets(this.searchQuery.query);
   };
 
   private _initSnippet() {
@@ -75,4 +85,22 @@ export class SetupStorageController implements ReactiveController {
       this._loadSnippets();
     });
   }
+
+  private _searchSnippetsListener = (e: CustomEvent) => {
+    const query = e.detail.query;
+
+    if (!e.detail.query) {
+      myAPI.loadSnippets().then((snippets) => {
+        this.snippets = snippets;
+        this.host.requestUpdate();
+      });
+    } else {
+      myAPI.loadSnippets().then((snippets) => {
+        this.snippets = snippets.filter((snippet) =>
+          snippet.title.includes(query)
+        );
+        this.host.requestUpdate();
+      });
+    }
+  };
 }

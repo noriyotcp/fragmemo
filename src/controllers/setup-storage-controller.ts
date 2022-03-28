@@ -82,7 +82,7 @@ export class SetupStorageController implements ReactiveController {
   private _initSnippet() {
     myAPI.initSnippet().then((snippet) => {
       myAPI.newActiveSnippetHistory(snippet._id);
-      this._loadSnippets(this.searchQuery.query, [snippet]);
+      this._loadSnippets();
     });
   }
 

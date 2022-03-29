@@ -112,6 +112,10 @@ export class SnippetList extends LitElement {
           this.setupStorage.activeSnippetHistory.snippetId
       )!;
     }
+    // override the selected item with the one on the top if there's a search query
+    if (this.setupStorage.searchQuery.query) {
+      topItem = this.snippetItems[0];
+    }
     if (!topItem) return;
 
     this._updateSelectedItem(topItem);

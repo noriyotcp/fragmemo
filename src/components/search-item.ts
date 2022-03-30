@@ -55,17 +55,6 @@ export class SearchItem extends LitElement {
     super.disconnectedCallback();
   }
 
-  private _clearSearch = (_e: InputEvent): void => {
-    this.searchInput.value = "";
-    dispatch({
-      type: "clear-internal-search-query",
-    });
-
-    dispatch({
-      type: "update-snippets",
-    });
-  };
-
   private _search = (e: InputEvent): void => {
     const target = <HTMLInputElement>e.currentTarget;
     if (e.isComposing) return;
@@ -101,5 +90,10 @@ export class SearchItem extends LitElement {
     dispatch({
       type: "update-snippets",
     });
+  };
+
+  private _clearSearch = (_e: InputEvent): void => {
+    this.searchInput.value = "";
+    this.searchInput.dispatchEvent(new CustomEvent("sl-clear"));
   };
 }

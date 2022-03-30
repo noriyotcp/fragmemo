@@ -4,7 +4,7 @@ import { customElement, query } from "lit/decorators.js";
 
 @customElement("search-item")
 export class SearchItem extends LitElement {
-  @query("#search-input") searchInput!: HTMLInputElement;
+  @query("#search-item") searchItem!: HTMLInputElement;
 
   // Get rid of border on sl-input
   static styles = [
@@ -27,7 +27,7 @@ export class SearchItem extends LitElement {
     return html`
       <header>
         <sl-input
-          id="search-input"
+          id="search-item"
           placeholder="Input or press enter..."
           size="large"
           type="search"
@@ -93,7 +93,7 @@ export class SearchItem extends LitElement {
   };
 
   private _clearSearch = (_e: InputEvent): void => {
-    this.searchInput.value = "";
-    this.searchInput.dispatchEvent(new CustomEvent("sl-clear"));
+    this.searchItem.value = "";
+    this.searchItem.dispatchEvent(new CustomEvent("sl-clear"));
   };
 }

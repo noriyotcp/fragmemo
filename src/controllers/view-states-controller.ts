@@ -24,6 +24,17 @@ export class ViewStatesController implements ReactiveController {
     );
   }
 
+  hostDisconnected() {
+    window.removeEventListener(
+      "fragment-switched",
+      this._fragmentSwitchedListener as EventListener
+    );
+    window.removeEventListener(
+      "snippet-selected",
+      this._snippetSelectedListener as EventListener
+    );
+  }
+
   private _fragmentSwitchedListener = (e: CustomEvent) => {
     this.isSnippetSwitched = false;
 

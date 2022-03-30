@@ -1,9 +1,11 @@
 import { dispatch } from "../events/dispatcher";
 import { LitElement, html, css, TemplateResult } from "lit";
-import { customElement } from "lit/decorators.js";
+import { customElement, query } from "lit/decorators.js";
 
 @customElement("search-item")
 export class SearchItem extends LitElement {
+  @query("#search-input") searchInput!: HTMLInputElement;
+
   // Get rid of border on sl-input
   static styles = [
     css`
@@ -25,7 +27,7 @@ export class SearchItem extends LitElement {
     return html`
       <header>
         <sl-input
-          id="search"
+          id="search-input"
           placeholder="Input or press enter..."
           size="large"
           type="search"
@@ -39,6 +41,30 @@ export class SearchItem extends LitElement {
       </header>
     `;
   }
+
+  connectedCallback() {
+    super.connectedCallback();
+
+    window.addEventListener(
+      "snippets-created",
+      this._clearSearch as EventListener
+    );
+  }
+
+  disconnectedCallback() {
+    super.disconnectedCallback();
+  }
+
+  private _clearSearch = (_e: InputEvent): void => {
+    this.searchInput.value = "";
+    dispatch({
+      type: "clear-internal-search-query",
+    });
+
+    dispatch({
+      type: "update-snippets",
+    });
+  };
 
   private _search = (e: InputEvent): void => {
     const target = <HTMLInputElement>e.currentTarget;

@@ -32,6 +32,17 @@ export class SetupStorageController implements ReactiveController {
     myAPI.newSnippet((_e: Event) => this._initSnippet());
   }
 
+  hostDisconnected(): void {
+    window.removeEventListener(
+      "update-snippets",
+      this._updateSnippetsListener as EventListener
+    );
+    window.removeEventListener(
+      "search-snippets",
+      this._searchSnippetsListener as EventListener
+    );
+  }
+
   async setupStorage(): Promise<void> {
     await myAPI
       .setupStorage()

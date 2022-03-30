@@ -59,6 +59,9 @@ export class FragmentsController implements ReactiveController {
   private _selectSnippetListener = (e: CustomEvent): void => {
     this.snippet = JSON.parse(e.detail.selectedSnippet);
     if (!this.snippet) return;
+    if (this.snippet._id === this.activeFragmentId) {
+      return;
+    }
 
     myAPI.newActiveSnippetHistory(<number>this.snippet._id);
 

@@ -38,11 +38,12 @@ export class EditorElement extends LitElement {
     });
   }
 
-  @query("#lang-select") select!: HTMLSelectElement;
+  @query("#lang-select") select?: HTMLSelectElement;
   @state()
   private _activeFragmentId?: number;
   @state() private _content = "";
   @state() private _language = "plaintext";
+  private _noSnippets = false;
   private _languages!: Language[];
 
   static styles = [
@@ -72,39 +73,53 @@ export class EditorElement extends LitElement {
         height: 100%;
         width: 8rem;
       }
+
+      .no-snippet {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: calc(100vh - var(--header-height));
+        color: var(--gray);
+      }
     `,
   ];
 
+  renderNoSnippets(): TemplateResult {
+    return html`<section class="no-snippet">No Snippet Selected</section>`;
+  }
+
   render(): TemplateResult {
-    return html`
-      <section>
-        <test-header></test-header>
-        <fragment-tab-list
-          @fragment-activated=${this._onFragmentActivated}
-        ></fragment-tab-list>
-        <code-editor
-          code="${this._content}"
-          language="${this._language}"
-          @change-text=${this._changeText}
-          @save-text=${this._saveText}
-          @blur-editor=${this._onBlurEditor}
-        ></code-editor>
-      </section>
-      <footer>
-        <select
-          name="languages"
-          id="lang-select"
-          @change=${this._selectionChange}
-        >
-          ${map(this._languages, (l) => {
-            return html`<option _idx=${l._idx} value=${l.name}>
-              ${l.alias}
-            </option>`;
-          })}
-        </select>
-        <editing-state-icon></editing-state-icon>
-      </footer>
-    `;
+    return !this._noSnippets
+      ? html`
+          <section>
+            <test-header></test-header>
+            <fragment-tab-list
+              @fragment-activated=${this._onFragmentActivated}
+            ></fragment-tab-list>
+            <code-editor
+              code="${this._content}"
+              language="${this._language}"
+              @change-text=${this._changeText}
+              @save-text=${this._saveText}
+              @blur-editor=${this._onBlurEditor}
+            ></code-editor>
+          </section>
+          <footer>
+            <select
+              name="languages"
+              id="lang-select"
+              @change=${this._selectionChange}
+            >
+              ${map(this._languages, (l) => {
+                return html`<option _idx=${l._idx} value=${l.name}>
+                  ${l.alias}
+                </option>`;
+              })}
+            </select>
+            <editing-state-icon></editing-state-icon>
+          </footer>
+        `
+      : this.renderNoSnippets();
   }
 
   firstUpdated() {
@@ -140,13 +155,17 @@ export class EditorElement extends LitElement {
     this._language = target.selectedOptions[0].getAttribute("value")!;
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const _idx = target.selectedOptions[0].getAttribute("_idx")!;
-    myAPI.updateFragment({
-      _id: this._activeFragmentId,
-      properties: { language: { _idx: Number(_idx) } },
-    });
-    this.fragmentStore.setPartialRow("states", `${this._activeFragmentId}`, {
-      langIdx: Number(_idx),
-    });
+
+    if (this._activeFragmentId) {
+      myAPI.updateFragment({
+        _id: this._activeFragmentId,
+        properties: { language: { _idx: Number(_idx) } },
+      });
+      this.fragmentStore.setPartialRow("states", `${this._activeFragmentId}`, {
+        langIdx: Number(_idx),
+      });
+    }
+
     this._setContent();
   }
 
@@ -179,6 +198,8 @@ export class EditorElement extends LitElement {
   }
 
   private _selectOption(idx: number): void {
+    if (!this.select) return;
+
     this.select.options[idx].selected = true;
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     this._language = this.select.selectedOptions[0].getAttribute("value")!;

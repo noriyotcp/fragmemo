@@ -2,13 +2,14 @@ import { displayToast } from "../displayToast";
 import { ReactiveController, ReactiveControllerHost } from "lit";
 import { Snippet, ActiveSnippetHistory } from "../models";
 import { SearchQueryController } from "./search-query-controller";
+import { dispatch } from "../events/dispatcher";
 const { myAPI } = window;
 
 export class SetupStorageController implements ReactiveController {
   private host: ReactiveControllerHost;
   searchQuery: SearchQueryController;
 
-  snippets: Snippet[] = [];
+  _snippets: Snippet[] = [];
   activeSnippetHistory!: ActiveSnippetHistory;
 
   constructor(host: ReactiveControllerHost) {
@@ -114,4 +115,19 @@ export class SetupStorageController implements ReactiveController {
       });
     }
   };
+
+  get snippets(): Snippet[] {
+    return this._snippets;
+  }
+
+  set snippets(snippets: Snippet[]) {
+    this._snippets = snippets;
+    console.log("snippets-loaded", this._snippets);
+    dispatch({
+      type: "snippets-loaded",
+      detail: {
+        noSnippets: this._snippets.length <= 0,
+      },
+    });
+  }
 }

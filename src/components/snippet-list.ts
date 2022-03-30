@@ -116,17 +116,17 @@ export class SnippetList extends LitElement {
 
     // topItem is the first item in the list or the item that was selected before
     let topItem = this.snippetItems[0];
-    if (this.setupStorage.activeSnippetHistory) {
+
+    // override the selected item with the one on the top if there's a search query
+    if (this.setupStorage.searchQuery.query) {
+      topItem = this.snippetItems[0];
+    } else if (this.setupStorage.activeSnippetHistory) {
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       topItem = Array.from(this.snippetItems).find(
         (item) =>
           Number(item.getAttribute("snippet-id")) ===
           this.setupStorage.activeSnippetHistory.snippetId
       )!;
-    }
-    // override the selected item with the one on the top if there's a search query
-    if (this.setupStorage.searchQuery.query) {
-      topItem = this.snippetItems[0];
     }
     if (!topItem) return;
 

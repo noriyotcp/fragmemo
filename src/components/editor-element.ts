@@ -107,6 +107,27 @@ export class EditorElement extends LitElement {
     `;
   }
 
+  firstUpdated() {
+    window.addEventListener(
+      "snippets-loaded",
+      this._setSnippets as EventListener
+    );
+  }
+
+  disconnectedCallback() {
+    window.removeEventListener(
+      "snippets-loaded",
+      this._setSnippets as EventListener
+    );
+
+    super.disconnectedCallback();
+  }
+
+  private _setSnippets = (e: CustomEvent): void => {
+    this._noSnippets = e.detail.noSnippets;
+    this.requestUpdate();
+  };
+
   private _selectLanguage() {
     this.select?.focus();
   }

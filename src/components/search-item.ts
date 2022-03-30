@@ -52,6 +52,11 @@ export class SearchItem extends LitElement {
   }
 
   disconnectedCallback() {
+    window.removeEventListener(
+      "snippets-created",
+      this._clearSearch as EventListener
+    );
+
     super.disconnectedCallback();
   }
 

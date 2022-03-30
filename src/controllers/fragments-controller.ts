@@ -31,6 +31,17 @@ export class FragmentsController implements ReactiveController {
     myAPI.newFragment((_e: Event) => this._initFragment());
   }
 
+  hostDisconnected(): void {
+    window.removeEventListener(
+      "select-snippet",
+      this._selectSnippetListener as EventListener
+    );
+    window.removeEventListener(
+      "active-fragment",
+      this._activeFragmentListener as EventListener
+    );
+  }
+
   private _initFragment() {
     if (!this.snippet) return;
 

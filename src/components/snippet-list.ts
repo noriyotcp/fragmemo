@@ -71,29 +71,41 @@ export class SnippetList extends LitElement {
   }
 
   firstUpdated(): void {
-    this.snippetList.addEventListener("selection-change", ((
-      e: CustomEvent
-    ): void => {
-      this.snippet = JSON.parse(
-        e.detail.selectedItems[0].getAttribute("snippet")
-      );
-      const previouslySelectedSnippet = e.detail.previouslySelectedItems?.[0]
-        ? e.detail.previouslySelectedItems[0].getAttribute("snippet")
-        : null;
-
-      dispatch({
-        type: "select-snippet",
-        detail: {
-          selectedSnippet: e.detail.selectedItems[0].getAttribute("snippet"),
-          previouslySelectedSnippet,
-        },
-      });
-    }) as EventListener);
+    this.snippetList.addEventListener(
+      "selection-change",
+      this._onSelectionChange as EventListener
+    );
 
     myAPI.contextMenuCommand((_e: Event, command) =>
       this._contextMenuCommand(_e, command)
     );
   }
+
+  disconnectedCallback() {
+    this.snippetList.removeEventListener(
+      "selection-change",
+      this._onSelectionChange as EventListener
+    );
+
+    super.disconnectedCallback();
+  }
+
+  private _onSelectionChange = (e: CustomEvent): void => {
+    this.snippet = JSON.parse(
+      e.detail.selectedItems[0].getAttribute("snippet")
+    );
+    const previouslySelectedSnippet = e.detail.previouslySelectedItems?.[0]
+      ? e.detail.previouslySelectedItems[0].getAttribute("snippet")
+      : null;
+
+    dispatch({
+      type: "select-snippet",
+      detail: {
+        selectedSnippet: e.detail.selectedItems[0].getAttribute("snippet"),
+        previouslySelectedSnippet,
+      },
+    });
+  };
 
   updated(): void {
     if (!this.snippetItems[0]) return;

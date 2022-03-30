@@ -77,6 +77,7 @@ export class FragmentTab extends LitElement {
       "content-editing-state-changed",
       this._stateChangedListener as EventListener
     );
+
     super.disconnectedCallback();
   }
 

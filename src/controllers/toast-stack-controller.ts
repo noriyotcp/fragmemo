@@ -30,6 +30,13 @@ export class ToastStackController implements ReactiveController {
     );
   }
 
+  hostDisconnected(): void {
+    window.removeEventListener(
+      "display-toast-stack",
+      this._displayToastListener as EventListener
+    );
+  }
+
   // Always escape HTML for text arguments!
   escapeHtml(html: string): string {
     const div = document.createElement("div");

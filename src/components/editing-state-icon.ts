@@ -58,8 +58,6 @@ export class EditingStateIcon extends LitElement {
   }
 
   disconnectedCallback() {
-    super.disconnectedCallback();
-
     window.removeEventListener(
       "content-editing-state-changed",
       this._stateChangedListener as EventListener
@@ -72,6 +70,8 @@ export class EditingStateIcon extends LitElement {
       "active-fragment",
       this._activeFragmentListener as EventListener
     );
+
+    super.disconnectedCallback();
   }
 
   private _snippetSelectedListener = (e: CustomEvent) => {

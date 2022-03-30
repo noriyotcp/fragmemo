@@ -18,6 +18,17 @@ export class SearchQueryController implements ReactiveController {
     );
   }
 
+  hostDisconnected() {
+    window.removeEventListener(
+      "search-snippets",
+      this._searchSnippets as EventListener
+    );
+    window.removeEventListener(
+      "clear-internal-search-query",
+      this._clearSearchQuery as EventListener
+    );
+  }
+
   private _searchSnippets = (e: CustomEvent) => {
     this.query = e.detail.query;
   };

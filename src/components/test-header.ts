@@ -93,6 +93,15 @@ export class TestHeader extends LitElement {
     });
   }
 
+  disconnectedCallback() {
+    window.removeEventListener(
+      "select-snippet",
+      this._selectSnippetListener as EventListener
+    );
+
+    super.disconnectedCallback();
+  }
+
   private _selectSnippetListener = (e: CustomEvent): void => {
     this._snippet = JSON.parse(e.detail.selectedSnippet);
     console.info(

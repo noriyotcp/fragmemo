@@ -104,10 +104,6 @@ export class TestHeader extends LitElement {
 
   private _selectSnippetListener = (e: CustomEvent): void => {
     this._snippet = JSON.parse(e.detail.selectedSnippet);
-    console.info(
-      "previouslySelectedSnippet",
-      JSON.parse(e.detail.previouslySelectedSnippet)
-    );
     this.requestUpdate();
   };
 }

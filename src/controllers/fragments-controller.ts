@@ -69,10 +69,6 @@ export class FragmentsController implements ReactiveController {
     myAPI.getSnippet(<number>this.snippet._id).then((snippet) => {
       this.snippet = snippet as unknown as Snippet;
     });
-    console.info(
-      "previouslySelectedSnippet",
-      JSON.parse(e.detail.previouslySelectedSnippet)
-    );
     myAPI.getActiveFragment(<number>this.snippet._id).then((activeFragment) => {
       this.activeFragmentId = activeFragment.fragmentId;
       dispatch({

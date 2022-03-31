@@ -1,6 +1,6 @@
 import { dispatch } from "../events/dispatcher";
-import { LitElement, html, css, TemplateResult } from "lit";
-import { customElement, query, state } from "lit/decorators.js";
+import { LitElement, html, css, TemplateResult, PropertyValues } from "lit";
+import { customElement, property, query, state } from "lit/decorators.js";
 import { map } from "lit/directives/map.js";
 import { createFragmentStore, Store } from "../stores";
 import { Language } from "models.d";
@@ -43,7 +43,7 @@ export class EditorElement extends LitElement {
   private _activeFragmentId?: number;
   @state() private _content = "";
   @state() private _language = "plaintext";
-  private _noSnippets = false;
+  @state() private _noSnippets = false;
   private _languages!: Language[];
 
   static styles = [
@@ -136,6 +136,22 @@ export class EditorElement extends LitElement {
     );
 
     super.disconnectedCallback();
+  }
+
+  protected updated(_changedProperties: PropertyValues): void {
+    // _changeProperties has the previous values of the changed properties
+    // It means the value of _noSnippets turns from true to false
+    if (_changedProperties.get("_noSnippets")) {
+      if (!this._activeFragmentId) return;
+      myAPI.getFragment(<number>this._activeFragmentId).then((fragment) => {
+        dispatch({
+          type: "select-snippet",
+          detail: {
+            selectedSnippet: JSON.stringify(fragment.snippet),
+          },
+        });
+      });
+    }
   }
 
   private _setSnippets = (e: CustomEvent): void => {

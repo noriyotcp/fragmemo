@@ -7,7 +7,7 @@ import "@ui5/webcomponents/dist/StandardListItem.js";
 
 import { SetupStorageController } from "../controllers/setup-storage-controller";
 import { dispatch } from "../events/dispatcher";
-import { Snippet } from "../models";
+import { ActiveSnippetHistory, Snippet } from "../models";
 
 const { myAPI } = window;
 
@@ -18,6 +18,7 @@ export class SnippetList extends LitElement {
   @query("#snippetList") snippetList!: HTMLElement;
   @queryAll("ui5-li") snippetItems!: HTMLLIElement[];
   snippet!: Snippet;
+  _activeSnippetHistory: ActiveSnippetHistory | null = null;
 
   constructor() {
     super();
@@ -107,30 +108,32 @@ export class SnippetList extends LitElement {
     });
   };
 
-  updated(): void {
+  async updated(): Promise<void> {
     if (!this.snippetItems[0]) return;
-    console.info(
-      "snippet-list:updated",
-      this.setupStorage.activeSnippetHistory
-    );
 
+    this._activeSnippetHistory = await this.activeSnippetHistory();
     // topItem is the first item in the list or the item that was selected before
     let topItem = this.snippetItems[0];
 
     // override the selected item with the one on the top if there's a search query
     if (this.setupStorage.searchQuery.query) {
       topItem = this.snippetItems[0];
-    } else if (this.setupStorage.activeSnippetHistory) {
+    } else if (this._activeSnippetHistory) {
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       topItem = Array.from(this.snippetItems).find(
         (item) =>
           Number(item.getAttribute("snippet-id")) ===
-          this.setupStorage.activeSnippetHistory.snippetId
+          this._activeSnippetHistory?.snippetId
       )!;
     }
-    if (!topItem) return;
 
+    if (!topItem) return;
     this._updateSelectedItem(topItem);
+  }
+
+  async activeSnippetHistory() {
+    const result = await myAPI.getLatestActiveSnippetHistory();
+    return result;
   }
 
   private _showContextMenu(e: MouseEvent): void {

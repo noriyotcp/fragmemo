@@ -26,7 +26,7 @@
   },
   "license": "MIT",
   "dependencies": {
-    "@ui5/webcomponents": "^1.2.3",
+    "@ui5/webcomponents": "^1.2.4",
     "electron-json-storage": "^4.5.0",
     "lit": "^2.2.1",
     "monaco-editor": "^0.33.0",

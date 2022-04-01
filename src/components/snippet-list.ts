@@ -151,10 +151,6 @@ export class SnippetList extends LitElement {
         if (confirm(message)) {
           myAPI.deleteSnippet(this.snippet._id).then(() => {
             dispatch({
-              type: "clear-internal-search-query",
-            });
-
-            dispatch({
               type: "update-snippets",
             });
           });

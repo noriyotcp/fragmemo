@@ -105,10 +105,10 @@ export class SnippetList extends LitElement {
   };
 
   async updated(): Promise<void> {
-    // Once the snippet list is restored from being empty, contextMenuCommand listener could be dead
+    // Once the snippet list is restored from being empty, contextMenuCommandSnippetItem listener could be dead
     // So we need to remvoe and re-add it
-    myAPI.removeAllListeners("context-menu-command");
-    myAPI.contextMenuCommand((_e: Event, command) =>
+    myAPI.removeAllListeners("context-menu-command-snippet-item");
+    myAPI.contextMenuCommandSnippetItem((_e: Event, command) =>
       this._contextMenuCommand(_e, command)
     );
 

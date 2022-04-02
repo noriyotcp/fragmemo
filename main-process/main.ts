@@ -208,7 +208,10 @@ app.once("browser-window-created", () => {
         type: "normal",
         id: "delete-snippet",
         click: () => {
-          event.sender.send("context-menu-command", "delete-snippet");
+          event.sender.send(
+            "context-menu-command-snippet-item",
+            "delete-snippet"
+          );
         },
       },
     ];

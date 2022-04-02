@@ -7,7 +7,7 @@ import "@ui5/webcomponents/dist/StandardListItem.js";
 
 import { SetupStorageController } from "../controllers/setup-storage-controller";
 import { dispatch } from "../events/dispatcher";
-import { Snippet } from "../models";
+import { ActiveSnippetHistory, Snippet } from "../models";
 
 const { myAPI } = window;
 
@@ -18,6 +18,7 @@ export class SnippetList extends LitElement {
   @query("#snippetList") snippetList!: HTMLElement;
   @queryAll("ui5-li") snippetItems!: HTMLLIElement[];
   snippet!: Snippet;
+  _activeSnippetHistory!: ActiveSnippetHistory;
 
   constructor() {
     super();
@@ -107,12 +108,10 @@ export class SnippetList extends LitElement {
     });
   };
 
-  updated(): void {
+  async updated(): Promise<void> {
     if (!this.snippetItems[0]) return;
-    console.info(
-      "snippet-list:updated",
-      this.setupStorage.activeSnippetHistory
-    );
+
+    this._activeSnippetHistory = await myAPI.getLatestActiveSnippetHistory();
 
     // topItem is the first item in the list or the item that was selected before
     let topItem = this.snippetItems[0];
@@ -120,16 +119,16 @@ export class SnippetList extends LitElement {
     // override the selected item with the one on the top if there's a search query
     if (this.setupStorage.searchQuery.query) {
       topItem = this.snippetItems[0];
-    } else if (this.setupStorage.activeSnippetHistory) {
+    } else if (this._activeSnippetHistory) {
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       topItem = Array.from(this.snippetItems).find(
         (item) =>
           Number(item.getAttribute("snippet-id")) ===
-          this.setupStorage.activeSnippetHistory.snippetId
+          this._activeSnippetHistory.snippetId
       )!;
     }
-    if (!topItem) return;
 
+    if (!topItem) return;
     this._updateSelectedItem(topItem);
   }
 
@@ -150,10 +149,6 @@ export class SnippetList extends LitElement {
         const message = `Are you sure you want to delete "${this.snippet.title}"?`;
         if (confirm(message)) {
           myAPI.deleteSnippet(this.snippet._id).then(() => {
-            dispatch({
-              type: "clear-internal-search-query",
-            });
-
             dispatch({
               type: "update-snippets",
             });

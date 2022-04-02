@@ -190,7 +190,10 @@ app.once("browser-window-created", () => {
         type: "normal",
         id: "delete-fragment",
         click: () => {
-          event.sender.send("context-menu-command", "delete-fragment");
+          event.sender.send(
+            "context-menu-command-fragment-tab",
+            "delete-fragment"
+          );
         },
       },
     ];

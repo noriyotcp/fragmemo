@@ -62,7 +62,7 @@ export class FragmentTabList extends LitElement {
   firstUpdated(): void {
     myAPI.nextTab((_e: Event) => this._nextTab());
     myAPI.previousTab((_e: Event) => this._previousTab());
-    myAPI.contextMenuCommand((_e: Event, command) =>
+    myAPI.contextMenuCommandFragmentTab((_e: Event, command) =>
       this._contextMenuCommand(_e, command)
     );
   }

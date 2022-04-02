@@ -70,7 +70,7 @@ export class FragmentTabList extends LitElement {
   disconnectedCallback() {
     myAPI.removeAllListeners("next-tab");
     myAPI.removeAllListeners("previous-tab");
-    myAPI.removeAllListeners("context-menu-command");
+    myAPI.removeAllListeners("context-menu-command-fragment-tab");
 
     super.disconnectedCallback();
   }

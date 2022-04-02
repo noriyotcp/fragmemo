@@ -30,7 +30,10 @@ export interface SandBox {
   previousTab: (listener: (_e: Event) => void) => Electron.IpcRenderer;
   newSnippet: (listener: (_e: Event) => void) => Electron.IpcRenderer;
   newFragment: (listener: (_e: Event) => void) => Electron.IpcRenderer;
-  contextMenuCommand: (
+  contextMenuCommandSnippetItem: (
+    listener: (_e: Event, command: string) => void
+  ) => Electron.IpcRenderer;
+  contextMenuCommandFragmentTab: (
     listener: (_e: Event, command: string) => void
   ) => Electron.IpcRenderer;
   removeAllListeners: (channel?: string) => Electron.IpcRenderer;

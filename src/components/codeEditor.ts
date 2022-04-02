@@ -139,6 +139,12 @@ export class CodeEditor extends LitElement {
     myAPI.saveFragment((_e: Event) => this._saveText());
   }
 
+  disconnectedCallback() {
+    myAPI.removeAllListeners("save-fragment");
+
+    super.disconnectedCallback();
+  }
+
   updated() {
     // switch snippets
     if (this.viewStatesController.isSnippetSwitched) {
@@ -173,6 +179,8 @@ export class CodeEditor extends LitElement {
   }
 
   private _saveCurrentViewState(fragmentId: number) {
+    if (!fragmentId) return;
+
     const viewState = this.editor.saveViewState();
     this.viewStateStore.setPartialRow("states", `${fragmentId}`, {
       viewState: JSON.stringify(viewState),

@@ -34,6 +34,12 @@ export class SettingsElement extends LitElement {
     `;
   }
 
+  disconnectedCallback() {
+    myAPI.removeAllListeners("toggle-settings");
+
+    super.disconnectedCallback();
+  }
+
   private _toggleSettings(): void {
     if (this.drawer.open) {
       this._closeSettings();

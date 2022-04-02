@@ -76,10 +76,6 @@ export class SnippetList extends LitElement {
       "selection-change",
       this._onSelectionChange as EventListener
     );
-
-    myAPI.contextMenuCommand((_e: Event, command) =>
-      this._contextMenuCommand(_e, command)
-    );
   }
 
   disconnectedCallback() {
@@ -109,6 +105,13 @@ export class SnippetList extends LitElement {
   };
 
   async updated(): Promise<void> {
+    // Once the snippet list is restored from being empty, contextMenuCommand listener could be dead
+    // So we need to remvoe and re-add it
+    myAPI.removeAllListeners("context-menu-command");
+    myAPI.contextMenuCommand((_e: Event, command) =>
+      this._contextMenuCommand(_e, command)
+    );
+
     if (!this.snippetItems[0]) return;
 
     this._activeSnippetHistory = await myAPI.getLatestActiveSnippetHistory();

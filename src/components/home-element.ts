@@ -4,7 +4,7 @@ import { customElement, state } from "lit/decorators.js";
 
 @customElement("home-element")
 export class HomeElement extends LitElement {
-  @state() private _noSnippets = true;
+  @state() private _noSnippets = false;
 
   constructor() {
     super();
@@ -52,6 +52,5 @@ export class HomeElement extends LitElement {
 
   private _setSnippets = (e: CustomEvent): void => {
     this._noSnippets = e.detail.noSnippets;
-    this.requestUpdate();
   };
 }

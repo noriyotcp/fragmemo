@@ -12,6 +12,7 @@ contextBridge.exposeInMainWorld("myAPI", {
   newFragment: (listener) => ipcRenderer.on("new-fragment", listener),
   contextMenuCommand: (listener) =>
     ipcRenderer.on("context-menu-command", listener),
+  removeAllListeners: (channel) => ipcRenderer.removeAllListeners(channel),
   // renderer process -> main process
   initSnippet: () => ipcRenderer.invoke("init-snippet"),
   initFragment: (snippetId) => ipcRenderer.invoke("init-fragment", snippetId),

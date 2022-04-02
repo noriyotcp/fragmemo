@@ -33,6 +33,7 @@ export interface SandBox {
   contextMenuCommand: (
     listener: (_e: Event, command: string) => void
   ) => Electron.IpcRenderer;
+  removeAllListeners: (channel?: string) => Electron.IpcRenderer;
   // renderer process -> main process
   initSnippet: () => Promise<Snippet>;
   initFragment: (snippetId: number) => Promise<void>;

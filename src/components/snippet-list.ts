@@ -18,7 +18,7 @@ export class SnippetList extends LitElement {
   @query("#snippetList") snippetList!: HTMLElement;
   @queryAll("ui5-li") snippetItems!: HTMLLIElement[];
   snippet!: Snippet;
-  _activeSnippetHistory: ActiveSnippetHistory | null = null;
+  _activeSnippetHistory!: ActiveSnippetHistory;
 
   constructor() {
     super();
@@ -111,7 +111,8 @@ export class SnippetList extends LitElement {
   async updated(): Promise<void> {
     if (!this.snippetItems[0]) return;
 
-    this._activeSnippetHistory = await this.activeSnippetHistory();
+    this._activeSnippetHistory = await myAPI.getLatestActiveSnippetHistory();
+
     // topItem is the first item in the list or the item that was selected before
     let topItem = this.snippetItems[0];
 
@@ -123,17 +124,12 @@ export class SnippetList extends LitElement {
       topItem = Array.from(this.snippetItems).find(
         (item) =>
           Number(item.getAttribute("snippet-id")) ===
-          this._activeSnippetHistory?.snippetId
+          this._activeSnippetHistory.snippetId
       )!;
     }
 
     if (!topItem) return;
     this._updateSelectedItem(topItem);
-  }
-
-  async activeSnippetHistory() {
-    const result = await myAPI.getLatestActiveSnippetHistory();
-    return result;
   }
 
   private _showContextMenu(e: MouseEvent): void {

@@ -89,37 +89,35 @@ export class EditorElement extends LitElement {
   }
 
   render(): TemplateResult {
-    return !this._noSnippets
-      ? html`
-          <section>
-            <test-header></test-header>
-            <fragment-tab-list
-              @fragment-activated=${this._onFragmentActivated}
-            ></fragment-tab-list>
-            <code-editor
-              code="${this._content}"
-              language="${this._language}"
-              @change-text=${this._changeText}
-              @save-text=${this._saveText}
-              @blur-editor=${this._onBlurEditor}
-            ></code-editor>
-          </section>
-          <footer>
-            <select
-              name="languages"
-              id="lang-select"
-              @change=${this._selectionChange}
-            >
-              ${map(this._languages, (l) => {
-                return html`<option _idx=${l._idx} value=${l.name}>
-                  ${l.alias}
-                </option>`;
-              })}
-            </select>
-            <editing-state-icon></editing-state-icon>
-          </footer>
-        `
-      : this.renderNoSnippets();
+    return html`
+      <section>
+        <test-header></test-header>
+        <fragment-tab-list
+          @fragment-activated=${this._onFragmentActivated}
+        ></fragment-tab-list>
+        <code-editor
+          code="${this._content}"
+          language="${this._language}"
+          @change-text=${this._changeText}
+          @save-text=${this._saveText}
+          @blur-editor=${this._onBlurEditor}
+        ></code-editor>
+      </section>
+      <footer>
+        <select
+          name="languages"
+          id="lang-select"
+          @change=${this._selectionChange}
+        >
+          ${map(this._languages, (l) => {
+            return html`<option _idx=${l._idx} value=${l.name}>
+              ${l.alias}
+            </option>`;
+          })}
+        </select>
+        <editing-state-icon></editing-state-icon>
+      </footer>
+    `;
   }
 
   firstUpdated() {

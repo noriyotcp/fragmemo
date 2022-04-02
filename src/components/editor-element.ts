@@ -1,6 +1,6 @@
 import { dispatch } from "../events/dispatcher";
-import { LitElement, html, css, TemplateResult, PropertyValues } from "lit";
-import { customElement, property, query, state } from "lit/decorators.js";
+import { LitElement, html, css, TemplateResult } from "lit";
+import { customElement, query, state } from "lit/decorators.js";
 import { map } from "lit/directives/map.js";
 import { createFragmentStore, Store } from "../stores";
 import { Language } from "models.d";
@@ -43,7 +43,6 @@ export class EditorElement extends LitElement {
   private _activeFragmentId?: number;
   @state() private _content = "";
   @state() private _language = "plaintext";
-  @state() private _noSnippets = false;
   private _languages!: Language[];
 
   static styles = [
@@ -84,80 +83,37 @@ export class EditorElement extends LitElement {
     `,
   ];
 
-  renderNoSnippets(): TemplateResult {
-    return html`<section class="no-snippet">No Snippet Selected</section>`;
-  }
-
   render(): TemplateResult {
-    return !this._noSnippets
-      ? html`
-          <section>
-            <test-header></test-header>
-            <fragment-tab-list
-              @fragment-activated=${this._onFragmentActivated}
-            ></fragment-tab-list>
-            <code-editor
-              code="${this._content}"
-              language="${this._language}"
-              @change-text=${this._changeText}
-              @save-text=${this._saveText}
-              @blur-editor=${this._onBlurEditor}
-            ></code-editor>
-          </section>
-          <footer>
-            <select
-              name="languages"
-              id="lang-select"
-              @change=${this._selectionChange}
-            >
-              ${map(this._languages, (l) => {
-                return html`<option _idx=${l._idx} value=${l.name}>
-                  ${l.alias}
-                </option>`;
-              })}
-            </select>
-            <editing-state-icon></editing-state-icon>
-          </footer>
-        `
-      : this.renderNoSnippets();
+    return html`
+      <section>
+        <test-header></test-header>
+        <fragment-tab-list
+          @fragment-activated=${this._onFragmentActivated}
+        ></fragment-tab-list>
+        <code-editor
+          code="${this._content}"
+          language="${this._language}"
+          @change-text=${this._changeText}
+          @save-text=${this._saveText}
+          @blur-editor=${this._onBlurEditor}
+        ></code-editor>
+      </section>
+      <footer>
+        <select
+          name="languages"
+          id="lang-select"
+          @change=${this._selectionChange}
+        >
+          ${map(this._languages, (l) => {
+            return html`<option _idx=${l._idx} value=${l.name}>
+              ${l.alias}
+            </option>`;
+          })}
+        </select>
+        <editing-state-icon></editing-state-icon>
+      </footer>
+    `;
   }
-
-  firstUpdated() {
-    window.addEventListener(
-      "snippets-loaded",
-      this._setSnippets as EventListener
-    );
-  }
-
-  disconnectedCallback() {
-    window.removeEventListener(
-      "snippets-loaded",
-      this._setSnippets as EventListener
-    );
-
-    super.disconnectedCallback();
-  }
-
-  protected updated(_changedProperties: PropertyValues): void {
-    // _changeProperties has the previous values of the changed properties
-    // It means the value of _noSnippets turns from true to false
-    if (_changedProperties.get("_noSnippets")) {
-      if (!this._activeFragmentId) return;
-      myAPI.getFragment(<number>this._activeFragmentId).then((fragment) => {
-        dispatch({
-          type: "select-snippet",
-          detail: {
-            selectedSnippet: JSON.stringify(fragment.snippet),
-          },
-        });
-      });
-    }
-  }
-
-  private _setSnippets = (e: CustomEvent): void => {
-    this._noSnippets = e.detail.noSnippets;
-    this.requestUpdate();
-  };
 
   private _selectLanguage() {
     this.select?.focus();

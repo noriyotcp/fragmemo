@@ -40,6 +40,7 @@ export class FragmentsController implements ReactiveController {
       "active-fragment",
       this._activeFragmentListener as EventListener
     );
+    myAPI.removeAllListeners("new-fragment");
   }
 
   private _initFragment() {

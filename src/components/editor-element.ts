@@ -1,5 +1,5 @@
 import { dispatch } from "../events/dispatcher";
-import { LitElement, html, css, TemplateResult, PropertyValues } from "lit";
+import { LitElement, html, css, TemplateResult } from "lit";
 import { customElement, query, state } from "lit/decorators.js";
 import { map } from "lit/directives/map.js";
 import { createFragmentStore, Store } from "../stores";

@@ -139,6 +139,12 @@ export class CodeEditor extends LitElement {
     myAPI.saveFragment((_e: Event) => this._saveText());
   }
 
+  disconnectedCallback() {
+    myAPI.removeAllListeners("save-fragment");
+
+    super.disconnectedCallback();
+  }
+
   updated() {
     // switch snippets
     if (this.viewStatesController.isSnippetSwitched) {

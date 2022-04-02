@@ -88,6 +88,8 @@ export class SnippetList extends LitElement {
       this._onSelectionChange as EventListener
     );
 
+    myAPI.removeAllListeners("context-menu-command");
+
     super.disconnectedCallback();
   }
 

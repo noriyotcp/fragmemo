@@ -173,6 +173,8 @@ export class CodeEditor extends LitElement {
   }
 
   private _saveCurrentViewState(fragmentId: number) {
+    if (!fragmentId) return;
+
     const viewState = this.editor.saveViewState();
     this.viewStateStore.setPartialRow("states", `${fragmentId}`, {
       viewState: JSON.stringify(viewState),

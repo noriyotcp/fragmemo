@@ -61,6 +61,7 @@ function createWindow() {
 
   const data = <settingsDataType>jsonStorage.lib.getSync("window");
   const { width, height, x, y } = data.window;
+  console.log("window created", data.window);
 
   // Create the browser window.
   const mainWindow = new BrowserWindow({
@@ -93,7 +94,24 @@ function createWindow() {
     });
   }
 
-  mainWindow.on("close", () => {
+  mainWindow.on("resize", () => {
+    const updatedWindowSettings = {
+      window: {
+        width: mainWindow.getSize()[0],
+        height: mainWindow.getSize()[1],
+        x: mainWindow.getPosition()[0],
+        y: mainWindow.getPosition()[1],
+      },
+    };
+
+    jsonStorage.lib.set("window", updatedWindowSettings, function (err) {
+      if (err) {
+        console.log(err);
+      }
+    });
+  });
+
+  mainWindow.on("move", () => {
     const updatedWindowSettings = {
       window: {
         width: mainWindow.getSize()[0],

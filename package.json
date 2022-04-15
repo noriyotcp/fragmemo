@@ -30,7 +30,7 @@
     "electron-json-storage": "^4.5.0",
     "lit": "^2.2.2",
     "monaco-editor": "^0.33.0",
-    "realm": "^10.14.0",
+    "realm": "^10.16.0",
     "split.js": "^1.6.5"
   },
   "devDependencies": {

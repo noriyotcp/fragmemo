@@ -53,7 +53,7 @@ export class FragmentTab extends LitElement {
         class="tab-item"
         fragmentId="${this.fragment._id}"
         active="${this._isActive(this.fragment._id)}"
-        @click="${this._onClickListener}"
+        @click="${this._activeFragmentTab}"
       >
         <div class="tab-item-inner">
           <fragment-title
@@ -68,20 +68,20 @@ export class FragmentTab extends LitElement {
   firstUpdated(): void {
     window.addEventListener(
       "content-editing-state-changed",
-      this._stateChangedListener as EventListener
+      this._onContentEditingStateChanged as EventListener
     );
   }
 
   disconnectedCallback() {
     window.removeEventListener(
       "content-editing-state-changed",
-      this._stateChangedListener as EventListener
+      this._onContentEditingStateChanged as EventListener
     );
 
     super.disconnectedCallback();
   }
 
-  private _stateChangedListener = (e: CustomEvent): void => {
+  private _onContentEditingStateChanged = (e: CustomEvent): void => {
     if (this.fragment._id !== e.detail._id) return;
 
     this._fragmentStore = e.detail.fragmentStore;
@@ -101,7 +101,7 @@ export class FragmentTab extends LitElement {
     return fragmentId === this.activeFragmentId;
   }
 
-  private _onClickListener(e: MouseEvent) {
+  private _activeFragmentTab(e: MouseEvent) {
     if (!e.currentTarget) return;
     const fragmentId = Number(
       (<HTMLDivElement>e.currentTarget).getAttribute("fragmentId")

@@ -94,7 +94,7 @@ export class EditorElement extends LitElement {
           code="${this._content}"
           language="${this._language}"
           @change-text=${this._changeText}
-          @save-text=${this._saveText}
+          @save-content=${this._saveContent}
           @blur-editor=${this._onBlurEditor}
         ></code-editor>
       </section>
@@ -215,7 +215,7 @@ export class EditorElement extends LitElement {
     });
   }
 
-  private _saveText(e: CustomEvent): void {
+  private _saveContent(e: CustomEvent): void {
     if (this._activeFragmentId === undefined) return;
 
     saveContent(this._activeFragmentId, e.detail.text, this.fragmentStore);

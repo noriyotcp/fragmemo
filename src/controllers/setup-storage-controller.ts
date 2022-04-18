@@ -23,11 +23,11 @@ export class SetupStorageController implements ReactiveController {
     this.setupStorage();
     window.addEventListener(
       "update-snippets",
-      this._updateSnippetsListener as EventListener
+      this._onSnippetsUpdated as EventListener
     );
     window.addEventListener(
       "search-snippets",
-      this._searchSnippetsListener as EventListener
+      this._onSnippetsSearched as EventListener
     );
     // When Command or Control + N is pressed
     myAPI.newSnippet((_e: Event) => this._initSnippet());
@@ -36,11 +36,11 @@ export class SetupStorageController implements ReactiveController {
   hostDisconnected(): void {
     window.removeEventListener(
       "update-snippets",
-      this._updateSnippetsListener as EventListener
+      this._onSnippetsUpdated as EventListener
     );
     window.removeEventListener(
       "search-snippets",
-      this._searchSnippetsListener as EventListener
+      this._onSnippetsSearched as EventListener
     );
   }
 
@@ -87,7 +87,7 @@ export class SetupStorageController implements ReactiveController {
       });
   }
 
-  private _updateSnippetsListener = (e: CustomEvent) => {
+  private _onSnippetsUpdated = (e: CustomEvent) => {
     this._loadSnippets(this.searchQuery.query);
   };
 
@@ -101,7 +101,7 @@ export class SetupStorageController implements ReactiveController {
     });
   }
 
-  private _searchSnippetsListener = (e: CustomEvent) => {
+  private _onSnippetsSearched = (e: CustomEvent) => {
     const query = e.detail.query;
 
     if (!e.detail.query) {

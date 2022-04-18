@@ -26,14 +26,14 @@ export class ToastStackController implements ReactiveController {
   hostConnected(): void {
     window.addEventListener(
       "display-toast-stack",
-      this._displayToastListener as EventListener
+      this._displayToast as EventListener
     );
   }
 
   hostDisconnected(): void {
     window.removeEventListener(
       "display-toast-stack",
-      this._displayToastListener as EventListener
+      this._displayToast as EventListener
     );
   }
 
@@ -60,7 +60,7 @@ export class ToastStackController implements ReactiveController {
     return alert.toast?.();
   }
 
-  private _displayToastListener = (e: CustomEvent): void => {
+  private _displayToast = (e: CustomEvent): void => {
     this.notify({
       message: `${e.detail.message}`,
       variant: e.detail.variant,

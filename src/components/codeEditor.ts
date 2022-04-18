@@ -136,7 +136,7 @@ export class CodeEditor extends LitElement {
       this.dispatchEvent(new CustomEvent("blur-editor"));
     });
     // When Command or Control + S is pressed
-    myAPI.saveFragment((_e: Event) => this._saveText());
+    myAPI.saveFragment((_e: Event) => this._saveContent());
   }
 
   disconnectedCallback() {
@@ -206,12 +206,12 @@ export class CodeEditor extends LitElement {
     );
   }
 
-  private _saveText() {
+  private _saveContent() {
     this._saveCurrentViewState(this.viewStatesController.currentFragmentId);
     this.viewStatesController.previousFragmentId = null;
 
     this.dispatchEvent(
-      new CustomEvent("save-text", {
+      new CustomEvent("save-content", {
         detail: { text: this.getValue() },
         bubbles: true,
         composed: true,

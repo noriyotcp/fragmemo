@@ -21,11 +21,11 @@ export class FragmentsController implements ReactiveController {
   hostConnected(): void {
     window.addEventListener(
       "select-snippet",
-      this._selectSnippetListener as EventListener
+      this._onSnippetSelected as EventListener
     );
     window.addEventListener(
       "active-fragment",
-      this._activeFragmentListener as EventListener
+      this._onFragmentActivated as EventListener
     );
     // When Command or Control + T is pressed
     myAPI.newFragment((_e: Event) => this._initFragment());
@@ -34,11 +34,11 @@ export class FragmentsController implements ReactiveController {
   hostDisconnected(): void {
     window.removeEventListener(
       "select-snippet",
-      this._selectSnippetListener as EventListener
+      this._onSnippetSelected as EventListener
     );
     window.removeEventListener(
       "active-fragment",
-      this._activeFragmentListener as EventListener
+      this._onFragmentActivated as EventListener
     );
     myAPI.removeAllListeners("new-fragment");
   }
@@ -53,7 +53,7 @@ export class FragmentsController implements ReactiveController {
     });
   }
 
-  private _selectSnippetListener = (e: CustomEvent): void => {
+  private _onSnippetSelected = (e: CustomEvent): void => {
     this.snippet = JSON.parse(e.detail.selectedSnippet);
     if (!this.snippet) return;
     if (this.snippet._id === this.activeFragmentId) {
@@ -85,7 +85,7 @@ export class FragmentsController implements ReactiveController {
     });
   };
 
-  private _activeFragmentListener = (e: CustomEvent): void => {
+  private _onFragmentActivated = (e: CustomEvent): void => {
     if (!this.snippet) return;
 
     this.inactiveFragmentId = this.activeFragmentId;

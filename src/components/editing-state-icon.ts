@@ -45,45 +45,45 @@ export class EditingStateIcon extends LitElement {
   firstUpdated(): void {
     window.addEventListener(
       "content-editing-state-changed",
-      this._stateChangedListener as EventListener
+      this._onContentEditingStateChanged as EventListener
     );
     window.addEventListener(
       "snippet-selected",
-      this._snippetSelectedListener as EventListener
+      this._onSnippetSelected as EventListener
     );
     window.addEventListener(
       "active-fragment",
-      this._activeFragmentListener as EventListener
+      this._onFragmentActivated as EventListener
     );
   }
 
   disconnectedCallback() {
     window.removeEventListener(
       "content-editing-state-changed",
-      this._stateChangedListener as EventListener
+      this._onContentEditingStateChanged as EventListener
     );
     window.removeEventListener(
       "snippet-selected",
-      this._snippetSelectedListener as EventListener
+      this._onSnippetSelected as EventListener
     );
     window.removeEventListener(
       "active-fragment",
-      this._activeFragmentListener as EventListener
+      this._onFragmentActivated as EventListener
     );
 
     super.disconnectedCallback();
   }
 
-  private _snippetSelectedListener = (e: CustomEvent) => {
+  private _onSnippetSelected = (e: CustomEvent) => {
     // e.detail.to is active fragment ID
     this._setIsEditing(e.detail.to);
   };
 
-  private _activeFragmentListener = (e: CustomEvent) => {
+  private _onFragmentActivated = (e: CustomEvent) => {
     this._setIsEditing(e.detail.activeFragmentId);
   };
 
-  private _stateChangedListener = (e: CustomEvent): void => {
+  private _onContentEditingStateChanged = (e: CustomEvent): void => {
     this._fragmentStore = e.detail.fragmentStore;
     this._setIsEditing(e.detail._id);
   };

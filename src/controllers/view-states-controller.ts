@@ -16,26 +16,26 @@ export class ViewStatesController implements ReactiveController {
   hostConnected(): void {
     window.addEventListener(
       "fragment-switched",
-      this._fragmentSwitchedListener as EventListener
+      this._onFragmentSwitched as EventListener
     );
     window.addEventListener(
       "snippet-selected",
-      this._snippetSelectedListener as EventListener
+      this._onSnippetSelected as EventListener
     );
   }
 
   hostDisconnected() {
     window.removeEventListener(
       "fragment-switched",
-      this._fragmentSwitchedListener as EventListener
+      this._onFragmentSwitched as EventListener
     );
     window.removeEventListener(
       "snippet-selected",
-      this._snippetSelectedListener as EventListener
+      this._onSnippetSelected as EventListener
     );
   }
 
-  private _fragmentSwitchedListener = (e: CustomEvent) => {
+  private _onFragmentSwitched = (e: CustomEvent) => {
     this.isSnippetSwitched = false;
 
     this.currentFragmentId = e.detail.to;
@@ -44,7 +44,7 @@ export class ViewStatesController implements ReactiveController {
     console.log("fragment-switched", e.detail);
   };
 
-  private _snippetSelectedListener = (e: CustomEvent) => {
+  private _onSnippetSelected = (e: CustomEvent) => {
     this.isSnippetSwitched = this.currentSnippetId !== e.detail.snippetId;
     this.currentSnippetId = e.detail.snippetId;
 

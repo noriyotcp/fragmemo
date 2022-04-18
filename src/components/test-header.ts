@@ -47,7 +47,7 @@ export class TestHeader extends LitElement {
   async firstUpdated(): Promise<void> {
     window.addEventListener(
       "select-snippet",
-      this._selectSnippetListener as EventListener
+      this._onSnippetSelected as EventListener
     );
 
     // Give the browser a chance to paint
@@ -96,13 +96,13 @@ export class TestHeader extends LitElement {
   disconnectedCallback() {
     window.removeEventListener(
       "select-snippet",
-      this._selectSnippetListener as EventListener
+      this._onSnippetSelected as EventListener
     );
 
     super.disconnectedCallback();
   }
 
-  private _selectSnippetListener = (e: CustomEvent): void => {
+  private _onSnippetSelected = (e: CustomEvent): void => {
     this._snippet = JSON.parse(e.detail.selectedSnippet);
     this.requestUpdate();
   };

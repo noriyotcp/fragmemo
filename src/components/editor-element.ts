@@ -33,9 +33,6 @@ export class EditorElement extends LitElement {
     myAPI.loadLanguages().then((languages) => {
       this._languages = languages;
     });
-    myAPI.selectLanguage((_e: Event) => {
-      this._selectLanguage();
-    });
   }
 
   @query("#lang-select") select?: HTMLSelectElement;
@@ -96,6 +93,7 @@ export class EditorElement extends LitElement {
           @change-text=${this._changeText}
           @save-content=${this._saveContent}
           @blur-editor=${this._onBlurEditor}
+          @select-language=${this._selectLanguage}
         ></code-editor>
       </section>
       <footer>

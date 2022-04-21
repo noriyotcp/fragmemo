@@ -124,7 +124,18 @@ export class CodeEditor extends LitElement {
     };
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     this.editor = monaco.editor.create(this.container.value!, editorOptions);
-    console.log(this._langaugesMap());
+    this.editor.createContextKey(
+      /*key name*/ "selectLanguageContext",
+      /*default value*/ true
+    );
+    this.editor.addCommand(
+      monaco.KeyMod.CtrlCmd | monaco.KeyMod.Alt | monaco.KeyCode.KeyL,
+      () => {
+        this._selectLanguage();
+      },
+      "selectLanguageContext"
+    );
+
     this.editor.onKeyUp((e) => {
       this._changeText(e.browserEvent.isComposing);
     });
@@ -176,6 +187,10 @@ export class CodeEditor extends LitElement {
     ) {
       this._restoreCurrentViewState();
     }
+  }
+
+  private _selectLanguage(): void {
+    this.dispatchEvent(new CustomEvent("select-language"));
   }
 
   private _saveCurrentViewState(fragmentId: number) {

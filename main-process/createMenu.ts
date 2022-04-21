@@ -55,17 +55,7 @@ export const createMenu = (win: BrowserWindow): void => {
     { role: "viewMenu" },
     {
       label: "Go",
-      submenu: [
-        {
-          label: "Languages",
-          accelerator: "CmdOrCtrl+L",
-          click: async () => {
-            win.webContents.send("select-language");
-          },
-        },
-        { type: "separator" },
-        ...switchTab,
-      ],
+      submenu: [...switchTab],
     },
     { role: "windowMenu" },
     { role: "help", submenu: [{ role: "about" }] },

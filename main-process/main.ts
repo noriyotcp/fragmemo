@@ -280,9 +280,7 @@ app.once("browser-window-created", () => {
   };
 
   ipcMain.handle("load-languages", (event) => {
-    if (!db) return;
-
-    return db.sortBy("Language", "_idx").toJSON();
+    return dbHandlers.loadLanguages();
   });
 
   ipcMain.handle("load-fragments", (event, snippetId) => {

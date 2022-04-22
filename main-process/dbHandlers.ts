@@ -1,6 +1,6 @@
 import { app } from "electron";
 import DB from "./db/db";
-import { Fragment } from "./db/realm";
+import { Fragment, Language } from "./db/realm";
 import { Results } from "realm";
 
 const db = new DB(`${app.getPath("userData")}/fragmemoDB/fragmemo.realm`);
@@ -17,6 +17,12 @@ export const setupStorage = (): DB => {
   }
 
   return db;
+};
+
+export const loadLanguages = (): Language[] | undefined => {
+  if (!db) return;
+
+  return db.sortBy("Language", "_idx").toJSON();
 };
 
 export const loadFragments = (snippetId: number): Fragment[] => {

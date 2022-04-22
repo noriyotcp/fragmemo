@@ -252,7 +252,7 @@ app.once("browser-window-created", () => {
   });
 
   ipcMain.handle("init-fragment", (event, snippetId) => {
-    db.initFragment(snippetId);
+    dbHandlers.initFragment(snippetId);
   });
 
   ipcMain.handle("setup-storage", async () => {

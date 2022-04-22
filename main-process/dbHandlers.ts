@@ -19,6 +19,10 @@ export const setupStorage = (): DB => {
   return db;
 };
 
+export const initFragment = (snippetId: number): void => {
+  db.initFragment(snippetId);
+};
+
 export const loadSnippets = (): Snippet[] | undefined => {
   if (!db) return;
 

@@ -19,6 +19,11 @@ export const setupStorage = (): DB => {
   return db;
 };
 
+export const initSnippet = (): Snippet[] => {
+  db.initSnippet("");
+  return db.reverseSortBy("Snippet", "_id")[0].toJSON();
+};
+
 export const initFragment = (snippetId: number): void => {
   db.initFragment(snippetId);
 };

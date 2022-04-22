@@ -261,23 +261,8 @@ app.once("browser-window-created", () => {
   });
 
   ipcMain.handle("load-snippets", (event) => {
-    if (!db) return;
-
-    try {
-      return loadSnippets(db);
-    } catch (error) {
-      console.error(error);
-      throw error;
-    }
+    return dbHandlers.loadSnippets();
   });
-
-  const loadSnippets = (db: DB): Snippet[] => {
-    const snippets = db.reverseSortBy(
-      "Snippet",
-      "snippetUpdate.updatedAt"
-    ) as unknown as Results<Snippet>;
-    return snippets.toJSON();
-  };
 
   ipcMain.handle("load-languages", (event) => {
     return dbHandlers.loadLanguages();

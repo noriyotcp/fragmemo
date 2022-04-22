@@ -3,7 +3,7 @@ import DB from "./db/db";
 
 const db = new DB(`${app.getPath("userData")}/fragmemoDB/fragmemo.realm`);
 
-const setupStorage = (): DB => {
+export const setupStorage = (): DB => {
   try {
     if (db.empty) {
       db.initLanguage();
@@ -17,4 +17,6 @@ const setupStorage = (): DB => {
   return db;
 };
 
-export { setupStorage };
+export const resetActiveSnippetHistory = (): void => {
+  db.resetActiveSnippetHistory();
+};

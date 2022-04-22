@@ -302,7 +302,7 @@ app.once("browser-window-created", () => {
 });
 
 app.on("will-quit", () => {
-  db.resetActiveSnippetHistory();
+  dbHandlers.resetActiveSnippetHistory();
   db.close();
 });
 

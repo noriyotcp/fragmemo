@@ -286,10 +286,7 @@ app.once("browser-window-created", () => {
   });
 
   ipcMain.handle("load-fragments", (event, snippetId) => {
-    const fragments = db
-      .objects("Fragment")
-      .filtered(`snippet._id == ${snippetId}`) as unknown as Results<Fragment>;
-    return fragments.toJSON();
+    return dbHandlers.loadFragments(snippetId);
   });
 
   ipcMain.handle("new-active-snippet-history", (event, snippetId) => {

@@ -1,5 +1,7 @@
 import { app } from "electron";
 import DB from "./db/db";
+import { Fragment } from "./db/realm";
+import { Results } from "realm";
 
 const db = new DB(`${app.getPath("userData")}/fragmemoDB/fragmemo.realm`);
 
@@ -15,6 +17,13 @@ export const setupStorage = (): DB => {
   }
 
   return db;
+};
+
+export const loadFragments = (snippetId: number): Fragment[] => {
+  const fragments = db
+    .objects("Fragment")
+    .filtered(`snippet._id == ${snippetId}`) as unknown as Results<Fragment>;
+  return fragments.toJSON();
 };
 
 export const newActiveSnippetHistory = (snippetId: number): void => {

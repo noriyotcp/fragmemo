@@ -297,7 +297,7 @@ app.once("browser-window-created", () => {
   });
 
   ipcMain.handle("get-latest-active-snippet-history", (event) => {
-    return db.reverseSortBy("ActiveSnippetHistory", "_id")[0]?.toJSON();
+    return dbHandlers.getLatestActiveSnippetHistory();
   });
 });
 

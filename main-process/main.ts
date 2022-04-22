@@ -293,7 +293,7 @@ app.once("browser-window-created", () => {
   });
 
   ipcMain.handle("new-active-snippet-history", (event, snippetId) => {
-    db.createActiveSnippetHistory(snippetId);
+    dbHandlers.newActiveSnippetHistory(snippetId);
   });
 
   ipcMain.handle("get-latest-active-snippet-history", (event) => {

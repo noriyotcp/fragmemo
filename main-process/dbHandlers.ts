@@ -17,6 +17,10 @@ export const setupStorage = (): DB => {
   return db;
 };
 
+export const newActiveSnippetHistory = (snippetId: number): void => {
+  db.createActiveSnippetHistory(snippetId);
+};
+
 export const getLatestActiveSnippetHistory = (): JSON => {
   return db.reverseSortBy("ActiveSnippetHistory", "_id")[0]?.toJSON();
 };

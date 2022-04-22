@@ -239,11 +239,11 @@ app.once("browser-window-created", () => {
   });
 
   ipcMain.handle("delete-fragment", (event, ids) => {
-    db.deleteFragment(ids.fragmentId, ids.nextActiveFragmentId);
+    dbHandlers.deleteFragment(ids);
   });
 
   ipcMain.handle("delete-snippet", (event, snippetId) => {
-    db.deleteSnippet(snippetId);
+    dbHandlers.deleteSnippet(snippetId);
   });
 
   ipcMain.handle("init-snippet", (event) => {

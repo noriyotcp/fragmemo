@@ -56,6 +56,17 @@ export const loadFragments = (snippetId: number): Fragment[] => {
   return fragments.toJSON();
 };
 
+export const deleteFragment = (ids: {
+  fragmentId: number;
+  nextActiveFragmentId?: number;
+}) => {
+  db.deleteFragment(ids.fragmentId, ids.nextActiveFragmentId);
+};
+
+export const deleteSnippet = (snippetId: number): void => {
+  db.deleteSnippet(snippetId);
+};
+
 export const newActiveSnippetHistory = (snippetId: number): void => {
   db.createActiveSnippetHistory(snippetId);
 };

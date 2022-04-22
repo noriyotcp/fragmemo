@@ -11,6 +11,7 @@ import { createMenu } from "./createMenu";
 import { JsonStorage, DatapathDoesNotExistError } from "./jsonStorage";
 import { setTimeout } from "timers/promises";
 import DB from "./db/db";
+import * as dbHandlers from "./dbHandlers";
 // import { createHash } from "node:crypto";
 import fs from "fs";
 
@@ -256,17 +257,7 @@ app.once("browser-window-created", () => {
 
   ipcMain.handle("setup-storage", async () => {
     // await setTimeout(1000); // wait 1 seconds for testing
-
-    db = new DB(`${app.getPath("userData")}/fragmemoDB/fragmemo.realm`);
-    try {
-      if (db.empty) {
-        db.initLanguage();
-        db.initSnippet("");
-      }
-    } catch (err) {
-      console.error(err);
-      throw err;
-    }
+    db = dbHandlers.setupStorage();
   });
 
   ipcMain.handle("load-snippets", (event) => {

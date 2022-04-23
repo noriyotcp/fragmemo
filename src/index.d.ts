@@ -7,12 +7,14 @@ import {
   Language,
   ActiveSnippetHistory,
 } from "models.d";
+import { Environment } from "monaco-editor";
 import { ISnippetProps, IFragmentProps } from "props.d";
 
 declare global {
   interface Window {
     ipcRenderer: IpcRenderer;
     myAPI: SandBox;
+    MonacoEnvironment: Environment;
   }
 }
 

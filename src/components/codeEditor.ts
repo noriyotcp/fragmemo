@@ -16,8 +16,7 @@ import { ViewStatesController } from "../controllers/view-states-controller";
 
 const { myAPI } = window;
 
-// @ts-ignore
-self.MonacoEnvironment = {
+window.MonacoEnvironment = {
   getWorker(_workerId: string, label: string) {
     if (label === "json") {
       return new jsonWorker();

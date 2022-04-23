@@ -21,12 +21,7 @@ export class SettingsElement extends LitElement {
   render(): TemplateResult {
     return html`
       <sl-drawer label="Settings" class="settings" style="--size: 100vw">
-        This drawer width is always 100% of the viewport.
-        <div
-          style="height: 150vh; border: dashed 2px var(--sl-color-neutral-200); padding: 0 1rem;"
-        >
-          <p>Scroll down and give it a try! 👇</p>
-        </div>
+        <settings-group></settings-group>
         <sl-button slot="footer" variant="primary" @click=${this._closeSettings}
           >Close</sl-button
         >

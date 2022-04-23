@@ -114,3 +114,12 @@ export const updateSnippets = (): void => {
     type: "update-snippets",
   });
 };
+
+export const searchSnippets = (query: string): void => {
+  dispatch({
+    type: "search-snippets",
+    detail: {
+      query,
+    },
+  });
+};

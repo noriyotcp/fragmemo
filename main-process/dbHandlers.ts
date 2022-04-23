@@ -43,6 +43,13 @@ export const loadSnippets = (): Snippet[] | undefined => {
   }
 };
 
+export const getActiveFragment = (snippetId: number): Fragment => {
+  const activeFragment = db
+    .objects("ActiveFragment")
+    .filtered(`snippetId = ${snippetId}`)[0];
+  return activeFragment.toJSON();
+};
+
 export const loadLanguages = (): Language[] | undefined => {
   if (!db) return;
 

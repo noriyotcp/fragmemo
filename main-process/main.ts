@@ -194,12 +194,8 @@ app.once("browser-window-created", () => {
     return fragment.toJSON();
   });
 
-  ipcMain.handle("get-active-fragment", async (event, snippetId) => {
-    const activeFragment = db
-      .objects("ActiveFragment")
-      .filtered(`snippetId = ${snippetId}`)[0];
-    console.log("Main process: get-active-fragment", activeFragment.toJSON());
-    return activeFragment.toJSON();
+  ipcMain.handle("get-active-fragment", (event, snippetId) => {
+    return dbHandlers.getActiveFragment(snippetId);
   });
 
   ipcMain.handle("show-context-menu-on-fragment-tab", (event) => {

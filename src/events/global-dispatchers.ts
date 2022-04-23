@@ -62,3 +62,13 @@ export const snippetSelected = (
     },
   });
 };
+
+export const fragmentSwitched = (from: number, to: number): void => {
+  dispatch({
+    type: "fragment-switched",
+    detail: {
+      from,
+      to,
+    },
+  });
+};

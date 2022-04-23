@@ -8,7 +8,7 @@ export interface ISnippetProps {
 }
 
 export interface IFragmentProps {
-  _id?: number;
+  _id: number;
   properties: {
     title?: string;
     content?: string;

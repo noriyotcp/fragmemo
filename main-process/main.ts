@@ -10,15 +10,11 @@ import {
 import { createMenu } from "./createMenu";
 import { JsonStorage, DatapathDoesNotExistError } from "./jsonStorage";
 import { setTimeout } from "timers/promises";
-import DB from "./db/db";
+import * as dbHandlers from "./dbHandlers";
 // import { createHash } from "node:crypto";
 import fs from "fs";
 
-import { Fragment, Snippet } from "./db/realm";
-import { Results } from "realm";
-
 const isDev = process.env.IS_DEV == "true" ? true : false;
-let db: DB;
 let jsonStorage: JsonStorage;
 
 async function createWindowSettings(): Promise<void> {
@@ -147,58 +143,28 @@ app.whenReady().then(() => {
 });
 
 app.once("browser-window-created", () => {
-  console.log("browser-window-created");
   ipcMain.handle("update-snippet", (event, props) => {
-    console.info("Main process: update-snippet", {
-      className: "Snippet",
-      props,
-    });
-    try {
-      db.updateSnippet(props);
-    } catch (error) {
-      console.error(error);
-      throw new Error("update-snippet: " + error);
-    }
+    dbHandlers.updateSnippet(props);
   });
 
-  ipcMain.handle("update-fragment", async (event, data) => {
-    console.info("Main process: update-fragment", {
-      className: "Fragment",
-      data,
-    });
-    await db.updateFragment(data);
-    return { status: true };
+  ipcMain.handle("update-fragment", async (event, props) => {
+    return dbHandlers.updateFragment(props);
   });
 
   ipcMain.handle("update-active-fragment", async (event, props) => {
-    console.info("Main process: update-active-fragment", {
-      className: "ActiveFragment",
-      props,
-    });
-    await db.updateActiveFragment(props);
-    return { status: true };
+    return dbHandlers.updateActiveFragment(props);
   });
 
   ipcMain.handle("get-snippet", async (event, snippetId) => {
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    const snippet = db.objectForPrimaryKey("Snippet", snippetId)!;
-    console.log("Main process: get-snippet", snippet.toJSON());
-    return snippet.toJSON();
+    return dbHandlers.getSnippet(snippetId);
   });
 
   ipcMain.handle("get-fragment", (event, fragmentId) => {
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    const fragment = db.objectForPrimaryKey("Fragment", fragmentId)!;
-    console.log("Main process: get-fragment", fragment.toJSON());
-    return fragment.toJSON();
+    return dbHandlers.getFragment(fragmentId);
   });
 
-  ipcMain.handle("get-active-fragment", async (event, snippetId) => {
-    const activeFragment = db
-      .objects("ActiveFragment")
-      .filtered(`snippetId = ${snippetId}`)[0];
-    console.log("Main process: get-active-fragment", activeFragment.toJSON());
-    return activeFragment.toJSON();
+  ipcMain.handle("get-active-fragment", (event, snippetId) => {
+    return dbHandlers.getActiveFragment(snippetId);
   });
 
   ipcMain.handle("show-context-menu-on-fragment-tab", (event) => {
@@ -238,81 +204,49 @@ app.once("browser-window-created", () => {
   });
 
   ipcMain.handle("delete-fragment", (event, ids) => {
-    db.deleteFragment(ids.fragmentId, ids.nextActiveFragmentId);
+    dbHandlers.deleteFragment(ids);
   });
 
   ipcMain.handle("delete-snippet", (event, snippetId) => {
-    db.deleteSnippet(snippetId);
+    dbHandlers.deleteSnippet(snippetId);
   });
 
   ipcMain.handle("init-snippet", (event) => {
-    db.initSnippet("");
-    return db.reverseSortBy("Snippet", "_id")[0].toJSON();
+    return dbHandlers.initSnippet();
   });
 
   ipcMain.handle("init-fragment", (event, snippetId) => {
-    db.initFragment(snippetId);
+    dbHandlers.initFragment(snippetId);
   });
 
   ipcMain.handle("setup-storage", async () => {
     // await setTimeout(1000); // wait 1 seconds for testing
-
-    db = new DB(`${app.getPath("userData")}/fragmemoDB/fragmemo.realm`);
-    try {
-      if (db.empty) {
-        db.initLanguage();
-        db.initSnippet("");
-      }
-    } catch (err) {
-      console.error(err);
-      throw err;
-    }
+    dbHandlers.setupStorage();
   });
 
   ipcMain.handle("load-snippets", (event) => {
-    if (!db) return;
-
-    try {
-      return loadSnippets(db);
-    } catch (error) {
-      console.error(error);
-      throw error;
-    }
+    return dbHandlers.loadSnippets();
   });
 
-  const loadSnippets = (db: DB): Snippet[] => {
-    const snippets = db.reverseSortBy(
-      "Snippet",
-      "snippetUpdate.updatedAt"
-    ) as unknown as Results<Snippet>;
-    return snippets.toJSON();
-  };
-
   ipcMain.handle("load-languages", (event) => {
-    if (!db) return;
-
-    return db.sortBy("Language", "_idx").toJSON();
+    return dbHandlers.loadLanguages();
   });
 
   ipcMain.handle("load-fragments", (event, snippetId) => {
-    const fragments = db
-      .objects("Fragment")
-      .filtered(`snippet._id == ${snippetId}`) as unknown as Results<Fragment>;
-    return fragments.toJSON();
+    return dbHandlers.loadFragments(snippetId);
   });
 
   ipcMain.handle("new-active-snippet-history", (event, snippetId) => {
-    db.createActiveSnippetHistory(snippetId);
+    dbHandlers.newActiveSnippetHistory(snippetId);
   });
 
   ipcMain.handle("get-latest-active-snippet-history", (event) => {
-    return db.reverseSortBy("ActiveSnippetHistory", "_id")[0]?.toJSON();
+    return dbHandlers.getLatestActiveSnippetHistory();
   });
 });
 
 app.on("will-quit", () => {
-  db.resetActiveSnippetHistory();
-  db.close();
+  dbHandlers.onWillQuit();
 });
 
 // Quit when all windows are closed, except on macOS. There, it's common

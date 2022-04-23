@@ -92,7 +92,7 @@ class DB extends Realm {
     });
   }
 
-  deleteFragment(fragmentId: number, nextActiveFragmentId: number): void {
+  deleteFragment(fragmentId: number, nextActiveFragmentId?: number): void {
     const fragment: Fragment | undefined = this.objectForPrimaryKey(
       "Fragment",
       fragmentId
@@ -107,9 +107,16 @@ class DB extends Realm {
     this.write(() => {
       this.delete(fragment);
     });
-    this.updateActiveFragment({
-      properties: { snippetId: snippet._id, fragmentId: nextActiveFragmentId },
-    });
+
+    if (nextActiveFragmentId) {
+      this.updateActiveFragment({
+        properties: {
+          snippetId: snippet._id,
+          fragmentId: nextActiveFragmentId,
+        },
+      });
+    }
+
     this.write(() => {
       snippet.snippetUpdate.updatedAt = new Date();
     });

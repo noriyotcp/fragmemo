@@ -1,6 +1,10 @@
-import { dispatch } from "../events/dispatcher";
 import { ReactiveController, ReactiveControllerHost } from "lit";
 import { Fragment, Snippet } from "models.d";
+import {
+  fragmentSwitched,
+  snippetSelected,
+  updateSnippets,
+} from "../events/global-dispatchers";
 
 const { myAPI } = window;
 
@@ -47,9 +51,7 @@ export class FragmentsController implements ReactiveController {
     if (!this.snippet) return;
 
     myAPI.initFragment(this.snippet._id).then(() => {
-      dispatch({
-        type: "update-snippets",
-      });
+      updateSnippets();
     });
   }
 
@@ -68,14 +70,7 @@ export class FragmentsController implements ReactiveController {
     });
     myAPI.getActiveFragment(<number>this.snippet._id).then((activeFragment) => {
       this.activeFragmentId = activeFragment.fragmentId;
-      dispatch({
-        type: "snippet-selected",
-        detail: {
-          to: this.activeFragmentId,
-          from: null,
-          snippetId: this.snippet?._id,
-        },
-      });
+      snippetSelected(this.activeFragmentId, undefined, this.snippet?._id);
     });
 
     myAPI.loadFragments(<number>this.snippet._id).then((fragments) => {
@@ -90,13 +85,7 @@ export class FragmentsController implements ReactiveController {
 
     this.inactiveFragmentId = this.activeFragmentId;
     this.activeFragmentId = e.detail.activeFragmentId;
-    dispatch({
-      type: "fragment-switched",
-      detail: {
-        from: this.inactiveFragmentId,
-        to: this.activeFragmentId,
-      },
-    });
+    fragmentSwitched(this.inactiveFragmentId, this.activeFragmentId);
 
     this._setCurrentTabIndex();
     // Update ActiveFragment in Realm DB

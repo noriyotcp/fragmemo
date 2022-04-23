@@ -1,8 +1,8 @@
-import { dispatch } from "../events/dispatcher";
 import { LitElement, html, css, TemplateResult } from "lit";
 import { customElement, property, queryAll } from "lit/decorators.js";
 import { Fragment } from "models.d";
 import { Store } from "stores";
+import { activeFragment } from "../events/global-dispatchers";
 
 @customElement("fragment-tab")
 export class FragmentTab extends LitElement {
@@ -113,11 +113,6 @@ export class FragmentTab extends LitElement {
       tab.removeAttribute("active");
     });
 
-    dispatch({
-      type: "active-fragment",
-      detail: {
-        activeFragmentId: fragmentId,
-      },
-    });
+    activeFragment(fragmentId);
   }
 }

@@ -3,9 +3,9 @@ import { customElement, queryAll } from "lit/decorators.js";
 import { map } from "lit/directives/map.js";
 import { styleMap } from "lit/directives/style-map.js";
 import { FragmentsController } from "../controllers/fragments-controller";
-import { dispatch } from "../events/dispatcher";
 import { IdsOnDeleteFragment } from "index.d";
 import { Fragment } from "models.d";
+import { updateSnippets } from "../events/global-dispatchers";
 
 const { myAPI } = window;
 
@@ -134,9 +134,7 @@ export class FragmentTabList extends LitElement {
       myAPI
         .deleteFragment(this._idsOnDeleteFragment(this.tabOnContext))
         .then(() => {
-          dispatch({
-            type: "update-snippets",
-          });
+          updateSnippets();
         });
     }
   }

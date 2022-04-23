@@ -6,8 +6,8 @@ import "@ui5/webcomponents/dist/List.js";
 import "@ui5/webcomponents/dist/StandardListItem.js";
 
 import { SetupStorageController } from "../controllers/setup-storage-controller";
-import { dispatch } from "../events/dispatcher";
 import { ActiveSnippetHistory, Snippet } from "../models";
+import { selectSnippet, updateSnippets } from "../events/global-dispatchers";
 
 const { myAPI } = window;
 
@@ -99,13 +99,10 @@ export class SnippetList extends LitElement {
       ? e.detail.previouslySelectedItems[0].getAttribute("snippet")
       : null;
 
-    dispatch({
-      type: "select-snippet",
-      detail: {
-        selectedSnippet: e.detail.selectedItems[0].getAttribute("snippet"),
-        previouslySelectedSnippet,
-      },
-    });
+    selectSnippet(
+      e.detail.selectedItems[0].getAttribute("snippet"),
+      previouslySelectedSnippet
+    );
   };
 
   async updated(): Promise<void> {
@@ -149,9 +146,7 @@ export class SnippetList extends LitElement {
         const message = `Are you sure you want to delete "${this.snippet.title}"?`;
         if (confirm(message)) {
           myAPI.deleteSnippet(this.snippet._id).then(() => {
-            dispatch({
-              type: "update-snippets",
-            });
+            updateSnippets();
           });
         }
       }

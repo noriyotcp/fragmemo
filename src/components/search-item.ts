@@ -1,6 +1,10 @@
-import { dispatch } from "../events/dispatcher";
 import { LitElement, html, css, TemplateResult } from "lit";
 import { customElement, query } from "lit/decorators.js";
+import {
+  clearSearchQuery,
+  searchSnippets,
+  updateSnippets,
+} from "../events/global-dispatchers";
 
 @customElement("search-item")
 export class SearchItem extends LitElement {
@@ -64,12 +68,7 @@ export class SearchItem extends LitElement {
     const target = <HTMLInputElement>e.currentTarget;
     if (e.isComposing) return;
 
-    dispatch({
-      type: "search-snippets",
-      detail: {
-        query: target.value,
-      },
-    });
+    searchSnippets(target.value);
   };
 
   private _searchByEnter = (e: KeyboardEvent): void => {
@@ -79,22 +78,12 @@ export class SearchItem extends LitElement {
 
     if (!target.value) return;
 
-    dispatch({
-      type: "search-snippets",
-      detail: {
-        query: target.value,
-      },
-    });
+    searchSnippets(target.value);
   };
 
   private _clear = (e: Event): void => {
-    dispatch({
-      type: "clear-internal-search-query",
-    });
-
-    dispatch({
-      type: "update-snippets",
-    });
+    clearSearchQuery();
+    updateSnippets();
   };
 
   private _clearSearch = (_e: InputEvent): void => {

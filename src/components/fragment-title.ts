@@ -1,8 +1,8 @@
 import { LitElement, html, TemplateResult, css } from "lit";
 import { customElement, property, query } from "lit/decorators.js";
 import { live } from "lit/directives/live.js";
-import { dispatch } from "../events/dispatcher";
 import { Fragment } from "models.d";
+import { updateSnippets } from "../events/global-dispatchers";
 
 const { myAPI } = window;
 
@@ -84,9 +84,7 @@ export class FragmentTitle extends LitElement {
         },
       })
       .then(() => {
-        dispatch({
-          type: "update-snippets",
-        });
+        updateSnippets();
       });
   }
 }

@@ -1,10 +1,13 @@
-import { dispatch } from "../events/dispatcher";
 import { LitElement, html, css, TemplateResult } from "lit";
 import { customElement, query, state } from "lit/decorators.js";
 import { map } from "lit/directives/map.js";
 import { createFragmentStore, Store } from "../stores";
 import { Language } from "models.d";
 import { saveContentAsync, saveContent } from "../saveContent";
+import {
+  contentEditingStateChanged,
+  updateSnippets,
+} from "../events/global-dispatchers";
 
 const { myAPI } = window;
 
@@ -193,13 +196,8 @@ export class EditorElement extends LitElement {
           }
         );
 
-        dispatch({
-          type: "content-editing-state-changed",
-          detail: {
-            _id: this._activeFragmentId,
-            fragmentStore: this.fragmentStore,
-          },
-        });
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        contentEditingStateChanged(this._activeFragmentId!, this.fragmentStore);
 
         // auto save
         if (!e.detail.isComposing) {
@@ -220,9 +218,7 @@ export class EditorElement extends LitElement {
   }
 
   private _onBlurEditor(e: CustomEvent): void {
-    dispatch({
-      type: "update-snippets",
-    });
+    updateSnippets();
   }
 
   private _setContent(): void {

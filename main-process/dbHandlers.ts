@@ -78,6 +78,13 @@ export const loadFragments = (snippetId: number): Fragment[] => {
   return fragments.toJSON();
 };
 
+export const updateActiveFragment = async (props: {
+  properties: { fragmentId: number; snippetId: number };
+}): Promise<{ status: boolean }> => {
+  await db.updateActiveFragment(props);
+  return { status: true };
+};
+
 export const deleteFragment = (ids: {
   fragmentId: number;
   nextActiveFragmentId?: number;

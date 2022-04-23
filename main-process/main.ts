@@ -172,12 +172,7 @@ app.once("browser-window-created", () => {
   });
 
   ipcMain.handle("update-active-fragment", async (event, props) => {
-    console.info("Main process: update-active-fragment", {
-      className: "ActiveFragment",
-      props,
-    });
-    await db.updateActiveFragment(props);
-    return { status: true };
+    return dbHandlers.updateActiveFragment(props);
   });
 
   ipcMain.handle("get-snippet", async (event, snippetId) => {

@@ -78,6 +78,17 @@ export const loadFragments = (snippetId: number): Fragment[] => {
   return fragments.toJSON();
 };
 
+// TODO: Duplicated in src/props.d.ts
+interface IFragmentProps {
+  _id: number;
+  properties: typeof Fragment;
+}
+
+export const updateFragment = async (props: IFragmentProps) => {
+  await db.updateFragment(props);
+  return { status: true };
+};
+
 export const updateActiveFragment = async (props: {
   properties: { fragmentId: number; snippetId: number };
 }): Promise<{ status: boolean }> => {

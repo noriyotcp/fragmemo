@@ -1,6 +1,7 @@
 import { dispatch } from "../events/dispatcher";
 import { ReactiveController, ReactiveControllerHost } from "lit";
 import { Fragment, Snippet } from "models.d";
+import { snippetSelected } from "../events/global-dispatchers";
 
 const { myAPI } = window;
 
@@ -68,14 +69,7 @@ export class FragmentsController implements ReactiveController {
     });
     myAPI.getActiveFragment(<number>this.snippet._id).then((activeFragment) => {
       this.activeFragmentId = activeFragment.fragmentId;
-      dispatch({
-        type: "snippet-selected",
-        detail: {
-          to: this.activeFragmentId,
-          from: null,
-          snippetId: this.snippet?._id,
-        },
-      });
+      snippetSelected(this.activeFragmentId, undefined, this.snippet?._id);
     });
 
     myAPI.loadFragments(<number>this.snippet._id).then((fragments) => {

@@ -8,7 +8,7 @@
     "dev": "tsc -b main-process/ && vite",
     "build": "tsc --noEmit && vite build",
     "serve": "vite preview",
-    "electron": "wait-on tcp:3000 && cross-env IS_DEV=true electron .",
+    "electron": "wait-on tcp:127.0.0.1:3000 && cross-env IS_DEV=true electron .",
     "electron:pack": "electron-builder --dir",
     "electron:dev": "concurrently -k \"cross-env BROWSER=none yarn dev\" \"yarn electron\"",
     "electron:builder": "electron-builder",

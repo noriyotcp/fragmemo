@@ -78,3 +78,9 @@ export const clearInternalSearchQuery = (): void => {
     type: "clear-internal-search-query",
   });
 };
+
+export const snippetsCreated = (): void => {
+  dispatch({
+    type: "snippets-created",
+  });
+};

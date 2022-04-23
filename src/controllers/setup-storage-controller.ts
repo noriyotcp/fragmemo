@@ -2,7 +2,7 @@ import { ReactiveController, ReactiveControllerHost } from "lit";
 import { Snippet, ActiveSnippetHistory } from "../models";
 import { SearchQueryController } from "./search-query-controller";
 import { dispatch } from "../events/dispatcher";
-import { displayToast } from "../events/global-dispatchers";
+import { displayToast, snippetsCreated } from "../events/global-dispatchers";
 const { myAPI } = window;
 
 export class SetupStorageController implements ReactiveController {
@@ -95,9 +95,7 @@ export class SetupStorageController implements ReactiveController {
     myAPI.initSnippet().then((snippet) => {
       myAPI.newActiveSnippetHistory(snippet._id);
       this._loadSnippets();
-      dispatch({
-        type: "snippets-created",
-      });
+      snippetsCreated();
     });
   }
 

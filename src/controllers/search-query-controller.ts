@@ -13,7 +13,7 @@ export class SearchQueryController implements ReactiveController {
       this._searchSnippets as EventListener
     );
     window.addEventListener(
-      "clear-internal-search-query",
+      "clear-search-query",
       this._clearSearchQuery as EventListener
     );
   }
@@ -24,7 +24,7 @@ export class SearchQueryController implements ReactiveController {
       this._searchSnippets as EventListener
     );
     window.removeEventListener(
-      "clear-internal-search-query",
+      "clear-search-query",
       this._clearSearchQuery as EventListener
     );
   }

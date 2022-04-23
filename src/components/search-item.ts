@@ -1,7 +1,7 @@
 import { LitElement, html, css, TemplateResult } from "lit";
 import { customElement, query } from "lit/decorators.js";
 import {
-  clearInternalSearchQuery,
+  clearSearchQuery,
   searchSnippets,
   updateSnippets,
 } from "../events/global-dispatchers";
@@ -82,7 +82,7 @@ export class SearchItem extends LitElement {
   };
 
   private _clear = (e: Event): void => {
-    clearInternalSearchQuery();
+    clearSearchQuery();
     updateSnippets();
   };
 

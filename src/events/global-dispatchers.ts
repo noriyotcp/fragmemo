@@ -75,9 +75,9 @@ export const fragmentSwitched = (from: number, to: number): void => {
   });
 };
 
-export const clearInternalSearchQuery = (): void => {
+export const clearSearchQuery = (): void => {
   dispatch({
-    type: "clear-internal-search-query",
+    type: "clear-search-query",
   });
 };
 

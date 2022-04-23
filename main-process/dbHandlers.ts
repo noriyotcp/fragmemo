@@ -43,6 +43,13 @@ export const loadSnippets = (): Snippet[] | undefined => {
   }
 };
 
+export const getFragment = (fragmentId: number): Fragment | void => {
+  const fragment = db.objectForPrimaryKey("Fragment", fragmentId);
+  if (!fragment) return;
+
+  return fragment.toJSON();
+};
+
 export const getActiveFragment = (snippetId: number): Fragment => {
   const activeFragment = db
     .objects("ActiveFragment")

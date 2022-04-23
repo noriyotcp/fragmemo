@@ -188,10 +188,7 @@ app.once("browser-window-created", () => {
   });
 
   ipcMain.handle("get-fragment", (event, fragmentId) => {
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    const fragment = db.objectForPrimaryKey("Fragment", fragmentId)!;
-    console.log("Main process: get-fragment", fragment.toJSON());
-    return fragment.toJSON();
+    return dbHandlers.getFragment(fragmentId);
   });
 
   ipcMain.handle("get-active-fragment", (event, snippetId) => {

@@ -27,3 +27,16 @@ export const displayToast = (message: string, options?: object): void => {
     },
   });
 };
+
+export const selectSnippet = (
+  selectedSnippet: string,
+  previouslySelectedSnippet: string
+): void => {
+  dispatch({
+    type: "select-snippet",
+    detail: {
+      selectedSnippet,
+      previouslySelectedSnippet,
+    },
+  });
+};

@@ -1,8 +1,11 @@
 import { ReactiveController, ReactiveControllerHost } from "lit";
 import { Snippet, ActiveSnippetHistory } from "../models";
 import { SearchQueryController } from "./search-query-controller";
-import { dispatch } from "../events/dispatcher";
-import { displayToast, snippetsCreated } from "../events/global-dispatchers";
+import {
+  displayToast,
+  snippetsCreated,
+  snippetsLoaded,
+} from "../events/global-dispatchers";
 const { myAPI } = window;
 
 export class SetupStorageController implements ReactiveController {
@@ -123,12 +126,6 @@ export class SetupStorageController implements ReactiveController {
 
   set snippets(snippets: Snippet[]) {
     this._snippets = snippets;
-    console.log("snippets-loaded", this._snippets);
-    dispatch({
-      type: "snippets-loaded",
-      detail: {
-        noSnippets: this._snippets.length <= 0,
-      },
-    });
+    snippetsLoaded(this._snippets.length <= 0);
   }
 }

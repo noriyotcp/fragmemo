@@ -84,3 +84,12 @@ export const snippetsCreated = (): void => {
     type: "snippets-created",
   });
 };
+
+export const snippetsLoaded = (noSnippets: boolean): void => {
+  dispatch({
+    type: "snippets-loaded",
+    detail: {
+      noSnippets,
+    },
+  });
+};

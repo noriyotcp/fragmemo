@@ -10,16 +10,11 @@ import {
 import { createMenu } from "./createMenu";
 import { JsonStorage, DatapathDoesNotExistError } from "./jsonStorage";
 import { setTimeout } from "timers/promises";
-import DB from "./db/db";
 import * as dbHandlers from "./dbHandlers";
 // import { createHash } from "node:crypto";
 import fs from "fs";
 
-import { Fragment, Snippet } from "./db/realm";
-import { Results } from "realm";
-
 const isDev = process.env.IS_DEV == "true" ? true : false;
-let db: DB;
 let jsonStorage: JsonStorage;
 
 async function createWindowSettings(): Promise<void> {
@@ -226,7 +221,7 @@ app.once("browser-window-created", () => {
 
   ipcMain.handle("setup-storage", async () => {
     // await setTimeout(1000); // wait 1 seconds for testing
-    db = dbHandlers.setupStorage();
+    dbHandlers.setupStorage();
   });
 
   ipcMain.handle("load-snippets", (event) => {

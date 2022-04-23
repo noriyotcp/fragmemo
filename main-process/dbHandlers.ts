@@ -5,7 +5,7 @@ import { Results } from "realm";
 
 const db = new DB(`${app.getPath("userData")}/fragmemoDB/fragmemo.realm`);
 
-export const setupStorage = (): DB => {
+export const setupStorage = (): void => {
   try {
     if (db.empty) {
       db.initLanguage();
@@ -15,8 +15,6 @@ export const setupStorage = (): DB => {
     console.error(err);
     throw err;
   }
-
-  return db;
 };
 
 export const initSnippet = (): Snippet[] => {

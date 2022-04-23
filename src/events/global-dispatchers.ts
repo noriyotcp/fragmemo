@@ -72,3 +72,9 @@ export const fragmentSwitched = (from: number, to: number): void => {
     },
   });
 };
+
+export const clearInternalSearchQuery = (): void => {
+  dispatch({
+    type: "clear-internal-search-query",
+  });
+};

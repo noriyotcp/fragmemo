@@ -78,11 +78,25 @@ export const loadFragments = (snippetId: number): Fragment[] => {
   return fragments.toJSON();
 };
 
-// TODO: Duplicated in src/props.d.ts
+// TODO: Define in main-process/props.d.ts ?
+interface ISnippetProps {
+  _id: number;
+  properties: typeof Snippet;
+}
+
 interface IFragmentProps {
   _id: number;
   properties: typeof Fragment;
 }
+
+export const updateSnippet = (props: ISnippetProps) => {
+  try {
+    db.updateSnippet(props);
+  } catch (error) {
+    console.error(error);
+    throw new Error(`update-snippet: ${error}`);
+  }
+};
 
 export const updateFragment = async (props: IFragmentProps) => {
   await db.updateFragment(props);

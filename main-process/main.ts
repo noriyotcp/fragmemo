@@ -251,8 +251,7 @@ app.once("browser-window-created", () => {
 });
 
 app.on("will-quit", () => {
-  dbHandlers.resetActiveSnippetHistory();
-  db.close();
+  dbHandlers.onWillQuit();
 });
 
 // Quit when all windows are closed, except on macOS. There, it's common

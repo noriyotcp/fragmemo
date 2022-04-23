@@ -129,6 +129,7 @@ export const getLatestActiveSnippetHistory = (): JSON => {
   return db.reverseSortBy("ActiveSnippetHistory", "_id")[0]?.toJSON();
 };
 
-export const resetActiveSnippetHistory = (): void => {
+export const onWillQuit = (): void => {
   db.resetActiveSnippetHistory();
+  db.close();
 };

@@ -43,6 +43,14 @@ export const loadSnippets = (): Snippet[] | undefined => {
   }
 };
 
+export const getSnippet = (snippetId: number): Snippet | void => {
+  const snippet = db.objectForPrimaryKey("Snippet", snippetId);
+  if (!snippet) return;
+
+  console.log("Main process: get-snippet", snippet.toJSON());
+  return snippet.toJSON();
+};
+
 export const getFragment = (fragmentId: number): Fragment | void => {
   const fragment = db.objectForPrimaryKey("Fragment", fragmentId);
   if (!fragment) return;

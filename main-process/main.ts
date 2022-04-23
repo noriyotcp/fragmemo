@@ -181,10 +181,7 @@ app.once("browser-window-created", () => {
   });
 
   ipcMain.handle("get-snippet", async (event, snippetId) => {
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    const snippet = db.objectForPrimaryKey("Snippet", snippetId)!;
-    console.log("Main process: get-snippet", snippet.toJSON());
-    return snippet.toJSON();
+    return dbHandlers.getSnippet(snippetId);
   });
 
   ipcMain.handle("get-fragment", (event, fragmentId) => {

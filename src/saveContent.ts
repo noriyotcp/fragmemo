@@ -1,5 +1,5 @@
-import { dispatch } from "./events/dispatcher";
 import { Store } from "stores";
+import { contentEditingStateChanged } from "./events/global-dispatchers";
 
 const { myAPI } = window;
 const queue: number[] = [];
@@ -46,13 +46,7 @@ function saveContent(
         content: content,
         isEditing: false,
       });
-      dispatch({
-        type: "content-editing-state-changed",
-        detail: {
-          _id: fragmentId,
-          fragmentStore: fragmentStore,
-        },
-      });
+      contentEditingStateChanged(fragmentId, fragmentStore);
     });
 }
 

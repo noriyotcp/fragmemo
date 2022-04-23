@@ -5,6 +5,7 @@ import { map } from "lit/directives/map.js";
 import { createFragmentStore, Store } from "../stores";
 import { Language } from "models.d";
 import { saveContentAsync, saveContent } from "../saveContent";
+import { contentEditingStateChanged } from "../events/global-dispatchers";
 
 const { myAPI } = window;
 
@@ -193,13 +194,8 @@ export class EditorElement extends LitElement {
           }
         );
 
-        dispatch({
-          type: "content-editing-state-changed",
-          detail: {
-            _id: this._activeFragmentId,
-            fragmentStore: this.fragmentStore,
-          },
-        });
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        contentEditingStateChanged(this._activeFragmentId!, this.fragmentStore);
 
         // auto save
         if (!e.detail.isComposing) {

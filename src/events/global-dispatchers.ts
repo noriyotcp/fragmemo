@@ -1,3 +1,5 @@
+import { Store } from "../stores";
+
 type dispatchType = {
   type: string;
   detail?: object;
@@ -90,6 +92,19 @@ export const snippetsLoaded = (noSnippets: boolean): void => {
     type: "snippets-loaded",
     detail: {
       noSnippets,
+    },
+  });
+};
+
+export const contentEditingStateChanged = (
+  _id: number,
+  fragmentStore: typeof Store
+): void => {
+  dispatch({
+    type: "content-editing-state-changed",
+    detail: {
+      _id,
+      fragmentStore,
     },
   });
 };

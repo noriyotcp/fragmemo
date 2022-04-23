@@ -17,3 +17,13 @@ export const activeFragment = (fragmentId: number): void => {
     },
   });
 };
+
+export const displayToast = (message: string, options?: object): void => {
+  dispatch({
+    type: "display-toast-stack",
+    detail: {
+      message,
+      ...options,
+    },
+  });
+};

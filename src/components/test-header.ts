@@ -1,7 +1,7 @@
 import { LitElement, html, css, TemplateResult } from "lit";
 import { customElement, query, state } from "lit/decorators.js";
 import { dispatch } from "../events/dispatcher";
-import { displayToast } from "../displayToast";
+import { displayToast } from "../events/global-dispatchers";
 import "@ui5/webcomponents/dist/Input.js";
 import { Override } from "index.d";
 import { Snippet } from "models.d";

@@ -1,7 +1,10 @@
 import { dispatch } from "../events/dispatcher";
 import { LitElement, html, css, TemplateResult } from "lit";
 import { customElement, query } from "lit/decorators.js";
-import { clearInternalSearchQuery } from "../events/global-dispatchers";
+import {
+  clearInternalSearchQuery,
+  updateSnippets,
+} from "../events/global-dispatchers";
 
 @customElement("search-item")
 export class SearchItem extends LitElement {
@@ -90,10 +93,7 @@ export class SearchItem extends LitElement {
 
   private _clear = (e: Event): void => {
     clearInternalSearchQuery();
-
-    dispatch({
-      type: "update-snippets",
-    });
+    updateSnippets();
   };
 
   private _clearSearch = (_e: InputEvent): void => {

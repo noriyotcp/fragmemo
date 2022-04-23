@@ -1,7 +1,6 @@
 import { LitElement, html, css, TemplateResult } from "lit";
 import { customElement, query, state } from "lit/decorators.js";
-import { dispatch } from "../events/dispatcher";
-import { displayToast } from "../events/global-dispatchers";
+import { displayToast, updateSnippets } from "../events/global-dispatchers";
 import "@ui5/webcomponents/dist/Input.js";
 import { Override } from "index.d";
 import { Snippet } from "models.d";
@@ -74,9 +73,7 @@ export class TestHeader extends LitElement {
         .updateSnippet(snippetProps)
         .then(() => {
           // dispatch event to update the list
-          dispatch({
-            type: "update-snippets",
-          });
+          updateSnippets();
           displayToast("Snippet updated", {
             variant: "primary",
             icon: "check2-circle",

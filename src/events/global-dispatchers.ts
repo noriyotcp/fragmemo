@@ -108,3 +108,9 @@ export const contentEditingStateChanged = (
     },
   });
 };
+
+export const updateSnippets = (): void => {
+  dispatch({
+    type: "update-snippets",
+  });
+};

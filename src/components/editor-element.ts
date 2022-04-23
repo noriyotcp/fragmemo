@@ -1,11 +1,13 @@
-import { dispatch } from "../events/dispatcher";
 import { LitElement, html, css, TemplateResult } from "lit";
 import { customElement, query, state } from "lit/decorators.js";
 import { map } from "lit/directives/map.js";
 import { createFragmentStore, Store } from "../stores";
 import { Language } from "models.d";
 import { saveContentAsync, saveContent } from "../saveContent";
-import { contentEditingStateChanged } from "../events/global-dispatchers";
+import {
+  contentEditingStateChanged,
+  updateSnippets,
+} from "../events/global-dispatchers";
 
 const { myAPI } = window;
 
@@ -216,9 +218,7 @@ export class EditorElement extends LitElement {
   }
 
   private _onBlurEditor(e: CustomEvent): void {
-    dispatch({
-      type: "update-snippets",
-    });
+    updateSnippets();
   }
 
   private _setContent(): void {

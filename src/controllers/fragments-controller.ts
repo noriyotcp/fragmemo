@@ -1,9 +1,9 @@
-import { dispatch } from "../events/dispatcher";
 import { ReactiveController, ReactiveControllerHost } from "lit";
 import { Fragment, Snippet } from "models.d";
 import {
   fragmentSwitched,
   snippetSelected,
+  updateSnippets,
 } from "../events/global-dispatchers";
 
 const { myAPI } = window;
@@ -51,9 +51,7 @@ export class FragmentsController implements ReactiveController {
     if (!this.snippet) return;
 
     myAPI.initFragment(this.snippet._id).then(() => {
-      dispatch({
-        type: "update-snippets",
-      });
+      updateSnippets();
     });
   }
 

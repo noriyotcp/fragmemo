@@ -1,12 +1,17 @@
 import { LitElement, html, TemplateResult } from "lit";
-import { customElement, query } from "lit/decorators.js";
+import { customElement, query, queryAll } from "lit/decorators.js";
 
 @customElement("settings-group")
 export class SettingsGroup extends LitElement {
   @query("#autosave") autosave!: HTMLInputElement;
+  @query("sl-input[name='after-delay']") afterDelay!: HTMLInputElement;
+  @queryAll("sl-input") inputs!: HTMLInputElement[];
+  @query("form") form!: HTMLFormElement;
   settings = {
     autosave: true,
+    afterDelay: 1000,
   };
+  data!: FormData;
 
   render(): TemplateResult {
     return html`
@@ -17,16 +22,32 @@ export class SettingsGroup extends LitElement {
 
         <sl-tab-panel name="editor">
           <form>
-            <sl-switch id="autosave" checked=${this.settings.autosave}
+            <sl-switch
+              id="autosave"
+              name="autosave"
+              checked=${this.settings.autosave}
               >Auto save</sl-switch
             >
             <sl-input
               type="number"
               placeholder="after delay (milliseconds)"
               size="small"
-              value="1000"
+              value=${this.settings.afterDelay}
               min="1"
+              name="after-delay"
+              required
             ></sl-input>
+            <sl-input
+              type="number"
+              placeholder="after delay (milliseconds)"
+              size="small"
+              value=${this.settings.afterDelay}
+              min="1"
+              name="after-delay"
+              required
+            ></sl-input>
+            <br />
+            <sl-button type="submit" variant="primary">Submit</sl-button>
           </form>
         </sl-tab-panel>
         <sl-tab-panel name="custom">This is the custom tab panel.</sl-tab-panel>
@@ -38,9 +59,29 @@ export class SettingsGroup extends LitElement {
   }
 
   firstUpdated() {
-    this.autosave.addEventListener("sl-change", (e: Event) => {
-      this.settings.autosave = this.autosave.checked;
-      console.log("autosave", this.settings.autosave);
+    this.form.addEventListener("submit", (e: Event) => {
+      e.preventDefault();
+      const isAllValid = Array.from(this.inputs).every((i) =>
+        this._checkValidity(i.input)
+      );
+      if (isAllValid) {
+        this._setSettings();
+      }
     });
+  }
+
+  private _setSettings() {
+    // const data = new FormData(this.form);
+    this.settings.autosave = this.autosave.checked;
+    this.settings.afterDelay = this.afterDelay.valueAsNumber;
+    console.log("settings", this.settings);
+  }
+
+  private _checkValidity(input: HTMLInputElement) {
+    if (input.checkValidity()) {
+      return true;
+    } else {
+      return false;
+    }
   }
 }

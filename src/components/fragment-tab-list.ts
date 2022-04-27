@@ -34,6 +34,9 @@ export class FragmentTabList extends LitElement {
       border-right: none;
       border-left: none;
     }
+    fragment-tab:not(:last-child) {
+      border-right: 1px solid var(--gray);
+    }
   `;
 
   tabBarTemplate(): TemplateResult {

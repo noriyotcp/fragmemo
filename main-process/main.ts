@@ -8,45 +8,19 @@ import {
   PopupOptions,
 } from "electron";
 import { createMenu } from "./createMenu";
-import { JsonStorage, DatapathDoesNotExistError } from "./jsonStorage";
-import { setTimeout } from "timers/promises";
+import initRestoreWindow from "./settings/restore/window";
+import { JsonStorage } from "./jsonStorage";
 import * as dbHandlers from "./dbHandlers";
-// import { createHash } from "node:crypto";
-import fs from "fs";
 
 const isDev = process.env.IS_DEV == "true" ? true : false;
-let jsonStorage: JsonStorage;
-
-async function createWindowSettings(): Promise<void> {
-  const pathToRestore = `${app.getPath("userData")}/fragmemoSettings/restore`;
-
-  try {
-    jsonStorage = new JsonStorage(pathToRestore);
-  } catch (error) {
-    if (error instanceof DatapathDoesNotExistError) {
-      fs.mkdirSync(pathToRestore, { recursive: true });
-      jsonStorage = new JsonStorage(pathToRestore);
-      const defaultWindowSettings = {
-        window: { width: 800, height: 600, x: 0, y: 0 },
-      };
-      // Use fs.writeFileSync instead of electron-json-storage set()
-      // electron-json-storage set() is async, so we need to wait for it to finish
-      // github.dev/electron-userland/electron-json-storage/blob/df4edce1e643e7343d962721fe2eacfeda094870/lib/storage.js#L419-L439
-      fs.writeFileSync(
-        path.resolve(pathToRestore, "window.json"),
-        JSON.stringify(defaultWindowSettings)
-      );
-    } else {
-      throw error;
-    }
-  } finally {
-    // But, just in case, we'll wait for 1 millisecond :)
-    await setTimeout(1);
-  }
-}
+// top-level await requires Compiler option 'module' of value 'nodenext' is unstable.
+let restoreWindow: JsonStorage;
+initRestoreWindow().then((storage) => {
+  restoreWindow = storage;
+});
 
 function createWindow() {
-  type settingsDataType = {
+  type WindowDataType = {
     window: {
       width: number;
       height: number;
@@ -55,7 +29,7 @@ function createWindow() {
     };
   };
 
-  const data = <settingsDataType>jsonStorage.lib.getSync("window");
+  const data = <WindowDataType>restoreWindow.lib.getSync("window");
   const { width, height, x, y } = data.window;
   console.log("window created", data.window);
 
@@ -100,7 +74,7 @@ function createWindow() {
       },
     };
 
-    jsonStorage.lib.set("window", updatedWindowSettings, function (err) {
+    restoreWindow.lib.set("window", updatedWindowSettings, function (err) {
       if (err) {
         console.log(err);
       }
@@ -117,7 +91,7 @@ function createWindow() {
       },
     };
 
-    jsonStorage.lib.set("window", updatedWindowSettings, function (err) {
+    restoreWindow.lib.set("window", updatedWindowSettings, function (err) {
       if (err) {
         console.log(err);
       }
@@ -130,7 +104,6 @@ function createWindow() {
 // Some APIs can only be used after this event occurs.
 app.whenReady().then(() => {
   (async () => {
-    await createWindowSettings();
     createWindow();
     app.on("activate", function () {
       // On macOS it's common to re-create a window in the app when the

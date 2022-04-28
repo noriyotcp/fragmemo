@@ -11,7 +11,6 @@ export class SettingsGroup extends LitElement {
     autosave: true,
     afterDelay: 1000,
   };
-  data!: FormData;
 
   render(): TemplateResult {
     return html`
@@ -37,15 +36,6 @@ export class SettingsGroup extends LitElement {
               name="after-delay"
               required
             ></sl-input>
-            <sl-input
-              type="number"
-              placeholder="after delay (milliseconds)"
-              size="small"
-              value=${this.settings.afterDelay}
-              min="1"
-              name="after-delay"
-              required
-            ></sl-input>
             <br />
             <sl-button type="submit" variant="primary">Submit</sl-button>
           </form>
@@ -62,7 +52,7 @@ export class SettingsGroup extends LitElement {
     this.form.addEventListener("submit", (e: Event) => {
       e.preventDefault();
       const isAllValid = Array.from(this.inputs).every((i) =>
-        this._checkValidity(i.input)
+        this._checkValidity(i)
       );
       if (isAllValid) {
         this._setSettings();
@@ -71,14 +61,14 @@ export class SettingsGroup extends LitElement {
   }
 
   private _setSettings() {
-    // const data = new FormData(this.form);
     this.settings.autosave = this.autosave.checked;
     this.settings.afterDelay = this.afterDelay.valueAsNumber;
     console.log("settings", this.settings);
   }
 
   private _checkValidity(input: HTMLInputElement) {
-    if (input.checkValidity()) {
+    if (input.reportValidity()) {
+      // Shoelace's method
       return true;
     } else {
       return false;

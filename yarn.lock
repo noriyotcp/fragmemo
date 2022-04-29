@@ -1246,44 +1246,44 @@
     "@typescript-eslint/types" "5.20.0"
     eslint-visitor-keys "^3.0.0"
 
-"@ui5/webcomponents-base@1.3.0":
-  version "1.3.0"
-  resolved "https://registry.yarnpkg.com/@ui5/webcomponents-base/-/webcomponents-base-1.3.0.tgz#32a4794584427bf060cf86d3ed633287387df073"
-  integrity sha512-EkUrT8tVCiT4izfVa/HuTe/2UjcAmU0Xkv/+MB72dDAXnwVeIqf0iX1elHiwXHWyohXG88hiRPSlooU1KvxZSg==
+"@ui5/webcomponents-base@1.3.1":
+  version "1.3.1"
+  resolved "https://registry.yarnpkg.com/@ui5/webcomponents-base/-/webcomponents-base-1.3.1.tgz#0bc5153abe46105a6547198e3469e11f9ac2039a"
+  integrity sha512-aueH/C/a98NhONLeIylH4YvzV1erEJEncl2ELIsUBoz/oSo9CTtcDNf4Rq12ruN1YsBWh9SLtVQGo22uG6/23Q==
   dependencies:
-    lit-html "2.0.1"
+    lit-html "^2.0.1"
 
-"@ui5/webcomponents-icons@1.3.0":
-  version "1.3.0"
-  resolved "https://registry.yarnpkg.com/@ui5/webcomponents-icons/-/webcomponents-icons-1.3.0.tgz#c9f3bd6fb30c964452cdc49b1ec697b68c659edc"
-  integrity sha512-/xtfHWTAiATKk289iGKLhcIEjDOdjBrkyOeHWnz/LFFFZ9WQth2hafkL0VNOkndEN8wp/+vMhdXU2Ub0hQxgXA==
+"@ui5/webcomponents-icons@1.3.1":
+  version "1.3.1"
+  resolved "https://registry.yarnpkg.com/@ui5/webcomponents-icons/-/webcomponents-icons-1.3.1.tgz#5ff9ab464ba8d3ef950686345ff73afaa366dc4e"
+  integrity sha512-/EkHY66X/1/tiS8C5/vCn2nYk/CHkevUdNSMwI0WpzIQL8h82nvwLRDCh5a80Eb/sM4gDsyNhzgyBxKN2THJhw==
   dependencies:
-    "@ui5/webcomponents-base" "1.3.0"
+    "@ui5/webcomponents-base" "1.3.1"
 
-"@ui5/webcomponents-localization@1.3.0":
-  version "1.3.0"
-  resolved "https://registry.yarnpkg.com/@ui5/webcomponents-localization/-/webcomponents-localization-1.3.0.tgz#d41e1aaf11f8d31dc6f7b378d1756a61431ab089"
-  integrity sha512-i4lmCTenEMSlFD8tZInvYb3HY0NCLxuMEebfj1dgHRIEboTcuTlHEBKtski0FEa9aooQ3wFXIJSx3MGEP+3Zyg==
+"@ui5/webcomponents-localization@1.3.1":
+  version "1.3.1"
+  resolved "https://registry.yarnpkg.com/@ui5/webcomponents-localization/-/webcomponents-localization-1.3.1.tgz#e5ffc97ce0e923a097bb0ee05a74fe061f825f37"
+  integrity sha512-JyZ/HyqklVFncTUkgHHQsn/KYGOV/IEup4s/tVul/QWHwV0jdSh224PIwfXN5UVodaHenqmFowlcnPt3m8mGXA==
   dependencies:
-    "@ui5/webcomponents-base" "1.3.0"
+    "@ui5/webcomponents-base" "1.3.1"
 
-"@ui5/webcomponents-theming@1.3.0":
-  version "1.3.0"
-  resolved "https://registry.yarnpkg.com/@ui5/webcomponents-theming/-/webcomponents-theming-1.3.0.tgz#94ec102b73b211a34ed0c97a6910f8186757e25a"
-  integrity sha512-EJ2WGcew+ma+4Qnv0fBBc85GQ7OH7rq75tKxKApUpcoAqNodPosSBJ4ns7dYjdL16R7Q9UvFck043X69ea2bSA==
+"@ui5/webcomponents-theming@1.3.1":
+  version "1.3.1"
+  resolved "https://registry.yarnpkg.com/@ui5/webcomponents-theming/-/webcomponents-theming-1.3.1.tgz#6415b09765472282ac04432c8deaccf7404ace27"
+  integrity sha512-OA/8Aqkq1dR6sDJ9MXHLs8ktDhU8Pd23w9zwJp19HawgXR3zcoZvjxqxxwY8rz7Lwpm410SWaIt4C3F5z47+QQ==
   dependencies:
     "@sap-theming/theming-base-content" "11.1.38"
-    "@ui5/webcomponents-base" "1.3.0"
+    "@ui5/webcomponents-base" "1.3.1"
 
-"@ui5/webcomponents@^1.3.0":
-  version "1.3.0"
-  resolved "https://registry.yarnpkg.com/@ui5/webcomponents/-/webcomponents-1.3.0.tgz#ba577d5effe751b81521bd05ccd0736c3e3b0063"
-  integrity sha512-963M3SUOWtV66ZOyUhc+p15KfD4WKKUlA1yyvbGWlhZ2A/5s/BZo/x6OwAQ3sz/DasK4M+vUSLYa+HnXpBq+Lg==
+"@ui5/webcomponents@^1.3.1":
+  version "1.3.1"
+  resolved "https://registry.yarnpkg.com/@ui5/webcomponents/-/webcomponents-1.3.1.tgz#36c90e068fe7e1217fa309bdba01110a27b3d576"
+  integrity sha512-G6mTT6uaUov8YypfDUPDKqvNVZGWAHa48POhxD0LRkJ1VrTLspgoXtGzVwY9vmiIGkvWTLV4pzslq1F3n3U6gA==
   dependencies:
-    "@ui5/webcomponents-base" "1.3.0"
-    "@ui5/webcomponents-icons" "1.3.0"
-    "@ui5/webcomponents-localization" "1.3.0"
-    "@ui5/webcomponents-theming" "1.3.0"
+    "@ui5/webcomponents-base" "1.3.1"
+    "@ui5/webcomponents-icons" "1.3.1"
+    "@ui5/webcomponents-localization" "1.3.1"
+    "@ui5/webcomponents-theming" "1.3.1"
 
 "@vitejs/plugin-vue@^1.10.2":
   version "1.10.2"
@@ -4283,10 +4283,10 @@ lit-element@^3.2.0:
     "@lit/reactive-element" "^1.3.0"
     lit-html "^2.2.0"
 
-lit-html@2.0.1:
-  version "2.0.1"
-  resolved "https://registry.yarnpkg.com/lit-html/-/lit-html-2.0.1.tgz#63241015efa07bc9259b6f96f04abd052d2a1f95"
-  integrity sha512-KF5znvFdXbxTYM/GjpdOOnMsjgRcFGusTnB54ixnCTya5zUR0XqrDRj29ybuLS+jLXv1jji6Y8+g4W7WP8uL4w==
+lit-html@^2.0.1:
+  version "2.2.3"
+  resolved "https://registry.yarnpkg.com/lit-html/-/lit-html-2.2.3.tgz#dcb2744d0f0c1800b2eb2de37bc42384434a74f7"
+  integrity sha512-vI4j3eWwtQaR8q/O63juZVliBIFMio716X719/lSsGH4UWPy2/7Qf377jsNs4cx3gCHgIbx8yxFgXFQ/igZyXQ==
   dependencies:
     "@types/trusted-types" "^2.0.2"
 

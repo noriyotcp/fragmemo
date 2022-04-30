@@ -1,5 +1,6 @@
 import { LitElement, html, TemplateResult } from "lit";
 import { customElement, query, queryAll } from "lit/decorators.js";
+import { userSettingsUpdated } from "../events/global-dispatchers";
 
 @customElement("settings-group")
 export class SettingsGroup extends LitElement {
@@ -49,6 +50,8 @@ export class SettingsGroup extends LitElement {
   }
 
   firstUpdated() {
+    this._settingsUpdated();
+
     this.form.addEventListener("submit", (e: Event) => {
       e.preventDefault();
       const isAllValid = Array.from(this.inputs).every((i) =>
@@ -56,6 +59,7 @@ export class SettingsGroup extends LitElement {
       );
       if (isAllValid) {
         this._setSettings();
+        this._settingsUpdated();
       }
     });
   }
@@ -73,5 +77,9 @@ export class SettingsGroup extends LitElement {
     } else {
       return false;
     }
+  }
+
+  private _settingsUpdated() {
+    userSettingsUpdated(this.settings);
   }
 }

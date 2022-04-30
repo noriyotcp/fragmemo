@@ -44,6 +44,7 @@ export class EditorElement extends LitElement {
   @state() private _content = "";
   @state() private _language = "plaintext";
   private _languages!: Language[];
+  private _afterDelay!: number;
 
   static styles = [
     css`
@@ -115,6 +116,25 @@ export class EditorElement extends LitElement {
       </footer>
     `;
   }
+
+  firstUpdated(): void {
+    window.addEventListener(
+      "user-settings-updated",
+      this._onUserSettingsUpdated as EventListener
+    );
+  }
+
+  disconnectedCallback() {
+    window.removeEventListener(
+      "user-settings-updated",
+      this._onUserSettingsUpdated as EventListener
+    );
+    super.disconnectedCallback();
+  }
+
+  private _onUserSettingsUpdated = (e: CustomEvent) => {
+    this._afterDelay = e.detail.userSettings.afterDelay;
+  };
 
   private _selectLanguage() {
     this.select?.focus();
@@ -205,7 +225,7 @@ export class EditorElement extends LitElement {
             fragmentId: this._activeFragmentId as number,
             content: e.detail.text,
             fragmentStore: this.fragmentStore,
-            afterDelay: 2000,
+            afterDelay: this._afterDelay,
           };
           saveContentAsync(params);
         }

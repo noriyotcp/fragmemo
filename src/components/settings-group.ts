@@ -54,8 +54,8 @@ export class SettingsGroup extends LitElement {
 
     this.form.addEventListener("submit", (e: Event) => {
       e.preventDefault();
-      const isAllValid = Array.from(this.inputs).every((i) =>
-        this._checkValidity(i)
+      const isAllValid = Array.from(this.inputs).every(
+        (input) => input.reportValidity() // Shoelace's method
       );
       if (isAllValid) {
         this._setSettings();
@@ -68,15 +68,6 @@ export class SettingsGroup extends LitElement {
     this.settings.autosave = this.autosave.checked;
     this.settings.afterDelay = this.afterDelay.valueAsNumber;
     console.log("settings", this.settings);
-  }
-
-  private _checkValidity(input: HTMLInputElement) {
-    if (input.reportValidity()) {
-      // Shoelace's method
-      return true;
-    } else {
-      return false;
-    }
   }
 
   private _settingsUpdated() {

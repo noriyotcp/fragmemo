@@ -201,11 +201,13 @@ export class EditorElement extends LitElement {
 
         // auto save
         if (!e.detail.isComposing) {
-          saveContentAsync(
-            this._activeFragmentId as number,
-            e.detail.text,
-            this.fragmentStore
-          );
+          const params = {
+            fragmentId: this._activeFragmentId as number,
+            content: e.detail.text,
+            fragmentStore: this.fragmentStore,
+            afterDelay: 2000,
+          };
+          saveContentAsync(params);
         }
       }
     });

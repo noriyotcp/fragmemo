@@ -11,7 +11,7 @@ type WindowDataType = {
 
 const keyname = "restoreWindow";
 const filename = `${keyname}.json`;
-const defaultWindowSettings: WindowDataType = {
+const defaultSettings: WindowDataType = {
   window: { width: 800, height: 600, x: 0, y: 0 },
 };
 
@@ -19,7 +19,7 @@ let getWindowData: () => WindowDataType;
 let setWindowData: (_: WindowDataType) => void;
 
 // top-level await requires Compiler option 'module' of value 'nodenext' is unstable.
-initSettingsStorage(filename, defaultWindowSettings)
+initSettingsStorage(filename, defaultSettings)
   .then((storage) => {
     getWindowData = () => {
       return <WindowDataType>storage.lib.getSync(keyname);

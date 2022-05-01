@@ -9,7 +9,7 @@ type EditorSettingsType = {
 
 const keyname = "userSettingsEditor";
 const filename = `${keyname}.json`;
-const defaultEditorSettings = {
+const defaultSettings = {
   editor: { autosave: true, afterDelay: 1000 },
 };
 
@@ -17,7 +17,7 @@ let getEditorSettings: () => EditorSettingsType;
 let setEditorSettings: (_: EditorSettingsType) => void;
 
 // top-level await requires Compiler option 'module' of value 'nodenext' is unstable.
-initSettingsStorage(filename, defaultEditorSettings)
+initSettingsStorage(filename, defaultSettings)
   .then((storage) => {
     getEditorSettings = () => {
       return <EditorSettingsType>storage.lib.getSync(keyname);

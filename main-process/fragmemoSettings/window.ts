@@ -1,24 +1,26 @@
-import { app } from "electron";
 import { setTimeout } from "timers/promises";
 import path from "node:path";
 import fs from "node:fs";
-import { JsonStorage, DatapathDoesNotExistError } from "../jsonStorage";
-
-const pathToRestore = `${app.getPath("userData")}/fragmemoSettings`;
+import {
+  initJsonStorage,
+  pathToRestore,
+  JsonStorage,
+  DatapathDoesNotExistError,
+} from "./initJsonStorage";
 
 const initRestoreWindowStorage = async (): Promise<JsonStorage> => {
-  try {
-    // Check whether window.json exists or not
-    JsonStorage.doesDatapathExist(path.resolve(pathToRestore, "window.json"));
-    return Promise.resolve(new JsonStorage(pathToRestore));
-  } catch (error) {
-    if (error instanceof DatapathDoesNotExistError) {
-      await createDefaultWindowSettings();
-      return Promise.resolve(new JsonStorage(pathToRestore));
-    } else {
-      return Promise.reject(error);
-    }
-  }
+  return initJsonStorage("window.json")
+    .then((storage) => {
+      return Promise.resolve(storage);
+    })
+    .catch(async (error) => {
+      if (error instanceof DatapathDoesNotExistError) {
+        await createDefaultWindowSettings();
+        return initJsonStorage("window.json");
+      } else {
+        return Promise.reject(error);
+      }
+    });
 };
 
 const createDefaultWindowSettings = async (): Promise<void> => {

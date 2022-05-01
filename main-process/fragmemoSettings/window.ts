@@ -5,8 +5,11 @@ import {
   DatapathDoesNotExistError,
 } from "./initJsonStorage";
 
+const keyname = "restoreWindow";
+const filename = `${keyname}.json`;
+
 const initRestoreWindowStorage = async (): Promise<JsonStorage> => {
-  return initJsonStorage("window.json")
+  return initJsonStorage(filename)
     .then((storage) => {
       return Promise.resolve(storage);
     })
@@ -15,8 +18,8 @@ const initRestoreWindowStorage = async (): Promise<JsonStorage> => {
         const defaultWindowSettings = {
           window: { width: 800, height: 600, x: 0, y: 0 },
         };
-        await createDefaultSettings(defaultWindowSettings, "window.json");
-        return initJsonStorage("window.json");
+        await createDefaultSettings(defaultWindowSettings, filename);
+        return initJsonStorage(filename);
       } else {
         return Promise.reject(error);
       }
@@ -39,11 +42,11 @@ let setWindowData: (_: WindowDataType) => void;
 initRestoreWindowStorage()
   .then((storage) => {
     getWindowData = () => {
-      return <WindowDataType>storage.lib.getSync("window");
+      return <WindowDataType>storage.lib.getSync(keyname);
     };
     setWindowData = (data) => {
       storage.lib.set(
-        "window",
+        keyname,
         data,
         { prettyPrinting: true },
         function (error) {

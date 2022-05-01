@@ -2,20 +2,18 @@ import { app } from "electron";
 import { setTimeout } from "timers/promises";
 import path from "node:path";
 import fs from "node:fs";
-import { JsonStorage, DatapathDoesNotExistError } from "../../jsonStorage";
+import { JsonStorage, DatapathDoesNotExistError } from "../jsonStorage";
 
-const pathToRestore = `${app.getPath(
-  "userData"
-)}/fragmemoSettings/userSettings`;
+const pathToRestore = `${app.getPath("userData")}/fragmemoSettings`;
 
-const initEditorSettingsStorage = async (): Promise<JsonStorage> => {
+const initRestoreWindowStorage = async (): Promise<JsonStorage> => {
   try {
-    // Check whether editor.json exists or not
-    JsonStorage.doesDatapathExist(path.resolve(pathToRestore, "editor.json"));
+    // Check whether window.json exists or not
+    JsonStorage.doesDatapathExist(path.resolve(pathToRestore, "window.json"));
     return Promise.resolve(new JsonStorage(pathToRestore));
   } catch (error) {
     if (error instanceof DatapathDoesNotExistError) {
-      await createDefaultEditorSettings();
+      await createDefaultWindowSettings();
       return Promise.resolve(new JsonStorage(pathToRestore));
     } else {
       return Promise.reject(error);
@@ -23,18 +21,18 @@ const initEditorSettingsStorage = async (): Promise<JsonStorage> => {
   }
 };
 
-const createDefaultEditorSettings = async (): Promise<void> => {
+const createDefaultWindowSettings = async (): Promise<void> => {
   try {
     fs.mkdirSync(pathToRestore, { recursive: true });
-    const defaultEditorSettings = {
-      editor: { autosave: true, afterDelay: 1000 },
+    const defaultWindowSettings = {
+      window: { width: 800, height: 600, x: 0, y: 0 },
     };
     // Use fs.writeFileSync instead of electron-json-storage set()
     // electron-json-storage set() is async, so we need to wait for it to finish
     // github.dev/electron-userland/electron-json-storage/blob/df4edce1e643e7343d962721fe2eacfeda094870/lib/storage.js#L419-L439
     fs.writeFileSync(
-      path.resolve(pathToRestore, "editor.json"),
-      JSON.stringify(defaultEditorSettings, null, 2)
+      path.resolve(pathToRestore, "window.json"),
+      JSON.stringify(defaultWindowSettings, null, 2)
     );
   } catch (error) {
     console.error(error);
@@ -45,25 +43,27 @@ const createDefaultEditorSettings = async (): Promise<void> => {
   }
 };
 
-type EditorSettingsType = {
-  editor: {
-    autosave: boolean;
-    afterDelay: number;
+type WindowDataType = {
+  window: {
+    width: number;
+    height: number;
+    x: number;
+    y: number;
   };
 };
 
-let getEditorSettings: () => EditorSettingsType;
-let setEditorSettings: (_: EditorSettingsType) => void;
+let getWindowData: () => WindowDataType;
+let setWindowData: (_: WindowDataType) => void;
 
 // top-level await requires Compiler option 'module' of value 'nodenext' is unstable.
-initEditorSettingsStorage()
+initRestoreWindowStorage()
   .then((storage) => {
-    getEditorSettings = () => {
-      return <EditorSettingsType>storage.lib.getSync("editor");
+    getWindowData = () => {
+      return <WindowDataType>storage.lib.getSync("window");
     };
-    setEditorSettings = (data) => {
+    setWindowData = (data) => {
       storage.lib.set(
-        "editor",
+        "window",
         data,
         { prettyPrinting: true },
         function (error) {
@@ -79,4 +79,4 @@ initEditorSettingsStorage()
     throw error;
   });
 
-export { getEditorSettings, setEditorSettings };
+export { getWindowData, setWindowData };

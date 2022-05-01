@@ -8,11 +8,8 @@ import {
   PopupOptions,
 } from "electron";
 import { createMenu } from "./createMenu";
-import { getWindowData, setWindowData } from "./settings/userSettings/window";
-import {
-  getEditorSettings,
-  setEditorSettings,
-} from "./settings/userSettings/editor";
+import { getWindowData, setWindowData } from "./settings/window";
+import { getEditorSettings, setEditorSettings } from "./settings/editor";
 import * as dbHandlers from "./dbHandlers";
 
 const isDev = process.env.IS_DEV == "true" ? true : false;

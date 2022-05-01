@@ -8,7 +8,7 @@ import {
   PopupOptions,
 } from "electron";
 import { createMenu } from "./createMenu";
-import { getWindowData, setWindowData } from "./settings/restore/window";
+import { getWindowData, setWindowData } from "./settings/userSettings/window";
 import {
   getEditorSettings,
   setEditorSettings,

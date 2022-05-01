@@ -6,7 +6,7 @@ import { JsonStorage, DatapathDoesNotExistError } from "../../jsonStorage";
 
 const pathToRestore = `${app.getPath("userData")}/fragmemoSettings/restore`;
 
-export default async (): Promise<JsonStorage> => {
+const initRestoreWindow = async (): Promise<JsonStorage> => {
   try {
     return new JsonStorage(pathToRestore);
   } catch (error) {
@@ -20,7 +20,7 @@ export default async (): Promise<JsonStorage> => {
       // github.dev/electron-userland/electron-json-storage/blob/df4edce1e643e7343d962721fe2eacfeda094870/lib/storage.js#L419-L439
       fs.writeFileSync(
         path.resolve(pathToRestore, "window.json"),
-        JSON.stringify(defaultWindowSettings)
+        JSON.stringify(defaultWindowSettings, null, 2)
       );
       return new JsonStorage(pathToRestore);
     } else {
@@ -31,3 +31,31 @@ export default async (): Promise<JsonStorage> => {
     await setTimeout(1);
   }
 };
+
+type WindowDataType = {
+  window: {
+    width: number;
+    height: number;
+    x: number;
+    y: number;
+  };
+};
+
+let getWindowData: () => WindowDataType;
+let setWindowData: (_: WindowDataType) => void;
+
+// top-level await requires Compiler option 'module' of value 'nodenext' is unstable.
+initRestoreWindow().then((storage) => {
+  getWindowData = () => {
+    return <WindowDataType>storage.lib.getSync("window");
+  };
+  setWindowData = (data) => {
+    storage.lib.set("window", data, { prettyPrinting: true }, function (err) {
+      if (err) {
+        console.log(err);
+      }
+    });
+  };
+});
+
+export { getWindowData, setWindowData };

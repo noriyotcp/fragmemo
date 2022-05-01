@@ -8,30 +8,14 @@ import {
   PopupOptions,
 } from "electron";
 import { createMenu } from "./createMenu";
-import initRestoreWindow from "./settings/restore/window";
-import { JsonStorage } from "./jsonStorage";
+import { getWindowData, setWindowData } from "./settings/restore/window";
 import * as dbHandlers from "./dbHandlers";
 
 const isDev = process.env.IS_DEV == "true" ? true : false;
-// top-level await requires Compiler option 'module' of value 'nodenext' is unstable.
-let restoreWindow: JsonStorage;
-initRestoreWindow().then((storage) => {
-  restoreWindow = storage;
-});
 
 function createWindow() {
-  type WindowDataType = {
-    window: {
-      width: number;
-      height: number;
-      x: number;
-      y: number;
-    };
-  };
-
-  const data = <WindowDataType>restoreWindow.lib.getSync("window");
-  const { width, height, x, y } = data.window;
-  console.log("window created", data.window);
+  const { width, height, x, y } = getWindowData().window;
+  console.log("window created", { width, height, x, y });
 
   // Create the browser window.
   const mainWindow = new BrowserWindow({
@@ -65,7 +49,7 @@ function createWindow() {
   }
 
   mainWindow.on("resize", () => {
-    const updatedWindowSettings = {
+    const updatedWindowData = {
       window: {
         width: mainWindow.getSize()[0],
         height: mainWindow.getSize()[1],
@@ -74,15 +58,11 @@ function createWindow() {
       },
     };
 
-    restoreWindow.lib.set("window", updatedWindowSettings, function (err) {
-      if (err) {
-        console.log(err);
-      }
-    });
+    setWindowData(updatedWindowData);
   });
 
   mainWindow.on("move", () => {
-    const updatedWindowSettings = {
+    const updatedWindowData = {
       window: {
         width: mainWindow.getSize()[0],
         height: mainWindow.getSize()[1],
@@ -91,11 +71,7 @@ function createWindow() {
       },
     };
 
-    restoreWindow.lib.set("window", updatedWindowSettings, function (err) {
-      if (err) {
-        console.log(err);
-      }
-    });
+    setWindowData(updatedWindowData);
   });
 }
 

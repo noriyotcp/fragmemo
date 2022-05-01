@@ -8,8 +8,11 @@ import {
   PopupOptions,
 } from "electron";
 import { createMenu } from "./createMenu";
-import { getWindowData, setWindowData } from "./settings/window";
-import { getEditorSettings, setEditorSettings } from "./settings/editor";
+import { getWindowData, setWindowData } from "./fragmemoSettings/window";
+import {
+  getEditorSettings,
+  setEditorSettings,
+} from "./fragmemoSettings/editor";
 import * as dbHandlers from "./dbHandlers";
 
 const isDev = process.env.IS_DEV == "true" ? true : false;

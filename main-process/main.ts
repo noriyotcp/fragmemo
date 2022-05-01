@@ -9,6 +9,10 @@ import {
 } from "electron";
 import { createMenu } from "./createMenu";
 import { getWindowData, setWindowData } from "./settings/restore/window";
+import {
+  getEditorSettings,
+  setEditorSettings,
+} from "./settings/userSettings/editor";
 import * as dbHandlers from "./dbHandlers";
 
 const isDev = process.env.IS_DEV == "true" ? true : false;
@@ -16,6 +20,8 @@ const isDev = process.env.IS_DEV == "true" ? true : false;
 function createWindow() {
   const { width, height, x, y } = getWindowData().window;
   console.log("window created", { width, height, x, y });
+  let { autosave, afterDelay } = getEditorSettings().editor;
+  console.log("editor settings", { autosave, afterDelay });
 
   // Create the browser window.
   const mainWindow = new BrowserWindow({
@@ -73,6 +79,18 @@ function createWindow() {
 
     setWindowData(updatedWindowData);
   });
+
+  // it takes a few seconds to load the new editor settings
+  // so we'll call it at the end
+  setEditorSettings({
+    editor: {
+      autosave: false,
+      afterDelay: 10000,
+    },
+  });
+  autosave = getEditorSettings().editor.autosave;
+  afterDelay = getEditorSettings().editor.afterDelay;
+  console.log("new editor settings", { autosave, afterDelay });
 }
 
 // This method will be called when Electron has finished

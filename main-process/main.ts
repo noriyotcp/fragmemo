@@ -8,7 +8,11 @@ import {
   PopupOptions,
 } from "electron";
 import { createMenu } from "./createMenu";
-import { getWindowData, setWindowData } from "./settings/restore/window";
+import { getWindowData, setWindowData } from "./fragmemoSettings/window";
+import {
+  getEditorSettings,
+  setEditorSettings,
+} from "./fragmemoSettings/editor";
 import * as dbHandlers from "./dbHandlers";
 
 const isDev = process.env.IS_DEV == "true" ? true : false;
@@ -16,6 +20,14 @@ const isDev = process.env.IS_DEV == "true" ? true : false;
 function createWindow() {
   const { width, height, x, y } = getWindowData().window;
   console.log("window created", { width, height, x, y });
+  const { autosave, afterDelay } = getEditorSettings().editor;
+  console.log("editor settings", { autosave, afterDelay });
+  setEditorSettings({
+    editor: {
+      autosave: false,
+      afterDelay: 10000,
+    },
+  });
 
   // Create the browser window.
   const mainWindow = new BrowserWindow({
@@ -195,6 +207,11 @@ app.once("browser-window-created", () => {
 });
 
 app.on("will-quit", () => {
+  // it takes a few seconds to load the new editor settings
+  // so we'll call it at the end
+  const { autosave, afterDelay } = getEditorSettings().editor;
+  console.log("new editor settings", { autosave, afterDelay });
+
   dbHandlers.onWillQuit();
 });
 

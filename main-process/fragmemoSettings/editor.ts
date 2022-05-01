@@ -1,4 +1,4 @@
-import { initSettingsStorage } from "./initJsonStorage";
+import { initSettingsStorage } from "./initSettingsStorage";
 
 type EditorSettingsType = {
   editor: {

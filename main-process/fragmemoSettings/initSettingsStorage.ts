@@ -60,10 +60,4 @@ const createDefaultSettings = async (
   }
 };
 
-export {
-  initJsonStorage,
-  initSettingsStorage,
-  pathToRestore,
-  createDefaultSettings,
-};
-export { JsonStorage, DatapathDoesNotExistError } from "../jsonStorage";
+export { initSettingsStorage };

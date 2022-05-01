@@ -6,7 +6,7 @@ import { JsonStorage, DatapathDoesNotExistError } from "../../jsonStorage";
 
 const pathToRestore = `${app.getPath("userData")}/fragmemoSettings/restore`;
 
-export default async (): Promise<JsonStorage> => {
+const initRestoreWindow = async (): Promise<JsonStorage> => {
   try {
     return new JsonStorage(pathToRestore);
   } catch (error) {
@@ -31,3 +31,11 @@ export default async (): Promise<JsonStorage> => {
     await setTimeout(1);
   }
 };
+
+// top-level await requires Compiler option 'module' of value 'nodenext' is unstable.
+let restoreWindow: JsonStorage;
+initRestoreWindow().then((storage) => {
+  restoreWindow = storage;
+});
+
+export { restoreWindow };

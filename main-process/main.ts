@@ -8,16 +8,10 @@ import {
   PopupOptions,
 } from "electron";
 import { createMenu } from "./createMenu";
-import initRestoreWindow from "./settings/restore/window";
-import { JsonStorage } from "./jsonStorage";
+import { restoreWindow } from "./settings/restore/window";
 import * as dbHandlers from "./dbHandlers";
 
 const isDev = process.env.IS_DEV == "true" ? true : false;
-// top-level await requires Compiler option 'module' of value 'nodenext' is unstable.
-let restoreWindow: JsonStorage;
-initRestoreWindow().then((storage) => {
-  restoreWindow = storage;
-});
 
 function createWindow() {
   type WindowDataType = {

@@ -4,7 +4,9 @@ import path from "node:path";
 import fs from "node:fs";
 import { JsonStorage, DatapathDoesNotExistError } from "../../jsonStorage";
 
-const pathToRestore = `${app.getPath("userData")}/fragmemoSettings/restore`;
+const pathToRestore = `${app.getPath(
+  "userData"
+)}/fragmemoSettings/userSettings`;
 
 const initRestoreWindowStorage = async (): Promise<JsonStorage> => {
   try {

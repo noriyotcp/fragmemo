@@ -8,6 +8,8 @@ const pathToRestore = `${app.getPath("userData")}/fragmemoSettings/restore`;
 
 const initRestoreWindowStorage = async (): Promise<JsonStorage> => {
   try {
+    // Check whether window.json exists or not
+    JsonStorage.doesDatapathExist(path.resolve(pathToRestore, "window.json"));
     return Promise.resolve(new JsonStorage(pathToRestore));
   } catch (error) {
     if (error instanceof DatapathDoesNotExistError) {

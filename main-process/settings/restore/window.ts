@@ -38,4 +38,25 @@ initRestoreWindow().then((storage) => {
   restoreWindow = storage;
 });
 
-export { restoreWindow };
+type WindowDataType = {
+  window: {
+    width: number;
+    height: number;
+    x: number;
+    y: number;
+  };
+};
+
+const getWindowData = () => {
+  return <WindowDataType>restoreWindow.lib.getSync("window");
+};
+
+const setWindowData = (data: WindowDataType) => {
+  restoreWindow.lib.set("window", data, function (err) {
+    if (err) {
+      console.log(err);
+    }
+  });
+};
+
+export { getWindowData, setWindowData };

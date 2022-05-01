@@ -8,22 +8,13 @@ import {
   PopupOptions,
 } from "electron";
 import { createMenu } from "./createMenu";
-import { restoreWindow } from "./settings/restore/window";
+import { getWindowData, setWindowData } from "./settings/restore/window";
 import * as dbHandlers from "./dbHandlers";
 
 const isDev = process.env.IS_DEV == "true" ? true : false;
 
 function createWindow() {
-  type WindowDataType = {
-    window: {
-      width: number;
-      height: number;
-      x: number;
-      y: number;
-    };
-  };
-
-  const data = <WindowDataType>restoreWindow.lib.getSync("window");
+  const data = getWindowData();
   const { width, height, x, y } = data.window;
   console.log("window created", data.window);
 
@@ -68,11 +59,7 @@ function createWindow() {
       },
     };
 
-    restoreWindow.lib.set("window", updatedWindowSettings, function (err) {
-      if (err) {
-        console.log(err);
-      }
-    });
+    setWindowData(updatedWindowSettings);
   });
 
   mainWindow.on("move", () => {
@@ -85,11 +72,7 @@ function createWindow() {
       },
     };
 
-    restoreWindow.lib.set("window", updatedWindowSettings, function (err) {
-      if (err) {
-        console.log(err);
-      }
-    });
+    setWindowData(updatedWindowSettings);
   });
 }
 

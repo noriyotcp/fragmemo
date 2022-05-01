@@ -41,10 +41,10 @@ type WindowDataType = {
   };
 };
 
-// top-level await requires Compiler option 'module' of value 'nodenext' is unstable.
 let getWindowData: () => WindowDataType;
 let setWindowData: (_: WindowDataType) => void;
 
+// top-level await requires Compiler option 'module' of value 'nodenext' is unstable.
 initRestoreWindow().then((storage) => {
   getWindowData = () => {
     return <WindowDataType>storage.lib.getSync("window");

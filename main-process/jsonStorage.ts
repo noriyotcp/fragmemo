@@ -6,13 +6,13 @@ export default class JsonStorage {
   datapath: string;
 
   constructor(datapath: string) {
-    this.doesDatapathExist(datapath);
+    JsonStorage.doesDatapathExist(datapath);
     this.lib = storage;
     this.lib.setDataPath(datapath);
     this.datapath = this.lib.getDataPath();
   }
 
-  doesDatapathExist(filePath: fs.PathLike): void {
+  static doesDatapathExist(filePath: fs.PathLike): void {
     if (!fs.existsSync(filePath)) {
       throw new DatapathDoesNotExistError(`${filePath} does not exist`);
     }

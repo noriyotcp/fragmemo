@@ -20,9 +20,27 @@ const initJsonStorage = async (filename: string): Promise<JsonStorage> => {
   }
 };
 
+const initSettingsStorage = async (
+  filename: string,
+  defaultSettings: object
+): Promise<JsonStorage> => {
+  return initJsonStorage(filename)
+    .then((storage) => {
+      return Promise.resolve(storage);
+    })
+    .catch(async (error) => {
+      if (error instanceof DatapathDoesNotExistError) {
+        await createDefaultSettings(filename, defaultSettings);
+        return initJsonStorage(filename);
+      } else {
+        return Promise.reject(error);
+      }
+    });
+};
+
 const createDefaultSettings = async (
-  settings: object,
-  filename: string
+  filename: string,
+  settings: object
 ): Promise<void> => {
   try {
     fs.mkdirSync(pathToRestore, { recursive: true });
@@ -42,5 +60,10 @@ const createDefaultSettings = async (
   }
 };
 
-export { initJsonStorage, pathToRestore, createDefaultSettings };
+export {
+  initJsonStorage,
+  initSettingsStorage,
+  pathToRestore,
+  createDefaultSettings,
+};
 export { JsonStorage, DatapathDoesNotExistError } from "../jsonStorage";

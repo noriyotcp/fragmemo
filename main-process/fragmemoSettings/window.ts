@@ -1,30 +1,4 @@
-import {
-  initJsonStorage,
-  createDefaultSettings,
-  JsonStorage,
-  DatapathDoesNotExistError,
-} from "./initJsonStorage";
-
-const keyname = "restoreWindow";
-const filename = `${keyname}.json`;
-
-const initRestoreWindowStorage = async (): Promise<JsonStorage> => {
-  return initJsonStorage(filename)
-    .then((storage) => {
-      return Promise.resolve(storage);
-    })
-    .catch(async (error) => {
-      if (error instanceof DatapathDoesNotExistError) {
-        const defaultWindowSettings = {
-          window: { width: 800, height: 600, x: 0, y: 0 },
-        };
-        await createDefaultSettings(defaultWindowSettings, filename);
-        return initJsonStorage(filename);
-      } else {
-        return Promise.reject(error);
-      }
-    });
-};
+import { initSettingsStorage } from "./initJsonStorage";
 
 type WindowDataType = {
   window: {
@@ -35,11 +9,17 @@ type WindowDataType = {
   };
 };
 
+const keyname = "restoreWindow";
+const filename = `${keyname}.json`;
+const defaultWindowSettings: WindowDataType = {
+  window: { width: 800, height: 600, x: 0, y: 0 },
+};
+
 let getWindowData: () => WindowDataType;
 let setWindowData: (_: WindowDataType) => void;
 
 // top-level await requires Compiler option 'module' of value 'nodenext' is unstable.
-initRestoreWindowStorage()
+initSettingsStorage(filename, defaultWindowSettings)
   .then((storage) => {
     getWindowData = () => {
       return <WindowDataType>storage.lib.getSync(keyname);

@@ -42,17 +42,15 @@ type WindowDataType = {
 };
 
 // top-level await requires Compiler option 'module' of value 'nodenext' is unstable.
-let restoreWindow: JsonStorage;
 let getWindowData: () => WindowDataType;
 let setWindowData: (_: WindowDataType) => void;
 
 initRestoreWindow().then((storage) => {
-  restoreWindow = storage;
   getWindowData = () => {
-    return <WindowDataType>restoreWindow.lib.getSync("window");
+    return <WindowDataType>storage.lib.getSync("window");
   };
   setWindowData = (data) => {
-    restoreWindow.lib.set("window", data, function (err) {
+    storage.lib.set("window", data, function (err) {
       if (err) {
         console.log(err);
       }

@@ -6,9 +6,9 @@ import { JsonStorage, DatapathDoesNotExistError } from "../../jsonStorage";
 
 const pathToRestore = `${app.getPath("userData")}/fragmemoSettings/restore`;
 
-const initRestoreWindow = async (): Promise<JsonStorage> => {
+const initRestoreWindowStorage = async (): Promise<JsonStorage> => {
   try {
-    return new JsonStorage(pathToRestore);
+    return Promise.resolve(new JsonStorage(pathToRestore));
   } catch (error) {
     if (error instanceof DatapathDoesNotExistError) {
       fs.mkdirSync(pathToRestore, { recursive: true });
@@ -22,9 +22,9 @@ const initRestoreWindow = async (): Promise<JsonStorage> => {
         path.resolve(pathToRestore, "window.json"),
         JSON.stringify(defaultWindowSettings, null, 2)
       );
-      return new JsonStorage(pathToRestore);
+      return Promise.resolve(new JsonStorage(pathToRestore));
     } else {
-      throw error;
+      return Promise.reject(error);
     }
   } finally {
     // But, just in case, we'll wait for 1 millisecond :)
@@ -45,17 +45,27 @@ let getWindowData: () => WindowDataType;
 let setWindowData: (_: WindowDataType) => void;
 
 // top-level await requires Compiler option 'module' of value 'nodenext' is unstable.
-initRestoreWindow().then((storage) => {
-  getWindowData = () => {
-    return <WindowDataType>storage.lib.getSync("window");
-  };
-  setWindowData = (data) => {
-    storage.lib.set("window", data, { prettyPrinting: true }, function (err) {
-      if (err) {
-        console.log(err);
-      }
-    });
-  };
-});
+initRestoreWindowStorage()
+  .then((storage) => {
+    getWindowData = () => {
+      return <WindowDataType>storage.lib.getSync("window");
+    };
+    setWindowData = (data) => {
+      storage.lib.set(
+        "window",
+        data,
+        { prettyPrinting: true },
+        function (error) {
+          if (error) {
+            console.error(error);
+            throw error;
+          }
+        }
+      );
+    };
+  })
+  .catch((error) => {
+    throw error;
+  });
 
 export { getWindowData, setWindowData };

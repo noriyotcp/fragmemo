@@ -20,7 +20,7 @@ const initRestoreWindow = async (): Promise<JsonStorage> => {
       // github.dev/electron-userland/electron-json-storage/blob/df4edce1e643e7343d962721fe2eacfeda094870/lib/storage.js#L419-L439
       fs.writeFileSync(
         path.resolve(pathToRestore, "window.json"),
-        JSON.stringify(defaultWindowSettings)
+        JSON.stringify(defaultWindowSettings, null, 2)
       );
       return new JsonStorage(pathToRestore);
     } else {
@@ -50,7 +50,7 @@ initRestoreWindow().then((storage) => {
     return <WindowDataType>storage.lib.getSync("window");
   };
   setWindowData = (data) => {
-    storage.lib.set("window", data, function (err) {
+    storage.lib.set("window", data, { prettyPrinting: true }, function (err) {
       if (err) {
         console.log(err);
       }

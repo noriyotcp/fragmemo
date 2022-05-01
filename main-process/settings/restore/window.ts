@@ -32,12 +32,6 @@ const initRestoreWindow = async (): Promise<JsonStorage> => {
   }
 };
 
-// top-level await requires Compiler option 'module' of value 'nodenext' is unstable.
-let restoreWindow: JsonStorage;
-initRestoreWindow().then((storage) => {
-  restoreWindow = storage;
-});
-
 type WindowDataType = {
   window: {
     width: number;
@@ -47,16 +41,23 @@ type WindowDataType = {
   };
 };
 
-const getWindowData = () => {
-  return <WindowDataType>restoreWindow.lib.getSync("window");
-};
+// top-level await requires Compiler option 'module' of value 'nodenext' is unstable.
+let restoreWindow: JsonStorage;
+let getWindowData: () => WindowDataType;
+let setWindowData: (_: WindowDataType) => void;
 
-const setWindowData = (data: WindowDataType) => {
-  restoreWindow.lib.set("window", data, function (err) {
-    if (err) {
-      console.log(err);
-    }
-  });
-};
+initRestoreWindow().then((storage) => {
+  restoreWindow = storage;
+  getWindowData = () => {
+    return <WindowDataType>restoreWindow.lib.getSync("window");
+  };
+  setWindowData = (data) => {
+    restoreWindow.lib.set("window", data, function (err) {
+      if (err) {
+        console.log(err);
+      }
+    });
+  };
+});
 
 export { getWindowData, setWindowData };

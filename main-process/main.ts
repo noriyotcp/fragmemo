@@ -198,7 +198,7 @@ app.once("browser-window-created", () => {
   });
 
   ipcMain.handle("get-editor-settings", (event) => {
-    return getEditorSettings().editor;
+    return getEditorSettings();
   });
 
   ipcMain.handle("set-editor-settings", (event, settings) => {
@@ -207,11 +207,6 @@ app.once("browser-window-created", () => {
 });
 
 app.on("will-quit", () => {
-  // it takes a few seconds to load the new editor settings
-  // so we'll call it at the end
-  const { autosave, afterDelay } = getEditorSettings().editor;
-  console.log("new editor settings", { autosave, afterDelay });
-
   dbHandlers.onWillQuit();
 });
 

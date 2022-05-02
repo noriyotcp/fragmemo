@@ -63,7 +63,7 @@ export interface SandBox {
   getFragment: (fragmentId: number) => Promise<Fragment>;
   getActiveFragment: (snippetId: number) => Promise<ActiveFragment>;
   getLatestActiveSnippetHistory: () => Promise<ActiveSnippetHistory>;
-  getEditorSettings: () => Promise<EditorSettingsType["editor"]>;
+  getEditorSettings: () => Promise<EditorSettingsType>;
   setEditorSettings: (settings: EditorSettingsType) => void;
   showContextMenuOnFragmentTab: () => void;
   showContextMenuOnSnippetItem: () => void;

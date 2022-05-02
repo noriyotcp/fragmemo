@@ -4,7 +4,8 @@ import { EditorSettingsType } from "fragmemoSettings.d";
 const keyname = "userSettingsEditor";
 const filename = `${keyname}.json`;
 const defaultSettings = {
-  editor: { autosave: true, afterDelay: 1000 },
+  autosave: true,
+  afterDelay: 1000,
 };
 
 let getEditorSettings: () => EditorSettingsType;

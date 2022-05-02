@@ -121,19 +121,19 @@ export class EditorElement extends LitElement {
   firstUpdated(): void {
     window.addEventListener(
       "user-settings-editor-updated",
-      this._onUserSettingsUpdated as EventListener
+      this._onEditorSettingsUpdated as EventListener
     );
   }
 
   disconnectedCallback() {
     window.removeEventListener(
       "user-settings-editor-updated",
-      this._onUserSettingsUpdated as EventListener
+      this._onEditorSettingsUpdated as EventListener
     );
     super.disconnectedCallback();
   }
 
-  private _onUserSettingsUpdated = (e: CustomEvent) => {
+  private _onEditorSettingsUpdated = (e: CustomEvent) => {
     this._autosave = e.detail.userSettings.autosave;
     this._afterDelay = e.detail.userSettings.afterDelay;
   };

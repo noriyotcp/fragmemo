@@ -18,7 +18,7 @@ import * as dbHandlers from "./dbHandlers";
 const isDev = process.env.IS_DEV == "true" ? true : false;
 
 function createWindow() {
-  const { width, height, x, y } = getWindowData().window;
+  const { width, height, x, y } = getWindowData();
   console.log("window created", { width, height, x, y });
 
   // Create the browser window.
@@ -54,12 +54,10 @@ function createWindow() {
 
   mainWindow.on("resize", () => {
     const updatedWindowData = {
-      window: {
-        width: mainWindow.getSize()[0],
-        height: mainWindow.getSize()[1],
-        x: mainWindow.getPosition()[0],
-        y: mainWindow.getPosition()[1],
-      },
+      width: mainWindow.getSize()[0],
+      height: mainWindow.getSize()[1],
+      x: mainWindow.getPosition()[0],
+      y: mainWindow.getPosition()[1],
     };
 
     setWindowData(updatedWindowData);
@@ -67,12 +65,10 @@ function createWindow() {
 
   mainWindow.on("move", () => {
     const updatedWindowData = {
-      window: {
-        width: mainWindow.getSize()[0],
-        height: mainWindow.getSize()[1],
-        x: mainWindow.getPosition()[0],
-        y: mainWindow.getPosition()[1],
-      },
+      width: mainWindow.getSize()[0],
+      height: mainWindow.getSize()[1],
+      x: mainWindow.getPosition()[0],
+      y: mainWindow.getPosition()[1],
     };
 
     setWindowData(updatedWindowData);

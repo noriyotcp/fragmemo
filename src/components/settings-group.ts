@@ -1,6 +1,9 @@
+import { EditorSettingsType } from "index.d";
 import { LitElement, html, TemplateResult } from "lit";
-import { customElement, query, queryAll } from "lit/decorators.js";
+import { customElement, query, queryAll, state } from "lit/decorators.js";
 import { userSettingsUpdated } from "../events/global-dispatchers";
+
+const { myAPI } = window;
 
 @customElement("settings-group")
 export class SettingsGroup extends LitElement {
@@ -8,10 +11,16 @@ export class SettingsGroup extends LitElement {
   @query("sl-input[name='after-delay']") afterDelay!: HTMLInputElement;
   @queryAll("sl-input") inputs!: HTMLInputElement[];
   @query("form") form!: HTMLFormElement;
-  settings = {
-    autosave: true,
-    afterDelay: 1000,
-  };
+  @state() settings!: EditorSettingsType["editor"];
+
+  constructor() {
+    super();
+    myAPI.getEditorSettings().then((settings) => {
+      this.settings = settings;
+      this._settingsUpdated();
+      console.log("editor settings", this.settings);
+    });
+  }
 
   render(): TemplateResult {
     return html`
@@ -25,14 +34,14 @@ export class SettingsGroup extends LitElement {
             <sl-switch
               id="autosave"
               name="autosave"
-              checked=${this.settings.autosave}
+              checked=${this.settings?.autosave}
               >Auto save</sl-switch
             >
             <sl-input
               type="number"
               placeholder="after delay (milliseconds)"
               size="small"
-              value=${this.settings.afterDelay}
+              value=${this.settings?.afterDelay}
               min="1"
               name="after-delay"
               required
@@ -50,8 +59,6 @@ export class SettingsGroup extends LitElement {
   }
 
   firstUpdated() {
-    this._settingsUpdated();
-
     this.form.addEventListener("submit", (e: Event) => {
       e.preventDefault();
       const isAllValid = Array.from(this.inputs).every(
@@ -67,7 +74,7 @@ export class SettingsGroup extends LitElement {
   private _setSettings() {
     this.settings.autosave = this.autosave.checked;
     this.settings.afterDelay = this.afterDelay.valueAsNumber;
-    console.log("settings", this.settings);
+    myAPI.setEditorSettings({ editor: this.settings });
   }
 
   private _settingsUpdated() {

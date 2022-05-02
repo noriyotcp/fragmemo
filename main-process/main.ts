@@ -20,14 +20,6 @@ const isDev = process.env.IS_DEV == "true" ? true : false;
 function createWindow() {
   const { width, height, x, y } = getWindowData().window;
   console.log("window created", { width, height, x, y });
-  const { autosave, afterDelay } = getEditorSettings().editor;
-  console.log("editor settings", { autosave, afterDelay });
-  setEditorSettings({
-    editor: {
-      autosave: false,
-      afterDelay: 10000,
-    },
-  });
 
   // Create the browser window.
   const mainWindow = new BrowserWindow({
@@ -203,6 +195,14 @@ app.once("browser-window-created", () => {
 
   ipcMain.handle("get-latest-active-snippet-history", (event) => {
     return dbHandlers.getLatestActiveSnippetHistory();
+  });
+
+  ipcMain.handle("get-editor-settings", (event) => {
+    return getEditorSettings().editor;
+  });
+
+  ipcMain.handle("set-editor-settings", (event, settings) => {
+    return setEditorSettings(settings);
   });
 });
 

@@ -9,5 +9,5 @@
       "electron-json-storage": ["electron-json-storage"]
     }
   },
-  "include": ["./**/*.ts", "./**/*.js"]
+  "include": ["./**/*.ts", "./**/*.d.ts", "./**/*.js"]
 }

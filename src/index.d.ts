@@ -9,6 +9,8 @@ import {
 } from "models.d";
 import { Environment } from "monaco-editor";
 import { ISnippetProps, IFragmentProps } from "props.d";
+import { EditorSettingsType } from "../main-process/fragmemoSettings.d";
+export { EditorSettingsType } from "../main-process/fragmemoSettings.d";
 
 declare global {
   interface Window {
@@ -61,6 +63,8 @@ export interface SandBox {
   getFragment: (fragmentId: number) => Promise<Fragment>;
   getActiveFragment: (snippetId: number) => Promise<ActiveFragment>;
   getLatestActiveSnippetHistory: () => Promise<ActiveSnippetHistory>;
+  getEditorSettings: () => Promise<EditorSettingsType["editor"]>;
+  setEditorSettings: (settings: EditorSettingsType) => void;
   showContextMenuOnFragmentTab: () => void;
   showContextMenuOnSnippetItem: () => void;
 }

@@ -35,6 +35,9 @@ contextBridge.exposeInMainWorld("myAPI", {
     ipcRenderer.invoke("get-active-fragment", snippetId),
   getLatestActiveSnippetHistory: () =>
     ipcRenderer.invoke("get-latest-active-snippet-history"),
+  getEditorSettings: () => ipcRenderer.invoke("get-editor-settings"),
+  setEditorSettings: (settings) =>
+    ipcRenderer.invoke("set-editor-settings", settings),
   showContextMenuOnFragmentTab: () =>
     ipcRenderer.invoke("show-context-menu-on-fragment-tab"),
   showContextMenuOnSnippetItem: () =>

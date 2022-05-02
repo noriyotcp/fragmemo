@@ -10,6 +10,7 @@ import {
 import { Environment } from "monaco-editor";
 import { ISnippetProps, IFragmentProps } from "props.d";
 import { EditorSettingsType } from "../main-process/fragmemoSettings.d";
+export { EditorSettingsType } from "../main-process/fragmemoSettings.d";
 
 declare global {
   interface Window {

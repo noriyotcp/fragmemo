@@ -1,7 +1,10 @@
 import { EditorSettingsType } from "index.d";
 import { LitElement, html, TemplateResult } from "lit";
 import { customElement, query, queryAll, state } from "lit/decorators.js";
-import { userSettingsUpdated } from "../events/global-dispatchers";
+import {
+  userSettingsUpdated,
+  displayToast,
+} from "../events/global-dispatchers";
 
 const { myAPI } = window;
 
@@ -11,14 +14,15 @@ export class SettingsGroup extends LitElement {
   @query("sl-input[name='after-delay']") afterDelay!: HTMLInputElement;
   @queryAll("sl-input") inputs!: HTMLInputElement[];
   @query("form") form!: HTMLFormElement;
-  @state() settings!: EditorSettingsType["editor"];
+  @query("#reload-page") reloadPage!: HTMLButtonElement;
+
+  @state() settings!: EditorSettingsType;
 
   constructor() {
     super();
     myAPI.getEditorSettings().then((settings) => {
       this.settings = settings;
       this._settingsUpdated();
-      console.log("editor settings", this.settings);
     });
   }
 
@@ -31,12 +35,7 @@ export class SettingsGroup extends LitElement {
 
         <sl-tab-panel name="editor">
           <form>
-            <sl-switch
-              id="autosave"
-              name="autosave"
-              checked=${this.settings?.autosave}
-              >Auto save</sl-switch
-            >
+            <sl-switch id="autosave" name="autosave">Auto save</sl-switch>
             <sl-input
               type="number"
               placeholder="after delay (milliseconds)"
@@ -49,6 +48,16 @@ export class SettingsGroup extends LitElement {
             <br />
             <sl-button type="submit" variant="primary">Submit</sl-button>
           </form>
+          <sl-tooltip>
+            <div slot="content">
+              Restore settings<br />before submitting changes
+            </div>
+            <sl-icon-button
+              id="reload-page"
+              name="arrow-clockwise"
+              label="Reload"
+            ></sl-icon-button>
+          </sl-tooltip>
         </sl-tab-panel>
         <sl-tab-panel name="custom">This is the custom tab panel.</sl-tab-panel>
         <sl-tab-panel name="advanced"
@@ -67,14 +76,33 @@ export class SettingsGroup extends LitElement {
       if (isAllValid) {
         this._setSettings();
         this._settingsUpdated();
+        displayToast("Editor settings updated", {
+          variant: "primary",
+          icon: "check2-circle",
+        });
       }
+    });
+
+    this.reloadPage.addEventListener("click", () => {
+      this.requestUpdate();
     });
   }
 
+  updated() {
+    if (!this.settings) return;
+
+    // ensure to update the state of the inputs
+    this.autosave.checked = this.settings.autosave;
+    this.afterDelay.valueAsNumber = this.settings.afterDelay;
+  }
+
   private _setSettings() {
-    this.settings.autosave = this.autosave.checked;
-    this.settings.afterDelay = this.afterDelay.valueAsNumber;
-    myAPI.setEditorSettings({ editor: this.settings });
+    const updatedSettings = {
+      autosave: this.autosave.checked,
+      afterDelay: this.afterDelay.valueAsNumber,
+    };
+    myAPI.setEditorSettings(updatedSettings);
+    this.settings = updatedSettings;
   }
 
   private _settingsUpdated() {

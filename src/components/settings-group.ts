@@ -75,6 +75,7 @@ export class SettingsGroup extends LitElement {
   updated() {
     if (!this.settings) return;
 
+    // ensure to update the `autosave` switch
     this.autosave.checked = this.settings.autosave;
   }
 

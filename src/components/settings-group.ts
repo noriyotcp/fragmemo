@@ -14,6 +14,8 @@ export class SettingsGroup extends LitElement {
   @query("sl-input[name='after-delay']") afterDelay!: HTMLInputElement;
   @queryAll("sl-input") inputs!: HTMLInputElement[];
   @query("form") form!: HTMLFormElement;
+  @query("#reload-page") reloadPage!: HTMLButtonElement;
+
   @state() settings!: EditorSettingsType;
 
   constructor() {
@@ -46,6 +48,16 @@ export class SettingsGroup extends LitElement {
             <br />
             <sl-button type="submit" variant="primary">Submit</sl-button>
           </form>
+          <sl-tooltip>
+            <div slot="content">
+              Restore settings<br />before submitting changes
+            </div>
+            <sl-icon-button
+              id="reload-page"
+              name="arrow-clockwise"
+              label="Reload"
+            ></sl-icon-button>
+          </sl-tooltip>
         </sl-tab-panel>
         <sl-tab-panel name="custom">This is the custom tab panel.</sl-tab-panel>
         <sl-tab-panel name="advanced"
@@ -70,13 +82,18 @@ export class SettingsGroup extends LitElement {
         });
       }
     });
+
+    this.reloadPage.addEventListener("click", () => {
+      this.requestUpdate();
+    });
   }
 
   updated() {
     if (!this.settings) return;
 
-    // ensure to update the `autosave` switch
+    // ensure to update the state of the inputs
     this.autosave.checked = this.settings.autosave;
+    this.afterDelay.valueAsNumber = this.settings.afterDelay;
   }
 
   private _setSettings() {

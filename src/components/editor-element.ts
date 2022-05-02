@@ -44,7 +44,7 @@ export class EditorElement extends LitElement {
   @state() private _content = "";
   @state() private _language = "plaintext";
   private _languages!: Language[];
-  private _autosave!: boolean;
+  @state() private _autosave!: boolean;
   private _afterDelay!: number;
 
   static styles = [
@@ -113,7 +113,9 @@ export class EditorElement extends LitElement {
             </option>`;
           })}
         </select>
-        <editing-state-icon></editing-state-icon>
+        ${this._autosave
+          ? html`<editing-state-icon></editing-state-icon>`
+          : html``}
       </footer>
     `;
   }

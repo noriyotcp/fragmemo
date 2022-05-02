@@ -74,7 +74,7 @@ export class SettingsGroup extends LitElement {
   private _setSettings() {
     this.settings.autosave = this.autosave.checked;
     this.settings.afterDelay = this.afterDelay.valueAsNumber;
-    console.log("settings", this.settings);
+    myAPI.setEditorSettings({ editor: this.settings });
   }
 
   private _settingsUpdated() {

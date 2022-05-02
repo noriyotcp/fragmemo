@@ -200,6 +200,10 @@ app.once("browser-window-created", () => {
   ipcMain.handle("get-editor-settings", (event) => {
     return getEditorSettings().editor;
   });
+
+  ipcMain.handle("set-editor-settings", (event, settings) => {
+    return setEditorSettings(settings);
+  });
 });
 
 app.on("will-quit", () => {

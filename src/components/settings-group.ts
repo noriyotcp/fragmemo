@@ -22,6 +22,7 @@ export class SettingsGroup extends LitElement {
     super();
     myAPI.getEditorSettings().then((settings) => {
       this.settings = settings;
+      // Not updated at this time, but nofify the current settings to the other components
       this._settingsUpdated();
     });
   }
@@ -106,6 +107,6 @@ export class SettingsGroup extends LitElement {
   }
 
   private _settingsUpdated() {
-    userSettingsUpdated(this.settings);
+    userSettingsUpdated("editor", this.settings);
   }
 }

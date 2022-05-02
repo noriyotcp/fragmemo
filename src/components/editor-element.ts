@@ -44,6 +44,7 @@ export class EditorElement extends LitElement {
   @state() private _content = "";
   @state() private _language = "plaintext";
   private _languages!: Language[];
+  private _autosave!: boolean;
   private _afterDelay!: number;
 
   static styles = [
@@ -119,20 +120,21 @@ export class EditorElement extends LitElement {
 
   firstUpdated(): void {
     window.addEventListener(
-      "user-settings-updated",
-      this._onUserSettingsUpdated as EventListener
+      "user-settings-editor-updated",
+      this._onEditorSettingsUpdated as EventListener
     );
   }
 
   disconnectedCallback() {
     window.removeEventListener(
-      "user-settings-updated",
-      this._onUserSettingsUpdated as EventListener
+      "user-settings-editor-updated",
+      this._onEditorSettingsUpdated as EventListener
     );
     super.disconnectedCallback();
   }
 
-  private _onUserSettingsUpdated = (e: CustomEvent) => {
+  private _onEditorSettingsUpdated = (e: CustomEvent) => {
+    this._autosave = e.detail.userSettings.autosave;
     this._afterDelay = e.detail.userSettings.afterDelay;
   };
 
@@ -220,7 +222,7 @@ export class EditorElement extends LitElement {
         contentEditingStateChanged(this._activeFragmentId!, this.fragmentStore);
 
         // auto save
-        if (!e.detail.isComposing) {
+        if (this._autosave && !e.detail.isComposing) {
           const params = {
             fragmentId: this._activeFragmentId as number,
             content: e.detail.text,

@@ -1,11 +1,5 @@
 import { initSettingsStorage } from "./initSettingsStorage";
-
-type EditorSettingsType = {
-  editor: {
-    autosave: boolean;
-    afterDelay: number;
-  };
-};
+import { EditorSettingsType } from "fragmemoSettings.d";
 
 const keyname = "userSettingsEditor";
 const filename = `${keyname}.json`;

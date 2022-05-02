@@ -2,6 +2,8 @@ import { LitElement, html, TemplateResult } from "lit";
 import { customElement, query, queryAll } from "lit/decorators.js";
 import { userSettingsUpdated } from "../events/global-dispatchers";
 
+const { myAPI } = window;
+
 @customElement("settings-group")
 export class SettingsGroup extends LitElement {
   @query("#autosave") autosave!: HTMLInputElement;
@@ -50,6 +52,10 @@ export class SettingsGroup extends LitElement {
   }
 
   firstUpdated() {
+    myAPI.getEditorSettings().then((settings) => {
+      console.log("editor settings", settings);
+    });
+
     this._settingsUpdated();
 
     this.form.addEventListener("submit", (e: Event) => {

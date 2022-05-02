@@ -107,6 +107,6 @@ export class SettingsGroup extends LitElement {
   }
 
   private _settingsUpdated() {
-    userSettingsUpdated(this.settings);
+    userSettingsUpdated("editor", this.settings);
   }
 }

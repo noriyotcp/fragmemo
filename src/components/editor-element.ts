@@ -120,14 +120,14 @@ export class EditorElement extends LitElement {
 
   firstUpdated(): void {
     window.addEventListener(
-      "user-settings-updated",
+      "user-settings-editor-updated",
       this._onUserSettingsUpdated as EventListener
     );
   }
 
   disconnectedCallback() {
     window.removeEventListener(
-      "user-settings-updated",
+      "user-settings-editor-updated",
       this._onUserSettingsUpdated as EventListener
     );
     super.disconnectedCallback();

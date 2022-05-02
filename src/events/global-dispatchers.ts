@@ -124,9 +124,12 @@ export const searchSnippets = (query: string): void => {
   });
 };
 
-export const userSettingsUpdated = (userSettings: object): void => {
+export const userSettingsUpdated = (
+  settingsType: string,
+  userSettings: object
+): void => {
   dispatch({
-    type: "user-settings-updated",
+    type: `user-settings-${settingsType}-updated`,
     detail: {
       userSettings,
     },

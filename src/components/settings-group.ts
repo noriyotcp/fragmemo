@@ -11,14 +11,13 @@ export class SettingsGroup extends LitElement {
   @query("sl-input[name='after-delay']") afterDelay!: HTMLInputElement;
   @queryAll("sl-input") inputs!: HTMLInputElement[];
   @query("form") form!: HTMLFormElement;
-  @state() settings!: EditorSettingsType["editor"];
+  @state() settings!: EditorSettingsType;
 
   constructor() {
     super();
     myAPI.getEditorSettings().then((settings) => {
       this.settings = settings;
       this._settingsUpdated();
-      console.log("editor settings", this.settings);
     });
   }
 
@@ -31,12 +30,7 @@ export class SettingsGroup extends LitElement {
 
         <sl-tab-panel name="editor">
           <form>
-            <sl-switch
-              id="autosave"
-              name="autosave"
-              checked=${this.settings?.autosave}
-              >Auto save</sl-switch
-            >
+            <sl-switch id="autosave" name="autosave">Auto save</sl-switch>
             <sl-input
               type="number"
               placeholder="after delay (milliseconds)"
@@ -71,10 +65,16 @@ export class SettingsGroup extends LitElement {
     });
   }
 
+  updated() {
+    if (!this.settings) return;
+
+    this.autosave.checked = this.settings.autosave;
+  }
+
   private _setSettings() {
     this.settings.autosave = this.autosave.checked;
     this.settings.afterDelay = this.afterDelay.valueAsNumber;
-    myAPI.setEditorSettings({ editor: this.settings });
+    myAPI.setEditorSettings(this.settings);
   }
 
   private _settingsUpdated() {

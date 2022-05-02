@@ -1,7 +1,10 @@
 import { EditorSettingsType } from "index.d";
 import { LitElement, html, TemplateResult } from "lit";
 import { customElement, query, queryAll, state } from "lit/decorators.js";
-import { userSettingsUpdated } from "../events/global-dispatchers";
+import {
+  userSettingsUpdated,
+  displayToast,
+} from "../events/global-dispatchers";
 
 const { myAPI } = window;
 
@@ -61,6 +64,10 @@ export class SettingsGroup extends LitElement {
       if (isAllValid) {
         this._setSettings();
         this._settingsUpdated();
+        displayToast("Editor settings updated", {
+          variant: "primary",
+          icon: "check2-circle",
+        });
       }
     });
   }
@@ -72,9 +79,12 @@ export class SettingsGroup extends LitElement {
   }
 
   private _setSettings() {
-    this.settings.autosave = this.autosave.checked;
-    this.settings.afterDelay = this.afterDelay.valueAsNumber;
-    myAPI.setEditorSettings(this.settings);
+    const updatedSettings = {
+      autosave: this.autosave.checked,
+      afterDelay: this.afterDelay.valueAsNumber,
+    };
+    myAPI.setEditorSettings(updatedSettings);
+    this.settings = updatedSettings;
   }
 
   private _settingsUpdated() {

@@ -1,6 +1,7 @@
 import "./components/home-element";
 import "./components/settings-element";
 import "./components/settings-group";
+import "./components/settings-editor";
 import "./components/editor-element";
 import "./components/test-header";
 import "./components/codeEditor";

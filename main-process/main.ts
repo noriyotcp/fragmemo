@@ -23,6 +23,8 @@ function createWindow() {
 
   // Create the browser window.
   const mainWindow = new BrowserWindow({
+    minWidth: 400,
+    minHeight: 240 + 28, //the title bar height is 28px
     width: width,
     height: height,
     x: x,

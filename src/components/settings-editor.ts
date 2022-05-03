@@ -1,5 +1,5 @@
 import { EditorSettingsType } from "index.d";
-import { LitElement, html, TemplateResult } from "lit";
+import { LitElement, html, TemplateResult, css } from "lit";
 import { customElement, query, queryAll, state } from "lit/decorators.js";
 import {
   userSettingsUpdated,
@@ -27,32 +27,51 @@ export class SettingsEditor extends LitElement {
     });
   }
 
+  static styles = [
+    css`
+      .content-container {
+        max-width: 50%;
+      }
+      form {
+        display: grid;
+      }
+      .btn-group {
+        display: inline-flex;
+        justify-content: space-between;
+      }
+    `,
+  ];
+
   render(): TemplateResult {
     return html`
-      <form>
-        <sl-switch id="autosave" name="autosave">Auto save</sl-switch>
-        <sl-input
-          type="number"
-          placeholder="after delay (milliseconds)"
-          size="small"
-          value=${this.settings?.afterDelay}
-          min="1"
-          name="after-delay"
-          required
-        ></sl-input>
-        <br />
-        <sl-button type="submit" variant="primary">Submit</sl-button>
-      </form>
-      <sl-tooltip>
-        <div slot="content">
-          Restore settings<br />before submitting changes
-        </div>
-        <sl-icon-button
-          id="reload-page"
-          name="arrow-clockwise"
-          label="Reload"
-        ></sl-icon-button>
-      </sl-tooltip>
+      <div class="content-container">
+        <form>
+          <sl-switch id="autosave" name="autosave">Auto save</sl-switch>
+          <br />
+          <sl-input
+            type="number"
+            placeholder="after delay (milliseconds)"
+            size="small"
+            value=${this.settings?.afterDelay}
+            min="1"
+            name="after-delay"
+            class="input"
+            required
+          ></sl-input>
+          <br />
+          <div class="btn-group">
+            <sl-button type="submit" variant="primary">Submit</sl-button>
+            <sl-tooltip placement="left">
+              <div slot="content">
+                Restore settings<br />before submitting changes
+              </div>
+              <sl-button id="reload-page">
+                <sl-icon name="arrow-clockwise" label="Reload"></sl-icon>
+              </sl-button>
+            </sl-tooltip>
+          </div>
+        </form>
+      </div>
     `;
   }
 

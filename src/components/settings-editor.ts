@@ -52,7 +52,7 @@ export class SettingsEditor extends LitElement {
             type="number"
             placeholder="after delay (milliseconds)"
             size="small"
-            value=${this.settings?.afterDelay}
+            value=${this.settings?.files.afterDelay}
             min="1"
             name="after-delay"
             class="input"
@@ -100,14 +100,16 @@ export class SettingsEditor extends LitElement {
     if (!this.settings) return;
 
     // ensure to update the state of the inputs
-    this.autosave.checked = this.settings.autosave;
-    this.afterDelay.valueAsNumber = this.settings.afterDelay;
+    this.autosave.checked = this.settings.files.autosave;
+    this.afterDelay.valueAsNumber = this.settings.files.afterDelay;
   }
 
   private _setSettings() {
     const updatedSettings = {
-      autosave: this.autosave.checked,
-      afterDelay: this.afterDelay.valueAsNumber,
+      files: {
+        autosave: this.autosave.checked,
+        afterDelay: this.afterDelay.valueAsNumber,
+      },
     };
     myAPI.setEditorSettings(updatedSettings);
     this.settings = updatedSettings;

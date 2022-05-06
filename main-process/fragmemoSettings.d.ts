@@ -1,4 +1,6 @@
 export type EditorSettingsType = {
-  autosave: boolean;
-  afterDelay: number;
+  files: {
+    autosave: boolean;
+    afterDelay: number;
+  };
 };

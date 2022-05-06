@@ -65,7 +65,7 @@ export class ToastStackController implements ReactiveController {
       message: `${e.detail.message}`,
       variant: e.detail.variant,
       icon: e.detail.icon,
-      duration: 5000,
+      duration: e.detail.duration ?? 2000,
     });
   };
 }

@@ -85,6 +85,7 @@ export class TestHeader extends LitElement {
           displayToast("Snippet update failed", {
             variant: "danger",
             icon: "exclamation-octagon",
+            duration: 5000,
           });
         });
     });

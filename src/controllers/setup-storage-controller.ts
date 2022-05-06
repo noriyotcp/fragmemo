@@ -62,6 +62,7 @@ export class SetupStorageController implements ReactiveController {
         displayToast("Setup storage failed", {
           variant: "danger",
           icon: "exclamation-octagon",
+          duration: 5000,
         });
       });
   }
@@ -80,6 +81,7 @@ export class SetupStorageController implements ReactiveController {
         displayToast("Snippets load failed", {
           variant: "danger",
           icon: "exclamation-octagon",
+          duration: 5000,
         });
       })
       .finally(() => {

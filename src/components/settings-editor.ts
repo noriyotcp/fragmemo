@@ -61,7 +61,12 @@ export class SettingsEditor extends LitElement {
               (i) => html`<sl-menu-item value=${i}>${i}</sl-menu-item>`
             )}
           </sl-select>
-          <sl-switch id="autosave" name="autosave">Auto save</sl-switch>
+          <sl-switch
+            id="autosave"
+            name="autosave"
+            ?checked="${this.settings?.files?.autosave}"
+            >Auto save</sl-switch
+          >
           <sl-input
             type="number"
             placeholder="after delay (milliseconds)"

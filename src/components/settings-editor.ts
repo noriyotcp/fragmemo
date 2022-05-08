@@ -34,6 +34,7 @@ export class SettingsEditor extends LitElement {
       }
       form {
         display: grid;
+        row-gap: 1rem;
       }
       .btn-group {
         display: inline-flex;
@@ -47,7 +48,6 @@ export class SettingsEditor extends LitElement {
       <div class="content-container">
         <form>
           <sl-switch id="autosave" name="autosave">Auto save</sl-switch>
-          <br />
           <sl-input
             type="number"
             placeholder="after delay (milliseconds)"
@@ -58,7 +58,6 @@ export class SettingsEditor extends LitElement {
             class="input"
             required
           ></sl-input>
-          <br />
           <div class="btn-group">
             <sl-button type="submit" variant="primary">Submit</sl-button>
             <sl-tooltip placement="left">

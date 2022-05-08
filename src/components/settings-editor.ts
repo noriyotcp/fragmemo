@@ -44,6 +44,12 @@ export class SettingsEditor extends LitElement {
         display: inline-flex;
         justify-content: space-between;
       }
+      sl-switch::part(base) {
+        color: var(--sl-input-label-color);
+      }
+      h3 {
+        margin-block: 0;
+      }
     `,
   ];
 
@@ -51,8 +57,10 @@ export class SettingsEditor extends LitElement {
     return html`
       <div class="content-container">
         <form>
-          <h2>Editor</h2>
+          <h3>Editor</h3>
           <sl-select
+            size="small"
+            label="Line Numbers"
             name="editor-line-numbers"
             value=${this.settings?.editor?.lineNumbers}
           >
@@ -61,6 +69,8 @@ export class SettingsEditor extends LitElement {
               (i) => html`<sl-menu-item value=${i}>${i}</sl-menu-item>`
             )}
           </sl-select>
+
+          <h3>Files</h3>
           <sl-switch
             id="autosave"
             name="autosave"
@@ -68,6 +78,7 @@ export class SettingsEditor extends LitElement {
             >Auto save</sl-switch
           >
           <sl-input
+            label="Auto Save Delay"
             type="number"
             placeholder="after delay (milliseconds)"
             size="small"

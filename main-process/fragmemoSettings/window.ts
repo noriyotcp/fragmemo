@@ -23,7 +23,9 @@ let setWindowData: (_: WindowDataType) => void;
 initSettingsStorage(filename, defaultSettings)
   .then((storage) => {
     getWindowData = () => {
-      return <WindowDataType>storage.lib.getSync(keyname);
+      const windowSettings = <WindowDataType>storage.lib.getSync(keyname);
+      // Merge and override default settings with the stored settings
+      return { ...defaultSettings, ...windowSettings };
     };
     setWindowData = (data) => {
       storage.lib.set(

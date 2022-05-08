@@ -14,6 +14,8 @@ const lineNumbersList = ["on", "off", "relative", "interval"] as const;
 export class SettingsEditor extends LitElement {
   @query("#autosave") autosave!: HTMLInputElement;
   @query("sl-input[name='after-delay']") afterDelay!: HTMLInputElement;
+  @query("sl-select[name='editor-line-numbers']")
+  editorLineNumbers!: HTMLInputElement;
   @queryAll("sl-input") inputs!: HTMLInputElement[];
   @query("form") form!: HTMLFormElement;
   @query("#reload-page") reloadPage!: HTMLButtonElement;
@@ -50,7 +52,10 @@ export class SettingsEditor extends LitElement {
       <div class="content-container">
         <form>
           <h2>Editor</h2>
-          <sl-select value=${this.settings?.editor?.lineNumbers}>
+          <sl-select
+            name="editor-line-numbers"
+            value=${this.settings?.editor?.lineNumbers}
+          >
             ${map(
               lineNumbersList,
               (i) => html`<sl-menu-item value=${i}>${i}</sl-menu-item>`
@@ -107,15 +112,17 @@ export class SettingsEditor extends LitElement {
   updated() {
     if (!this.settings) return;
 
-    // ensure to update the state of the inputs
+    // ensure to update the UI state of the inputs
     this.autosave.checked = this.settings.files.autosave;
     this.afterDelay.valueAsNumber = this.settings.files.afterDelay;
+    this.editorLineNumbers.value = this.settings.editor.lineNumbers;
   }
 
   private _setSettings() {
     const updatedSettings: EditorSettingsType = {
       editor: {
-        lineNumbers: "on", // TODO: set this.settings.editor.lineNumbers
+        lineNumbers: this.editorLineNumbers
+          .value as typeof lineNumbersList[number],
       },
       files: {
         autosave: this.autosave.checked,

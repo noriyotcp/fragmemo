@@ -1,12 +1,14 @@
 import { EditorSettingsType } from "index.d";
 import { LitElement, html, TemplateResult, css } from "lit";
 import { customElement, query, queryAll, state } from "lit/decorators.js";
+import { map } from "lit/directives/map.js";
 import {
   userSettingsUpdated,
   displayToast,
 } from "../events/global-dispatchers";
 
 const { myAPI } = window;
+const lineNumbersList = ["on", "off", "relative", "interval"] as const;
 
 @customElement("settings-editor")
 export class SettingsEditor extends LitElement {
@@ -47,6 +49,13 @@ export class SettingsEditor extends LitElement {
     return html`
       <div class="content-container">
         <form>
+          <h2>Editor</h2>
+          <sl-select value=${this.settings?.editor?.lineNumbers}>
+            ${map(
+              lineNumbersList,
+              (i) => html`<sl-menu-item value=${i}>${i}</sl-menu-item>`
+            )}
+          </sl-select>
           <sl-switch id="autosave" name="autosave">Auto save</sl-switch>
           <sl-input
             type="number"
@@ -104,7 +113,10 @@ export class SettingsEditor extends LitElement {
   }
 
   private _setSettings() {
-    const updatedSettings = {
+    const updatedSettings: EditorSettingsType = {
+      editor: {
+        lineNumbers: "on", // TODO: set this.settings.editor.lineNumbers
+      },
       files: {
         autosave: this.autosave.checked,
         afterDelay: this.afterDelay.valueAsNumber,

@@ -143,6 +143,7 @@ export class EditorElement extends LitElement {
   private _onEditorSettingsUpdated = (e: CustomEvent) => {
     this._autosave = e.detail.userSettings.files.autosave;
     this._afterDelay = e.detail.userSettings.files.afterDelay;
+    this._editorOptions = { ...e.detail.userSettings.editor };
   };
 
   private _selectLanguage() {

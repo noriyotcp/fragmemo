@@ -36,6 +36,9 @@ export class EditorElement extends LitElement {
     myAPI.loadLanguages().then((languages) => {
       this._languages = languages;
     });
+    myAPI.getEditorSettings().then((settings) => {
+      this._editorOptions = { ...settings.editor };
+    });
   }
 
   @query("#lang-select") select?: HTMLSelectElement;
@@ -43,6 +46,7 @@ export class EditorElement extends LitElement {
   private _activeFragmentId?: number;
   @state() private _content = "";
   @state() private _language = "plaintext";
+  @state() private _editorOptions = {};
   private _languages!: Language[];
   @state() private _autosave!: boolean;
   private _afterDelay!: number;
@@ -95,6 +99,7 @@ export class EditorElement extends LitElement {
         <code-editor
           code="${this._content}"
           language="${this._language}"
+          editorOptions="${JSON.stringify(this._editorOptions)}"
           @change-text=${this._changeText}
           @save-content=${this._saveContent}
           @blur-editor=${this._onBlurEditor}
@@ -138,6 +143,7 @@ export class EditorElement extends LitElement {
   private _onEditorSettingsUpdated = (e: CustomEvent) => {
     this._autosave = e.detail.userSettings.files.autosave;
     this._afterDelay = e.detail.userSettings.files.afterDelay;
+    this._editorOptions = { ...e.detail.userSettings.editor };
   };
 
   private _selectLanguage() {

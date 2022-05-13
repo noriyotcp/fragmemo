@@ -44,6 +44,7 @@ export class CodeEditor extends LitElement {
   @property({ type: Boolean, attribute: "readonly" }) readOnly?: boolean;
   @property() language!: string;
   @property() code!: string;
+  @property({ type: Object }) editorOptions!: object;
 
   static styles = css`
     :host {
@@ -177,6 +178,10 @@ export class CodeEditor extends LitElement {
     console.log(`model language was changed to ${this.model.getLanguageId()}`);
     this.setValue(this.code);
 
+    if (!this._ObjectIsEmpty(this.editorOptions)) {
+      this.setOptions(this.editorOptions);
+    }
+
     console.info("updated", this.viewStateStore.getTable("states"));
     if (
       this.viewStateStore.hasRow(
@@ -187,6 +192,9 @@ export class CodeEditor extends LitElement {
       this._restoreCurrentViewState();
     }
   }
+
+  private _ObjectIsEmpty = (obj: object) =>
+    Object.keys(obj).length === 0 && obj.constructor === Object;
 
   private _selectLanguage(): void {
     this.dispatchEvent(new CustomEvent("select-language"));

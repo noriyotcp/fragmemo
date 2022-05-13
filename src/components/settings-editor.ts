@@ -1,17 +1,21 @@
 import { EditorSettingsType } from "index.d";
 import { LitElement, html, TemplateResult, css } from "lit";
 import { customElement, query, queryAll, state } from "lit/decorators.js";
+import { map } from "lit/directives/map.js";
 import {
   userSettingsUpdated,
   displayToast,
 } from "../events/global-dispatchers";
 
 const { myAPI } = window;
+const lineNumbersList = ["on", "off", "relative", "interval"] as const;
 
 @customElement("settings-editor")
 export class SettingsEditor extends LitElement {
   @query("#autosave") autosave!: HTMLInputElement;
   @query("sl-input[name='after-delay']") afterDelay!: HTMLInputElement;
+  @query("sl-select[name='editor-line-numbers']")
+  editorLineNumbers!: HTMLInputElement;
   @queryAll("sl-input") inputs!: HTMLInputElement[];
   @query("form") form!: HTMLFormElement;
   @query("#reload-page") reloadPage!: HTMLButtonElement;
@@ -40,6 +44,12 @@ export class SettingsEditor extends LitElement {
         display: inline-flex;
         justify-content: space-between;
       }
+      sl-switch::part(base) {
+        color: var(--sl-input-label-color);
+      }
+      h3 {
+        margin-block: 0;
+      }
     `,
   ];
 
@@ -47,8 +57,28 @@ export class SettingsEditor extends LitElement {
     return html`
       <div class="content-container">
         <form>
-          <sl-switch id="autosave" name="autosave">Auto save</sl-switch>
+          <h3>Editor</h3>
+          <sl-select
+            size="small"
+            label="Line Numbers"
+            name="editor-line-numbers"
+            value=${this.settings?.editor?.lineNumbers}
+          >
+            ${map(
+              lineNumbersList,
+              (i) => html`<sl-menu-item value=${i}>${i}</sl-menu-item>`
+            )}
+          </sl-select>
+
+          <h3>Files</h3>
+          <sl-switch
+            id="autosave"
+            name="autosave"
+            ?checked="${this.settings?.files?.autosave}"
+            >Auto save</sl-switch
+          >
           <sl-input
+            label="Auto Save Delay"
             type="number"
             placeholder="after delay (milliseconds)"
             size="small"
@@ -98,13 +128,18 @@ export class SettingsEditor extends LitElement {
   updated() {
     if (!this.settings) return;
 
-    // ensure to update the state of the inputs
+    // ensure to update the UI state of the inputs
     this.autosave.checked = this.settings.files.autosave;
     this.afterDelay.valueAsNumber = this.settings.files.afterDelay;
+    this.editorLineNumbers.value = this.settings.editor.lineNumbers;
   }
 
   private _setSettings() {
-    const updatedSettings = {
+    const updatedSettings: EditorSettingsType = {
+      editor: {
+        lineNumbers: this.editorLineNumbers
+          .value as typeof lineNumbersList[number],
+      },
       files: {
         autosave: this.autosave.checked,
         afterDelay: this.afterDelay.valueAsNumber,

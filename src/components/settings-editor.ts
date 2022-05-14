@@ -9,7 +9,9 @@ import {
 import * as monaco from "monaco-editor";
 
 const { myAPI } = window;
-const lineNumbersList = ["on", "off", "relative", "interval"] as const;
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+const lineNumbersList = monaco.editor.EditorOptions.lineNumbers.schema.enum;
 
 @customElement("settings-editor")
 export class SettingsEditor extends LitElement {

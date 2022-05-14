@@ -31,7 +31,7 @@ export class SettingsEditor extends LitElement {
     const options = Object.entries(monaco.editor.EditorOptions).map(
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
-      ([_, value]) => [value.name, value.schema?.value ?? value.defaultValue]
+      ([_, value]) => [value.name, value.schema?.default ?? value.defaultValue]
     );
     console.log("object fromEntries", Object.fromEntries(options));
     this.defaultEditorOptions = Object.fromEntries(options);

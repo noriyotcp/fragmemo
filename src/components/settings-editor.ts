@@ -6,6 +6,7 @@ import {
   userSettingsUpdated,
   displayToast,
 } from "../events/global-dispatchers";
+import * as monaco from "monaco-editor";
 
 const { myAPI } = window;
 const lineNumbersList = ["on", "off", "relative", "interval"] as const;
@@ -21,10 +22,21 @@ export class SettingsEditor extends LitElement {
   @query("#reload-page") reloadPage!: HTMLButtonElement;
 
   @state() settings!: EditorSettingsType;
+  defaultSettings: Partial<EditorSettingsType["editor"]>;
+  monacoEditorSettings!: EditorSettingsType["editor"];
 
   constructor() {
     super();
+    const options = Object.entries(monaco.editor.EditorOptions).map(
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      ([_, value]) => [value.name, value.schema?.value ?? value.defaultValue]
+    );
+    console.log("object fromEntries", Object.fromEntries(options));
+    this.defaultSettings = Object.fromEntries(options);
+
     myAPI.getEditorSettings().then((settings) => {
+      // override default settings with user settings
       this.settings = settings;
       // Not updated at this time, but nofify the current settings to the other components
       this._settingsUpdated();
@@ -46,6 +58,9 @@ export class SettingsEditor extends LitElement {
       }
       sl-switch::part(base) {
         color: var(--sl-input-label-color);
+      }
+      sl-select {
+        border-left: 1px solid var(--sl-color-primary-600);
       }
       h3 {
         margin-block: 0;
@@ -82,7 +97,7 @@ export class SettingsEditor extends LitElement {
             type="number"
             placeholder="after delay (milliseconds)"
             size="small"
-            value=${this.settings?.files.afterDelay}
+            value=${this.settings?.files?.afterDelay}
             min="1"
             name="after-delay"
             class="input"
@@ -131,14 +146,14 @@ export class SettingsEditor extends LitElement {
     // ensure to update the UI state of the inputs
     this.autosave.checked = this.settings.files.autosave;
     this.afterDelay.valueAsNumber = this.settings.files.afterDelay;
-    this.editorLineNumbers.value = this.settings.editor.lineNumbers;
+    this.editorLineNumbers.value = <string>this.settings.editor.lineNumbers;
   }
 
   private _setSettings() {
     const updatedSettings: EditorSettingsType = {
       editor: {
         lineNumbers: this.editorLineNumbers
-          .value as typeof lineNumbersList[number],
+          .value as monaco.editor.LineNumbersType,
       },
       files: {
         autosave: this.autosave.checked,

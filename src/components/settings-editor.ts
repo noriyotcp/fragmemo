@@ -24,8 +24,7 @@ export class SettingsEditor extends LitElement {
   @query("#reload-page") reloadPage!: HTMLButtonElement;
 
   @state() settings!: EditorSettingsType;
-  defaultSettings: Partial<EditorSettingsType["editor"]>;
-  monacoEditorSettings!: EditorSettingsType["editor"];
+  defaultEditorOptions: Partial<EditorSettingsType["editor"]>;
 
   constructor() {
     super();
@@ -35,7 +34,7 @@ export class SettingsEditor extends LitElement {
       ([_, value]) => [value.name, value.schema?.value ?? value.defaultValue]
     );
     console.log("object fromEntries", Object.fromEntries(options));
-    this.defaultSettings = Object.fromEntries(options);
+    this.defaultEditorOptions = Object.fromEntries(options);
 
     myAPI.getEditorSettings().then((settings) => {
       // override default settings with user settings

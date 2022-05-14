@@ -60,11 +60,15 @@ export class SettingsEditor extends LitElement {
       sl-switch::part(base) {
         color: var(--sl-input-label-color);
       }
-      sl-select {
-        border-left: 1px solid var(--sl-color-primary-600);
-      }
       h3 {
         margin-block: 0;
+      }
+      .form-group {
+        padding-left: 0.5rem;
+      }
+      .form-group[customized] {
+        padding-left: 0.5rem;
+        border-left: 1px solid var(--sl-color-primary-600);
       }
     `,
   ];
@@ -74,36 +78,45 @@ export class SettingsEditor extends LitElement {
       <div class="content-container">
         <form>
           <h3>Editor</h3>
-          <sl-select
-            size="small"
-            label="Line Numbers"
-            name="editor-line-numbers"
-            value=${this.settings?.editor?.lineNumbers}
+          <div
+            class="form-group"
+            ?customized="${this._isCustomized("lineNumbers")}"
           >
-            ${map(
-              lineNumbersList,
-              (i) => html`<sl-menu-item value=${i}>${i}</sl-menu-item>`
-            )}
-          </sl-select>
+            <sl-select
+              size="small"
+              label="Line Numbers"
+              name="editor-line-numbers"
+              value=${this.settings?.editor?.lineNumbers}
+            >
+              ${map(
+                lineNumbersList,
+                (i) => html`<sl-menu-item value=${i}>${i}</sl-menu-item>`
+              )}
+            </sl-select>
+          </div>
 
           <h3>Files</h3>
-          <sl-switch
-            id="autosave"
-            name="autosave"
-            ?checked="${this.settings?.files?.autosave}"
-            >Auto save</sl-switch
-          >
-          <sl-input
-            label="Auto Save Delay"
-            type="number"
-            placeholder="after delay (milliseconds)"
-            size="small"
-            value=${this.settings?.files?.afterDelay}
-            min="1"
-            name="after-delay"
-            class="input"
-            required
-          ></sl-input>
+          <div class="form-group">
+            <sl-switch
+              id="autosave"
+              name="autosave"
+              ?checked="${this.settings?.files?.autosave}"
+              >Auto save</sl-switch
+            >
+          </div>
+          <div class="form-group">
+            <sl-input
+              label="Auto Save Delay"
+              type="number"
+              placeholder="after delay (milliseconds)"
+              size="small"
+              value=${this.settings?.files?.afterDelay}
+              min="1"
+              name="after-delay"
+              class="input"
+              required
+            ></sl-input>
+          </div>
           <div class="btn-group">
             <sl-button type="submit" variant="primary">Submit</sl-button>
             <sl-tooltip placement="left">
@@ -167,5 +180,12 @@ export class SettingsEditor extends LitElement {
 
   private _settingsUpdated() {
     userSettingsUpdated("editor", this.settings);
+  }
+
+  private _isCustomized(editorOptionName: keyof EditorSettingsType["editor"]) {
+    return (
+      this.defaultEditorOptions[`${editorOptionName}`] !==
+      this.settings?.editor[`${editorOptionName}`]
+    );
   }
 }

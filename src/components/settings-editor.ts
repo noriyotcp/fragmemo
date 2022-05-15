@@ -25,6 +25,15 @@ export class SettingsEditor extends LitElement {
 
   @state() settings!: EditorSettingsType;
   monacoDefaultEditorOptions: Partial<EditorSettingsType["editor"]>;
+  defaultEditorSettings: EditorSettingsType = {
+    editor: {
+      lineNumbers: "on",
+    },
+    files: {
+      autosave: true,
+      afterDelay: 1000,
+    },
+  };
 
   constructor() {
     super();
@@ -190,7 +199,7 @@ export class SettingsEditor extends LitElement {
 
   private _isCustomized(editorOptionName: keyof EditorSettingsType["editor"]) {
     return (
-      this.monacoDefaultEditorOptions[`${editorOptionName}`] !==
+      this.defaultEditorSettings.editor[`${editorOptionName}`] !==
       this.settings?.editor[`${editorOptionName}`]
     );
   }

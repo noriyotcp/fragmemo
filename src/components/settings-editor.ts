@@ -6,6 +6,7 @@ import {
   userSettingsUpdated,
   displayToast,
 } from "../events/global-dispatchers";
+import { defaultEditorSettings } from "../../common/defaultEditorSettings";
 import * as monaco from "monaco-editor";
 
 const { myAPI } = window;
@@ -25,15 +26,6 @@ export class SettingsEditor extends LitElement {
 
   @state() settings!: EditorSettingsType;
   monacoDefaultEditorOptions: Partial<EditorSettingsType["editor"]>;
-  defaultEditorSettings: EditorSettingsType = {
-    editor: {
-      lineNumbers: "on",
-    },
-    files: {
-      autosave: true,
-      afterDelay: 1000,
-    },
-  };
 
   constructor() {
     super();
@@ -201,7 +193,7 @@ export class SettingsEditor extends LitElement {
     editorOptionName: keyof EditorSettingsType["editor"]
   ) {
     return (
-      this.defaultEditorSettings.editor[`${editorOptionName}`] !==
+      defaultEditorSettings.editor[`${editorOptionName}`] !==
       this.settings?.editor[`${editorOptionName}`]
     );
   }
@@ -210,7 +202,7 @@ export class SettingsEditor extends LitElement {
     editorOptionName: keyof EditorSettingsType["files"]
   ) {
     return (
-      this.defaultEditorSettings.files[`${editorOptionName}`] !==
+      defaultEditorSettings.files[`${editorOptionName}`] !==
       this.settings?.files[`${editorOptionName}`]
     );
   }

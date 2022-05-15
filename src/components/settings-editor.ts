@@ -25,12 +25,12 @@ export class SettingsEditor extends LitElement {
   @query("#reload-page") reloadPage!: HTMLButtonElement;
 
   @state() settings!: EditorSettingsType;
-  @state() defaultEditorSettings!: EditorSettingsType;
+  // @state() defaultEditorSettings!: EditorSettingsType;
   monacoDefaultEditorOptions: Partial<EditorSettingsType["editor"]>;
 
   constructor() {
     super();
-    this.defaultEditorSettings = defaultEditorSettings;
+    // this.defaultEditorSettings = defaultEditorSettings;
     const options = Object.entries(monaco.editor.EditorOptions).map(
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
@@ -41,7 +41,11 @@ export class SettingsEditor extends LitElement {
 
     myAPI.getEditorSettings().then((settings) => {
       // override default settings with user settings
-      this.settings = settings;
+      if ("editor" in settings && "files" in settings) {
+        this.settings = settings;
+      } else {
+        this.settings = this._mergeSettings(defaultEditorSettings, settings);
+      }
       // Not updated at this time, but nofify the current settings to the other components
       this._settingsUpdated();
     });
@@ -169,9 +173,20 @@ export class SettingsEditor extends LitElement {
     // ensure to update the UI state of the inputs
     this.autosave.checked = this.settings.files.autosave;
     this.afterDelay.valueAsNumber = this.settings.files.afterDelay;
-    this.editorLineNumbers.value =
-      <string>this.settings.editor.lineNumbers ||
-      <string>this.defaultEditorSettings.editor.lineNumbers;
+    this.editorLineNumbers.value = <string>this.settings.editor.lineNumbers;
+  }
+
+  // find properties that are customized by the user
+  // if not, replacing the entire object starting from the top keys
+  private _mergeSettings(
+    defaultOptions: EditorSettingsType,
+    userOptions: EditorSettingsType
+  ) {
+    return {
+      editor:
+        "editor" in userOptions ? userOptions.editor : defaultOptions.editor,
+      files: "files" in userOptions ? userOptions.files : defaultOptions.files,
+    } as EditorSettingsType;
   }
 
   private _setSettings() {

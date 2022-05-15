@@ -1,12 +1,22 @@
 import { initSettingsStorage } from "./initSettingsStorage";
 import { EditorSettingsType } from "fragmemoSettings.d";
-import { defaultEditorSettings } from "../../common/defaultEditorSettings";
+// import { defaultEditorSettings } from "../../common/defaultEditorSettings";
 
 const keyname = "userSettingsEditor";
 const filename = `${keyname}.json`;
 
 let getEditorSettings: () => EditorSettingsType;
 let setEditorSettings: (_: EditorSettingsType) => void;
+
+const defaultEditorSettings: EditorSettingsType = {
+  editor: {
+    lineNumbers: "on",
+  },
+  files: {
+    autosave: false,
+    afterDelay: 10000,
+  },
+};
 
 // top-level await requires Compiler option 'module' of value 'nodenext' is unstable.
 initSettingsStorage(filename, defaultEditorSettings)

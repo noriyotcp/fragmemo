@@ -25,7 +25,6 @@ export class SettingsEditor extends LitElement {
   @query("#reload-page") reloadPage!: HTMLButtonElement;
 
   @state() settings!: EditorSettingsType;
-  // @state() defaultEditorSettings!: EditorSettingsType;
   monacoDefaultEditorOptions: Partial<EditorSettingsType["editor"]>;
 
   constructor() {

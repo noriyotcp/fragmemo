@@ -89,7 +89,7 @@ export class SettingsEditor extends LitElement {
           <h3>Editor</h3>
           <div
             class="form-group"
-            ?customized="${this._isCustomized("lineNumbers")}"
+            ?customized="${this._isCustomizedEditorOption("lineNumbers")}"
           >
             <sl-select
               size="small"
@@ -107,8 +107,7 @@ export class SettingsEditor extends LitElement {
           <h3>Files</h3>
           <div
             class="form-group"
-            ?customized="${this.settings?.files?.autosave !==
-            this.defaultEditorSettings.files.autosave}"
+            ?customized="${this._isCustomizedFilesOption("autosave")}"
           >
             <sl-switch
               id="autosave"
@@ -119,8 +118,7 @@ export class SettingsEditor extends LitElement {
           </div>
           <div
             class="form-group"
-            ?customized="${this.settings?.files?.afterDelay !==
-            this.defaultEditorSettings.files.afterDelay}"
+            ?customized="${this._isCustomizedFilesOption("afterDelay")}"
           >
             <sl-input
               label="Auto Save Delay"
@@ -199,10 +197,21 @@ export class SettingsEditor extends LitElement {
     userSettingsUpdated("editor", this.settings);
   }
 
-  private _isCustomized(editorOptionName: keyof EditorSettingsType["editor"]) {
+  private _isCustomizedEditorOption(
+    editorOptionName: keyof EditorSettingsType["editor"]
+  ) {
     return (
       this.defaultEditorSettings.editor[`${editorOptionName}`] !==
       this.settings?.editor[`${editorOptionName}`]
+    );
+  }
+
+  private _isCustomizedFilesOption(
+    editorOptionName: keyof EditorSettingsType["files"]
+  ) {
+    return (
+      this.defaultEditorSettings.files[`${editorOptionName}`] !==
+      this.settings?.files[`${editorOptionName}`]
     );
   }
 }

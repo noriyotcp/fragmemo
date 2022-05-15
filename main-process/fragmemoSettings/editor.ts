@@ -14,7 +14,7 @@ initSettingsStorage(filename, defaultEditorSettings)
     getEditorSettings = () => {
       const editorSettings = <EditorSettingsType>storage.lib.getSync(keyname);
       // Merge and override default settings with user settings
-      return { ...defaultEditorSettings, ...editorSettings };
+      return editorSettings;
     };
     setEditorSettings = (data) => {
       storage.lib.set(

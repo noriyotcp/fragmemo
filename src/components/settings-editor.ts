@@ -25,10 +25,12 @@ export class SettingsEditor extends LitElement {
   @query("#reload-page") reloadPage!: HTMLButtonElement;
 
   @state() settings!: EditorSettingsType;
+  @state() defaultEditorSettings!: EditorSettingsType;
   monacoDefaultEditorOptions: Partial<EditorSettingsType["editor"]>;
 
   constructor() {
     super();
+    this.defaultEditorSettings = defaultEditorSettings;
     const options = Object.entries(monaco.editor.EditorOptions).map(
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
@@ -167,7 +169,9 @@ export class SettingsEditor extends LitElement {
     // ensure to update the UI state of the inputs
     this.autosave.checked = this.settings.files.autosave;
     this.afterDelay.valueAsNumber = this.settings.files.afterDelay;
-    this.editorLineNumbers.value = <string>this.settings.editor.lineNumbers;
+    this.editorLineNumbers.value =
+      <string>this.settings.editor.lineNumbers ||
+      <string>this.defaultEditorSettings.editor.lineNumbers;
   }
 
   private _setSettings() {

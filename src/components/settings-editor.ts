@@ -6,9 +6,12 @@ import {
   userSettingsUpdated,
   displayToast,
 } from "../events/global-dispatchers";
+import * as monaco from "monaco-editor";
 
 const { myAPI } = window;
-const lineNumbersList = ["on", "off", "relative", "interval"] as const;
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+const lineNumbersList = monaco.editor.EditorOptions.lineNumbers.schema.enum;
 
 @customElement("settings-editor")
 export class SettingsEditor extends LitElement {
@@ -21,10 +24,20 @@ export class SettingsEditor extends LitElement {
   @query("#reload-page") reloadPage!: HTMLButtonElement;
 
   @state() settings!: EditorSettingsType;
+  defaultEditorOptions: Partial<EditorSettingsType["editor"]>;
 
   constructor() {
     super();
+    const options = Object.entries(monaco.editor.EditorOptions).map(
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      ([_, value]) => [value.name, value.schema?.default ?? value.defaultValue]
+    );
+    console.log("object fromEntries", Object.fromEntries(options));
+    this.defaultEditorOptions = Object.fromEntries(options);
+
     myAPI.getEditorSettings().then((settings) => {
+      // override default settings with user settings
       this.settings = settings;
       // Not updated at this time, but nofify the current settings to the other components
       this._settingsUpdated();
@@ -50,6 +63,13 @@ export class SettingsEditor extends LitElement {
       h3 {
         margin-block: 0;
       }
+      .form-group {
+        padding-left: 0.5rem;
+      }
+      .form-group[customized] {
+        padding-left: 0.5rem;
+        border-left: 1px solid var(--sl-color-primary-600);
+      }
     `,
   ];
 
@@ -58,36 +78,51 @@ export class SettingsEditor extends LitElement {
       <div class="content-container">
         <form>
           <h3>Editor</h3>
-          <sl-select
-            size="small"
-            label="Line Numbers"
-            name="editor-line-numbers"
-            value=${this.settings?.editor?.lineNumbers}
+          <div
+            class="form-group"
+            ?customized="${this._isCustomized("lineNumbers")}"
           >
-            ${map(
-              lineNumbersList,
-              (i) => html`<sl-menu-item value=${i}>${i}</sl-menu-item>`
-            )}
-          </sl-select>
+            <sl-select
+              size="small"
+              label="Line Numbers"
+              name="editor-line-numbers"
+              value=${this.settings?.editor?.lineNumbers}
+            >
+              ${map(
+                lineNumbersList,
+                (i) => html`<sl-menu-item value=${i}>${i}</sl-menu-item>`
+              )}
+            </sl-select>
+          </div>
 
           <h3>Files</h3>
-          <sl-switch
-            id="autosave"
-            name="autosave"
-            ?checked="${this.settings?.files?.autosave}"
-            >Auto save</sl-switch
+          <div
+            class="form-group"
+            ?customized="${!this.settings?.files?.autosave}"
           >
-          <sl-input
-            label="Auto Save Delay"
-            type="number"
-            placeholder="after delay (milliseconds)"
-            size="small"
-            value=${this.settings?.files.afterDelay}
-            min="1"
-            name="after-delay"
-            class="input"
-            required
-          ></sl-input>
+            <sl-switch
+              id="autosave"
+              name="autosave"
+              ?checked="${this.settings?.files?.autosave}"
+              >Auto save</sl-switch
+            >
+          </div>
+          <div
+            class="form-group"
+            ?customized="${this.settings?.files?.afterDelay !== 1000}"
+          >
+            <sl-input
+              label="Auto Save Delay"
+              type="number"
+              placeholder="after delay (milliseconds)"
+              size="small"
+              value=${this.settings?.files?.afterDelay}
+              min="1"
+              name="after-delay"
+              class="input"
+              required
+            ></sl-input>
+          </div>
           <div class="btn-group">
             <sl-button type="submit" variant="primary">Submit</sl-button>
             <sl-tooltip placement="left">
@@ -131,14 +166,14 @@ export class SettingsEditor extends LitElement {
     // ensure to update the UI state of the inputs
     this.autosave.checked = this.settings.files.autosave;
     this.afterDelay.valueAsNumber = this.settings.files.afterDelay;
-    this.editorLineNumbers.value = this.settings.editor.lineNumbers;
+    this.editorLineNumbers.value = <string>this.settings.editor.lineNumbers;
   }
 
   private _setSettings() {
     const updatedSettings: EditorSettingsType = {
       editor: {
         lineNumbers: this.editorLineNumbers
-          .value as typeof lineNumbersList[number],
+          .value as monaco.editor.LineNumbersType,
       },
       files: {
         autosave: this.autosave.checked,
@@ -151,5 +186,12 @@ export class SettingsEditor extends LitElement {
 
   private _settingsUpdated() {
     userSettingsUpdated("editor", this.settings);
+  }
+
+  private _isCustomized(editorOptionName: keyof EditorSettingsType["editor"]) {
+    return (
+      this.defaultEditorOptions[`${editorOptionName}`] !==
+      this.settings?.editor[`${editorOptionName}`]
+    );
   }
 }

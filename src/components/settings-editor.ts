@@ -107,7 +107,8 @@ export class SettingsEditor extends LitElement {
           <h3>Files</h3>
           <div
             class="form-group"
-            ?customized="${!this.settings?.files?.autosave}"
+            ?customized="${this.settings?.files?.autosave !==
+            this.defaultEditorSettings.files.autosave}"
           >
             <sl-switch
               id="autosave"
@@ -118,7 +119,8 @@ export class SettingsEditor extends LitElement {
           </div>
           <div
             class="form-group"
-            ?customized="${this.settings?.files?.afterDelay !== 1000}"
+            ?customized="${this.settings?.files?.afterDelay !==
+            this.defaultEditorSettings.files.afterDelay}"
           >
             <sl-input
               label="Auto Save Delay"

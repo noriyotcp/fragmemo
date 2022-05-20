@@ -6,6 +6,7 @@ import {
   userSettingsUpdated,
   displayToast,
 } from "../events/global-dispatchers";
+import { defaultEditorSettings } from "../defaultEditorSettings";
 import * as monaco from "monaco-editor";
 
 const { myAPI } = window;
@@ -24,21 +25,26 @@ export class SettingsEditor extends LitElement {
   @query("#reload-page") reloadPage!: HTMLButtonElement;
 
   @state() settings!: EditorSettingsType;
-  defaultEditorOptions: Partial<EditorSettingsType["editor"]>;
+  monacoDefaultEditorOptions: Partial<EditorSettingsType["editor"]>;
 
   constructor() {
     super();
+    // this.defaultEditorSettings = defaultEditorSettings;
     const options = Object.entries(monaco.editor.EditorOptions).map(
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
       ([_, value]) => [value.name, value.schema?.default ?? value.defaultValue]
     );
     console.log("object fromEntries", Object.fromEntries(options));
-    this.defaultEditorOptions = Object.fromEntries(options);
+    this.monacoDefaultEditorOptions = Object.fromEntries(options);
 
     myAPI.getEditorSettings().then((settings) => {
       // override default settings with user settings
-      this.settings = settings;
+      if ("editor" in settings && "files" in settings) {
+        this.settings = settings;
+      } else {
+        this.settings = this._mergeSettings(defaultEditorSettings, settings);
+      }
       // Not updated at this time, but nofify the current settings to the other components
       this._settingsUpdated();
     });
@@ -80,7 +86,7 @@ export class SettingsEditor extends LitElement {
           <h3>Editor</h3>
           <div
             class="form-group"
-            ?customized="${this._isCustomized("lineNumbers")}"
+            ?customized="${this._isCustomizedEditorOption("lineNumbers")}"
           >
             <sl-select
               size="small"
@@ -98,7 +104,7 @@ export class SettingsEditor extends LitElement {
           <h3>Files</h3>
           <div
             class="form-group"
-            ?customized="${!this.settings?.files?.autosave}"
+            ?customized="${this._isCustomizedFilesOption("autosave")}"
           >
             <sl-switch
               id="autosave"
@@ -109,7 +115,7 @@ export class SettingsEditor extends LitElement {
           </div>
           <div
             class="form-group"
-            ?customized="${this.settings?.files?.afterDelay !== 1000}"
+            ?customized="${this._isCustomizedFilesOption("afterDelay")}"
           >
             <sl-input
               label="Auto Save Delay"
@@ -169,6 +175,19 @@ export class SettingsEditor extends LitElement {
     this.editorLineNumbers.value = <string>this.settings.editor.lineNumbers;
   }
 
+  // find properties that are customized by the user
+  // if not, replacing the entire object starting from the top keys
+  private _mergeSettings(
+    defaultOptions: EditorSettingsType,
+    userOptions: EditorSettingsType
+  ) {
+    return {
+      editor:
+        "editor" in userOptions ? userOptions.editor : defaultOptions.editor,
+      files: "files" in userOptions ? userOptions.files : defaultOptions.files,
+    } as EditorSettingsType;
+  }
+
   private _setSettings() {
     const updatedSettings: EditorSettingsType = {
       editor: {
@@ -188,10 +207,21 @@ export class SettingsEditor extends LitElement {
     userSettingsUpdated("editor", this.settings);
   }
 
-  private _isCustomized(editorOptionName: keyof EditorSettingsType["editor"]) {
+  private _isCustomizedEditorOption(
+    editorOptionName: keyof EditorSettingsType["editor"]
+  ) {
     return (
-      this.defaultEditorOptions[`${editorOptionName}`] !==
+      defaultEditorSettings.editor[`${editorOptionName}`] !==
       this.settings?.editor[`${editorOptionName}`]
+    );
+  }
+
+  private _isCustomizedFilesOption(
+    editorOptionName: keyof EditorSettingsType["files"]
+  ) {
+    return (
+      defaultEditorSettings.files[`${editorOptionName}`] !==
+      this.settings?.files[`${editorOptionName}`]
     );
   }
 }

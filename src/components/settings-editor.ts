@@ -6,7 +6,7 @@ import {
   userSettingsUpdated,
   displayToast,
 } from "../events/global-dispatchers";
-import { defaultEditorSettings } from "../../common/defaultEditorSettings";
+import { defaultEditorSettings } from "../defaultEditorSettings";
 import * as monaco from "monaco-editor";
 
 const { myAPI } = window;

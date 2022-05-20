@@ -1,6 +1,6 @@
 import { initSettingsStorage } from "./initSettingsStorage";
 import { EditorSettingsType } from "fragmemoSettings.d";
-import { defaultEditorSettings } from "../../common/defaultEditorSettings";
+import { defaultEditorSettings } from "../defaultEditorSettings";
 
 const keyname = "userSettingsEditor";
 const filename = `${keyname}.json`;

@@ -34,7 +34,7 @@
     "split.js": "^1.6.5"
   },
   "devDependencies": {
-    "@swc/core": "1.2.187",
+    "@swc/core": "1.2.196",
     "@swc/jest": "^0.2.21",
     "@types/electron-json-storage": "^4.5.0",
     "@types/jest": "^27.5.1",
@@ -51,7 +51,7 @@
     "jest": "^28.1.0",
     "prettier": "2.6.2",
     "ts-node": "^10.7.0",
-    "typescript": "^4.6.4",
+    "typescript": "^4.7.2",
     "vite": "^2.9.9",
     "wait-on": "^6.0.1"
   },

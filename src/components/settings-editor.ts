@@ -8,6 +8,7 @@ import {
 } from "../events/global-dispatchers";
 import { defaultEditorSettings } from "../defaultEditorSettings";
 import * as monaco from "monaco-editor";
+import { applyPatch, compare } from "fast-json-patch";
 
 const { myAPI } = window;
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -39,13 +40,8 @@ export class SettingsEditor extends LitElement {
     this.monacoDefaultEditorOptions = Object.fromEntries(options);
 
     myAPI.getEditorSettings().then((settings) => {
-      // override default settings with user settings
-      if ("editor" in settings && "files" in settings) {
-        this.settings = settings;
-      } else {
-        this.settings = this._mergeSettings(defaultEditorSettings, settings);
-      }
-      // Not updated at this time, but nofify the current settings to the other components
+      this.settings = this._mergeSettings(defaultEditorSettings, settings);
+      console.log("settings merged\n", JSON.stringify(this.settings, null, 2));
       this._settingsUpdated();
     });
   }
@@ -178,14 +174,16 @@ export class SettingsEditor extends LitElement {
   // find properties that are customized by the user
   // if not, replacing the entire object starting from the top keys
   private _mergeSettings(
-    defaultOptions: EditorSettingsType,
-    userOptions: EditorSettingsType
+    defaultSettings: EditorSettingsType,
+    userSettings: EditorSettingsType
   ) {
-    return {
-      editor:
-        "editor" in userOptions ? userOptions.editor : defaultOptions.editor,
-      files: "files" in userOptions ? userOptions.files : defaultOptions.files,
-    } as EditorSettingsType;
+    // Add the new default properties to the user settings
+    // If diff is empty, the userSetting remains the same
+    const diff = compare(userSettings, defaultSettings);
+    return applyPatch(
+      userSettings,
+      diff.filter((d) => d.op == "add")
+    ).newDocument;
   }
 
   private _setSettings() {
@@ -201,6 +199,7 @@ export class SettingsEditor extends LitElement {
     };
     myAPI.setEditorSettings(updatedSettings);
     this.settings = updatedSettings;
+    console.log("settings updated\n", JSON.stringify(this.settings, null, 2));
   }
 
   private _settingsUpdated() {

@@ -61,7 +61,8 @@
     "productName": "fragmemo",
     "copyright": "Copyright © 2021 ${author}",
     "mac": {
-      "category": "public.app-category.utilities"
+      "category": "public.app-category.utilities",
+      "icon": "icons/icon.png"
     },
     "nsis": {
       "oneClick": false,

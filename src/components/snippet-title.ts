@@ -8,8 +8,8 @@ import { ISnippetProps } from "props.d";
 
 const { myAPI } = window;
 
-@customElement("test-header")
-export class TestHeader extends LitElement {
+@customElement("snippet-title")
+export class SnippetTitle extends LitElement {
   @query("#snippet-title") snippetTitle!: HTMLInputElement;
   @state() private _snippet?: Snippet;
 

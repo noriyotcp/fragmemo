@@ -92,7 +92,7 @@ export class EditorElement extends LitElement {
   render(): TemplateResult {
     return html`
       <section>
-        <test-header></test-header>
+        <snippet-title></snippet-title>
         <fragment-tab-list
           @fragment-activated=${this._onFragmentActivated}
         ></fragment-tab-list>

@@ -130,6 +130,10 @@ export class EditorElement extends LitElement {
       "user-settings-editor-updated",
       this._onEditorSettingsUpdated as EventListener
     );
+    window.addEventListener(
+      "init-fragment",
+      this._onInitFragment as EventListener
+    );
   }
 
   disconnectedCallback() {
@@ -139,6 +143,10 @@ export class EditorElement extends LitElement {
     );
     super.disconnectedCallback();
   }
+
+  private _onInitFragment = (e: CustomEvent) => {
+    this._content = "";
+  };
 
   private _onEditorSettingsUpdated = (e: CustomEvent) => {
     this._autosave = e.detail.userSettings.files.autosave;

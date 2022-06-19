@@ -1,7 +1,9 @@
 import { ReactiveController, ReactiveControllerHost } from "lit";
 import { Fragment, Snippet } from "models.d";
 import {
+  activeFragment as activeFragmentEvent,
   fragmentSwitched,
+  initFragment,
   snippetSelected,
   updateSnippets,
 } from "../events/global-dispatchers";
@@ -51,7 +53,16 @@ export class FragmentsController implements ReactiveController {
     if (!this.snippet) return;
 
     myAPI.initFragment(this.snippet._id).then(() => {
-      updateSnippets();
+      myAPI
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        .getActiveFragment(<number>this.snippet._id)
+        .then((activeFragment) => {
+          // dispatch the fragment to be active ID to active-fragment event
+          activeFragmentEvent(activeFragment.fragmentId);
+          initFragment();
+          updateSnippets();
+        });
     });
   }
 

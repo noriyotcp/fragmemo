@@ -146,6 +146,10 @@ export class CodeEditor extends LitElement {
     this.editor.onDidBlurEditorText((e) => {
       this.dispatchEvent(new CustomEvent("blur-editor"));
     });
+    window.addEventListener(
+      "init-fragment",
+      this._onInitFragment as EventListener
+    );
     // When Command or Control + S is pressed
     myAPI.saveFragment((_e: Event) => this._saveContent());
   }
@@ -192,6 +196,11 @@ export class CodeEditor extends LitElement {
       this._restoreCurrentViewState();
     }
   }
+
+  private _onInitFragment = (e: CustomEvent) => {
+    this.code = "";
+    this.requestUpdate();
+  };
 
   private _ObjectIsEmpty = (obj: object) =>
     Object.keys(obj).length === 0 && obj.constructor === Object;

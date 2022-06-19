@@ -135,3 +135,9 @@ export const userSettingsUpdated = (
     },
   });
 };
+
+export const initFragment = (): void => {
+  dispatch({
+    type: "init-fragment",
+  });
+};

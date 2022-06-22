@@ -15,7 +15,7 @@ export { EditorSettingsType } from "../main-process/fragmemoSettings.d";
 declare global {
   interface Window {
     ipcRenderer: IpcRenderer;
-    myAPI: SandBox;
+    appAPI: SandBox;
     MonacoEnvironment: Environment;
   }
 }

@@ -2,13 +2,13 @@ import { Override } from "index";
 import { LitElement, html, TemplateResult } from "lit";
 import { customElement, query } from "lit/decorators.js";
 
-const { myAPI } = window;
+const { appAPI } = window;
 
 @customElement("settings-element")
 export class SettingsElement extends LitElement {
   constructor() {
     super();
-    myAPI.toggleSettings((_e: Event) => {
+    appAPI.toggleSettings((_e: Event) => {
       this._toggleSettings();
     });
   }
@@ -30,7 +30,7 @@ export class SettingsElement extends LitElement {
   }
 
   disconnectedCallback() {
-    myAPI.removeAllListeners("toggle-settings");
+    appAPI.removeAllListeners("toggle-settings");
 
     super.disconnectedCallback();
   }

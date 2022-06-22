@@ -8,7 +8,7 @@ import {
   updateSnippets,
 } from "../events/global-dispatchers";
 
-const { myAPI } = window;
+const { appAPI } = window;
 
 export class FragmentsController implements ReactiveController {
   private host: ReactiveControllerHost;
@@ -34,7 +34,7 @@ export class FragmentsController implements ReactiveController {
       this._onFragmentActivated as EventListener
     );
     // When Command or Control + T is pressed
-    myAPI.newFragment((_e: Event) => this._initFragment());
+    appAPI.newFragment((_e: Event) => this._initFragment());
   }
 
   hostDisconnected(): void {
@@ -46,14 +46,14 @@ export class FragmentsController implements ReactiveController {
       "active-fragment",
       this._onFragmentActivated as EventListener
     );
-    myAPI.removeAllListeners("new-fragment");
+    appAPI.removeAllListeners("new-fragment");
   }
 
   private _initFragment() {
     if (!this.snippet) return;
 
-    myAPI.initFragment(this.snippet._id).then(() => {
-      myAPI
+    appAPI.initFragment(this.snippet._id).then(() => {
+      appAPI
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
         .getActiveFragment(<number>this.snippet._id)
@@ -70,18 +70,18 @@ export class FragmentsController implements ReactiveController {
     this.snippet = JSON.parse(e.detail.selectedSnippet);
     if (!this.snippet) return;
 
-    myAPI.newActiveSnippetHistory(<number>this.snippet._id);
+    appAPI.newActiveSnippetHistory(<number>this.snippet._id);
 
     // Get the snippet by id from Realm DB
-    myAPI.getSnippet(<number>this.snippet._id).then((snippet) => {
+    appAPI.getSnippet(<number>this.snippet._id).then((snippet) => {
       this.snippet = snippet as unknown as Snippet;
     });
-    myAPI.getActiveFragment(<number>this.snippet._id).then((activeFragment) => {
+    appAPI.getActiveFragment(<number>this.snippet._id).then((activeFragment) => {
       this.activeFragmentId = activeFragment.fragmentId;
       snippetSelected(this.activeFragmentId, undefined, this.snippet?._id);
     });
 
-    myAPI.loadFragments(<number>this.snippet._id).then((fragments) => {
+    appAPI.loadFragments(<number>this.snippet._id).then((fragments) => {
       this.fragments = fragments;
       this._setCurrentTabIndex();
       this.host.requestUpdate();
@@ -97,7 +97,7 @@ export class FragmentsController implements ReactiveController {
 
     this._setCurrentTabIndex();
     // Update ActiveFragment in Realm DB
-    myAPI
+    appAPI
       .updateActiveFragment({
         properties: {
           fragmentId: this.activeFragmentId,
@@ -105,7 +105,7 @@ export class FragmentsController implements ReactiveController {
         },
       })
       .then(({ status }) => {
-        console.log("myAPI.updateActiveFragment", status);
+        console.log("appAPI.updateActiveFragment", status);
         this.host.requestUpdate();
       });
   };

@@ -9,7 +9,7 @@ import {
   updateSnippets,
 } from "../events/global-dispatchers";
 
-const { myAPI } = window;
+const { appAPI } = window;
 
 @customElement("editor-element")
 export class EditorElement extends LitElement {
@@ -33,10 +33,10 @@ export class EditorElement extends LitElement {
       }
     );
 
-    myAPI.loadLanguages().then((languages) => {
+    appAPI.loadLanguages().then((languages) => {
       this._languages = languages;
     });
-    myAPI.getEditorSettings().then((settings) => {
+    appAPI.getEditorSettings().then((settings) => {
       this._editorOptions = { ...settings.editor };
     });
   }
@@ -168,7 +168,7 @@ export class EditorElement extends LitElement {
     const _idx = target.selectedOptions[0].getAttribute("_idx")!;
 
     if (this._activeFragmentId) {
-      myAPI.updateFragment({
+      appAPI.updateFragment({
         _id: this._activeFragmentId,
         properties: { language: { _idx: Number(_idx) } },
       });
@@ -188,7 +188,7 @@ export class EditorElement extends LitElement {
     this._activeFragmentId = e.detail.activeFragmentId;
     // if no records for the active fragment, it fetches a fragment from Realm DB
     if (!this.fragmentStore.hasRow("states", `${this._activeFragmentId}`)) {
-      myAPI.getFragment(Number(this._activeFragmentId)).then((fragment) => {
+      appAPI.getFragment(Number(this._activeFragmentId)).then((fragment) => {
         this.fragmentStore.setPartialRow("states", `${fragment._id}`, {
           content: fragment.content,
           langIdx: fragment.language._idx,
@@ -220,7 +220,7 @@ export class EditorElement extends LitElement {
     if (this._activeFragmentId === undefined) return;
 
     // compare the previous and current text
-    myAPI.getFragment(this._activeFragmentId).then((fragment) => {
+    appAPI.getFragment(this._activeFragmentId).then((fragment) => {
       if (fragment.content !== e.detail.text) {
         this.fragmentStore.setCell("states", `${this._activeFragmentId}`, {
           content: e.detail.text,

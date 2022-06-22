@@ -6,7 +6,7 @@ import { Override } from "index.d";
 import { Snippet } from "models.d";
 import { ISnippetProps } from "props.d";
 
-const { myAPI } = window;
+const { appAPI } = window;
 
 @customElement("snippet-title")
 export class SnippetTitle extends LitElement {
@@ -69,7 +69,7 @@ export class SnippetTitle extends LitElement {
         },
       };
 
-      myAPI
+      appAPI
         .updateSnippet(snippetProps)
         .then(() => {
           // dispatch event to update the list

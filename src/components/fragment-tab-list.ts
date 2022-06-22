@@ -7,7 +7,7 @@ import { IdsOnDeleteFragment } from "index.d";
 import { Fragment } from "models.d";
 import { updateSnippets } from "../events/global-dispatchers";
 
-const { myAPI } = window;
+const { appAPI } = window;
 
 interface ITabOnContext {
   fragmentId: number;
@@ -63,17 +63,17 @@ export class FragmentTabList extends LitElement {
   }
 
   firstUpdated(): void {
-    myAPI.nextTab((_e: Event) => this._nextTab());
-    myAPI.previousTab((_e: Event) => this._previousTab());
-    myAPI.contextMenuCommandFragmentTab((_e: Event, command) =>
+    appAPI.nextTab((_e: Event) => this._nextTab());
+    appAPI.previousTab((_e: Event) => this._previousTab());
+    appAPI.contextMenuCommandFragmentTab((_e: Event, command) =>
       this._contextMenuCommand(_e, command)
     );
   }
 
   disconnectedCallback() {
-    myAPI.removeAllListeners("next-tab");
-    myAPI.removeAllListeners("previous-tab");
-    myAPI.removeAllListeners("context-menu-command-fragment-tab");
+    appAPI.removeAllListeners("next-tab");
+    appAPI.removeAllListeners("previous-tab");
+    appAPI.removeAllListeners("context-menu-command-fragment-tab");
 
     super.disconnectedCallback();
   }
@@ -101,7 +101,7 @@ export class FragmentTabList extends LitElement {
       fragmentId: fragment._id,
       tabIndex: Number((<HTMLElement>e.currentTarget).getAttribute("tabIndex")),
     };
-    myAPI.showContextMenuOnFragmentTab();
+    appAPI.showContextMenuOnFragmentTab();
   }
 
   private _idsOnDeleteFragment({
@@ -134,7 +134,7 @@ export class FragmentTabList extends LitElement {
 
   private _contextMenuCommand(e: Event, command: string): void {
     if (command === "delete-fragment") {
-      myAPI
+      appAPI
         .deleteFragment(this._idsOnDeleteFragment(this.tabOnContext))
         .then(() => {
           updateSnippets();

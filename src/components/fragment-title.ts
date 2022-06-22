@@ -4,7 +4,7 @@ import { live } from "lit/directives/live.js";
 import { Fragment } from "models.d";
 import { updateSnippets } from "../events/global-dispatchers";
 
-const { myAPI } = window;
+const { appAPI } = window;
 
 @customElement("fragment-title")
 export class FragmentTitle extends LitElement {
@@ -76,7 +76,7 @@ export class FragmentTitle extends LitElement {
   }
 
   private _updateFragmentTitle() {
-    myAPI
+    appAPI
       .updateFragment({
         _id: this.fragment._id,
         properties: {

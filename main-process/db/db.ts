@@ -8,7 +8,6 @@ import {
   ActiveSnippetHistory,
 } from "./realm";
 import languages from "./seeds/languages";
-import * as fragments from "./seeds/fragments";
 
 interface ActiveFragmentProps {
   properties: Pick<ActiveFragment, "fragmentId" | "snippetId">;
@@ -60,14 +59,7 @@ class DB extends Realm {
     const latestSnippet = this.createSnippet(title, snippetUpdate);
 
     // create an empty fragment
-    // TODO: seed data for testing
-    // this.createFragment("", fragments.content1, latestSnippet, 0); // language == 'plaintext'
-    const latestFragment = this.createFragment(
-      "",
-      fragments.content2,
-      latestSnippet,
-      0
-    );
+    const latestFragment = this.createFragment("", "", latestSnippet, 0);
 
     this.createActiveFragment(latestFragment._id, latestSnippet._id);
   }

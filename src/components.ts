@@ -4,7 +4,7 @@ import "./components/settings-group";
 import "./components/settings-editor";
 import "./components/editor-element";
 import "./components/snippet-title";
-import "./components/codeEditor";
+import "./components/code-editor";
 import "./components/snippet-list";
 import "./components/search-item";
 import "./components/fragment-tab";

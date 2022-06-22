@@ -8,7 +8,7 @@ import {
 } from "../events/global-dispatchers";
 const { appAPI } = window;
 
-export class SetupStorageController implements ReactiveController {
+export class SnippetListController implements ReactiveController {
   private host: ReactiveControllerHost;
   searchQuery: SearchQueryController;
 

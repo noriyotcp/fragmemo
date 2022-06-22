@@ -5,7 +5,7 @@ import { repeat } from "lit/directives/repeat.js";
 import "@ui5/webcomponents/dist/List.js";
 import "@ui5/webcomponents/dist/StandardListItem.js";
 
-import { SetupStorageController } from "../controllers/setup-storage-controller";
+import { SnippetListController } from "../controllers/snippet-list-controller";
 import { ActiveSnippetHistory, Snippet } from "../models";
 import { selectSnippet, updateSnippets } from "../events/global-dispatchers";
 
@@ -13,7 +13,7 @@ const { appAPI } = window;
 
 @customElement("snippet-list")
 export class SnippetList extends LitElement {
-  private setupStorage = new SetupStorageController(this);
+  private snippetListController = new SnippetListController(this);
 
   @query("#snippetList") snippetList!: HTMLElement;
   @queryAll("ui5-li") snippetItems!: HTMLLIElement[];
@@ -49,7 +49,7 @@ export class SnippetList extends LitElement {
       <search-item></search-item>
       <ui5-list id="snippetList" class="full-width" mode="SingleSelect">
         ${repeat(
-          this.setupStorage.snippets,
+          this.snippetListController.snippets,
           (snippet: Snippet) => snippet._id,
           (snippet: Snippet) =>
             html`<ui5-li
@@ -114,7 +114,7 @@ export class SnippetList extends LitElement {
     let topItem = this.snippetItems[0];
 
     // override the selected item with the one on the top if there's a search query
-    if (this.setupStorage.searchQuery.query) {
+    if (this.snippetListController.searchQuery.query) {
       topItem = this.snippetItems[0];
     } else if (this._activeSnippetHistory) {
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion

@@ -6,7 +6,7 @@ import {
   snippetsCreated,
   snippetsLoaded,
 } from "../events/global-dispatchers";
-const { myAPI } = window;
+const { appAPI } = window;
 
 export class SetupStorageController implements ReactiveController {
   private host: ReactiveControllerHost;
@@ -33,7 +33,7 @@ export class SetupStorageController implements ReactiveController {
       this._onSnippetsSearched as EventListener
     );
     // When Command or Control + N is pressed
-    myAPI.newSnippet((_e: Event) => this._initSnippet());
+    appAPI.newSnippet((_e: Event) => this._initSnippet());
   }
 
   hostDisconnected(): void {
@@ -48,7 +48,7 @@ export class SetupStorageController implements ReactiveController {
   }
 
   async setupStorage(): Promise<void> {
-    await myAPI
+    await appAPI
       .setupStorage()
       .then(() => {
         displayToast("Setup storage", {
@@ -68,7 +68,7 @@ export class SetupStorageController implements ReactiveController {
   }
 
   private _loadSnippets(query = "", preSnippets: Snippet[] = []) {
-    myAPI
+    appAPI
       .loadSnippets()
       .then((snippets) => {
         const filtered = snippets.filter((snippet) =>
@@ -85,7 +85,7 @@ export class SetupStorageController implements ReactiveController {
         });
       })
       .finally(() => {
-        myAPI.getLatestActiveSnippetHistory().then((activeSnippetHistory) => {
+        appAPI.getLatestActiveSnippetHistory().then((activeSnippetHistory) => {
           this.activeSnippetHistory = activeSnippetHistory;
           this.host.requestUpdate();
         });
@@ -97,8 +97,8 @@ export class SetupStorageController implements ReactiveController {
   };
 
   private _initSnippet() {
-    myAPI.initSnippet().then((snippet) => {
-      myAPI.newActiveSnippetHistory(snippet._id);
+    appAPI.initSnippet().then((snippet) => {
+      appAPI.newActiveSnippetHistory(snippet._id);
       this._loadSnippets();
       snippetsCreated();
     });
@@ -108,12 +108,12 @@ export class SetupStorageController implements ReactiveController {
     const query = e.detail.query;
 
     if (!e.detail.query) {
-      myAPI.loadSnippets().then((snippets) => {
+      appAPI.loadSnippets().then((snippets) => {
         this.snippets = snippets;
         this.host.requestUpdate();
       });
     } else {
-      myAPI.loadSnippets().then((snippets) => {
+      appAPI.loadSnippets().then((snippets) => {
         this.snippets = snippets.filter((snippet) =>
           snippet.title.includes(query)
         );

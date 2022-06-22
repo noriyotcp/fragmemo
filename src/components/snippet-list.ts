@@ -9,7 +9,7 @@ import { SetupStorageController } from "../controllers/setup-storage-controller"
 import { ActiveSnippetHistory, Snippet } from "../models";
 import { selectSnippet, updateSnippets } from "../events/global-dispatchers";
 
-const { myAPI } = window;
+const { appAPI } = window;
 
 @customElement("snippet-list")
 export class SnippetList extends LitElement {
@@ -76,7 +76,7 @@ export class SnippetList extends LitElement {
       "selection-change",
       this._onSelectionChange as EventListener
     );
-    myAPI.contextMenuCommandSnippetItem((_e: Event, command) =>
+    appAPI.contextMenuCommandSnippetItem((_e: Event, command) =>
       this._contextMenuCommand(_e, command)
     );
   }
@@ -86,7 +86,7 @@ export class SnippetList extends LitElement {
       "selection-change",
       this._onSelectionChange as EventListener
     );
-    myAPI.removeAllListeners("context-menu-command-snippet-item");
+    appAPI.removeAllListeners("context-menu-command-snippet-item");
 
     super.disconnectedCallback();
   }
@@ -108,7 +108,7 @@ export class SnippetList extends LitElement {
   async updated(): Promise<void> {
     if (!this.snippetItems[0]) return;
 
-    this._activeSnippetHistory = await myAPI.getLatestActiveSnippetHistory();
+    this._activeSnippetHistory = await appAPI.getLatestActiveSnippetHistory();
 
     // topItem is the first item in the list or the item that was selected before
     let topItem = this.snippetItems[0];
@@ -135,7 +135,7 @@ export class SnippetList extends LitElement {
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       (<HTMLElement>e.currentTarget).getAttribute("snippet")!
     );
-    myAPI.showContextMenuOnSnippetItem();
+    appAPI.showContextMenuOnSnippetItem();
   }
 
   private _contextMenuCommand(e: Event, command: string): void {
@@ -145,7 +145,7 @@ export class SnippetList extends LitElement {
       } else {
         const message = `Are you sure you want to delete "${this.snippet.title}"?`;
         if (confirm(message)) {
-          myAPI.deleteSnippet(this.snippet._id).then(() => {
+          appAPI.deleteSnippet(this.snippet._id).then(() => {
             updateSnippets();
           });
         }
@@ -177,7 +177,7 @@ export class SnippetList extends LitElement {
   }
 
   private async _fragmentsCount(snippetId: number): Promise<number> {
-    const fragments = await myAPI.loadFragments(snippetId);
+    const fragments = await appAPI.loadFragments(snippetId);
     return fragments.length;
   }
 }

@@ -10,7 +10,7 @@ import { defaultEditorSettings } from "../defaultEditorSettings";
 import * as monaco from "monaco-editor";
 import { applyPatch, compare } from "fast-json-patch";
 
-const { myAPI } = window;
+const { appAPI } = window;
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 const lineNumbersList = monaco.editor.EditorOptions.lineNumbers.schema.enum;
@@ -39,7 +39,7 @@ export class SettingsEditor extends LitElement {
     console.log("object fromEntries", Object.fromEntries(options));
     this.monacoDefaultEditorOptions = Object.fromEntries(options);
 
-    myAPI.getEditorSettings().then((settings) => {
+    appAPI.getEditorSettings().then((settings) => {
       this.settings = this._mergeSettings(defaultEditorSettings, settings);
       console.log("settings merged\n", JSON.stringify(this.settings, null, 2));
       this._settingsUpdated();
@@ -197,7 +197,7 @@ export class SettingsEditor extends LitElement {
         afterDelay: this.afterDelay.valueAsNumber,
       },
     };
-    myAPI.setEditorSettings(updatedSettings);
+    appAPI.setEditorSettings(updatedSettings);
     this.settings = updatedSettings;
     console.log("settings updated\n", JSON.stringify(this.settings, null, 2));
   }

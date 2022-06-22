@@ -1,7 +1,7 @@
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const { contextBridge, ipcRenderer } = require("electron");
 
-contextBridge.exposeInMainWorld("myAPI", {
+contextBridge.exposeInMainWorld("appAPI", {
   // main process -> renderer process
   toggleSettings: (listener) => ipcRenderer.on("toggle-settings", listener),
   saveFragment: (listener) => ipcRenderer.on("save-fragment", listener),

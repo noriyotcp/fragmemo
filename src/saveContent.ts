@@ -1,7 +1,7 @@
 import { Store } from "stores";
 import { contentEditingStateChanged } from "./events/global-dispatchers";
 
-const { myAPI } = window;
+const { appAPI } = window;
 const queue: number[] = [];
 // Run sleep function
 const _sleep = (ms: number) =>
@@ -40,7 +40,7 @@ function saveContent(
   content: string,
   fragmentStore: typeof Store
 ): void {
-  myAPI
+  appAPI
     .updateFragment({
       _id: fragmentId,
       properties: { content: content },

@@ -14,7 +14,7 @@ import tsWorker from "monaco-editor/esm/vs/language/typescript/ts.worker?worker"
 import { createViewStateStore, Store } from "../stores";
 import { ViewStatesController } from "../controllers/view-states-controller";
 
-const { myAPI } = window;
+const { appAPI } = window;
 
 window.MonacoEnvironment = {
   getWorker(_workerId: string, label: string) {
@@ -151,11 +151,11 @@ export class CodeEditor extends LitElement {
       this._onInitFragment as EventListener
     );
     // When Command or Control + S is pressed
-    myAPI.saveFragment((_e: Event) => this._saveContent());
+    appAPI.saveFragment((_e: Event) => this._saveContent());
   }
 
   disconnectedCallback() {
-    myAPI.removeAllListeners("save-fragment");
+    appAPI.removeAllListeners("save-fragment");
 
     super.disconnectedCallback();
   }

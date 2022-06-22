@@ -5,7 +5,7 @@ import { repeat } from "lit/directives/repeat.js";
 import "@ui5/webcomponents/dist/List.js";
 import "@ui5/webcomponents/dist/StandardListItem.js";
 
-import { SnippetListController } from "../controllers/setup-storage-controller";
+import { SnippetListController } from "../controllers/snippet-list-controller";
 import { ActiveSnippetHistory, Snippet } from "../models";
 import { selectSnippet, updateSnippets } from "../events/global-dispatchers";
 

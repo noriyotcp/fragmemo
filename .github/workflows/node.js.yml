@@ -14,8 +14,8 @@ on:
       - reopened
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
+  build_on_mac:
+    runs-on: macos-latest
 
     strategy:
       matrix:

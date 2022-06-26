@@ -1,7 +1,7 @@
 {
   "name": "fragmemo",
   "productName": "fragmemo",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "Snippet tool",
   "main": "build/main.js",
   "scripts": {

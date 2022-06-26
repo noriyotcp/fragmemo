@@ -16,6 +16,8 @@ on:
 jobs:
   build_on_mac:
     runs-on: macos-latest
+    permissions:
+      contents: write
 
     strategy:
       matrix:
@@ -32,4 +34,7 @@ jobs:
       - run: yarn install
       - run: yarn lint
       - run: yarn test
-      - run: yarn app:build:mac
+      - name: "Build the app for Mac (Intel)"
+        run: yarn app:build:mac
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

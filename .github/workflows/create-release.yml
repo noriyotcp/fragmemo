@@ -8,7 +8,7 @@ on:
       - "v*"
 
 jobs:
-  build_on_mac:
+  release-for-macos:
     runs-on: macos-latest
     permissions:
       contents: write
@@ -34,14 +34,6 @@ jobs:
         run: yarn app:build:mac:x64
       - name: "Build the app for Mac (Arm)"
         run: yarn app:build:mac:arm64
-
-  create_release:
-    runs-on: macos-latest
-    permissions:
-      contents: write
-
-    steps:
-      - uses: actions/checkout@v3
       - name: Create release
         uses: ncipollo/release-action@v1.10.0
         with:

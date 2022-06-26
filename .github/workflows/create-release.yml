@@ -37,8 +37,7 @@ jobs:
       - name: Create release
         uses: ncipollo/release-action@v1.10.0
         with:
-          artifacts: "dist/fragmemo-*.dmg,dist/fragmemo-*-arm64.dmg,dist/fragmemo-*-mac.zip,fragmemo-*-arm64-mac.zip"
+          artifacts: "dist/fragmemo-*.dmg,dist/fragmemo-*-arm64.dmg,dist/fragmemo-*-mac.zip,dist/fragmemo-*-arm64-mac.zip"
           draft: true
           generateReleaseNotes: true
-          repo: "main"
           token: ${{ secrets.GITHUB_TOKEN }}

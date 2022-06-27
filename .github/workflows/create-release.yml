@@ -1,6 +1,11 @@
 name: Create Release
 
 on:
+  workflow_dispatch:
+    branches-ignore:
+      - "**"
+    tags:
+      - "v*"
   push:
     branches-ignore:
       - "**"

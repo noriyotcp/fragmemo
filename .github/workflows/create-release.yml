@@ -33,8 +33,6 @@ jobs:
           node-version: ${{ matrix.node-version }}
           cache: "yarn"
       - run: yarn install --frozen-lockfile
-      - run: yarn lint
-      - run: yarn test
       - name: "Build the app for Mac (Intel)"
         run: yarn app:build:mac:x64
       - name: "Build the app for Mac (Arm)"

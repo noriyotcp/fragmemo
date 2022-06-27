@@ -4,12 +4,11 @@
 
 ![This is fragmemo preview](https://user-images.githubusercontent.com/5820754/175816035-d74ce678-51f4-4257-bfa2-5285b3ab5c3a.png)
 
-
 **Snippet manager built with Electron, Lit & monaco-editor**
 
 At this time, this supports for macOS only.
 
-## Develop
+## Development
 
 ```sh
 yarn install

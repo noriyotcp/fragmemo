@@ -889,10 +889,10 @@
     "@nodelib/fs.scandir" "2.1.5"
     fastq "^1.6.0"
 
-"@realm.io/common@^0.1.2":
-  version "0.1.3"
-  resolved "https://registry.yarnpkg.com/@realm.io/common/-/common-0.1.3.tgz#9a07f923dd5ac91aa61ae5dd26fdd5470be1a01f"
-  integrity sha512-PezSt3ab0CwKJ54Cj3Qnv6RTFb2x+7nyXVmb0cthwjCA3Lu1VcDhqyOsWoZcl2lvucgj/rYgyn4X/bIoItU3TA==
+"@realm.io/common@^0.1.4":
+  version "0.1.4"
+  resolved "https://registry.yarnpkg.com/@realm.io/common/-/common-0.1.4.tgz#d50ed1c91af1477695222ce04754a19a81336a54"
+  integrity sha512-+nI/fOa/G9idiZ7h9DVz5NmnrvVNI3AM/I0eB7vL/PxDCF8vH3vew8ZrWOSr08GT2bDliy1wB6IYRqezQ1H/Iw==
 
 "@sap-theming/theming-base-content@11.1.38":
   version "11.1.38"
@@ -4885,12 +4885,12 @@ realm-network-transport@^0.7.2:
     abort-controller "^3.0.0"
     node-fetch "^2.6.0"
 
-realm@^10.19.2:
-  version "10.19.2"
-  resolved "https://registry.yarnpkg.com/realm/-/realm-10.19.2.tgz#39c63b68e70d9b80dd3c434ebc8be52358d154b1"
-  integrity sha512-AfZPXP8AZS80mHMTj519bhGXXjrtG0nSlsNwya0i7VXZPZ8Tn/ICflGyvzT9mNN8UfBTynp3rwRxPo3bgNLJpQ==
+realm@^10.19.3:
+  version "10.19.3"
+  resolved "https://registry.yarnpkg.com/realm/-/realm-10.19.3.tgz#953fabd0c745f8cd23479c6312fc2bb4c08ad446"
+  integrity sha512-T8tB3QAYf5Q0YMo2MfF656N0QDee/7RmRwVTK8ahAtSNWFs3hDRABHihkNcbngrdaTAZPx2uhNZR7OTKmBOMWw==
   dependencies:
-    "@realm.io/common" "^0.1.2"
+    "@realm.io/common" "^0.1.4"
     bindings "^1.5.0"
     bson "4.4.1"
     clang-format "^1.6.0"

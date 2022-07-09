@@ -41,7 +41,7 @@
     "@swc/jest": "^0.2.21",
     "@types/electron-json-storage": "^4.5.0",
     "@types/jest": "^28.1.4",
-    "@types/node": "^18.0.0",
+    "@types/node": "^18.0.3",
     "@typescript-eslint/eslint-plugin": "^5.30.4",
     "@typescript-eslint/parser": "^5.30.4",
     "@vitejs/plugin-vue": "^2.3.3",

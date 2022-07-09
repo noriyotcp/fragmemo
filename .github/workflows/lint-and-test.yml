@@ -1,12 +1,9 @@
 # This workflow will do a clean installation of node dependencies, cache/restore them, build the source code and run tests across different versions of node
 # For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
 
-name: Node.js CI
+name: Lint and Test
 
 on:
-  push:
-    branches:
-      - main
   pull_request:
     types:
       - opened
@@ -14,7 +11,7 @@ on:
       - reopened
 
 jobs:
-  build_on_mac:
+  run_on_mac:
     runs-on: macos-latest
     permissions:
       contents: write
@@ -36,7 +33,3 @@ jobs:
       - run: yarn install --frozen-lockfile
       - run: yarn lint
       - run: yarn test
-      - name: "Build the app for Mac (Intel)"
-        run: yarn app:build:mac:x64
-      - name: "Build the app for Mac (Arm)"
-        run: yarn app:build:mac:arm64

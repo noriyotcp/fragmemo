@@ -11,7 +11,7 @@ on:
       - reopened
 
 jobs:
-  build_on_mac:
+  run_on_mac:
     runs-on: macos-latest
     permissions:
       contents: write

@@ -1,7 +1,5 @@
 # fragmemo
 
-[![Node.js CI](https://github.com/noriyotcp/fragmemo/actions/workflows/node.js.yml/badge.svg?branch=main)](https://github.com/noriyotcp/fragmemo/actions/workflows/node.js.yml)
-
 [![Build](https://github.com/noriyotcp/fragmemo/actions/workflows/build.yml/badge.svg)](https://github.com/noriyotcp/fragmemo/actions/workflows/build.yml)
 
 [![Lint and Test](https://github.com/noriyotcp/fragmemo/actions/workflows/lint-and-test.yml/badge.svg)](https://github.com/noriyotcp/fragmemo/actions/workflows/lint-and-test.yml)

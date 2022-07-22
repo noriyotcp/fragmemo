@@ -37,7 +37,7 @@
     "split.js": "^1.6.5"
   },
   "devDependencies": {
-    "@swc/core": "^1.2.215",
+    "@swc/core": "^1.2.218",
     "@swc/jest": "^0.2.21",
     "@types/electron-json-storage": "^4.5.0",
     "@types/jest": "^28.1.6",

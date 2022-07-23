@@ -1,10 +1,6 @@
 # fragmemo
 
-[![Build](https://github.com/noriyotcp/fragmemo/actions/workflows/build.yml/badge.svg)](https://github.com/noriyotcp/fragmemo/actions/workflows/build.yml)
-
-[![Lint and Test](https://github.com/noriyotcp/fragmemo/actions/workflows/lint-and-test.yml/badge.svg)](https://github.com/noriyotcp/fragmemo/actions/workflows/lint-and-test.yml)
-
-[![Create Release](https://github.com/noriyotcp/fragmemo/actions/workflows/create-release.yml/badge.svg)](https://github.com/noriyotcp/fragmemo/actions/workflows/create-release.yml)
+[![Build](https://github.com/noriyotcp/fragmemo/actions/workflows/build.yml/badge.svg)](https://github.com/noriyotcp/fragmemo/actions/workflows/build.yml) [![Lint and Test](https://github.com/noriyotcp/fragmemo/actions/workflows/lint-and-test.yml/badge.svg)](https://github.com/noriyotcp/fragmemo/actions/workflows/lint-and-test.yml) [![Create Release](https://github.com/noriyotcp/fragmemo/actions/workflows/create-release.yml/badge.svg)](https://github.com/noriyotcp/fragmemo/actions/workflows/create-release.yml)
 
 ![This is fragmemo preview](https://user-images.githubusercontent.com/5820754/175816035-d74ce678-51f4-4257-bfa2-5285b3ab5c3a.png)
 

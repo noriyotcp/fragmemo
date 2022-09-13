@@ -36,7 +36,7 @@
     "fast-json-patch": "^3.1.1",
     "lit": "^2.3.1",
     "monaco-editor": "^0.34.0",
-    "realm": "^10.19.5",
+    "realm": "^10.20.0",
     "split.js": "^1.6.5"
   },
   "devDependencies": {
@@ -51,7 +51,7 @@
     "cross-env": "^7.0.3",
     "electron": "^20.1.1",
     "electron-builder": "^23.3.3",
-    "eslint": "^8.21.0",
+    "eslint": "^8.23.1",
     "eslint-config-prettier": "^8.5.0",
     "jest": "^29.0.1",
     "prettier": "2.7.1",

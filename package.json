@@ -44,7 +44,7 @@
     "@swc/jest": "^0.2.23",
     "@types/electron-json-storage": "^4.5.0",
     "@types/jest": "^29.1.2",
-    "@types/node": "^18.11.3",
+    "@types/node": "^18.11.9",
     "@typescript-eslint/eslint-plugin": "^5.41.0",
     "@typescript-eslint/parser": "^5.42.0",
     "concurrently": "^7.5.0",

@@ -65,7 +65,7 @@ class DB extends Realm {
   }
 
   initFragment(snippetId: number): void {
-    const snippet: Snippet | undefined = this.objectForPrimaryKey(
+    const snippet: Snippet | null = this.objectForPrimaryKey(
       "Snippet",
       snippetId
     );
@@ -85,7 +85,7 @@ class DB extends Realm {
   }
 
   deleteFragment(fragmentId: number, nextActiveFragmentId?: number): void {
-    const fragment: Fragment | undefined = this.objectForPrimaryKey(
+    const fragment: Fragment | null = this.objectForPrimaryKey(
       "Fragment",
       fragmentId
     );
@@ -253,11 +253,10 @@ class DB extends Realm {
         )
       );
       // update _id of the latest one to 1
-      const latestOne: ActiveSnippetHistory | undefined =
-        this.objectForPrimaryKey(
-          "ActiveSnippetHistory",
-          this.currentMaxId("ActiveSnippetHistory")
-        );
+      const latestOne: ActiveSnippetHistory | null = this.objectForPrimaryKey(
+        "ActiveSnippetHistory",
+        this.currentMaxId("ActiveSnippetHistory")
+      );
       if (latestOne) {
         latestOne._id = 1;
       }

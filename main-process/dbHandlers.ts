@@ -11,7 +11,7 @@ const db = new DB(dataPath);
 
 export const setupStorage = (): void => {
   try {
-    if (db.empty) {
+    if (db.isEmpty) {
       db.initLanguage();
       db.initSnippet("");
     }

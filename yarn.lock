@@ -4735,10 +4735,10 @@ readable-stream@^3.1.1, readable-stream@^3.4.0:
     string_decoder "^1.1.1"
     util-deprecate "^1.0.1"
 
-realm@^11.1.0:
-  version "11.1.0"
-  resolved "https://registry.yarnpkg.com/realm/-/realm-11.1.0.tgz#e1085eb045bb7155907cdf9960e89e2573cab94d"
-  integrity sha512-E3ZYw6jUXPcl1wGtZuGtqI2z2j/hoCeuP9Mq6KDVqLdfxXzJGciZpgF1szG8KXmqgHOslQboKJkIJmjGhGUvxg==
+realm@^11.3.0:
+  version "11.3.0"
+  resolved "https://registry.yarnpkg.com/realm/-/realm-11.3.0.tgz#fee7988a3af88a9d182bb3d31bc5a8b7814b9259"
+  integrity sha512-/IHkzsuGMx6gxryK3Mu3+dH+ZZMG6UUavNyc5AADc8T8z/TZvBQ0jkbCUCGA5b6c8JD5NSSzaw9qyg4wdIad0w==
   dependencies:
     "@realm/common" "^0.1.4"
     "@realm/network-transport" "^0.7.2"
@@ -5247,22 +5247,10 @@ tar-stream@^2.1.4:
     inherits "^2.0.3"
     readable-stream "^3.1.1"
 
-tar@^6.0.1:
+tar@^6.0.1, tar@^6.1.11:
   version "6.1.12"
   resolved "https://registry.yarnpkg.com/tar/-/tar-6.1.12.tgz#3b742fb05669b55671fb769ab67a7791ea1a62e6"
   integrity sha512-jU4TdemS31uABHd+Lt5WEYJuzn+TJTCBLljvIAHZOz6M9Os5pJ4dD+vRFLxPa/n3T0iEFzpi+0x1UfuDZYbRMw==
-  dependencies:
-    chownr "^2.0.0"
-    fs-minipass "^2.0.0"
-    minipass "^3.0.0"
-    minizlib "^2.1.1"
-    mkdirp "^1.0.3"
-    yallist "^4.0.0"
-
-tar@^6.1.11:
-  version "6.1.11"
-  resolved "https://registry.yarnpkg.com/tar/-/tar-6.1.11.tgz#6760a38f003afa1b2ffd0ffe9e9abbd0eab3d621"
-  integrity sha512-an/KZQzQUkZCkuoAA64hM92X0Urb6VpRhAFllDzz44U2mcD5scmT3zBc4VgVpkugF580+DQn8eAFSyoQt0tznA==
   dependencies:
     chownr "^2.0.0"
     fs-minipass "^2.0.0"

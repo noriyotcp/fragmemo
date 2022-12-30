@@ -4,7 +4,7 @@ import { createRef, Ref, ref } from "lit/directives/ref.js";
 
 // -- Monaco Editor Imports --
 import * as monaco from "monaco-editor";
-import styles from "monaco-editor/min/vs/editor/editor.main.css";
+import styles from "monaco-editor/min/vs/editor/editor.main.css?inline";
 import editorWorker from "monaco-editor/esm/vs/editor/editor.worker?worker";
 import jsonWorker from "monaco-editor/esm/vs/language/json/json.worker?worker";
 import cssWorker from "monaco-editor/esm/vs/language/css/css.worker?worker";

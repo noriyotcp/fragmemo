@@ -1044,10 +1044,10 @@
     abort-controller "^3.0.0"
     node-fetch "^2.6.0"
 
-"@sap-theming/theming-base-content@11.1.41":
-  version "11.1.41"
-  resolved "https://registry.yarnpkg.com/@sap-theming/theming-base-content/-/theming-base-content-11.1.41.tgz#2c8df8d37734d0d60f682fa0adb7d7d0385dfb61"
-  integrity sha512-ffxq4uP7I/CowpXvXQxjNSBXEvMlZycoIZZyIbEoJmORYk+eUwMFTVf7DPriMDdsY/kSIEqse2xoPvHqdluPkg==
+"@sap-theming/theming-base-content@11.1.48":
+  version "11.1.48"
+  resolved "https://registry.yarnpkg.com/@sap-theming/theming-base-content/-/theming-base-content-11.1.48.tgz#5d2d05849d4b84d07b531051162be0163f10292d"
+  integrity sha512-Q2rMoEN+6tjnfbhlQ2a+WybhAWj/0RuhWUb3vSzI/iwCkGPGtz3k8HhtU1jtmAPjRCiJQSEmiE2HMv3Av/7Y7Q==
 
 "@sideway/address@^4.1.3":
   version "4.1.3"
@@ -1520,44 +1520,44 @@
     "@typescript-eslint/types" "5.46.0"
     eslint-visitor-keys "^3.3.0"
 
-"@ui5/webcomponents-base@1.9.1":
-  version "1.9.1"
-  resolved "https://registry.yarnpkg.com/@ui5/webcomponents-base/-/webcomponents-base-1.9.1.tgz#10fb674b0ce6f9ea23af182a4cb6e38d716648e8"
-  integrity sha512-10SjUjGAkjQYaienJaY48wFTgeZoQDDT7xs7cg6nm63bLRVrzwXtJ+xmI3/1IvHkV0Lm8qWrWiI+Tstl/irfDg==
+"@ui5/webcomponents-base@1.9.3":
+  version "1.9.3"
+  resolved "https://registry.yarnpkg.com/@ui5/webcomponents-base/-/webcomponents-base-1.9.3.tgz#5cf07034d70f0e128670b3e61b7d9d4363790f5e"
+  integrity sha512-bV1Kb76gOVYBJbCao1cNNhKbhUMceyyR43KhaZtjyatbGFlsQqbWlV3Dpi3JYyJLQrCi+eThByQz1QF+k9V5PA==
   dependencies:
     lit-html "^2.0.1"
 
-"@ui5/webcomponents-icons@1.9.1":
-  version "1.9.1"
-  resolved "https://registry.yarnpkg.com/@ui5/webcomponents-icons/-/webcomponents-icons-1.9.1.tgz#03c58572de4052ac2557f56a3e88ac75dfd7bdc0"
-  integrity sha512-tlI3mGUue0LwfJGyzeUjzW51IpzW3jnph/KPQkeq2cDDubR1VOXwGZZiiTD+DV2PJw9BORtjeZct7a5OtngtMA==
+"@ui5/webcomponents-icons@1.9.3":
+  version "1.9.3"
+  resolved "https://registry.yarnpkg.com/@ui5/webcomponents-icons/-/webcomponents-icons-1.9.3.tgz#8faa99a3395f0c7ac2b23ddb7d0b5bfe4d169bde"
+  integrity sha512-NB6Co1RU4rOocxLEO8J7a+6Qq8ehG8nDC8JjkQL3CpwqR/gDdbBlo6crP8CwgVLbXj8tvg0fa/4wlCv3worWRA==
   dependencies:
-    "@ui5/webcomponents-base" "1.9.1"
+    "@ui5/webcomponents-base" "1.9.3"
 
-"@ui5/webcomponents-localization@1.9.1":
-  version "1.9.1"
-  resolved "https://registry.yarnpkg.com/@ui5/webcomponents-localization/-/webcomponents-localization-1.9.1.tgz#51ed8791e362cfb8bab6a82f2401db384feeaba2"
-  integrity sha512-KGQijLFgdZ2NxIeWe5k2mNAExdDAGirGTxRG2cGJkJraIwPNBwj/ZGKM7nPk1PTxip7+PwdPQeHP6/+eBXceHg==
+"@ui5/webcomponents-localization@1.9.3":
+  version "1.9.3"
+  resolved "https://registry.yarnpkg.com/@ui5/webcomponents-localization/-/webcomponents-localization-1.9.3.tgz#e01c1d83594dd82204afe08a905d5ddd42a7cc74"
+  integrity sha512-DqVd7FGDptlsjsXL4pItvLGZrDqqWwcgpGKUlLQaMUQa5HKOMH0ffsix5Rr5RIi+mgZUndSFXlUyR0HYoUe24w==
   dependencies:
-    "@ui5/webcomponents-base" "1.9.1"
+    "@ui5/webcomponents-base" "1.9.3"
 
-"@ui5/webcomponents-theming@1.9.1":
-  version "1.9.1"
-  resolved "https://registry.yarnpkg.com/@ui5/webcomponents-theming/-/webcomponents-theming-1.9.1.tgz#2e4f25cbc33deb6d6089494b121dcac76038712e"
-  integrity sha512-LyuZjM7N8ab0Iez44/FcYRRPC5cYnpIW+NAwA+cwwG/d21oF70nuNgbRuVfS3Cr5bboCcWNoH0oeMhyqMYr2yw==
+"@ui5/webcomponents-theming@1.9.3":
+  version "1.9.3"
+  resolved "https://registry.yarnpkg.com/@ui5/webcomponents-theming/-/webcomponents-theming-1.9.3.tgz#661bbd1ce0eca87140a66c44b5f7a1d834b82184"
+  integrity sha512-LZTPMYzBXJwZHqywXZwO1Z/+7TzovePUDuKG8hyOEplGXQ+Ibh4JMhn5cx4nfnltM3uko55UZtyoaetHutxecQ==
   dependencies:
-    "@sap-theming/theming-base-content" "11.1.41"
-    "@ui5/webcomponents-base" "1.9.1"
+    "@sap-theming/theming-base-content" "11.1.48"
+    "@ui5/webcomponents-base" "1.9.3"
 
-"@ui5/webcomponents@^1.9.1":
-  version "1.9.1"
-  resolved "https://registry.yarnpkg.com/@ui5/webcomponents/-/webcomponents-1.9.1.tgz#ba8a7649beaac183ed6ff8678e5644bfa344f694"
-  integrity sha512-yWUPhMysFp3aaTx+I+ApuXXrX/sD+P4fKisz+cZYu0A/cJkHA+n/LmWm9zLoA+mWPPtkFWuAUX2RYP+1U8/8gg==
+"@ui5/webcomponents@^1.9.3":
+  version "1.9.3"
+  resolved "https://registry.yarnpkg.com/@ui5/webcomponents/-/webcomponents-1.9.3.tgz#50025c7e40e124365aa0310c4c72bcba2e5613e7"
+  integrity sha512-tn2v4LB5gk4bEYy7FqDsqUajy6lpu4gtc+GYDe181LfPaxas4kXdjhLLG0FbZg5+vHIeX6YUK5LXo4qNnRWAIQ==
   dependencies:
-    "@ui5/webcomponents-base" "1.9.1"
-    "@ui5/webcomponents-icons" "1.9.1"
-    "@ui5/webcomponents-localization" "1.9.1"
-    "@ui5/webcomponents-theming" "1.9.1"
+    "@ui5/webcomponents-base" "1.9.3"
+    "@ui5/webcomponents-icons" "1.9.3"
+    "@ui5/webcomponents-localization" "1.9.3"
+    "@ui5/webcomponents-theming" "1.9.3"
 
 abort-controller@^3.0.0:
   version "3.0.0"

@@ -5,6 +5,7 @@ export const defaultEditorSettings: EditorSettingsType = {
     lineNumbers: "on",
     stickyScroll: {
       enabled: false,
+      maxLineCount: 5,
     },
   },
   files: {

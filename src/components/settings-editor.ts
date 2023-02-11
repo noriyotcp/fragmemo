@@ -21,6 +21,11 @@ export class SettingsEditor extends LitElement {
   @query("sl-input[name='after-delay']") afterDelay!: HTMLInputElement;
   @query("sl-select[name='editor-line-numbers']")
   editorLineNumbers!: HTMLInputElement;
+  @query("#editor-sticky-scroll-enabled")
+  editorStickyScrollEnabled!: HTMLInputElement;
+  @query("sl-input[name='editor-sticky-scroll-max-line-count']")
+  editorStickyScrollMaxLineCount!: HTMLInputElement;
+
   @queryAll("sl-input") inputs!: HTMLInputElement[];
   @query("form") form!: HTMLFormElement;
   @query("#reload-page") reloadPage!: HTMLButtonElement;
@@ -96,6 +101,33 @@ export class SettingsEditor extends LitElement {
               )}
             </sl-select>
           </div>
+          <div
+            class="form-group"
+            ?customized="${this._isCustomizedObjectOption("stickyScroll")}"
+          >
+            <sl-switch
+              id="editor-sticky-scroll-enabled"
+              name="editor-sticky-scroll-enabled"
+              ?checked="${this.settings?.editor?.stickyScroll?.enabled}"
+              >Sticky Scroll</sl-switch
+            >
+          </div>
+          <div
+            class="form-group"
+            ?customized="${this._isCustomizedObjectOption("stickyScroll")}"
+          >
+            <sl-input
+              label="Max Line Count"
+              type="number"
+              placeholder="Maximum number of sticky lines to show"
+              size="small"
+              value=${this.settings?.editor?.stickyScroll?.maxLineCount}
+              min="1"
+              name="editor-sticky-scroll-max-line-count"
+              class="input"
+              required
+            ></sl-input>
+          </div>
 
           <h3>Files</h3>
           <div
@@ -169,6 +201,12 @@ export class SettingsEditor extends LitElement {
     this.autosave.checked = this.settings.files.autosave;
     this.afterDelay.valueAsNumber = this.settings.files.afterDelay;
     this.editorLineNumbers.value = <string>this.settings.editor.lineNumbers;
+    this.editorStickyScrollEnabled.checked = <boolean>(
+      this.settings.editor.stickyScroll?.enabled
+    );
+    this.editorStickyScrollMaxLineCount.valueAsNumber = <number>(
+      this.settings.editor.stickyScroll?.maxLineCount
+    );
   }
 
   // find properties that are customized by the user
@@ -191,6 +229,10 @@ export class SettingsEditor extends LitElement {
       editor: {
         lineNumbers: this.editorLineNumbers
           .value as monaco.editor.LineNumbersType,
+        stickyScroll: {
+          enabled: this.editorStickyScrollEnabled.checked,
+          maxLineCount: this.editorStickyScrollMaxLineCount.valueAsNumber,
+        },
       },
       files: {
         autosave: this.autosave.checked,
@@ -221,6 +263,15 @@ export class SettingsEditor extends LitElement {
     return (
       defaultEditorSettings.files[`${editorOptionName}`] !==
       this.settings?.files[`${editorOptionName}`]
+    );
+  }
+
+  private _isCustomizedObjectOption(
+    editorOptionName: keyof EditorSettingsType["editor"]
+  ) {
+    return (
+      JSON.stringify(defaultEditorSettings.editor[`${editorOptionName}`]) !==
+      JSON.stringify(this.settings?.editor[`${editorOptionName}`])
     );
   }
 }

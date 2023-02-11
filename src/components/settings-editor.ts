@@ -22,7 +22,7 @@ export class SettingsEditor extends LitElement {
   @query("sl-select[name='editor-line-numbers']")
   editorLineNumbers!: HTMLInputElement;
   @query("#editor-sticky-scroll-enabled")
-  stickyScrollEnabled!: HTMLInputElement;
+  editorStickyScrollEnabled!: HTMLInputElement;
   @query("sl-input[name='editor-sticky-scroll-max-line-count']")
   editorStickyScrollMaxLineCount!: HTMLInputElement;
 
@@ -201,7 +201,7 @@ export class SettingsEditor extends LitElement {
     this.autosave.checked = this.settings.files.autosave;
     this.afterDelay.valueAsNumber = this.settings.files.afterDelay;
     this.editorLineNumbers.value = <string>this.settings.editor.lineNumbers;
-    this.stickyScrollEnabled.checked = <boolean>(
+    this.editorStickyScrollEnabled.checked = <boolean>(
       this.settings.editor.stickyScroll?.enabled
     );
     this.editorStickyScrollMaxLineCount.valueAsNumber = <number>(
@@ -230,7 +230,7 @@ export class SettingsEditor extends LitElement {
         lineNumbers: this.editorLineNumbers
           .value as monaco.editor.LineNumbersType,
         stickyScroll: {
-          enabled: this.stickyScrollEnabled.checked,
+          enabled: this.editorStickyScrollEnabled.checked,
           maxLineCount: this.editorStickyScrollMaxLineCount.valueAsNumber,
         },
       },

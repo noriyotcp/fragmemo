@@ -56,11 +56,11 @@ export class SnippetTitle extends LitElement {
     this.snippetTitle.addEventListener("change", (e: Event) => {
       if (!this._snippet) return;
 
-      const { highlightValue } = e.currentTarget as Override<
+      const { value } = e.currentTarget as Override<
         EventTarget,
-        { highlightValue: string }
+        { value: string }
       >;
-      this._snippet.title = highlightValue;
+      this._snippet.title = value;
 
       const snippetProps: ISnippetProps = {
         _id: this._snippet._id,

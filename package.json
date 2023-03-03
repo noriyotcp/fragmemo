@@ -35,7 +35,7 @@
     "electron-json-storage": "^4.6.0",
     "fast-json-patch": "^3.1.1",
     "lit": "^2.6.1",
-    "monaco-editor": "^0.35.0",
+    "monaco-editor": "^0.36.1",
     "realm": "^11.5.1",
     "split.js": "^1.6.5"
   },

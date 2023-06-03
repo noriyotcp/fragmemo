@@ -1,30 +1,29 @@
 <!DOCTYPE html>
 <html lang="en" class="sl-theme-dark">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" href="/favicon.ico" />
-    <link rel="stylesheet" href="./index.css" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>fragmemo</title>
-    <script type="module" src="/src/components.ts"></script>
-    <script type="module" src="/src/split-pane.ts"></script>
-    <script src="https://unpkg.com/tinybase/lib/umd/tinybase.js"></script>
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.0.0-beta.86/dist/themes/dark.css"
-    />
-    <script
-      type="module"
-      src="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.0.0-beta.86/dist/shoelace.js"
-    ></script>
-  </head>
-  <body>
-    <div class="split">
-      <settings-element></settings-element>
-      <snippet-list id="split-0"></snippet-list>
-      <home-element id="split-1">
-        <no-snippets-element slot="no-snippets"></no-snippets-element>
-      </home-element>
-    </div>
-  </body>
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" href="/favicon.ico" />
+  <link rel="stylesheet" href="./index.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>fragmemo</title>
+  <script type="module" src="/src/components.ts"></script>
+  <script type="module" src="/src/split-pane.ts"></script>
+  <script src="https://unpkg.com/tinybase@3.0.6/lib/umd/tinybase.js"></script>
+  <link rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.0.0-beta.86/dist/themes/dark.css" />
+  <script type="module"
+    src="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.0.0-beta.86/dist/shoelace.js"></script>
+</head>
+
+<body>
+  <div class="split">
+    <settings-element></settings-element>
+    <snippet-list id="split-0"></snippet-list>
+    <home-element id="split-1">
+      <no-snippets-element slot="no-snippets"></no-snippets-element>
+    </home-element>
+  </div>
+</body>
+
 </html>

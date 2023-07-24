@@ -36,7 +36,7 @@
     "fast-json-patch": "^3.1.1",
     "lit": "^2.7.5",
     "monaco-editor": "^0.38.0",
-    "realm": "^11.6.0",
+    "realm": "^11.10.1",
     "split.js": "^1.6.5"
   },
   "devDependencies": {

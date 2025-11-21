@@ -22,3 +22,20 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Electron-vite build output
+out/
+dist-electron/
+dist-native/
+
+# Database files (generated locally)
+*.db
+*.db-shm
+*.db-wal
+
+# Environment files (auto-generated)
+.env
+.env.local
+
+# Private configuration
+.claude/

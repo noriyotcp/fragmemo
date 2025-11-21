@@ -1,15 +1,16 @@
 import { app, BrowserWindow } from 'electron'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
+import { db } from './db'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
-process.env.DIST = path.join(__dirname, '../dist')
+process.env.DIST = path.join(__dirname, '../renderer')
 process.env.VITE_PUBLIC = app.isPackaged ? process.env.DIST : path.join(process.env.DIST, '../public')
 
 let win: BrowserWindow | null
 
-const VITE_DEV_SERVER_URL = process.env['VITE_DEV_SERVER_URL']
+const VITE_DEV_SERVER_URL = process.env['ELECTRON_RENDERER_URL']
 
 function createWindow() {
   win = new BrowserWindow({
@@ -49,4 +50,10 @@ app.on('activate', () => {
   }
 })
 
-app.whenReady().then(createWindow)
+app.whenReady().then(async () => {
+  // Run database migrations
+  const { runMigrations } = await import('./db/migrate')
+  runMigrations()
+
+  createWindow()
+})

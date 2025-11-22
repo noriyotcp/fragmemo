@@ -13,7 +13,7 @@
     "db:push": "drizzle-kit push",
     "db:studio": "drizzle-kit studio",
     "rebuild": "node scripts/rebuild.cjs",
-    "postinstall": "npm run rebuild"
+    "postinstall": "npx electron-rebuild"
   },
   "dependencies": {
     "better-sqlite3": "^12.4.5",

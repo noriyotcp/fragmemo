@@ -1,8 +1,15 @@
 const path = require('path');
 const child = require('child_process');
+const fs = require('fs');
 
 // Rebuild better-sqlite3 for Electron
 // https://github.com/WiseLibs/better-sqlite3/blob/v8.5.2/docs/troubleshooting.md#electron
+
+// Get Electron version from package.json
+const packageJson = JSON.parse(
+  fs.readFileSync(path.join(__dirname, '../package.json'), 'utf8')
+);
+const electronVersion = packageJson.devDependencies.electron.replace(/^\^|~/, '');
 
 const better_sqlite3 = require.resolve('better-sqlite3');
 const better_sqlite3_root = path.posix.join(
@@ -15,7 +22,7 @@ const cp = child.spawn(
   [
     'run',
     'build-release',
-    `--target=${process.versions.electron}`,
+    `--target=${electronVersion}`,
     '--dist-url=https://electronjs.org/headers',
   ],
   {

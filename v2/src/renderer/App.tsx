@@ -6,6 +6,7 @@ import type { ISnippet } from './types'
 function App(): JSX.Element {
   const [activeSnippetId, setActiveSnippetId] = useState<string | null>(null)
   const [snippets, setSnippets] = useState<ISnippet[]>([])
+  const [searchQuery, setSearchQuery] = useState('')
 
   const loadSnippets = useCallback(async () => {
     const data = await window.api.getSnippets()
@@ -15,6 +16,19 @@ function App(): JSX.Element {
   useEffect(() => {
     loadSnippets()
   }, [loadSnippets])
+
+  const filteredSnippets = snippets.filter(snippet => {
+    if (!searchQuery) return true
+    const query = searchQuery.toLowerCase()
+
+    // Title match
+    if (snippet.title?.toLowerCase().includes(query)) return true
+
+    // Tag match
+    if (snippet.tags.some(tag => tag.toLowerCase().includes(query))) return true
+
+    return false
+  })
 
   const handleCreateSnippet = async () => {
     const newSnippet = await window.api.createSnippet('Untitled Snippet')
@@ -34,11 +48,13 @@ function App(): JSX.Element {
   return (
     <div className="flex h-screen w-screen overflow-hidden">
       <Sidebar
-        snippets={snippets}
+        snippets={filteredSnippets}
         activeSnippetId={activeSnippetId}
         onSelectSnippet={setActiveSnippetId}
         onCreateSnippet={handleCreateSnippet}
         onDeleteSnippet={handleDeleteSnippet}
+        searchQuery={searchQuery}
+        onSearchChange={setSearchQuery}
       />
       {activeSnippetId ? (
         <Editor

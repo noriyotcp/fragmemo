@@ -5,17 +5,28 @@ export function Sidebar({
   activeSnippetId,
   onSelectSnippet,
   onCreateSnippet,
-  onDeleteSnippet
+  onDeleteSnippet,
+  searchQuery,
+  onSearchChange
 }: {
   snippets: ISnippet[]
   activeSnippetId: string | null
   onSelectSnippet: (id: string) => void
   onCreateSnippet: () => void
   onDeleteSnippet: (id: string) => void
+  searchQuery: string
+  onSearchChange: (query: string) => void
 }) {
   return (
     <div className="w-64 h-screen bg-gray-100 border-r border-gray-200 flex flex-col">
-      <div className="p-4 border-b border-gray-200">
+      <div className="p-4 border-b border-gray-200 space-y-2">
+        <input
+          type="text"
+          value={searchQuery}
+          onChange={(e) => onSearchChange(e.target.value)}
+          placeholder="🔍 Search snippets..."
+          className="w-full px-3 py-2 text-sm border border-gray-300 rounded focus:outline-none focus:border-blue-500"
+        />
         <button
           onClick={onCreateSnippet}
           className="w-full bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded transition-colors"
@@ -33,7 +44,9 @@ export function Sidebar({
             onClick={() => onSelectSnippet(snippet.id)}
           >
             <div className="truncate flex-1">
-              <div className="font-medium text-sm truncate">{snippet.title || 'Untitled'}</div>
+              <div className={`font-medium text-sm truncate ${!snippet.title ? 'text-gray-400 italic' : ''}`}>
+                {snippet.title || 'Untitled'}
+              </div>
               {snippet.tags && snippet.tags.length > 0 && (
                 <div className="flex flex-wrap gap-1 mt-1">
                   {snippet.tags.map((tag) => (

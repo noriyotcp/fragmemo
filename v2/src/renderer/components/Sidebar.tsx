@@ -34,6 +34,18 @@ export function Sidebar({
           >
             <div className="truncate flex-1">
               <div className="font-medium text-sm truncate">{snippet.title || 'Untitled'}</div>
+              {snippet.tags && snippet.tags.length > 0 && (
+                <div className="flex flex-wrap gap-1 mt-1">
+                  {snippet.tags.map((tag) => (
+                    <span
+                      key={tag}
+                      className="text-xs px-1.5 py-0.5 bg-blue-100 text-blue-700 rounded"
+                    >
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+              )}
               <div className="text-xs text-gray-500">
                 {new Date(snippet.updatedAt).toLocaleDateString()}
               </div>

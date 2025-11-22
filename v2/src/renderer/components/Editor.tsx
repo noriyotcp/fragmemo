@@ -5,6 +5,7 @@ export function Editor({ snippetId, onUpdate }: { snippetId: string; onUpdate: (
   const [snippet, setSnippet] = useState<ISnippet | null>(null)
   const [fragments, setFragments] = useState<IFragment[]>([])
   const [loading, setLoading] = useState(false)
+  const [tagInput, setTagInput] = useState('')
 
   const loadData = useCallback(async () => {
     setLoading(true)
@@ -67,6 +68,47 @@ export function Editor({ snippetId, onUpdate }: { snippetId: string; onUpdate: (
           placeholder="Snippet Title"
           className="text-2xl font-bold w-full border-none focus:ring-0 placeholder-gray-300"
         />
+        <div className="mt-3 flex flex-wrap gap-2 items-center">
+          {snippet?.tags?.map((tag) => (
+            <span
+              key={tag}
+              className="inline-flex items-center gap-1 px-2 py-1 bg-blue-100 text-blue-700 rounded text-sm"
+            >
+              {tag}
+              <button
+                onClick={() => {
+                  if (!snippet) return
+                  const updatedTags = snippet.tags.filter(t => t !== tag)
+                  setSnippet({ ...snippet, tags: updatedTags })
+                  window.api.updateSnippet(snippet.id, { tags: updatedTags })
+                  onUpdate()
+                }}
+                className="hover:text-blue-900"
+              >
+                ×
+              </button>
+            </span>
+          ))}
+          <input
+            type="text"
+            value={tagInput}
+            onChange={(e) => setTagInput(e.target.value)}
+            placeholder="+ Add tag"
+            className="text-sm px-2 py-1 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' && !e.nativeEvent.isComposing) {
+                const newTag = tagInput.trim()
+                if (newTag && snippet && !snippet.tags.includes(newTag)) {
+                  const updatedTags = [...snippet.tags, newTag]
+                  setSnippet({ ...snippet, tags: updatedTags })
+                  window.api.updateSnippet(snippet.id, { tags: updatedTags })
+                  onUpdate()
+                  setTagInput('')
+                }
+              }
+            }}
+          />
+        </div>
       </div>
 
       {fragments.map((fragment, index) => (

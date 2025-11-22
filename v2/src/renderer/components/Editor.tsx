@@ -68,6 +68,11 @@ export function Editor({ snippetId, onUpdate }: { snippetId: string; onUpdate: (
     const newFragments = [...fragments, newFragment]
     setFragments(newFragments)
     setActiveFragmentId(newFragment.id)
+
+    // Persist active fragment to DB
+    if (snippet) {
+      window.api.updateSnippet(snippet.id, { activeFragmentId: newFragment.id })
+    }
   }
 
   const handleDeleteFragment = async (id: string, e: React.MouseEvent) => {

@@ -4,7 +4,7 @@ import react from '@vitejs/plugin-react'
 import fs from 'node:fs'
 import path from 'node:path'
 import { createRequire } from 'node:module'
-import type { Plugin } from 'vite'
+import type { Plugin, UserConfig } from 'vite'
 
 const require = createRequire(import.meta.url)
 
@@ -19,7 +19,7 @@ function bindingSqlite3(options: {
 
   return {
     name: 'vite-plugin-binding-sqlite3',
-    config(config: any) {
+    config(config: UserConfig) {
       const resolvedRoot = path.resolve(config.root || process.cwd())
       const output = path.resolve(resolvedRoot, options.output!)
       const better_sqlite3 = require.resolve('better-sqlite3')

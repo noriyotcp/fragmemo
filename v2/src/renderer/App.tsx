@@ -1,18 +1,45 @@
-function App() {
+import { useState, useEffect, useCallback } from 'react'
+import { Sidebar } from './components/Sidebar'
+import { Editor } from './components/Editor'
+import type { ISnippet } from './types'
+
+function App(): JSX.Element {
+  const [activeSnippetId, setActiveSnippetId] = useState<string | null>(null)
+  const [snippets, setSnippets] = useState<ISnippet[]>([])
+
+  const loadSnippets = useCallback(async () => {
+    const data = await window.api.getSnippets()
+    setSnippets(data)
+  }, [])
+
+  useEffect(() => {
+    loadSnippets()
+  }, [loadSnippets])
+
+  const handleCreateSnippet = async () => {
+    const newSnippet = await window.api.createSnippet('Untitled Snippet')
+    await loadSnippets()
+    setActiveSnippetId(newSnippet.id)
+  }
+
   return (
-    <div className="min-h-screen bg-gray-100">
-      <header className="bg-white shadow">
-        <div className="max-w-7xl mx-auto py-6 px-4">
-          <h1 className="text-3xl font-bold text-gray-900">Fragmemo v2</h1>
+    <div className="flex h-screen w-screen overflow-hidden">
+      <Sidebar
+        snippets={snippets}
+        activeSnippetId={activeSnippetId}
+        onSelectSnippet={setActiveSnippetId}
+        onCreateSnippet={handleCreateSnippet}
+      />
+      {activeSnippetId ? (
+        <Editor
+          snippetId={activeSnippetId}
+          onUpdate={loadSnippets}
+        />
+      ) : (
+        <div className="flex-1 flex items-center justify-center text-gray-400">
+          Select a snippet to start editing
         </div>
-      </header>
-      <main className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
-        <div className="px-4 py-6 sm:px-0">
-          <div className="border-4 border-dashed border-gray-200 rounded-lg h-96 flex items-center justify-center">
-            <p className="text-gray-500">Welcome to Fragmemo v2</p>
-          </div>
-        </div>
-      </main>
+      )}
     </div>
   )
 }

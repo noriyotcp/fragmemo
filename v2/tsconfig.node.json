@@ -25,6 +25,7 @@
   },
   "include": [
     "vite.config.ts",
+    "electron.vite.config.ts",
     "electron/**/*.ts"
   ]
 }

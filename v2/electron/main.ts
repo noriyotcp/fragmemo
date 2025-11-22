@@ -1,7 +1,6 @@
 import { app, BrowserWindow } from 'electron'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
-import { db } from './db'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
@@ -16,7 +15,8 @@ function createWindow() {
   win = new BrowserWindow({
     icon: path.join(process.env.VITE_PUBLIC || '', 'electron-vite.svg'),
     webPreferences: {
-      preload: path.join(__dirname, 'preload.js'),
+      preload: path.join(__dirname, '../preload/index.mjs'),
+      sandbox: false,
     },
   })
 
@@ -54,6 +54,10 @@ app.whenReady().then(async () => {
   // Run database migrations
   const { runMigrations } = await import('./db/migrate')
   runMigrations()
+
+  // Register IPC handlers
+  const { registerSnippetHandlers } = await import('./ipc/snippets')
+  registerSnippetHandlers()
 
   createWindow()
 })

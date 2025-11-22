@@ -21,9 +21,12 @@ export function Editor({ snippetId, onUpdate }: { snippetId: string; onUpdate: (
       setSnippet(currentSnippet)
 
       setFragments(fragmentsData)
-      // Set active fragment if not already set or if current active is not in list
-      if (fragmentsData.length > 0 && (!activeFragmentId || !fragmentsData.find(f => f.id === activeFragmentId))) {
-        setActiveFragmentId(fragmentsData[0].id)
+
+      // Restore active fragment from DB or fallback to first fragment
+      if (fragmentsData.length > 0) {
+        const savedActiveId = currentSnippet?.activeFragmentId
+        const validSavedId = savedActiveId && fragmentsData.find(f => f.id === savedActiveId)
+        setActiveFragmentId(validSavedId ? savedActiveId : fragmentsData[0].id)
       }
     } finally {
       setLoading(false)
@@ -143,7 +146,12 @@ export function Editor({ snippetId, onUpdate }: { snippetId: string; onUpdate: (
         {fragments.map((fragment) => (
           <div
             key={fragment.id}
-            onClick={() => setActiveFragmentId(fragment.id)}
+            onClick={() => {
+              setActiveFragmentId(fragment.id)
+              if (snippet) {
+                window.api.updateSnippet(snippet.id, { activeFragmentId: fragment.id })
+              }
+            }}
             className={`
               group flex items-center gap-2 px-3 py-2 text-sm cursor-pointer border-t border-l border-r rounded-t-md select-none min-w-[120px] max-w-[200px]
               ${activeFragmentId === fragment.id

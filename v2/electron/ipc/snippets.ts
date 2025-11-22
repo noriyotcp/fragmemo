@@ -12,9 +12,12 @@ export function registerSnippetHandlers() {
 
   ipcMain.handle('create-snippet', async (_, title: string) => {
     const id = randomUUID()
+    const fragmentId = randomUUID()
+
     const newSnippet = {
       id,
       title: title || 'Untitled Snippet',
+      activeFragmentId: fragmentId,
       updatedAt: new Date(),
       createdAt: new Date(),
     }
@@ -22,7 +25,7 @@ export function registerSnippetHandlers() {
 
     // Create default fragment
     await db.insert(fragments).values({
-      id: randomUUID(),
+      id: fragmentId,
       snippetId: id,
       title: '',
       content: '',

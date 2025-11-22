@@ -5,6 +5,7 @@ export const snippets = sqliteTable('snippets', {
   id: text('id').primaryKey(),
   title: text('title'),
   tags: text('tags', { mode: 'json' }).$type<string[]>().default(sql`'[]'`),
+  activeFragmentId: text('active_fragment_id'),
   createdAt: integer('created_at', { mode: 'timestamp' }).notNull().default(sql`(unixepoch())`),
   updatedAt: integer('updated_at', { mode: 'timestamp' }).notNull().default(sql`(unixepoch())`),
 })

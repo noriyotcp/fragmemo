@@ -2,6 +2,7 @@ export interface ISnippet {
   id: string
   title: string | null
   tags: string[]
+  activeFragmentId: string | null
   createdAt: Date
   updatedAt: Date
 }

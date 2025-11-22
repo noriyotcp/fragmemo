@@ -19,6 +19,17 @@ export function registerSnippetHandlers() {
       createdAt: new Date(),
     }
     await db.insert(snippets).values(newSnippet)
+
+    // Create default fragment
+    await db.insert(fragments).values({
+      id: randomUUID(),
+      snippetId: id,
+      title: '',
+      content: '',
+      language: 'plaintext',
+      order: 0
+    })
+
     return newSnippet
   })
 

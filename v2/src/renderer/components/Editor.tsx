@@ -89,6 +89,18 @@ export function Editor({ snippetId, onUpdate }: { snippetId: string; onUpdate: (
               <option value="typescript">TypeScript</option>
               <option value="markdown">Markdown</option>
             </select>
+            <button
+              onClick={async () => {
+                if (!confirm('Delete this fragment?')) return
+                await window.api.deleteFragment(fragment.id)
+                const newFragments = fragments.filter(f => f.id !== fragment.id)
+                setFragments(newFragments)
+              }}
+              className="text-gray-400 hover:text-red-500 px-2"
+              title="Delete Fragment"
+            >
+              ×
+            </button>
           </div>
           <textarea
             value={fragment.content}

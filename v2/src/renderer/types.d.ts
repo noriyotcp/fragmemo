@@ -22,6 +22,7 @@ export interface IAPI {
   deleteSnippet: (id: string) => Promise<string>
   getFragments: (snippetId: string) => Promise<IFragment[]>
   saveFragment: (fragment: IFragment) => Promise<IFragment>
+  deleteFragment: (id: string) => Promise<string>
 }
 
 declare global {

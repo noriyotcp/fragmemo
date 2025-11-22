@@ -56,4 +56,9 @@ export function registerSnippetHandlers() {
 
     return fragment
   })
+
+  ipcMain.handle('delete-fragment', async (_, id: string) => {
+    await db.delete(fragments).where(eq(fragments.id, id))
+    return id
+  })
 }

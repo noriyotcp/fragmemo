@@ -22,6 +22,15 @@ function App(): JSX.Element {
     setActiveSnippetId(newSnippet.id)
   }
 
+  const handleDeleteSnippet = async (id: string) => {
+    if (!confirm('Are you sure you want to delete this snippet?')) return
+    await window.api.deleteSnippet(id)
+    await loadSnippets()
+    if (activeSnippetId === id) {
+      setActiveSnippetId(null)
+    }
+  }
+
   return (
     <div className="flex h-screen w-screen overflow-hidden">
       <Sidebar
@@ -29,6 +38,7 @@ function App(): JSX.Element {
         activeSnippetId={activeSnippetId}
         onSelectSnippet={setActiveSnippetId}
         onCreateSnippet={handleCreateSnippet}
+        onDeleteSnippet={handleDeleteSnippet}
       />
       {activeSnippetId ? (
         <Editor

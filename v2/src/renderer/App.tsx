@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useRef } from 'react'
 import { Sidebar } from './components/Sidebar'
 import { Editor } from './components/Editor'
 import { Settings } from './components/Settings'
@@ -11,10 +11,43 @@ function App(): JSX.Element {
   const [isSettingsOpen, setIsSettingsOpen] = useState(false)
   const [settings, setSettings] = useState<ISettings | null>(null)
 
+  // Use ref to access latest search query in callbacks without dependency issues
+  const searchQueryRef = useRef(searchQuery)
+  useEffect(() => {
+    searchQueryRef.current = searchQuery
+  }, [searchQuery])
+
   const loadSnippets = useCallback(async () => {
     const data = await window.api.getSnippets()
     setSnippets(data)
-  }, [])
+
+    // Check if active snippet still exists
+    if (activeSnippetId && !data.find(s => s.id === activeSnippetId)) {
+      // If not, select the first one from the new data (respecting filter would be better but we don't have filtered list here easily)
+      // Actually, we should probably wait for effect, but simple logic:
+      // If the currently active snippet is deleted, we want to select *something*.
+      // Since we don't have easy access to filteredSnippets inside this callback without adding it to dependency array (which causes loops),
+      // let's just select the first one from the full list for now, or null if empty.
+      // Ideally we should respect the search query.
+
+      // Let's try to filter here using the current searchQuery state
+      const query = searchQueryRef.current.toLowerCase()
+
+      const filtered = data.filter(snippet => {
+        if (!query) return true
+        if (snippet.title?.toLowerCase().includes(query)) return true
+        if (snippet.tags.some(tag => tag.toLowerCase().includes(query))) return true
+        return false
+      })
+
+      if (filtered.length > 0) {
+        setActiveSnippetId(filtered[0].id)
+      } else {
+        // If filtered list is empty, just clear selection (keep search query)
+        setActiveSnippetId(null)
+      }
+    }
+  }, [activeSnippetId])
 
   const loadSettings = useCallback(async () => {
     const data = await window.api.getSettings()
@@ -52,6 +85,40 @@ function App(): JSX.Element {
       return () => mediaQuery.removeEventListener('change', handler)
     }
   }, [settings?.theme])
+
+  // Menu event handlers
+  useEffect(() => {
+    const unsubscribeNewSnippet = window.api.onMenuNewSnippet(() => {
+      handleCreateSnippet()
+    })
+
+    const unsubscribeOpenSettings = window.api.onMenuOpenSettings(() => {
+      setIsSettingsOpen(true)
+    })
+
+    return () => {
+      unsubscribeNewSnippet()
+      unsubscribeOpenSettings()
+    }
+  }, [])
+
+  // Keyboard shortcuts
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // Cmd+Shift+F: Focus search (always, regardless of context)
+      // Use capture phase to intercept before Monaco Editor
+      if ((e.metaKey || e.ctrlKey) && e.shiftKey && e.key.toLowerCase() === 'f') {
+        e.preventDefault()
+        e.stopPropagation() // Stop propagation to prevent Monaco from handling it if it has a conflict
+        const searchInput = document.querySelector('input[placeholder*="Search"]') as HTMLInputElement
+        searchInput?.focus()
+      }
+    }
+
+    // Use capture phase (true) to handle event before it reaches target (e.g. editor)
+    window.addEventListener('keydown', handleKeyDown, true)
+    return () => window.removeEventListener('keydown', handleKeyDown, true)
+  }, [])
 
   const handleUpdateSettings = async (data: Partial<ISettings>) => {
     const updated = await window.api.updateSettings(data)

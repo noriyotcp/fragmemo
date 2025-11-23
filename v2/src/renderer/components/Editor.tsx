@@ -77,6 +77,17 @@ export function Editor({ snippetId, onUpdate, settings }: { snippetId: string; o
 
   const handleDeleteFragment = async (id: string, e: React.MouseEvent) => {
     e.stopPropagation()
+
+    // If this is the last fragment, delete the entire snippet
+    if (fragments.length === 1) {
+      if (!confirm('This is the last fragment. Delete the entire snippet?')) return
+      if (snippet) {
+        await window.api.deleteSnippet(snippet.id)
+        onUpdate() // Refresh the snippet list
+      }
+      return
+    }
+
     if (!confirm('Delete this fragment?')) return
 
     await window.api.deleteFragment(id)
@@ -87,6 +98,74 @@ export function Editor({ snippetId, onUpdate, settings }: { snippetId: string; o
       setActiveFragmentId(newFragments.length > 0 ? newFragments[0].id : null)
     }
   }
+
+  // Menu and keyboard shortcuts
+  useEffect(() => {
+    // Menu: Close Tab
+    const unsubscribeCloseTab = window.api.onMenuCloseTab(async () => {
+      if (!activeFragmentId) return
+
+      // If this is the last fragment, delete the entire snippet
+      if (fragments.length === 1) {
+        if (confirm('This is the last fragment. Delete the entire snippet?')) {
+          if (snippet) {
+            await window.api.deleteSnippet(snippet.id)
+            onUpdate() // Refresh the snippet list
+          }
+        }
+        return
+      }
+
+      // Multiple fragments - just delete the active one
+      if (confirm('Delete this fragment?')) {
+        await window.api.deleteFragment(activeFragmentId)
+        const newFragments = fragments.filter(f => f.id !== activeFragmentId)
+        setFragments(newFragments)
+        setActiveFragmentId(newFragments.length > 0 ? newFragments[0].id : null)
+      }
+    })
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // Cmd+T: New Fragment
+      if ((e.metaKey || e.ctrlKey) && e.key === 't') {
+        e.preventDefault()
+        handleCreateFragment()
+      }
+
+      // Cmd+]: Next Fragment
+      if ((e.metaKey || e.ctrlKey) && e.key === ']') {
+        e.preventDefault()
+        const currentIndex = fragments.findIndex(f => f.id === activeFragmentId)
+        if (currentIndex !== -1 && fragments.length > 1) {
+          const nextIndex = (currentIndex + 1) % fragments.length
+          setActiveFragmentId(fragments[nextIndex].id)
+          if (snippet) {
+            window.api.updateSnippet(snippet.id, { activeFragmentId: fragments[nextIndex].id })
+          }
+        }
+      }
+
+      // Cmd+[: Previous Fragment
+      if ((e.metaKey || e.ctrlKey) && e.key === '[') {
+        e.preventDefault()
+        const currentIndex = fragments.findIndex(f => f.id === activeFragmentId)
+        if (currentIndex !== -1 && fragments.length > 1) {
+          const prevIndex = (currentIndex - 1 + fragments.length) % fragments.length
+          setActiveFragmentId(fragments[prevIndex].id)
+          if (snippet) {
+            window.api.updateSnippet(snippet.id, { activeFragmentId: fragments[prevIndex].id })
+          }
+        }
+      }
+    }
+
+    window.addEventListener('keydown', handleKeyDown)
+
+    return () => {
+      unsubscribeCloseTab()
+      window.removeEventListener('keydown', handleKeyDown)
+    }
+  }, [activeFragmentId, fragments, snippet])
 
   const activeFragment = fragments.find(f => f.id === activeFragmentId)
 

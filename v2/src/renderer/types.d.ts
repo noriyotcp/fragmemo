@@ -32,8 +32,14 @@ export interface IAPI {
   getFragments: (snippetId: string) => Promise<IFragment[]>
   saveFragment: (fragment: IFragment) => Promise<IFragment>
   deleteFragment: (id: string) => Promise<string>
+  // Settings
   getSettings: () => Promise<ISettings>
   updateSettings: (data: Partial<ISettings>) => Promise<ISettings>
+
+  // Menu event listeners
+  onMenuNewSnippet: (callback: () => void) => () => void
+  onMenuCloseTab: (callback: () => void) => () => void
+  onMenuOpenSettings: (callback: () => void) => () => void
 }
 
 declare global {

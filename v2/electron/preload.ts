@@ -9,5 +9,19 @@ contextBridge.exposeInMainWorld('api', {
   saveFragment: (fragment: unknown) => ipcRenderer.invoke('save-fragment', fragment),
   deleteFragment: (id: string) => ipcRenderer.invoke('delete-fragment', id),
   getSettings: () => ipcRenderer.invoke('get-settings'),
-  updateSettings: (data: object) => ipcRenderer.invoke('update-settings', data)
+  updateSettings: (data: object) => ipcRenderer.invoke('update-settings', data),
+
+  // Menu event listeners
+  onMenuNewSnippet: (callback: () => void) => {
+    ipcRenderer.on('menu:new-snippet', callback)
+    return () => ipcRenderer.removeListener('menu:new-snippet', callback)
+  },
+  onMenuCloseTab: (callback: () => void) => {
+    ipcRenderer.on('menu:close-tab', callback)
+    return () => ipcRenderer.removeListener('menu:close-tab', callback)
+  },
+  onMenuOpenSettings: (callback: () => void) => {
+    ipcRenderer.on('menu:open-settings', callback)
+    return () => ipcRenderer.removeListener('menu:open-settings', callback)
+  }
 })

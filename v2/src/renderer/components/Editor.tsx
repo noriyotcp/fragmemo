@@ -90,10 +90,16 @@ export function Editor({ snippetId, onUpdate, settings }: { snippetId: string; o
 
   const activeFragment = fragments.find(f => f.id === activeFragmentId)
 
-  if (loading) return <div className="p-4">Loading...</div>
+  if (loading) {
+    return (
+      <div className="flex-1 h-screen flex items-center justify-center bg-white dark:bg-[#1e1e1e] text-gray-500 dark:text-gray-400">
+        Loading...
+      </div>
+    )
+  }
 
   return (
-    <div className="flex-1 h-screen flex flex-col bg-white dark:bg-gray-800 overflow-hidden transition-colors duration-200">
+    <div className="flex-1 h-screen flex flex-col bg-white dark:bg-[#1e1e1e] overflow-hidden">
       {/* Header Section */}
       <div className="p-6 pb-2 border-b border-gray-100 dark:border-gray-700">
         <input

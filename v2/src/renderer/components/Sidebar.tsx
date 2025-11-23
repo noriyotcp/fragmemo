@@ -20,7 +20,7 @@ export function Sidebar({
   onOpenSettings: () => void
 }) {
   return (
-    <div className="w-64 h-screen bg-gray-100 dark:bg-gray-900 border-r border-gray-200 dark:border-gray-700 flex flex-col transition-colors duration-200">
+    <div className="w-64 h-screen bg-gray-100 dark:bg-gray-900 border-r border-gray-200 dark:border-gray-700 flex flex-col">
       <div className="p-4 border-b border-gray-200 dark:border-gray-700 space-y-2">
         <input
           type="text"

@@ -107,7 +107,7 @@ function App(): JSX.Element {
           settings={settings}
         />
       ) : (
-        <div className="flex-1 flex items-center justify-center text-gray-400 bg-white dark:bg-gray-800 transition-colors duration-200">
+        <div className="flex-1 flex items-center justify-center text-gray-400 bg-white dark:bg-gray-800">
           Select a snippet to start editing
         </div>
       )}

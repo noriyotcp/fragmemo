@@ -58,6 +58,8 @@ app.whenReady().then(async () => {
   // Register IPC handlers
   const { registerSnippetHandlers } = await import('./ipc/snippets')
   registerSnippetHandlers()
+  const { registerSettingsHandlers } = await import('./ipc/settings')
+  registerSettingsHandlers()
 
   createWindow()
 })

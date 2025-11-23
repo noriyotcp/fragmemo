@@ -1,8 +1,8 @@
 import { useEffect, useState, useCallback } from 'react'
 import MonacoEditor from '@monaco-editor/react'
-import type { IFragment, ISnippet } from '../types'
+import type { IFragment, ISnippet, ISettings } from '../types'
 
-export function Editor({ snippetId, onUpdate }: { snippetId: string; onUpdate: () => void }) {
+export function Editor({ snippetId, onUpdate, settings }: { snippetId: string; onUpdate: () => void; settings: ISettings }) {
   const [snippet, setSnippet] = useState<ISnippet | null>(null)
   const [fragments, setFragments] = useState<IFragment[]>([])
   const [loading, setLoading] = useState(false)
@@ -93,21 +93,21 @@ export function Editor({ snippetId, onUpdate }: { snippetId: string; onUpdate: (
   if (loading) return <div className="p-4">Loading...</div>
 
   return (
-    <div className="flex-1 h-screen flex flex-col bg-white overflow-hidden">
+    <div className="flex-1 h-screen flex flex-col bg-white dark:bg-gray-800 overflow-hidden transition-colors duration-200">
       {/* Header Section */}
-      <div className="p-6 pb-2 border-b border-gray-100">
+      <div className="p-6 pb-2 border-b border-gray-100 dark:border-gray-700">
         <input
           type="text"
           value={snippet?.title || ''}
           onChange={(e) => handleUpdateSnippetTitle(e.target.value)}
           placeholder="Snippet Title"
-          className="text-2xl font-bold w-full border-none focus:ring-0 placeholder-gray-300 p-0"
+          className="text-2xl font-bold w-full border-none focus:ring-0 placeholder-gray-300 dark:placeholder-gray-600 p-0 bg-transparent text-gray-900 dark:text-gray-100"
         />
         <div className="mt-3 flex flex-wrap gap-2 items-center">
           {snippet?.tags?.map((tag) => (
             <span
               key={tag}
-              className="inline-flex items-center gap-1 px-2 py-1 bg-blue-100 text-blue-700 rounded text-sm"
+              className="inline-flex items-center gap-1 px-2 py-1 bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-200 rounded text-sm"
             >
               {tag}
               <button
@@ -118,7 +118,7 @@ export function Editor({ snippetId, onUpdate }: { snippetId: string; onUpdate: (
                   window.api.updateSnippet(snippet.id, { tags: updatedTags })
                   onUpdate()
                 }}
-                className="hover:text-blue-900"
+                className="hover:text-blue-900 dark:hover:text-blue-100"
               >
                 ×
               </button>
@@ -129,7 +129,7 @@ export function Editor({ snippetId, onUpdate }: { snippetId: string; onUpdate: (
             value={tagInput}
             onChange={(e) => setTagInput(e.target.value)}
             placeholder="+ Add tag"
-            className="text-sm px-2 py-1 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
+            className="text-sm px-2 py-1 border border-gray-300 dark:border-gray-600 rounded focus:outline-none focus:border-blue-500 bg-transparent text-gray-700 dark:text-gray-300 placeholder-gray-400 dark:placeholder-gray-500"
             onKeyDown={(e) => {
               if (e.key === 'Enter' && !e.nativeEvent.isComposing) {
                 const newTag = tagInput.trim()
@@ -147,7 +147,7 @@ export function Editor({ snippetId, onUpdate }: { snippetId: string; onUpdate: (
       </div>
 
       {/* Tabs Bar */}
-      <div className="flex items-center bg-gray-50 border-b border-gray-200 px-2 pt-2 gap-1 overflow-x-auto">
+      <div className="flex items-center bg-gray-50 dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700 px-2 pt-2 gap-1 overflow-x-auto">
         {fragments.map((fragment) => (
           <div
             key={fragment.id}
@@ -157,12 +157,12 @@ export function Editor({ snippetId, onUpdate }: { snippetId: string; onUpdate: (
                 window.api.updateSnippet(snippet.id, { activeFragmentId: fragment.id })
               }
             }}
-            className={`
-              group flex items-center gap-2 px-3 py-2 text-sm cursor-pointer border-t border-l border-r rounded-t-md select-none min-w-[120px] max-w-[200px]
-              ${activeFragmentId === fragment.id
-                ? 'bg-white border-gray-200 border-b-white -mb-px text-gray-800 font-medium'
-                : 'bg-gray-100 border-transparent text-gray-500 hover:bg-gray-200'}
-            `}
+              className={`
+                group flex items-center gap-2 px-3 py-2 text-sm cursor-pointer border-t border-l border-r rounded-t-md select-none min-w-[120px] max-w-[200px] transition-colors
+                ${activeFragmentId === fragment.id
+                  ? 'bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 border-b-white dark:border-b-gray-800 -mb-px text-gray-800 dark:text-gray-100 font-medium'
+                  : 'bg-gray-100 dark:bg-gray-900 border-transparent text-gray-500 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-800'}
+              `}
           >
             <span className="truncate flex-1">{fragment.title || 'Untitled'}</span>
             <button
@@ -175,7 +175,7 @@ export function Editor({ snippetId, onUpdate }: { snippetId: string; onUpdate: (
         ))}
         <button
           onClick={handleCreateFragment}
-          className="p-2 text-gray-500 hover:text-blue-500 hover:bg-gray-200 rounded mb-1"
+          className="p-2 text-gray-500 dark:text-gray-400 hover:text-blue-500 dark:hover:text-blue-400 hover:bg-gray-200 dark:hover:bg-gray-800 rounded mb-1"
           title="New Fragment"
         >
           +
@@ -184,19 +184,19 @@ export function Editor({ snippetId, onUpdate }: { snippetId: string; onUpdate: (
 
       {/* Editor Toolbar (Language & Title) */}
       {activeFragment && (
-        <div className="flex items-center gap-4 p-2 border-b border-gray-200 bg-white">
+        <div className="flex items-center gap-4 p-2 border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800">
           <input
             type="text"
             value={activeFragment.title || ''}
             onChange={(e) => handleUpdateFragment(activeFragment.id, { title: e.target.value })}
             placeholder="Fragment Name"
-            className="text-sm border-none focus:ring-0 font-medium text-gray-700 w-48"
+            className="text-sm border-none focus:ring-0 font-medium text-gray-700 dark:text-gray-200 w-48 bg-transparent"
           />
-          <div className="h-4 w-px bg-gray-300"></div>
+          <div className="h-4 w-px bg-gray-300 dark:bg-gray-600"></div>
           <select
             value={activeFragment.language}
             onChange={(e) => handleUpdateFragment(activeFragment.id, { language: e.target.value })}
-            className="text-xs border-gray-300 rounded text-gray-600"
+            className="text-xs border-gray-300 dark:border-gray-600 rounded text-gray-600 dark:text-gray-300 bg-transparent"
           >
             <option value="plaintext">Plain Text</option>
             <option value="javascript">JavaScript</option>
@@ -221,11 +221,18 @@ export function Editor({ snippetId, onUpdate }: { snippetId: string; onUpdate: (
             language={activeFragment.language}
             defaultValue={activeFragment.content}
             value={activeFragment.content}
+            theme={
+              settings.theme === 'dark' ||
+              (settings.theme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches)
+                ? 'vs-dark'
+                : 'vs'
+            }
             onChange={(value: string | undefined) => handleUpdateFragment(activeFragment.id, { content: value || '' })}
             options={{
               minimap: { enabled: false },
               scrollBeyondLastLine: false,
-              fontSize: 14,
+              fontSize: settings.editorFontSize,
+              fontFamily: settings.editorFontFamily,
               wordWrap: 'on',
               automaticLayout: true
             }}

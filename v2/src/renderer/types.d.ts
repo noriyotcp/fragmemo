@@ -16,6 +16,14 @@ export interface IFragment {
   order: number
 }
 
+export interface ISettings {
+  id: string
+  theme: 'system' | 'light' | 'dark'
+  editorFontSize: number
+  editorFontFamily: string
+  autosave: boolean
+}
+
 export interface IAPI {
   getSnippets: () => Promise<ISnippet[]>
   createSnippet: (title: string) => Promise<ISnippet>
@@ -24,6 +32,8 @@ export interface IAPI {
   getFragments: (snippetId: string) => Promise<IFragment[]>
   saveFragment: (fragment: IFragment) => Promise<IFragment>
   deleteFragment: (id: string) => Promise<string>
+  getSettings: () => Promise<ISettings>
+  updateSettings: (data: Partial<ISettings>) => Promise<ISettings>
 }
 
 declare global {

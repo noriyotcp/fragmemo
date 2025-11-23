@@ -7,5 +7,7 @@ contextBridge.exposeInMainWorld('api', {
   deleteSnippet: (id: string) => ipcRenderer.invoke('delete-snippet', id),
   getFragments: (snippetId: string) => ipcRenderer.invoke('get-fragments', snippetId),
   saveFragment: (fragment: unknown) => ipcRenderer.invoke('save-fragment', fragment),
-  deleteFragment: (id: string) => ipcRenderer.invoke('delete-fragment', id)
+  deleteFragment: (id: string) => ipcRenderer.invoke('delete-fragment', id),
+  getSettings: () => ipcRenderer.invoke('get-settings'),
+  updateSettings: (data: object) => ipcRenderer.invoke('update-settings', data)
 })

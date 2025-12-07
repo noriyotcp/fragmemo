@@ -10,6 +10,8 @@ contextBridge.exposeInMainWorld('api', {
   deleteFragment: (id: string) => ipcRenderer.invoke('delete-fragment', id),
   getSettings: () => ipcRenderer.invoke('get-settings'),
   updateSettings: (data: object) => ipcRenderer.invoke('update-settings', data),
+  getAppState: () => ipcRenderer.invoke('get-app-state'),
+  updateAppState: (data: object) => ipcRenderer.invoke('update-app-state', data),
 
   // Menu event listeners
   onMenuNewSnippet: (callback: () => void) => {

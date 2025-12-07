@@ -10,6 +10,7 @@ function App(): JSX.Element {
   const [searchQuery, setSearchQuery] = useState('')
   const [isSettingsOpen, setIsSettingsOpen] = useState(false)
   const [settings, setSettings] = useState<ISettings | null>(null)
+  const [isRestored, setIsRestored] = useState(false)
 
   // Use ref to access latest search query in callbacks without dependency issues
   const searchQueryRef = useRef(searchQuery)
@@ -24,11 +25,6 @@ function App(): JSX.Element {
     // Check if active snippet still exists
     if (activeSnippetId && !data.find(s => s.id === activeSnippetId)) {
       // If not, select the first one from the new data (respecting filter would be better but we don't have filtered list here easily)
-      // Actually, we should probably wait for effect, but simple logic:
-      // If the currently active snippet is deleted, we want to select *something*.
-      // Since we don't have easy access to filteredSnippets inside this callback without adding it to dependency array (which causes loops),
-      // let's just select the first one from the full list for now, or null if empty.
-      // Ideally we should respect the search query.
 
       // Let's try to filter here using the current searchQuery state
       const query = searchQueryRef.current.toLowerCase()
@@ -54,10 +50,34 @@ function App(): JSX.Element {
     setSettings(data)
   }, [])
 
+  const loadAppState = useCallback(async () => {
+    try {
+      const appState = await window.api.getAppState()
+      if (appState.activeSnippetId) {
+        setActiveSnippetId(appState.activeSnippetId)
+      }
+    } catch (err) {
+      console.error('Failed to load app state:', err)
+    } finally {
+      setIsRestored(true)
+    }
+  }, [])
+
+  useEffect(() => {
+    loadAppState()
+  }, [loadAppState])
+
   useEffect(() => {
     loadSnippets()
     loadSettings()
   }, [loadSnippets, loadSettings])
+
+  // Persist activeSnippetId
+  useEffect(() => {
+    if (isRestored) {
+      window.api.updateAppState({ activeSnippetId })
+    }
+  }, [activeSnippetId, isRestored])
 
   // Apply theme
   useEffect(() => {

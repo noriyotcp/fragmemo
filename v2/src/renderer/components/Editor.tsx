@@ -1,13 +1,34 @@
-import { useEffect, useState, useCallback } from 'react'
+import { useEffect, useState, useCallback, useRef } from 'react'
 import MonacoEditor from '@monaco-editor/react'
 import type { IFragment, ISnippet, ISettings } from '../types'
 
 export function Editor({ snippetId, onUpdate, settings }: { snippetId: string; onUpdate: () => void; settings: ISettings }) {
   const [snippet, setSnippet] = useState<ISnippet | null>(null)
   const [fragments, setFragments] = useState<IFragment[]>([])
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(true)
   const [tagInput, setTagInput] = useState('')
+
   const [activeFragmentId, setActiveFragmentId] = useState<string | null>(null)
+  const activeFragmentIdRef = useRef<string | null>(null)
+  const fragmentsRef = useRef<IFragment[]>([])
+  const editorRef = useRef<any>(null)
+  const saveTimeoutRef = useRef<number | null>(null)
+  const restoredIds = useRef<Set<string>>(new Set())
+  const viewStatesRef = useRef<Record<string, any>>({}) // Store view states without re-rendering
+
+  // Sync activeFragmentId ref
+  useEffect(() => {
+    activeFragmentIdRef.current = activeFragmentId
+  }, [activeFragmentId])
+
+  // Cleanup on unmount
+  useEffect(() => {
+    return () => {
+      if (saveTimeoutRef.current) {
+        window.clearTimeout(saveTimeoutRef.current)
+      }
+    }
+  }, [])
 
   const loadData = useCallback(async () => {
     setLoading(true)
@@ -21,6 +42,7 @@ export function Editor({ snippetId, onUpdate, settings }: { snippetId: string; o
       setSnippet(currentSnippet)
 
       setFragments(fragmentsData)
+      fragmentsRef.current = fragmentsData
 
       // Restore active fragment from DB or fallback to first fragment
       if (fragmentsData.length > 0) {
@@ -31,7 +53,40 @@ export function Editor({ snippetId, onUpdate, settings }: { snippetId: string; o
     } finally {
       setLoading(false)
     }
-  }, [snippetId, activeFragmentId])
+  }, [snippetId]) // Remove activeFragmentId dependency to prevent loop
+
+  // Initialize viewStatesRef from loaded fragments
+  useEffect(() => {
+    fragments.forEach(f => {
+      if (f.viewState) {
+        viewStatesRef.current[f.id] = f.viewState
+      }
+    })
+  }, [fragments])
+
+  // Restore view state when active fragment changes (Tab switching)
+  useEffect(() => {
+    if (!activeFragmentId || !editorRef.current) return
+
+    // Check if we need to restore
+    const fragment = fragments.find(f => f.id === activeFragmentId)
+    if (fragment?.viewState && !restoredIds.current.has(fragment.id)) {
+      try {
+        // Delay to allow editor model switch to propagate?
+        // Monaco handles model switch synchronously usually, but restoring state might need a tick
+        setTimeout(() => {
+            if (activeFragmentId === fragment.id) { // Ensure likely still active
+             editorRef.current.restoreViewState(fragment.viewState)
+             restoredIds.current.add(fragment.id)
+            }
+        }, 10)
+      } catch (e) {
+        console.error('Failed to restore view state', e)
+      }
+    } else {
+        if (activeFragmentId) restoredIds.current.add(activeFragmentId)
+    }
+  }, [activeFragmentId, fragments])
 
   useEffect(() => {
     loadData()
@@ -54,6 +109,11 @@ export function Editor({ snippetId, onUpdate, settings }: { snippetId: string; o
     setFragments(newFragments)
     window.api.saveFragment(newFragments[index])
   }
+
+  // Update fragmentsRef whenever fragments change
+  useEffect(() => {
+    fragmentsRef.current = fragments
+  }, [fragments])
 
   const handleCreateFragment = async () => {
     const newFragment = {
@@ -312,6 +372,62 @@ export function Editor({ snippetId, onUpdate, settings }: { snippetId: string; o
                 ? 'vs-dark'
                 : 'vs'
             }
+            onMount={(editor) => {
+              editorRef.current = editor
+
+              const currentId = activeFragment.id
+
+              // Restore initial state if available from Ref (more reliable than state during rapid switches)
+              // If not in ref, try fragment.viewState (initial load)
+              const stateToRestore = viewStatesRef.current[currentId] || activeFragment.viewState
+
+              if (stateToRestore && !restoredIds.current.has(currentId)) {
+                try {
+                  setTimeout(() => {
+                      if (activeFragmentId === currentId && editorRef.current) {
+                        editorRef.current.restoreViewState(stateToRestore)
+                        restoredIds.current.add(currentId)
+                      }
+                  }, 0) // Immediate tick usually enough
+                } catch (e) {
+                  console.error('Failed to restore view state', e)
+                }
+              } else {
+                 if (currentId) restoredIds.current.add(currentId)
+              }
+
+              // Event listeners for saving state
+              const saveState = () => {
+                const currentId = activeFragmentIdRef.current
+                if (!editorRef.current || !currentId) return
+
+                if (saveTimeoutRef.current) clearTimeout(saveTimeoutRef.current)
+                saveTimeoutRef.current = window.setTimeout(() => {
+                   if (!editorRef.current) return
+
+                   // Get latest state
+                   const currentViewState = editorRef.current.saveViewState()
+                   if (!currentViewState) return
+
+                   // Update ref immediately
+                   viewStatesRef.current[currentId] = currentViewState
+
+                   // Find current fragment using ref to ensure freshness
+                   const currentFrag = fragmentsRef.current.find(f => f.id === currentId)
+                   if (currentFrag) {
+                      window.api.saveFragment({ ...currentFrag, viewState: currentViewState })
+                   }
+                }, 1000)
+              }
+
+              // We need fragments ref to access latest fragments inside the stable callback
+              // But onMount closure doesn't have access to future refs.
+              // BUT refs are stable objects, their .current property is mutable and readable.
+              // So we can read fragmentsRef.current inside saveState!
+
+              editor.onDidChangeCursorPosition(saveState)
+              editor.onDidScrollChange(saveState)
+            }}
             onChange={(value: string | undefined) => handleUpdateFragment(activeFragment.id, { content: value || '' })}
             options={{
               minimap: { enabled: false },

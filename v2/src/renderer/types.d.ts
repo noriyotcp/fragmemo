@@ -14,6 +14,7 @@ export interface IFragment {
   content: string
   language: string
   order: number
+  viewState?: any // Monaco ICodeEditorViewState
 }
 
 export interface ISettings {
@@ -22,6 +23,14 @@ export interface ISettings {
   editorFontSize: number
   editorFontFamily: string
   autosave: boolean
+}
+
+export interface IAppState {
+  id: string
+  activeSnippetId: string | null
+  activeFragmentId: string | null
+  sidebarWidth: number
+  windowBounds: { x: number; y: number; width: number; height: number } | null
 }
 
 export interface IAPI {
@@ -35,6 +44,8 @@ export interface IAPI {
   // Settings
   getSettings: () => Promise<ISettings>
   updateSettings: (data: Partial<ISettings>) => Promise<ISettings>
+  getAppState: () => Promise<IAppState>
+  updateAppState: (data: Partial<IAppState>) => Promise<IAppState>
 
   // Menu event listeners
   onMenuNewSnippet: (callback: () => void) => () => void

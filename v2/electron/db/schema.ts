@@ -17,6 +17,7 @@ export const fragments = sqliteTable('fragments', {
   content: text('content').notNull().default(''),
   language: text('language').notNull().default('plaintext'),
   order: integer('order').notNull().default(0),
+  viewState: text('view_state', { mode: 'json' }).$type<any>(), // JSON object of ICodeEditorViewState
 })
 
 export const settings = sqliteTable('settings', {

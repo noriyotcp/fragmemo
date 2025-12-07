@@ -61,7 +61,8 @@ export function registerSnippetHandlers() {
         content: fragment.content,
         title: fragment.title,
         language: fragment.language,
-        order: fragment.order
+        order: fragment.order,
+        viewState: fragment.viewState
       }
     })
 

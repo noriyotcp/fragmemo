@@ -1,0 +1,1 @@
+ALTER TABLE `fragments` ADD `view_state` text;

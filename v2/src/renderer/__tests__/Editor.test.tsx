@@ -101,11 +101,12 @@ describe('Editor.tsx - Fragment Management', () => {
     // Click on second fragment tab
     await user.click(screen.getByText('Fragment 2'))
 
-    // Should update snippet's activeFragmentId
+    // Should update snippet's activeFragmentId with silent flag (UI state only)
     await waitFor(() => {
       expect(mockApi.updateSnippet).toHaveBeenCalledWith(
         'snippet-1',
-        { activeFragmentId: 'fragment-2' }
+        { activeFragmentId: 'fragment-2' },
+        { silent: true }
       )
     })
   })

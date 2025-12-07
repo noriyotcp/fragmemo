@@ -28,37 +28,42 @@ export function Editor({ snippetId, onUpdate, settings }: { snippetId: string; o
     }
   }, [])
 
-  const loadData = useCallback(async () => {
-    setLoading(true)
-    try {
-      const [snippetsData, fragmentsData] = await Promise.all([
-        window.api.getSnippets(),
-        window.api.getFragments(snippetId)
-      ])
+  // Load data when snippetId changes
+  useEffect(() => {
+    const loadData = async () => {
+      setLoading(true)
+      try {
+        const [snippetsData, fragmentsData] = await Promise.all([
+          window.api.getSnippets(),
+          window.api.getFragments(snippetId)
+        ])
 
-      const currentSnippet = snippetsData.find(s => s.id === snippetId) || null
-      setSnippet(currentSnippet)
+        const currentSnippet = snippetsData.find(s => s.id === snippetId) || null
+        setSnippet(currentSnippet)
 
-      setFragments(fragmentsData)
-      fragmentsRef.current = fragmentsData
+        setFragments(fragmentsData)
+        fragmentsRef.current = fragmentsData
 
-      // Initialize viewStatesRef from loaded fragments (moved from useEffect)
-      fragmentsData.forEach(f => {
-        if (f.viewState) {
-          viewStatesRef.current[f.id] = f.viewState
+        // Initialize viewStatesRef from loaded fragments
+        fragmentsData.forEach(f => {
+          if (f.viewState) {
+            viewStatesRef.current[f.id] = f.viewState
+          }
+        })
+
+        // Restore active fragment from DB or fallback to first fragment
+        if (fragmentsData.length > 0) {
+          const savedActiveId = currentSnippet?.activeFragmentId
+          const validSavedId = savedActiveId && fragmentsData.find(f => f.id === savedActiveId)
+          setActiveFragmentId(validSavedId ? savedActiveId : fragmentsData[0].id)
         }
-      })
-
-      // Restore active fragment from DB or fallback to first fragment
-      if (fragmentsData.length > 0) {
-        const savedActiveId = currentSnippet?.activeFragmentId
-        const validSavedId = savedActiveId && fragmentsData.find(f => f.id === savedActiveId)
-        setActiveFragmentId(validSavedId ? savedActiveId : fragmentsData[0].id)
+      } finally {
+        setLoading(false)
       }
-    } finally {
-      setLoading(false)
     }
-  }, [snippetId]) // Remove activeFragmentId dependency to prevent loop
+
+    loadData()
+  }, [snippetId])
 
   // Helper function to restore view state for a fragment
   // Called from event handlers (tab clicks, keyboard shortcuts) instead of useEffect
@@ -84,10 +89,6 @@ export function Editor({ snippetId, onUpdate, settings }: { snippetId: string; o
       restoredIds.current.add(fragmentId)
     }
   }, [fragments])
-
-  useEffect(() => {
-    loadData()
-  }, [loadData])
 
   const handleUpdateSnippetTitle = (title: string) => {
     if (!snippet) return
@@ -124,9 +125,9 @@ export function Editor({ snippetId, onUpdate, settings }: { snippetId: string; o
     setFragments(newFragments)
     setActiveFragmentId(newFragment.id)
 
-    // Persist active fragment to DB
+    // Persist active fragment to DB (UI state only, don't update timestamp)
     if (snippet) {
-      window.api.updateSnippet(snippet.id, { activeFragmentId: newFragment.id })
+      window.api.updateSnippet(snippet.id, { activeFragmentId: newFragment.id }, { silent: true })
     }
 
     // Restore view state for new fragment (user action)
@@ -199,7 +200,7 @@ export function Editor({ snippetId, onUpdate, settings }: { snippetId: string; o
           const nextFragmentId = fragments[nextIndex].id
           setActiveFragmentId(nextFragmentId)
           if (snippet) {
-            window.api.updateSnippet(snippet.id, { activeFragmentId: nextFragmentId })
+            window.api.updateSnippet(snippet.id, { activeFragmentId: nextFragmentId }, { silent: true })
           }
           // Restore view state for next fragment (user action)
           restoreFragmentViewState(nextFragmentId)
@@ -215,7 +216,7 @@ export function Editor({ snippetId, onUpdate, settings }: { snippetId: string; o
           const prevFragmentId = fragments[prevIndex].id
           setActiveFragmentId(prevFragmentId)
           if (snippet) {
-            window.api.updateSnippet(snippet.id, { activeFragmentId: prevFragmentId })
+            window.api.updateSnippet(snippet.id, { activeFragmentId: prevFragmentId }, { silent: true })
           }
           // Restore view state for previous fragment (user action)
           restoreFragmentViewState(prevFragmentId)
@@ -303,7 +304,7 @@ export function Editor({ snippetId, onUpdate, settings }: { snippetId: string; o
             onClick={() => {
               setActiveFragmentId(fragment.id)
               if (snippet) {
-                window.api.updateSnippet(snippet.id, { activeFragmentId: fragment.id })
+                window.api.updateSnippet(snippet.id, { activeFragmentId: fragment.id }, { silent: true })
               }
               // Restore view state for clicked fragment (user action)
               restoreFragmentViewState(fragment.id)

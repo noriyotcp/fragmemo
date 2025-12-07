@@ -36,7 +36,7 @@ export interface IAppState {
 export interface IAPI {
   getSnippets: () => Promise<ISnippet[]>
   createSnippet: (title: string) => Promise<ISnippet>
-  updateSnippet: (id: string, data: Partial<ISnippet>) => Promise<ISnippet>
+  updateSnippet: (id: string, data: Partial<ISnippet>, options?: { silent?: boolean }) => Promise<ISnippet>
   deleteSnippet: (id: string) => Promise<string>
   getFragments: (snippetId: string) => Promise<IFragment[]>
   saveFragment: (fragment: IFragment) => Promise<IFragment>

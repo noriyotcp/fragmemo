@@ -36,8 +36,10 @@ export function registerSnippetHandlers() {
     return newSnippet
   })
 
-  ipcMain.handle('update-snippet', async (_, id: string, data: Partial<typeof snippets.$inferInsert>) => {
-    await db.update(snippets).set({ ...data, updatedAt: new Date() }).where(eq(snippets.id, id))
+  ipcMain.handle('update-snippet', async (_, id: string, data: Partial<typeof snippets.$inferInsert>, options: { silent?: boolean } = {}) => {
+    // Skip timestamp update if silent flag is set (e.g., UI state changes like tab switching)
+    const updateData = options.silent ? data : { ...data, updatedAt: new Date() }
+    await db.update(snippets).set(updateData).where(eq(snippets.id, id))
     return db.select().from(snippets).where(eq(snippets.id, id)).get()
   })
 

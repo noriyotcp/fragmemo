@@ -16,10 +16,8 @@ export function Editor({ snippetId, onUpdate, settings }: { snippetId: string; o
   const restoredIds = useRef<Set<string>>(new Set())
   const viewStatesRef = useRef<Record<string, any>>({}) // Store view states without re-rendering
 
-  // Sync activeFragmentId ref
-  useEffect(() => {
-    activeFragmentIdRef.current = activeFragmentId
-  }, [activeFragmentId])
+  // Sync activeFragmentId ref - direct assignment is safe during render
+  activeFragmentIdRef.current = activeFragmentId
 
   // Cleanup on unmount
   useEffect(() => {
@@ -30,67 +28,67 @@ export function Editor({ snippetId, onUpdate, settings }: { snippetId: string; o
     }
   }, [])
 
-  const loadData = useCallback(async () => {
-    setLoading(true)
-    try {
-      const [snippetsData, fragmentsData] = await Promise.all([
-        window.api.getSnippets(),
-        window.api.getFragments(snippetId)
-      ])
-
-      const currentSnippet = snippetsData.find(s => s.id === snippetId) || null
-      setSnippet(currentSnippet)
-
-      setFragments(fragmentsData)
-      fragmentsRef.current = fragmentsData
-
-      // Restore active fragment from DB or fallback to first fragment
-      if (fragmentsData.length > 0) {
-        const savedActiveId = currentSnippet?.activeFragmentId
-        const validSavedId = savedActiveId && fragmentsData.find(f => f.id === savedActiveId)
-        setActiveFragmentId(validSavedId ? savedActiveId : fragmentsData[0].id)
-      }
-    } finally {
-      setLoading(false)
-    }
-  }, [snippetId]) // Remove activeFragmentId dependency to prevent loop
-
-  // Initialize viewStatesRef from loaded fragments
+  // Load data when snippetId changes
   useEffect(() => {
-    fragments.forEach(f => {
-      if (f.viewState) {
-        viewStatesRef.current[f.id] = f.viewState
-      }
-    })
-  }, [fragments])
-
-  // Restore view state when active fragment changes (Tab switching)
-  useEffect(() => {
-    if (!activeFragmentId || !editorRef.current) return
-
-    // Check if we need to restore
-    const fragment = fragments.find(f => f.id === activeFragmentId)
-    if (fragment?.viewState && !restoredIds.current.has(fragment.id)) {
+    const loadData = async () => {
+      setLoading(true)
       try {
-        // Delay to allow editor model switch to propagate?
-        // Monaco handles model switch synchronously usually, but restoring state might need a tick
+        const [snippetsData, fragmentsData] = await Promise.all([
+          window.api.getSnippets(),
+          window.api.getFragments(snippetId)
+        ])
+
+        const currentSnippet = snippetsData.find(s => s.id === snippetId) || null
+        setSnippet(currentSnippet)
+
+        setFragments(fragmentsData)
+        fragmentsRef.current = fragmentsData
+
+        // Initialize viewStatesRef from loaded fragments
+        fragmentsData.forEach(f => {
+          if (f.viewState) {
+            viewStatesRef.current[f.id] = f.viewState
+          }
+        })
+
+        // Restore active fragment from DB or fallback to first fragment
+        if (fragmentsData.length > 0) {
+          const savedActiveId = currentSnippet?.activeFragmentId
+          const validSavedId = savedActiveId && fragmentsData.find(f => f.id === savedActiveId)
+          setActiveFragmentId(validSavedId ? savedActiveId : fragmentsData[0].id)
+        }
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    loadData()
+  }, [snippetId])
+
+  // Helper function to restore view state for a fragment
+  // Called from event handlers (tab clicks, keyboard shortcuts) instead of useEffect
+  const restoreFragmentViewState = useCallback((fragmentId: string) => {
+    if (!editorRef.current) return
+
+    const fragment = fragments.find(f => f.id === fragmentId)
+    const viewState = viewStatesRef.current[fragmentId] || fragment?.viewState
+
+    if (viewState && !restoredIds.current.has(fragmentId)) {
+      try {
+        // Small delay to allow Monaco editor model switch
         setTimeout(() => {
-            if (activeFragmentId === fragment.id) { // Ensure likely still active
-             editorRef.current.restoreViewState(fragment.viewState)
-             restoredIds.current.add(fragment.id)
-            }
+          if (activeFragmentIdRef.current === fragmentId && editorRef.current) {
+            editorRef.current.restoreViewState(viewState)
+            restoredIds.current.add(fragmentId)
+          }
         }, 10)
       } catch (e) {
         console.error('Failed to restore view state', e)
       }
-    } else {
-        if (activeFragmentId) restoredIds.current.add(activeFragmentId)
+    } else if (fragmentId) {
+      restoredIds.current.add(fragmentId)
     }
-  }, [activeFragmentId, fragments])
-
-  useEffect(() => {
-    loadData()
-  }, [loadData])
+  }, [fragments])
 
   const handleUpdateSnippetTitle = (title: string) => {
     if (!snippet) return
@@ -110,10 +108,8 @@ export function Editor({ snippetId, onUpdate, settings }: { snippetId: string; o
     window.api.saveFragment(newFragments[index])
   }
 
-  // Update fragmentsRef whenever fragments change
-  useEffect(() => {
-    fragmentsRef.current = fragments
-  }, [fragments])
+  // Update fragmentsRef - direct assignment is safe during render
+  fragmentsRef.current = fragments
 
   const handleCreateFragment = async () => {
     const newFragment = {
@@ -129,10 +125,13 @@ export function Editor({ snippetId, onUpdate, settings }: { snippetId: string; o
     setFragments(newFragments)
     setActiveFragmentId(newFragment.id)
 
-    // Persist active fragment to DB
+    // Persist active fragment to DB (UI state only, don't update timestamp)
     if (snippet) {
-      window.api.updateSnippet(snippet.id, { activeFragmentId: newFragment.id })
+      window.api.updateSnippet(snippet.id, { activeFragmentId: newFragment.id }, { silent: true })
     }
+
+    // Restore view state for new fragment (user action)
+    restoreFragmentViewState(newFragment.id)
   }
 
   const handleDeleteFragment = async (id: string, e: React.MouseEvent) => {
@@ -198,10 +197,13 @@ export function Editor({ snippetId, onUpdate, settings }: { snippetId: string; o
         const currentIndex = fragments.findIndex(f => f.id === activeFragmentId)
         if (currentIndex !== -1 && fragments.length > 1) {
           const nextIndex = (currentIndex + 1) % fragments.length
-          setActiveFragmentId(fragments[nextIndex].id)
+          const nextFragmentId = fragments[nextIndex].id
+          setActiveFragmentId(nextFragmentId)
           if (snippet) {
-            window.api.updateSnippet(snippet.id, { activeFragmentId: fragments[nextIndex].id })
+            window.api.updateSnippet(snippet.id, { activeFragmentId: nextFragmentId }, { silent: true })
           }
+          // Restore view state for next fragment (user action)
+          restoreFragmentViewState(nextFragmentId)
         }
       }
 
@@ -211,10 +213,13 @@ export function Editor({ snippetId, onUpdate, settings }: { snippetId: string; o
         const currentIndex = fragments.findIndex(f => f.id === activeFragmentId)
         if (currentIndex !== -1 && fragments.length > 1) {
           const prevIndex = (currentIndex - 1 + fragments.length) % fragments.length
-          setActiveFragmentId(fragments[prevIndex].id)
+          const prevFragmentId = fragments[prevIndex].id
+          setActiveFragmentId(prevFragmentId)
           if (snippet) {
-            window.api.updateSnippet(snippet.id, { activeFragmentId: fragments[prevIndex].id })
+            window.api.updateSnippet(snippet.id, { activeFragmentId: prevFragmentId }, { silent: true })
           }
+          // Restore view state for previous fragment (user action)
+          restoreFragmentViewState(prevFragmentId)
         }
       }
     }
@@ -299,8 +304,10 @@ export function Editor({ snippetId, onUpdate, settings }: { snippetId: string; o
             onClick={() => {
               setActiveFragmentId(fragment.id)
               if (snippet) {
-                window.api.updateSnippet(snippet.id, { activeFragmentId: fragment.id })
+                window.api.updateSnippet(snippet.id, { activeFragmentId: fragment.id }, { silent: true })
               }
+              // Restore view state for clicked fragment (user action)
+              restoreFragmentViewState(fragment.id)
             }}
               className={`
                 group flex items-center gap-2 px-3 py-2 text-sm cursor-pointer border-t border-l border-r rounded-t-md select-none min-w-[120px] max-w-[200px] transition-colors

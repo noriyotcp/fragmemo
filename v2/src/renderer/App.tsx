@@ -73,11 +73,11 @@ function App(): JSX.Element {
 
   // Helper function to persist active snippet ID
   // Called from event handlers instead of useEffect (React best practice)
-  const persistActiveSnippet = useCallback((snippetId: string | null) => {
+  const persistActiveSnippet = (snippetId: string | null) => {
     if (isRestored) {
       window.api.updateAppState({ activeSnippetId: snippetId })
     }
-  }, [isRestored])
+  }
 
   // Apply theme
   useEffect(() => {

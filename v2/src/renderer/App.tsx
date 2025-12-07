@@ -13,10 +13,9 @@ function App(): JSX.Element {
   const [isRestored, setIsRestored] = useState(false)
 
   // Use ref to access latest search query in callbacks without dependency issues
+  // Direct assignment is safe during render (ref mutations don't trigger re-renders)
   const searchQueryRef = useRef(searchQuery)
-  useEffect(() => {
-    searchQueryRef.current = searchQuery
-  }, [searchQuery])
+  searchQueryRef.current = searchQuery
 
   const loadSnippets = useCallback(async () => {
     const data = await window.api.getSnippets()
@@ -72,12 +71,13 @@ function App(): JSX.Element {
     loadSettings()
   }, [loadSnippets, loadSettings])
 
-  // Persist activeSnippetId
-  useEffect(() => {
+  // Helper function to persist active snippet ID
+  // Called from event handlers instead of useEffect (React best practice)
+  const persistActiveSnippet = useCallback((snippetId: string | null) => {
     if (isRestored) {
-      window.api.updateAppState({ activeSnippetId })
+      window.api.updateAppState({ activeSnippetId: snippetId })
     }
-  }, [activeSnippetId, isRestored])
+  }, [isRestored])
 
   // Apply theme
   useEffect(() => {
@@ -162,6 +162,8 @@ function App(): JSX.Element {
     const newSnippet = await window.api.createSnippet('Untitled Snippet')
     await loadSnippets()
     setActiveSnippetId(newSnippet.id)
+    // Persist immediately after state change (user action)
+    persistActiveSnippet(newSnippet.id)
   }
 
   const handleDeleteSnippet = async (id: string) => {
@@ -170,6 +172,8 @@ function App(): JSX.Element {
     await loadSnippets()
     if (activeSnippetId === id) {
       setActiveSnippetId(null)
+      // Persist the cleared state (user action)
+      persistActiveSnippet(null)
     }
   }
 
@@ -180,7 +184,11 @@ function App(): JSX.Element {
       <Sidebar
         snippets={filteredSnippets}
         activeSnippetId={activeSnippetId}
-        onSelectSnippet={setActiveSnippetId}
+        onSelectSnippet={(id) => {
+          setActiveSnippetId(id)
+          // Persist selection (user action)
+          persistActiveSnippet(id)
+        }}
         onCreateSnippet={handleCreateSnippet}
         onDeleteSnippet={handleDeleteSnippet}
         searchQuery={searchQuery}

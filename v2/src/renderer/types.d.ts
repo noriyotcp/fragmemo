@@ -41,6 +41,7 @@ export interface IAPI {
   getFragments: (snippetId: string) => Promise<IFragment[]>
   saveFragment: (fragment: IFragment) => Promise<IFragment>
   deleteFragment: (id: string) => Promise<string>
+  updateFragmentState: (fragmentId: string, viewState: any) => Promise<void>
   // Settings
   getSettings: () => Promise<ISettings>
   updateSettings: (data: Partial<ISettings>) => Promise<ISettings>

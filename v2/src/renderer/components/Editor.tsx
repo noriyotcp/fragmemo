@@ -401,7 +401,10 @@ export function Editor({ snippetId, onUpdate, settings }: { snippetId: string; o
                 const currentId = activeFragmentIdRef.current
                 if (!editorRef.current || !currentId) return
 
-                if (saveTimeoutRef.current) clearTimeout(saveTimeoutRef.current)
+                if (saveTimeoutRef.current) {
+                    window.clearTimeout(saveTimeoutRef.current)
+                }
+
                 saveTimeoutRef.current = window.setTimeout(() => {
                    if (!editorRef.current) return
 
@@ -412,18 +415,10 @@ export function Editor({ snippetId, onUpdate, settings }: { snippetId: string; o
                    // Update ref immediately
                    viewStatesRef.current[currentId] = currentViewState
 
-                   // Find current fragment using ref to ensure freshness
-                   const currentFrag = fragmentsRef.current.find(f => f.id === currentId)
-                   if (currentFrag) {
-                      window.api.saveFragment({ ...currentFrag, viewState: currentViewState })
-                   }
-                }, 1000)
+                   // Persist only view state to DB using new IPC
+                   window.api.updateFragmentState(currentId, currentViewState)
+                }, 500)
               }
-
-              // We need fragments ref to access latest fragments inside the stable callback
-              // But onMount closure doesn't have access to future refs.
-              // BUT refs are stable objects, their .current property is mutable and readable.
-              // So we can read fragmentsRef.current inside saveState!
 
               editor.onDidChangeCursorPosition(saveState)
               editor.onDidScrollChange(saveState)

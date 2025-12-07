@@ -1,6 +1,6 @@
 import { ipcMain } from 'electron'
 import { db } from '../db'
-import { snippets, fragments } from '../db/schema'
+import { snippets, fragments, fragmentStates } from '../db/schema'
 import { eq, desc } from 'drizzle-orm'
 import { randomUUID } from 'crypto'
 
@@ -48,7 +48,21 @@ export function registerSnippetHandlers() {
 
   // Fragments
   ipcMain.handle('get-fragments', async (_, snippetId: string) => {
-    return db.select().from(fragments).where(eq(fragments.snippetId, snippetId)).orderBy(fragments.order)
+    const result = await db.select({
+      id: fragments.id,
+      snippetId: fragments.snippetId,
+      title: fragments.title,
+      content: fragments.content,
+      language: fragments.language,
+      order: fragments.order,
+      viewState: fragmentStates.viewState
+    })
+    .from(fragments)
+    .leftJoin(fragmentStates, eq(fragments.id, fragmentStates.fragmentId))
+    .where(eq(fragments.snippetId, snippetId))
+    .orderBy(fragments.order)
+
+    return result
   })
 
   ipcMain.handle('save-fragment', async (_, fragment: typeof fragments.$inferInsert) => {
@@ -62,14 +76,23 @@ export function registerSnippetHandlers() {
         title: fragment.title,
         language: fragment.language,
         order: fragment.order,
-        viewState: fragment.viewState
+        updatedAt: now
       }
     })
 
-    // Update parent snippet's updatedAt
+    // Update parent snippet's updatedAt to sync
     await db.update(snippets).set({ updatedAt: now }).where(eq(snippets.id, fragment.snippetId))
 
     return fragment
+  })
+
+  ipcMain.handle('update-fragment-state', async (_, fragmentId: string, viewState: any) => {
+    await db.insert(fragmentStates)
+      .values({ fragmentId, viewState, updatedAt: new Date() })
+      .onConflictDoUpdate({
+        target: fragmentStates.fragmentId,
+        set: { viewState, updatedAt: new Date() }
+      })
   })
 
   ipcMain.handle('delete-fragment', async (_, id: string) => {

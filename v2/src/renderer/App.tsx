@@ -4,7 +4,7 @@ import { Editor } from './components/Editor'
 import { Settings } from './components/Settings'
 import type { ISnippet, ISettings } from './types'
 
-function App(): JSX.Element {
+function App() {
   const [activeSnippetId, setActiveSnippetId] = useState<string | null>(null)
   const [snippets, setSnippets] = useState<ISnippet[]>([])
   const [searchQuery, setSearchQuery] = useState('')

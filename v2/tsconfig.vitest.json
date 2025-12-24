@@ -1,10 +1,10 @@
 {
-  "extends": "./tsconfig.json",
+  "extends": "./tsconfig.app.json",
   "compilerOptions": {
-    "moduleResolution": "bundler",
     "types": [
       "vitest/globals",
-      "node"
+      "node",
+      "react"
     ]
   },
   "include": [

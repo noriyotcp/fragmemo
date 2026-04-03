@@ -94,3 +94,6 @@ out/
 
 # Electron Builder output
 dist/
+
+.claude/
+

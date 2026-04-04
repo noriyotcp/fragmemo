@@ -1,0 +1,1 @@
+ALTER TABLE `snippets` ADD `active_fragment_id` text;

@@ -1,0 +1,16 @@
+{
+  "extends": "./tsconfig.app.json",
+  "compilerOptions": {
+    "types": [
+      "vitest/globals",
+      "node",
+      "react"
+    ]
+  },
+  "include": [
+    "vitest.config.ts",
+    "src/renderer/**/*.test.ts",
+    "src/renderer/**/*.test.tsx",
+    "src/renderer/__tests__/**/*"
+  ]
+}

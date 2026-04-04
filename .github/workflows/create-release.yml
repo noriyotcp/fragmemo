@@ -1,16 +1,9 @@
+# Disabled until electron-builder is configured for v2
+# See: Phase 4 in migration plan
 name: Create Release
 
 on:
   workflow_dispatch:
-    branches-ignore:
-      - "**"
-    tags:
-      - "v*"
-  push:
-    branches-ignore:
-      - "**"
-    tags:
-      - "v*"
 
 jobs:
   release-for-macos:
@@ -22,25 +15,14 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [18.x]
-        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+        node-version: [22.x]
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
-          cache: "yarn"
-      - run: yarn install --frozen-lockfile
-      - name: "Build the app for Mac (Intel)"
-        run: yarn app:build:mac:x64
-      - name: "Build the app for Mac (Arm)"
-        run: yarn app:build:mac:arm64
-      - name: Create release
-        uses: ncipollo/release-action@v1.10.0
-        with:
-          artifacts: "dist/fragmemo-*.dmg,dist/fragmemo-*-arm64.dmg,dist/fragmemo-*-mac.zip,dist/fragmemo-*-arm64-mac.zip"
-          draft: true
-          generateReleaseNotes: true
-          token: ${{ secrets.GITHUB_TOKEN }}
+          cache: "npm"
+      - run: npm ci
+      - run: echo "TODO - configure electron-builder and add build/release steps"

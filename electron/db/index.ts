@@ -27,3 +27,8 @@ const sqlite = new Database(dbPath, { nativeBinding: bindingPath })
 export const db = drizzle(sqlite, { schema })
 
 console.log('Database initialized at:', dbPath)
+
+export function closeDatabase() {
+  sqlite.close()
+  console.log('Database closed')
+}

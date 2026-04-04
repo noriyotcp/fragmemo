@@ -1,7 +1,7 @@
 import { app, BrowserWindow, Menu } from 'electron'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
-import { db } from './db'
+import { closeDatabase, db } from './db'
 import { appState } from './db/schema'
 import { eq } from 'drizzle-orm'
 
@@ -177,6 +177,10 @@ app.on('activate', () => {
   if (BrowserWindow.getAllWindows().length === 0) {
     createWindow()
   }
+})
+
+app.on('will-quit', () => {
+  closeDatabase()
 })
 
 app.whenReady().then(async () => {

@@ -52,11 +52,11 @@
   },
   "dependencies": {
     "@monaco-editor/react": "^4.7.0",
-    "better-sqlite3": "^12.4.5",
-    "drizzle-orm": "^0.44.7",
+    "better-sqlite3": "^12.8.0",
+    "drizzle-orm": "^0.45.2",
     "monaco-editor": "^0.55.1",
-    "react": "^19.2.0",
-    "react-dom": "^19.2.0"
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4"
   },
   "devDependencies": {
     "@electron/rebuild": "^4.0.1",
@@ -66,7 +66,7 @@
     "@testing-library/user-event": "^14.6.1",
     "@types/better-sqlite3": "^7.6.13",
     "@types/node": "^24.10.1",
-    "@types/react": "^19.2.5",
+    "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^5.1.1",
     "@vitest/ui": "^3.2.4",

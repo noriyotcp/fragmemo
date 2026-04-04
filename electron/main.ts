@@ -1,6 +1,9 @@
 import { app, BrowserWindow, Menu } from 'electron'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
+import { db } from './db'
+import { appState } from './db/schema'
+import { eq } from 'drizzle-orm'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
@@ -103,14 +106,45 @@ function createApplicationMenu(mainWindow: BrowserWindow) {
   Menu.setApplicationMenu(menu)
 }
 
+function loadWindowBounds(): { x: number; y: number; width: number; height: number } | undefined {
+  const row = db.select().from(appState).where(eq(appState.id, 'default')).get()
+  return row?.windowBounds ?? undefined
+}
+
+function saveWindowBounds(bounds: { x: number; y: number; width: number; height: number }) {
+  db.insert(appState)
+    .values({ id: 'default', windowBounds: bounds })
+    .onConflictDoUpdate({
+      target: appState.id,
+      set: { windowBounds: bounds },
+    })
+    .run()
+}
+
 function createWindow() {
+  const savedBounds = loadWindowBounds()
+
   win = new BrowserWindow({
+    ...(savedBounds ?? { width: 800, height: 600 }),
     icon: path.join(process.env.VITE_PUBLIC || '', 'electron-vite.svg'),
     webPreferences: {
       preload: path.join(__dirname, '../preload/index.mjs'),
       sandbox: false,
     },
   })
+
+  // Save window bounds on resize and move
+  let boundsTimer: ReturnType<typeof setTimeout> | null = null
+  const persistBounds = () => {
+    if (boundsTimer) clearTimeout(boundsTimer)
+    boundsTimer = setTimeout(() => {
+      if (win && !win.isDestroyed()) {
+        saveWindowBounds(win.getBounds())
+      }
+    }, 300)
+  }
+  win.on('resize', persistBounds)
+  win.on('move', persistBounds)
 
   // Test active push message to Renderer-process.
   win.webContents.on('did-finish-load', () => {

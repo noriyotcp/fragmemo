@@ -88,7 +88,7 @@ export function registerSnippetHandlers() {
     return fragment
   })
 
-  ipcMain.handle('update-fragment-state', async (_, fragmentId: string, viewState: any) => {
+  ipcMain.handle('update-fragment-state', async (_, fragmentId: string, viewState: Record<string, unknown>) => {
     await db.insert(fragmentStates)
       .values({ fragmentId, viewState, updatedAt: new Date() })
       .onConflictDoUpdate({

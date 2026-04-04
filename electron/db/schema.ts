@@ -22,7 +22,7 @@ export const fragments = sqliteTable('fragments', {
 
 export const fragmentStates = sqliteTable('fragment_states', {
   fragmentId: text('fragment_id').primaryKey().references(() => fragments.id, { onDelete: 'cascade' }),
-  viewState: text('view_state', { mode: 'json' }).$type<any>(), // JSON object of ICodeEditorViewState
+  viewState: text('view_state', { mode: 'json' }).$type<Record<string, unknown>>(), // JSON object of ICodeEditorViewState
   updatedAt: integer('updated_at', { mode: 'timestamp' }).notNull().default(sql`(unixepoch())`),
 })
 

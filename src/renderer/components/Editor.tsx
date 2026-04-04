@@ -11,10 +11,10 @@ export function Editor({ snippetId, onUpdate, settings }: { snippetId: string; o
   const [activeFragmentId, setActiveFragmentId] = useState<string | null>(null)
   const activeFragmentIdRef = useRef<string | null>(null)
   const fragmentsRef = useRef<IFragment[]>([])
-  const editorRef = useRef<any>(null)
+  const editorRef = useRef<import('monaco-editor').editor.IStandaloneCodeEditor | null>(null)
   const saveTimeoutRef = useRef<number | null>(null)
   const restoredIds = useRef<Set<string>>(new Set())
-  const viewStatesRef = useRef<Record<string, any>>({}) // Store view states without re-rendering
+  const viewStatesRef = useRef<Record<string, unknown>>({}) // Store view states without re-rendering
 
   // Sync activeFragmentId ref - direct assignment is safe during render
   activeFragmentIdRef.current = activeFragmentId

@@ -14,7 +14,7 @@ export interface IFragment {
   content: string
   language: string
   order: number
-  viewState?: any // Monaco ICodeEditorViewState
+  viewState?: unknown // Monaco ICodeEditorViewState
 }
 
 export interface ISettings {
@@ -41,7 +41,7 @@ export interface IAPI {
   getFragments: (snippetId: string) => Promise<IFragment[]>
   saveFragment: (fragment: IFragment) => Promise<IFragment>
   deleteFragment: (id: string) => Promise<string>
-  updateFragmentState: (fragmentId: string, viewState: any) => Promise<void>
+  updateFragmentState: (fragmentId: string, viewState: unknown) => Promise<void>
   // Settings
   getSettings: () => Promise<ISettings>
   updateSettings: (data: Partial<ISettings>) => Promise<ISettings>

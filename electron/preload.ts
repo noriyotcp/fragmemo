@@ -8,7 +8,7 @@ contextBridge.exposeInMainWorld('api', {
   getFragments: (snippetId: string) => ipcRenderer.invoke('get-fragments', snippetId),
   saveFragment: (fragment: unknown) => ipcRenderer.invoke('save-fragment', fragment),
   deleteFragment: (id: string) => ipcRenderer.invoke('delete-fragment', id),
-  updateFragmentState: (fragmentId: string, viewState: any) => ipcRenderer.invoke('update-fragment-state', fragmentId, viewState),
+  updateFragmentState: (fragmentId: string, viewState: unknown) => ipcRenderer.invoke('update-fragment-state', fragmentId, viewState),
 
   // Settings
   getSettings: () => ipcRenderer.invoke('get-settings'),

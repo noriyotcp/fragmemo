@@ -6,7 +6,7 @@ import { mockApi } from './setup'
 
 // Mock Monaco Editor
 vi.mock('@monaco-editor/react', () => ({
-  default: ({ onChange, value }: any) => {
+  default: ({ onChange, value }: { onChange?: (value: string | undefined) => void; value?: string }) => {
     return (
       <div data-testid="monaco-editor">
         <textarea

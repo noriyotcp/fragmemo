@@ -9,6 +9,10 @@ updates:
         dependency-type: "development"
       production-dependencies:
         dependency-type: "production"
+    ignore:
+      # electron-vite 5.x requires vite ^5 || ^6 || ^7
+      - dependency-name: "vite"
+        versions: [">=8"]
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:

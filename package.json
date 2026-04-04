@@ -1,7 +1,14 @@
 {
-  "name": "v2",
+  "name": "fragmemo",
+  "productName": "fragmemo",
   "private": true,
-  "version": "0.0.0",
+  "version": "2.0.0",
+  "description": "Snippet tool",
+  "author": {
+    "name": "noriyotcp",
+    "email": "noriyo.akita@gmail.com"
+  },
+  "license": "MIT",
   "main": "./out/main/index.js",
   "type": "module",
   "scripts": {

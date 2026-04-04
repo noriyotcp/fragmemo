@@ -10,11 +10,16 @@ const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 
 const dbPath = path.join(app.getPath('userData'), 'fragmemo.db')
-// __dirname is out/main or out/main/chunks
-// We need to find out/native
-// Split by 'out/main' to get the root path
-const rootDir = __dirname.split(`${path.sep}out${path.sep}main`)[0]
-const bindingPath = path.join(rootDir, 'out', 'native', path.basename(import.meta.env.VITE_BETTER_SQLITE3_BINDING))
+
+// Resolve native binding path for dev vs packaged
+let bindingPath: string
+if (app.isPackaged) {
+  bindingPath = path.join(process.resourcesPath, 'native', 'better_sqlite3.node')
+} else {
+  // __dirname is out/main or out/main/chunks — split to find project root
+  const rootDir = __dirname.split(`${path.sep}out${path.sep}main`)[0]
+  bindingPath = path.join(rootDir, 'out', 'native', path.basename(import.meta.env.VITE_BETTER_SQLITE3_BINDING))
+}
 
 // Use nativeBinding option to specify the path to better_sqlite3.node
 const sqlite = new Database(dbPath, { nativeBinding: bindingPath })

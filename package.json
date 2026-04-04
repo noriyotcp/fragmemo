@@ -23,7 +23,32 @@
     "postinstall": "npx electron-rebuild",
     "test": "vitest",
     "test:ui": "vitest --ui",
-    "test:run": "vitest run"
+    "test:run": "vitest run",
+    "app:build": "electron-vite build && electron-builder",
+    "app:build:mac:x64": "electron-vite build && electron-builder --mac --x64",
+    "app:build:mac:arm64": "electron-vite build && electron-builder --mac --arm64"
+  },
+  "build": {
+    "appId": "com.electron.fragmemo",
+    "productName": "fragmemo",
+    "copyright": "Copyright (c) noriyotcp",
+    "mac": {
+      "category": "public.app-category.utilities",
+      "icon": "icons/icon.png",
+      "target": [
+        { "target": "dmg", "arch": ["x64", "arm64"] }
+      ]
+    },
+    "files": [
+      "out/**/*"
+    ],
+    "extraResources": [
+      { "from": "drizzle", "to": "drizzle" },
+      { "from": "out/native", "to": "native" }
+    ],
+    "directories": {
+      "output": "release"
+    }
   },
   "dependencies": {
     "@monaco-editor/react": "^4.7.0",

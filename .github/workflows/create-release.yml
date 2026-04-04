@@ -1,12 +1,13 @@
-# Disabled until electron-builder is configured for v2
-# See: Phase 4 in migration plan
 name: Create Release
 
 on:
   workflow_dispatch:
+  push:
+    tags:
+      - "v*"
 
 jobs:
-  release-for-macos:
+  build-macos:
     runs-on: macos-latest
     permissions:
       contents: write
@@ -15,14 +16,44 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [22.x]
+        arch: [x64, arm64]
 
     steps:
       - uses: actions/checkout@v4
-      - name: Use Node.js ${{ matrix.node-version }}
+      - name: Use Node.js 22.x
         uses: actions/setup-node@v4
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version: 22.x
           cache: "npm"
       - run: npm ci
-      - run: echo "TODO - configure electron-builder and add build/release steps"
+      - name: Rebuild native modules for ${{ matrix.arch }}
+        run: npx electron-rebuild --arch ${{ matrix.arch }}
+      - name: Build app for Mac (${{ matrix.arch }})
+        run: npm run app:build:mac:${{ matrix.arch }}
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: macos-${{ matrix.arch }}
+          path: |
+            release/fragmemo-*.dmg
+            release/fragmemo-*-mac.zip
+
+  create-release:
+    needs: build-macos
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+          merge-multiple: true
+      - name: Create release
+        uses: ncipollo/release-action@v1
+        with:
+          artifacts: "artifacts/*"
+          draft: true
+          generateReleaseNotes: true
+          token: ${{ secrets.GITHUB_TOKEN }}

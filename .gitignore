@@ -28,6 +28,9 @@ out/
 dist-electron/
 dist-native/
 
+# electron-builder output
+release/
+
 # Database files (generated locally)
 *.db
 *.db-shm

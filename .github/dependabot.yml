@@ -49,6 +49,10 @@ updates:
           - "@testing-library/*"
           - "jsdom"
           - "@types/*"
+          - "tailwindcss"
+          - "@tailwindcss/*"
+          - "autoprefixer"
+          - "postcss"
     ignore:
       # electron-vite 5.x requires vite ^5 || ^6 || ^7
       - dependency-name: "vite"

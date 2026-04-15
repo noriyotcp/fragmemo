@@ -5,10 +5,50 @@ updates:
     schedule:
       interval: "weekly"
     groups:
-      dev-dependencies:
-        dependency-type: "development"
       production-dependencies:
         dependency-type: "production"
+      # vite/electron 系は互いに peer dependency を持つため一緒に管理
+      dev-build:
+        patterns:
+          - "vite"
+          - "electron*"
+          - "@vitejs/*"
+          - "electron-vite"
+      # eslint 系は eslint-plugin-react-hooks との peer dependency 互換を一緒に確認
+      dev-tooling:
+        patterns:
+          - "eslint*"
+          - "@eslint/*"
+          - "typescript-eslint"
+          - "globals"
+      # vitest/testing 系
+      dev-testing:
+        patterns:
+          - "vitest"
+          - "@vitest/*"
+          - "@testing-library/*"
+          - "jsdom"
+      # 型定義（breaking change がほぼない）
+      dev-types:
+        patterns:
+          - "@types/*"
+      # 上記に含まれない残りの dev dependencies
+      dev-misc:
+        dependency-type: "development"
+        exclude-patterns:
+          - "vite"
+          - "electron*"
+          - "@vitejs/*"
+          - "electron-vite"
+          - "eslint*"
+          - "@eslint/*"
+          - "typescript-eslint"
+          - "globals"
+          - "vitest"
+          - "@vitest/*"
+          - "@testing-library/*"
+          - "jsdom"
+          - "@types/*"
     ignore:
       # electron-vite 5.x requires vite ^5 || ^6 || ^7
       - dependency-name: "vite"
@@ -16,6 +56,11 @@ updates:
       # @vitejs/plugin-react 6.x requires vite ^8, blocked until electron-vite supports vite 8
       - dependency-name: "@vitejs/plugin-react"
         versions: [">=6"]
+      # eslint-plugin-react-hooks 7.x supports eslint up to ^9 only
+      - dependency-name: "eslint"
+        versions: [">=10"]
+      - dependency-name: "@eslint/js"
+        versions: [">=10"]
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:

@@ -13,6 +13,9 @@ updates:
       # electron-vite 5.x requires vite ^5 || ^6 || ^7
       - dependency-name: "vite"
         versions: [">=8"]
+      # @vitejs/plugin-react 6.x requires vite ^8, blocked until electron-vite supports vite 8
+      - dependency-name: "@vitejs/plugin-react"
+        versions: [">=6"]
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:

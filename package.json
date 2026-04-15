@@ -36,15 +36,27 @@
       "category": "public.app-category.utilities",
       "icon": "icons/icon.png",
       "target": [
-        { "target": "dmg", "arch": ["x64", "arm64"] }
+        {
+          "target": "dmg",
+          "arch": [
+            "x64",
+            "arm64"
+          ]
+        }
       ]
     },
     "files": [
       "out/**/*"
     ],
     "extraResources": [
-      { "from": "drizzle", "to": "drizzle" },
-      { "from": "out/native", "to": "native" }
+      {
+        "from": "drizzle",
+        "to": "drizzle"
+      },
+      {
+        "from": "out/native",
+        "to": "native"
+      }
     ],
     "directories": {
       "output": "release"
@@ -61,6 +73,7 @@
   "devDependencies": {
     "@electron/rebuild": "^4.0.3",
     "@eslint/js": "^9.39.4",
+    "@tailwindcss/postcss": "^4.2.2",
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.2",
     "@testing-library/user-event": "^14.6.1",

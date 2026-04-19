@@ -113,7 +113,7 @@ export function Editor({ snippetId, onUpdate, settings }: { snippetId: string; o
     fragmentsRef.current = fragments
   }, [fragments])
 
-  const handleCreateFragment = async () => {
+  const handleCreateFragment = useCallback(async () => {
     const newFragment = {
       id: crypto.randomUUID(),
       snippetId,
@@ -134,7 +134,7 @@ export function Editor({ snippetId, onUpdate, settings }: { snippetId: string; o
 
     // Restore view state for new fragment (user action)
     restoreFragmentViewState(newFragment.id)
-  }
+  }, [snippetId, fragments, snippet, restoreFragmentViewState])
 
   const handleDeleteFragment = async (id: string, e: React.MouseEvent) => {
     e.stopPropagation()
@@ -232,7 +232,7 @@ export function Editor({ snippetId, onUpdate, settings }: { snippetId: string; o
       unsubscribeCloseTab()
       window.removeEventListener('keydown', handleKeyDown)
     }
-  }, [activeFragmentId, fragments, snippet])
+  }, [activeFragmentId, fragments, snippet, handleCreateFragment, onUpdate, restoreFragmentViewState])
 
   const activeFragment = fragments.find(f => f.id === activeFragmentId)
 

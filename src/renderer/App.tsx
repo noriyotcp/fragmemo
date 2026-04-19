@@ -85,13 +85,14 @@ function App() {
   }
 
   // Apply theme
+  const theme = settings?.theme
   useEffect(() => {
-    if (!settings) return
+    if (!theme) return
 
     const applyTheme = () => {
       const isDark =
-        settings.theme === 'dark' ||
-        (settings.theme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches)
+        theme === 'dark' ||
+        (theme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches)
 
       if (isDark) {
         document.documentElement.classList.add('dark')
@@ -103,13 +104,13 @@ function App() {
     applyTheme()
 
     // Listen for system theme changes if in system mode
-    if (settings.theme === 'system') {
+    if (theme === 'system') {
       const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)')
       const handler = () => applyTheme()
       mediaQuery.addEventListener('change', handler)
       return () => mediaQuery.removeEventListener('change', handler)
     }
-  }, [settings?.theme])
+  }, [theme])
 
   const handleCreateSnippet = useCallback(async () => {
     const newSnippet = await window.api.createSnippet('Untitled Snippet')

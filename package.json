@@ -101,6 +101,8 @@
     "vitest": "^4.1.4"
   },
   "overrides": {
-    "node-abi": "^4.28.0"
+    "@electron/rebuild": {
+      "node-abi": "^4.28.0"
+    }
   }
 }

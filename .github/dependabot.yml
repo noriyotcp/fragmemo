@@ -8,12 +8,16 @@ updates:
       production-dependencies:
         dependency-type: "production"
       # vite/electron 系は互いに peer dependency を持つため一緒に管理
+      # ただし major bump は breaking change のため standalone PR 化する
       dev-build:
         patterns:
           - "vite"
           - "electron*"
           - "@vitejs/*"
           - "electron-vite"
+        update-types:
+          - "minor"
+          - "patch"
       # eslint 系は eslint-plugin-react-hooks との peer dependency 互換を一緒に確認
       dev-tooling:
         patterns:

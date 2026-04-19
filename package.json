@@ -81,7 +81,7 @@
     "@types/node": "^25.6.0",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
-    "@vitejs/plugin-react": "^5.1.1",
+    "@vitejs/plugin-react": "^5.2.0",
     "@vitest/ui": "^4.1.4",
     "autoprefixer": "^10.5.0",
     "drizzle-kit": "^0.31.7",

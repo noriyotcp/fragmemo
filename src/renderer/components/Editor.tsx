@@ -16,8 +16,9 @@ export function Editor({ snippetId, onUpdate, settings }: { snippetId: string; o
   const restoredIds = useRef<Set<string>>(new Set())
   const viewStatesRef = useRef<Record<string, unknown>>({}) // Store view states without re-rendering
 
-  // Sync activeFragmentId ref - direct assignment is safe during render
-  activeFragmentIdRef.current = activeFragmentId
+  useEffect(() => {
+    activeFragmentIdRef.current = activeFragmentId
+  }, [activeFragmentId])
 
   // Cleanup on unmount
   useEffect(() => {
@@ -108,8 +109,9 @@ export function Editor({ snippetId, onUpdate, settings }: { snippetId: string; o
     window.api.saveFragment(newFragments[index])
   }
 
-  // Update fragmentsRef - direct assignment is safe during render
-  fragmentsRef.current = fragments
+  useEffect(() => {
+    fragmentsRef.current = fragments
+  }, [fragments])
 
   const handleCreateFragment = async () => {
     const newFragment = {

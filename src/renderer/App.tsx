@@ -13,9 +13,10 @@ function App() {
   const [isRestored, setIsRestored] = useState(false)
 
   // Use ref to access latest search query in callbacks without dependency issues
-  // Direct assignment is safe during render (ref mutations don't trigger re-renders)
   const searchQueryRef = useRef(searchQuery)
-  searchQueryRef.current = searchQuery
+  useEffect(() => {
+    searchQueryRef.current = searchQuery
+  }, [searchQuery])
 
   const loadSnippets = useCallback(async () => {
     const data = await window.api.getSnippets()
@@ -63,10 +64,14 @@ function App() {
   }, [])
 
   useEffect(() => {
+    // Initial mount data load — setState runs once after async fetch, no cascading render
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     loadAppState()
   }, [loadAppState])
 
   useEffect(() => {
+    // Initial mount data load — setState runs once after async fetch, no cascading render
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     loadSnippets()
     loadSettings()
   }, [loadSnippets, loadSettings])
@@ -106,6 +111,16 @@ function App() {
     }
   }, [settings?.theme])
 
+  const handleCreateSnippet = useCallback(async () => {
+    const newSnippet = await window.api.createSnippet('Untitled Snippet')
+    await loadSnippets()
+    setActiveSnippetId(newSnippet.id)
+    // Persist immediately after state change (user action)
+    if (isRestored) {
+      window.api.updateAppState({ activeSnippetId: newSnippet.id })
+    }
+  }, [loadSnippets, isRestored])
+
   // Menu event handlers
   useEffect(() => {
     const unsubscribeNewSnippet = window.api.onMenuNewSnippet(() => {
@@ -120,7 +135,7 @@ function App() {
       unsubscribeNewSnippet()
       unsubscribeOpenSettings()
     }
-  }, [])
+  }, [handleCreateSnippet])
 
   // Keyboard shortcuts
   useEffect(() => {
@@ -157,14 +172,6 @@ function App() {
 
     return false
   })
-
-  const handleCreateSnippet = async () => {
-    const newSnippet = await window.api.createSnippet('Untitled Snippet')
-    await loadSnippets()
-    setActiveSnippetId(newSnippet.id)
-    // Persist immediately after state change (user action)
-    persistActiveSnippet(newSnippet.id)
-  }
 
   const handleDeleteSnippet = async (id: string) => {
     if (!confirm('Are you sure you want to delete this snippet?')) return

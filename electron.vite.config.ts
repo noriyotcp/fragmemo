@@ -1,5 +1,5 @@
 import { resolve } from 'path'
-import { defineConfig, externalizeDepsPlugin } from 'electron-vite'
+import { defineConfig } from 'electron-vite'
 import react from '@vitejs/plugin-react'
 import fs from 'node:fs'
 import path from 'node:path'
@@ -56,7 +56,7 @@ function bindingSqlite3(options: {
 
 export default defineConfig({
   main: {
-    plugins: [externalizeDepsPlugin(), bindingSqlite3()],
+    plugins: [bindingSqlite3()],
     build: {
       rollupOptions: {
         input: {
@@ -66,7 +66,6 @@ export default defineConfig({
     }
   },
   preload: {
-    plugins: [externalizeDepsPlugin()],
     build: {
       rollupOptions: {
         input: {

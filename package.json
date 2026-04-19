@@ -99,5 +99,8 @@
     "typescript-eslint": "^8.58.2",
     "vite": "^7.3.2",
     "vitest": "^4.1.4"
+  },
+  "overrides": {
+    "node-abi": "^4.28.0"
   }
 }

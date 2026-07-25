@@ -22,11 +22,14 @@ npm run dev
 
 This project uses `better-sqlite3`, which includes a native Node addon. `npm install` automatically rebuilds it for Electron via the `postinstall` hook.
 
-If you see a `dlopen` architecture mismatch error (e.g. after running a cross-arch build like `npm run app:build:mac:x64` on an ARM Mac), rebuild the native module:
+Rebuild the native module explicitly when either of these happens:
 
 ```bash
 npm run rebuild
 ```
+
+- A `dlopen` architecture mismatch error, e.g. after a cross-arch build like `npm run app:build:mac:x64` on an ARM Mac.
+- `npm run build` fails with `[vite-plugin-binding-sqlite3] Cannot find .../build/Release/better_sqlite3.node`. The `postinstall` hook does not always leave that file behind — better-sqlite3 v13 ships `prebuilds/` instead — and only `npm run rebuild` produces it. The Build workflow runs this step for the same reason.
 
 ## License
 

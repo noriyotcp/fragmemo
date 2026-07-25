@@ -17,6 +17,21 @@ const better_sqlite3_root = path.posix.join(
   'node_modules/better-sqlite3'
 );
 
+// npm run rebuild -- --arch x64 (or --arch=x64) cross-compiles for another arch
+const args = process.argv.slice(2);
+const archIndex = args.findIndex((arg) => arg === '--arch' || arg.startsWith('--arch='));
+const arch =
+  archIndex === -1
+    ? process.arch
+    : args[archIndex].includes('=')
+      ? args[archIndex].split('=')[1]
+      : args[archIndex + 1];
+
+if (!arch) {
+  console.error('❌ --arch was given without a value.');
+  process.exit(1);
+}
+
 const cp = child.spawn(
   process.platform === 'win32' ? 'npm.cmd' : 'npm',
   [
@@ -24,6 +39,7 @@ const cp = child.spawn(
     'build-release',
     `--target=${electronVersion}`,
     '--dist-url=https://electronjs.org/headers',
+    `--arch=${arch}`,
   ],
   {
     cwd: better_sqlite3_root,

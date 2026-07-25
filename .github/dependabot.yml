@@ -5,8 +5,12 @@ updates:
     schedule:
       interval: "weekly"
     groups:
+      # major bump は breaking change のため standalone PR 化する
       production-dependencies:
         dependency-type: "production"
+        update-types:
+          - "minor"
+          - "patch"
       # vite/electron 系は互いに peer dependency を持つため一緒に管理
       # ただし major bump は breaking change のため standalone PR 化する
       dev-build:
@@ -32,13 +36,20 @@ updates:
           - "@vitest/*"
           - "@testing-library/*"
           - "jsdom"
+        update-types:
+          - "minor"
+          - "patch"
       # 型定義（breaking change がほぼない）
       dev-types:
         patterns:
           - "@types/*"
       # 上記に含まれない残りの dev dependencies
+      # major bump は typescript のように影響範囲が広いため standalone PR 化する
       dev-misc:
         dependency-type: "development"
+        update-types:
+          - "minor"
+          - "patch"
         exclude-patterns:
           - "vite"
           - "electron*"

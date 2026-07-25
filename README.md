@@ -29,7 +29,14 @@ npm run rebuild
 ```
 
 - A `dlopen` architecture mismatch error, e.g. after a cross-arch build like `npm run app:build:mac:x64` on an ARM Mac. Pass `-- --arch x64` (or `arm64`) to build for a specific architecture; without it the host architecture is used.
-- `npm run build` fails with `[vite-plugin-binding-sqlite3] Cannot find .../build/Release/better_sqlite3.node`. The `postinstall` hook does not always leave that file behind — better-sqlite3 v13 ships `prebuilds/` instead — and only `npm run rebuild` produces it. The Build workflow runs this step for the same reason.
+- `npm run build` fails with `[vite-plugin-binding-sqlite3] Cannot find .../build/Release/better_sqlite3.node`. The `postinstall` hook does not always leave that file behind — better-sqlite3 v13 ships `prebuilds/` instead — and only `npm run rebuild` produces it. The Build workflow runs this step for the same reason. `electron-builder` also clears that file while packaging, so a second `app:build` in a row needs another `npm run rebuild`.
+
+Each `app:build:mac:*` script packages one architecture, and the binding it ships is whatever `npm run rebuild` last produced. Build the matching binding first:
+
+```bash
+npm run rebuild -- --arch arm64 && npm run app:build:mac:arm64
+npm run rebuild -- --arch x64 && npm run app:build:mac:x64
+```
 
 ## License
 

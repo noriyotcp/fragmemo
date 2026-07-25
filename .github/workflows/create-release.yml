@@ -42,6 +42,9 @@ jobs:
 
   create-release:
     needs: build-macos
+    # release-action needs a tag from the ref; a workflow_dispatch on a branch
+    # has none, so skip this job and let such runs verify packaging only
+    if: startsWith(github.ref, 'refs/tags/')
     runs-on: ubuntu-latest
     permissions:
       contents: write

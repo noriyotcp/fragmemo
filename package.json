@@ -98,7 +98,7 @@
   },
   "overrides": {
     "@electron/rebuild": {
-      "node-abi": "^4.28.0"
+      "node-abi": "^4.32.0"
     }
   }
 }

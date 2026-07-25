@@ -1,6 +1,7 @@
 import { resolve } from 'path'
 import { defineConfig } from 'electron-vite'
 import react from '@vitejs/plugin-react'
+import tailwindcss from '@tailwindcss/vite'
 import fs from 'node:fs'
 import path from 'node:path'
 import { createRequire } from 'node:module'
@@ -83,12 +84,15 @@ export default defineConfig({
     },
     build: {
       outDir: 'out/renderer',
+      // @tailwindcss/vite only minifies when cssMinify is on, and this build
+      // leaves build.minify off, which cssMinify would otherwise inherit
+      cssMinify: true,
       rollupOptions: {
         input: {
           index: resolve(__dirname, 'src/renderer/index.html')
         }
       }
     },
-    plugins: [react()]
+    plugins: [react(), tailwindcss()]
   }
 })

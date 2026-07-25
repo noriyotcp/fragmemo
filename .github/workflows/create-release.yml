@@ -26,8 +26,10 @@ jobs:
           node-version: 22.x
           cache: "npm"
       - run: npm ci
+      # electron-rebuild does not leave build/Release/better_sqlite3.node behind
+      # on better-sqlite3 v13, and vite-plugin-binding-sqlite3 needs it
       - name: Rebuild native modules for ${{ matrix.arch }}
-        run: npx electron-rebuild --arch ${{ matrix.arch }}
+        run: npm run rebuild -- --arch ${{ matrix.arch }}
       - name: Build app for Mac (${{ matrix.arch }})
         run: npm run app:build:mac:${{ matrix.arch }}
       - name: Upload artifacts

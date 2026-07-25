@@ -37,11 +37,7 @@
       "icon": "icons/icon.png",
       "target": [
         {
-          "target": "dmg",
-          "arch": [
-            "x64",
-            "arm64"
-          ]
+          "target": "dmg"
         }
       ]
     },

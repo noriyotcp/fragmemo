@@ -22,6 +22,11 @@ updates:
         update-types:
           - "minor"
           - "patch"
+      # oxlint は minor リリースでルールが追加され CI の結果が変わりうるため
+      # update-types を絞らず単独 PR で来るようにする
+      dev-lint:
+        patterns:
+          - "oxlint"
       # vitest/testing 系
       dev-testing:
         patterns:
@@ -48,6 +53,7 @@ updates:
           - "electron*"
           - "@vitejs/*"
           - "electron-vite"
+          - "oxlint"
           - "vitest"
           - "@vitest/*"
           - "@testing-library/*"

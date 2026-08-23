@@ -61,7 +61,7 @@
   },
   "dependencies": {
     "@monaco-editor/react": "^4.7.0",
-    "better-sqlite3": "^13.0.2",
+    "better-sqlite3": "^13.0.3",
     "drizzle-orm": "^0.45.2",
     "monaco-editor": "^0.56.0",
     "react": "^19.2.8",

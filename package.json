@@ -98,5 +98,11 @@
     "@electron/rebuild": {
       "node-abi": "^4.32.0"
     }
+  },
+  "allowScripts": {
+    "electron-winstaller@5.4.0": true,
+    "esbuild@0.25.12": true,
+    "esbuild@0.27.7": true,
+    "esbuild@0.18.20": true
   }
 }

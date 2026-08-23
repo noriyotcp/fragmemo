@@ -14,7 +14,7 @@ export interface IFragment {
   content: string
   language: string
   order: number
-  viewState?: unknown // Monaco ICodeEditorViewState
+  viewState?: import('monaco-editor').editor.ICodeEditorViewState | null
 }
 
 export interface ISettings {

@@ -22,13 +22,11 @@ updates:
         update-types:
           - "minor"
           - "patch"
-      # eslint 系は eslint-plugin-react-hooks との peer dependency 互換を一緒に確認
-      dev-tooling:
+      # oxlint は minor リリースでルールが追加され CI の結果が変わりうるため
+      # update-types を絞らず単独 PR で来るようにする
+      dev-lint:
         patterns:
-          - "eslint*"
-          - "@eslint/*"
-          - "typescript-eslint"
-          - "globals"
+          - "oxlint"
       # vitest/testing 系
       dev-testing:
         patterns:
@@ -55,10 +53,7 @@ updates:
           - "electron*"
           - "@vitejs/*"
           - "electron-vite"
-          - "eslint*"
-          - "@eslint/*"
-          - "typescript-eslint"
-          - "globals"
+          - "oxlint"
           - "vitest"
           - "@vitest/*"
           - "@testing-library/*"
@@ -73,11 +68,6 @@ updates:
       # @vitejs/plugin-react 6.x requires vite ^8, blocked until electron-vite supports vite 8
       - dependency-name: "@vitejs/plugin-react"
         versions: [">=6"]
-      # eslint-plugin-react-hooks 7.x supports eslint up to ^9 only
-      - dependency-name: "eslint"
-        versions: [">=10"]
-      - dependency-name: "@eslint/js"
-        versions: [">=10"]
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:

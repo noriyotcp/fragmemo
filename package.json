@@ -16,6 +16,7 @@
     "build": "electron-vite build",
     "preview": "electron-vite preview",
     "lint": "oxlint .",
+    "typecheck": "tsc -b --noEmit",
     "db:generate": "drizzle-kit generate",
     "db:push": "drizzle-kit push",
     "db:studio": "drizzle-kit studio",

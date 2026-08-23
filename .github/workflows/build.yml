@@ -28,5 +28,6 @@ jobs:
       # enough on v12, but v13 ships prebuilds/ instead)
       - run: npm run rebuild
       - run: npm run lint
+      - run: npm run typecheck
       - run: npm run test:run
       - run: npm run build

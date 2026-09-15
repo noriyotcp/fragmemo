@@ -6,7 +6,7 @@ A snippet management tool built with Electron.
 
 ## Tech Stack
 
-- Electron 39 + React 19 + TypeScript
+- Electron 44 + React 19 + TypeScript
 - Monaco Editor
 - SQLite (better-sqlite3 + Drizzle ORM)
 - electron-vite + Tailwind CSS

@@ -18,6 +18,8 @@ npm install
 npm run dev
 ```
 
+The `postinstall` hook also downloads the Electron binary. Electron 42+ has no install script of its own and fetches the binary lazily on `require('electron')`, but `electron-vite dev` only reads `node_modules/electron/path.txt` and fails with `Error: Electron uninstall` when it is missing.
+
 ### Native module rebuild
 
 This project uses `better-sqlite3`, which includes a native Node addon. `npm install` automatically rebuilds it for Electron via the `postinstall` hook.

@@ -21,7 +21,7 @@
     "db:push": "drizzle-kit push",
     "db:studio": "drizzle-kit studio",
     "rebuild": "node scripts/rebuild.cjs",
-    "postinstall": "npx electron-rebuild",
+    "postinstall": "npx electron-rebuild && node node_modules/electron/install.js",
     "test": "vitest",
     "test:ui": "vitest --ui",
     "test:run": "vitest run",

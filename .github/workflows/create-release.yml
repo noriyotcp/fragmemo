@@ -30,8 +30,10 @@ jobs:
       # on better-sqlite3 v13, and vite-plugin-binding-sqlite3 needs it
       - name: Rebuild native modules for ${{ matrix.arch }}
         run: npm run rebuild -- --arch ${{ matrix.arch }}
+      # electron-builder would otherwise publish its own draft release per arch
+      # on a tag build; create-release below is the only release we want
       - name: Build app for Mac (${{ matrix.arch }})
-        run: npm run app:build:mac:${{ matrix.arch }}
+        run: npm run app:build:mac:${{ matrix.arch }} -- --publish never
       - name: Upload artifacts
         uses: actions/upload-artifact@v7
         with:
